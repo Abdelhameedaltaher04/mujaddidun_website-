@@ -21,9 +21,6 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-primary to-primary/80"></div>
           
           <div className="container-wide relative z-10 py-20 lg:py-32 flex flex-col items-center text-center">
-            <span className="inline-flex items-center rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-3 py-1 text-sm font-medium backdrop-blur-sm mb-6">
-              {t('app.name')}
-            </span>
             <h1 className="text-4xl lg:text-6xl font-display font-bold max-w-4xl tracking-tight text-balance mb-6">
               {t('projects.subtitle')}
             </h1>

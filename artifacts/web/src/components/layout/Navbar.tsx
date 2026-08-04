@@ -17,7 +17,6 @@ const NAV_ITEMS = [
   { key: 'nav.news', href: '/news' },
   { key: 'nav.events', href: '/events' },
   { key: 'nav.gallery', href: '/gallery' },
-  { key: 'nav.reports', href: '/reports' },
   { key: 'nav.partners', href: '/partners' },
   { key: 'nav.faq', href: '/faq' },
   { key: 'nav.volunteer', href: '/volunteer' },

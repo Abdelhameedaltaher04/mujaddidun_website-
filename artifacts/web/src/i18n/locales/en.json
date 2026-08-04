@@ -46,7 +46,6 @@
     "news": "News",
     "events": "Events",
     "gallery": "Gallery",
-    "reports": "Reports",
     "partners": "Partners",
     "faq": "FAQ",
     "volunteer": "Volunteer",
@@ -205,17 +204,6 @@
       "6": "Orphans Recreational Activities",
       "7": "Warm Winter Campaign",
       "8": "Feeding and Iftar Projects"
-    }
-  },
-  "reports": {
-    "title": "Reports",
-    "subtitle": "Annual and financial reports to ensure transparency.",
-    "download": "Download Report",
-    "empty": "No reports available for download at the moment.",
-    "items": {
-      "2021": "Annual and Financial Report 2021",
-      "2022": "Annual and Financial Report 2022",
-      "2023": "Annual and Financial Report 2023"
     }
   },
   "successStories": {

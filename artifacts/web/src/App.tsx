@@ -10,7 +10,6 @@ import ProjectsPage from '@/pages/ProjectsPage';
 import NewsPage from '@/pages/NewsPage';
 import EventsPage from '@/pages/EventsPage';
 import GalleryPage from '@/pages/GalleryPage';
-import ReportsPage from '@/pages/ReportsPage';
 import SuccessStoriesPage from '@/pages/SuccessStoriesPage';
 import PartnersPage from '@/pages/PartnersPage';
 import FaqPage from '@/pages/FaqPage';
@@ -34,7 +33,6 @@ function Router() {
       <Route path="/news" component={NewsPage} />
       <Route path="/events" component={EventsPage} />
       <Route path="/gallery" component={GalleryPage} />
-      <Route path="/reports" component={ReportsPage} />
       <Route path="/success-stories" component={SuccessStoriesPage} />
       <Route path="/partners" component={PartnersPage} />
       <Route path="/faq" component={FaqPage} />

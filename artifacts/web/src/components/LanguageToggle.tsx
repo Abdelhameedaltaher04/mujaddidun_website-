@@ -7,8 +7,7 @@ import { useLocale } from '@/contexts/LocaleContext';
  */
 export function LanguageToggle() {
   const { locale, toggleLocale, t } = useLocale();
-  const targetLabel =
-    locale === 'ar' ? t('common.english') : t('common.arabic');
+  const targetLabel = locale === 'ar' ? 'EN' : 'AR';
 
   return (
     <Button
