@@ -16,6 +16,50 @@
     "home": "Home",
     "welcome": "Welcome"
   },
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "projects": "Projects",
+    "news": "News",
+    "events": "Events",
+    "gallery": "Gallery",
+    "reports": "Reports",
+    "partners": "Partners",
+    "faq": "FAQ",
+    "volunteer": "Volunteer",
+    "contact": "Contact",
+    "login": "Login",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mainNavigation": "Main navigation"
+  },
+  "footer": {
+    "logoPlaceholder": "Association Logo",
+    "aboutBrief": "Al-Mujaddidun Charity and Development Association",
+    "quickLinks": "Quick Links",
+    "contactInfo": "Contact Information",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "followUs": "Follow Us",
+    "copyright": "© {year} Al-Mujaddidun Association. All rights reserved."
+  },
+  "breadcrumb": {
+    "label": "Breadcrumb"
+  },
+  "home": {
+    "sections": {
+      "hero": "Hero",
+      "statistics": "Statistics",
+      "aboutPreview": "About Preview",
+      "featuredProjects": "Featured Projects",
+      "latestNews": "Latest News",
+      "upcomingEvents": "Upcoming Events",
+      "partners": "Partners",
+      "successStories": "Success Stories",
+      "volunteerCta": "Volunteer CTA"
+    }
+  },
   "notFound": {
     "title": "Page not found",
     "description": "Sorry, the page you are looking for does not exist.",

@@ -16,6 +16,50 @@
     "home": "الرئيسية",
     "welcome": "مرحباً بكم"
   },
+  "nav": {
+    "home": "الرئيسية",
+    "about": "من نحن",
+    "projects": "المشاريع",
+    "news": "الأخبار",
+    "events": "الفعاليات",
+    "gallery": "معرض الصور",
+    "reports": "التقارير",
+    "partners": "الشركاء",
+    "faq": "الأسئلة الشائعة",
+    "volunteer": "التطوع",
+    "contact": "اتصل بنا",
+    "login": "تسجيل الدخول",
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة",
+    "mainNavigation": "التنقل الرئيسي"
+  },
+  "footer": {
+    "logoPlaceholder": "شعار الجمعية",
+    "aboutBrief": "جمعية المجددون للأعمال الخيرية والتنمية",
+    "quickLinks": "روابط سريعة",
+    "contactInfo": "معلومات التواصل",
+    "address": "العنوان",
+    "phone": "الهاتف",
+    "email": "البريد الإلكتروني",
+    "followUs": "تابعونا",
+    "copyright": "© {year} جمعية المجددون. جميع الحقوق محفوظة."
+  },
+  "breadcrumb": {
+    "label": "مسار التنقل"
+  },
+  "home": {
+    "sections": {
+      "hero": "القسم الترحيبي",
+      "statistics": "الإحصائيات",
+      "aboutPreview": "نبذة عنا",
+      "featuredProjects": "مشاريع مميزة",
+      "latestNews": "آخر الأخبار",
+      "upcomingEvents": "الفعاليات القادمة",
+      "partners": "الشركاء",
+      "successStories": "قصص النجاح",
+      "volunteerCta": "انضم كمتطوع"
+    }
+  },
   "notFound": {
     "title": "الصفحة غير موجودة",
     "description": "عذراً، الصفحة التي تبحث عنها غير موجودة.",
