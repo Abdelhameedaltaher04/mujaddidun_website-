@@ -34,7 +34,6 @@ const NAV_STRUCTURE: NavItem[] = [
     key: 'nav.activities',
     children: [
       { key: 'nav.programs', href: '/programs' },
-      { key: 'nav.projects', href: '/projects' },
       { key: 'nav.events', href: '/events' },
       { key: 'nav.gallery', href: '/gallery' },
     ],
