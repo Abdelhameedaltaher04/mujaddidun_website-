@@ -12,7 +12,6 @@ import logoUrl from '@/assets/mujaddidun-logo.png';
 const NAV_ITEMS = [
   { key: 'nav.home', href: '/' },
   { key: 'nav.about', href: '/about' },
-  { key: 'nav.projects', href: '/projects' },
   { key: 'nav.programs', href: '/programs' },
   { key: 'nav.news', href: '/news' },
   { key: 'nav.events', href: '/events' },
