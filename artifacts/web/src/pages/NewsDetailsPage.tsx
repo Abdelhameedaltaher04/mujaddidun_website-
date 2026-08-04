@@ -6,13 +6,19 @@ import { SectionHeading } from '@/components/layout/SectionHeading';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Link, useParams } from 'wouter';
+import { useState } from 'react';
 import { ArrowLeft, ArrowRight, Calendar, Image as ImageIcon } from 'lucide-react';
-import { FaFacebookF, FaWhatsapp, FaLinkedinIn } from 'react-icons/fa6';
+import { FaFacebookF, FaWhatsapp } from 'react-icons/fa6';
+import { GalleryLightbox } from '@/components/layout/GalleryLightbox';
+
+/** Featured image + 3 gallery-strip images. */
+const ARTICLE_IMAGE_COUNT = 4;
 
 export default function NewsDetailsPage() {
   const { t, dir } = useLocale();
   const params = useParams<{ id: string }>();
   const id = params.id;
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const isValidId = id && ['1', '2', '3'].includes(id);
 
@@ -84,11 +90,17 @@ export default function NewsDetailsPage() {
             </div>
 
             {/* Featured Image Placeholder */}
-            <div className="w-full aspect-[2/1] rounded-3xl bg-muted border border-border flex items-center justify-center mb-12 shadow-sm overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setLightboxIndex(0)}
+              aria-label={title}
+              className="w-full aspect-[2/1] rounded-3xl bg-muted border border-border flex items-center justify-center mb-12 shadow-sm overflow-hidden cursor-pointer transition-all hover:shadow-md hover:border-primary/40 focus-ring-standard"
+              data-testid="button-article-featured-image"
+            >
               <div className="text-muted-foreground/40 flex flex-col items-center">
                 <ImageIcon className="w-16 h-16 mb-4 opacity-50" />
               </div>
-            </div>
+            </button>
 
             {/* Content */}
             <div className="prose prose-lg dark:prose-invert max-w-none mx-auto space-y-6 text-foreground/90 leading-relaxed mb-12">
@@ -100,9 +112,16 @@ export default function NewsDetailsPage() {
             {/* Gallery Strip */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-16">
               {[1, 2, 3].map(n => (
-                <div key={n} className="aspect-[4/3] rounded-2xl bg-muted border border-border flex items-center justify-center overflow-hidden">
+                <button
+                  type="button"
+                  key={n}
+                  onClick={() => setLightboxIndex(n)}
+                  aria-label={`${title} ${n}`}
+                  className="aspect-[4/3] rounded-2xl bg-muted border border-border flex items-center justify-center overflow-hidden cursor-pointer transition-all hover:shadow-md hover:border-primary/40 focus-ring-standard"
+                  data-testid={`button-article-gallery-${n}`}
+                >
                    <ImageIcon className="w-8 h-8 text-muted-foreground/30" />
-                </div>
+                </button>
               ))}
             </div>
 
@@ -116,9 +135,6 @@ export default function NewsDetailsPage() {
                   </a>
                   <a href={`https://wa.me/?text=${encodedUrl}`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-success hover:border-success hover:scale-110 hover:shadow-lg hover:shadow-success/20 transition-all focus-ring-standard">
                     <FaWhatsapp className="w-4 h-4" />
-                  </a>
-                  <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-info hover:border-info hover:scale-110 hover:shadow-lg hover:shadow-info/20 transition-all focus-ring-standard">
-                    <FaLinkedinIn className="w-4 h-4" />
                   </a>
                 </div>
               </div>
@@ -168,6 +184,19 @@ export default function NewsDetailsPage() {
       </main>
 
       <Footer />
+
+      <GalleryLightbox
+        openIndex={lightboxIndex}
+        count={ARTICLE_IMAGE_COUNT}
+        onNavigate={setLightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        getLabel={(index) => (index === 0 ? title : `${title} ${index}`)}
+        renderItem={() => (
+          <div className="aspect-[4/3] w-full rounded-2xl bg-muted flex items-center justify-center text-muted-foreground/30 shadow-2xl">
+            <ImageIcon className="w-20 h-20" />
+          </div>
+        )}
+      />
     </div>
   );
 }
