@@ -20,8 +20,16 @@ interface MainContainerProps {
  * Centered, width-constrained container with responsive horizontal padding.
  * The single source of truth for page gutters across the public site.
  */
-export function MainContainer({ children, width = 'standard', className }: MainContainerProps) {
+export function MainContainer({
+  children,
+  width = 'standard',
+  className,
+}: MainContainerProps) {
   return (
-    <div className={cn(WIDTH_CLASSES[width], 'px-4 sm:px-6 lg:px-8', className)}>{children}</div>
+    <div
+      className={cn(WIDTH_CLASSES[width], 'px-4 sm:px-6 lg:px-8', className)}
+    >
+      {children}
+    </div>
   );
 }

@@ -48,7 +48,10 @@ function getInitialLocale(): Locale {
   return DEFAULT_LOCALE;
 }
 
-function interpolate(text: string, params?: Record<string, string | number>): string {
+function interpolate(
+  text: string,
+  params?: Record<string, string | number>,
+): string {
   if (!params) return text;
   return text.replace(/\{(\w+)\}/g, (match, name: string) =>
     name in params ? String(params[name]) : match,
@@ -94,7 +97,9 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     [locale, dir, setLocale, toggleLocale, t],
   );
 
-  return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
+  return (
+    <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
+  );
 }
 
 export function useLocale(): LocaleContextValue {

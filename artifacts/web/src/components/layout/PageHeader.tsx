@@ -1,5 +1,8 @@
 import { MainContainer } from '@/components/layout/MainContainer';
-import { Breadcrumb, type BreadcrumbItemDef } from '@/components/layout/Breadcrumb';
+import {
+  Breadcrumb,
+  type BreadcrumbItemDef,
+} from '@/components/layout/Breadcrumb';
 import type { ReactNode } from 'react';
 
 interface PageHeaderProps {
@@ -15,7 +18,12 @@ interface PageHeaderProps {
  * Standard header block for inner pages: optional breadcrumb,
  * page title, optional description, and optional actions.
  */
-export function PageHeader({ title, description, breadcrumbs, actions }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  description,
+  breadcrumbs,
+  actions,
+}: PageHeaderProps) {
   return (
     <div className="border-b border-border bg-muted">
       <MainContainer className="py-8 md:py-10">
@@ -26,11 +34,16 @@ export function PageHeader({ title, description, breadcrumbs, actions }: PageHea
         )}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground" data-testid="text-page-title">
+            <h1
+              className="text-3xl font-bold text-foreground"
+              data-testid="text-page-title"
+            >
               {title}
             </h1>
             {description && (
-              <p className="mt-2 max-w-prose text-muted-foreground">{description}</p>
+              <p className="mt-2 max-w-prose text-muted-foreground">
+                {description}
+              </p>
             )}
           </div>
           {actions && <div className="flex items-center gap-2">{actions}</div>}

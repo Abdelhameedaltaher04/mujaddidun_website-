@@ -148,7 +148,7 @@
   --app-font-mono: 'IBM Plex Mono', monospace;
 
   --radius: 0.5rem; /* 8px */
-  
+
   --shadow-color: 215 28% 17%;
   --shadow-2xs: 0px 2px 0px 0px hsl(var(--shadow-color) / 0.02);
   --shadow-xs: 0px 2px 0px 0px hsl(var(--shadow-color) / 0.04);
@@ -168,7 +168,7 @@
     0px 2px 0px 0px hsl(var(--shadow-color) / 0.02),
     0px 8px 10px -1px hsl(var(--shadow-color) / 0.1);
   --shadow-2xl: 0px 2px 0px 0px hsl(var(--shadow-color) / 0.15);
-  
+
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 
@@ -303,11 +303,11 @@
   .container-narrow {
     @apply w-full max-w-3xl mx-auto px-4 sm:px-6;
   }
-  
+
   .container-standard {
     @apply w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8;
   }
-  
+
   .container-wide {
     @apply w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8;
   }
@@ -322,7 +322,7 @@
     direction: rtl;
     text-align: right;
   }
-  
+
   .ltr-safe {
     direction: ltr;
     text-align: left;
@@ -345,8 +345,10 @@
     pointer-events: none;
   }
 
-  .no-default-hover-elevate {}
-  .no-default-active-elevate {}
+  .no-default-hover-elevate {
+  }
+  .no-default-active-elevate {
+  }
 
   .toggle-elevate::before,
   .toggle-elevate-2::before {

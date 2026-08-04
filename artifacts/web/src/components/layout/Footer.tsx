@@ -1,5 +1,13 @@
 import { Link } from 'wouter';
-import { Facebook, Instagram, Mail, MapPin, Phone, Twitter, Youtube } from 'lucide-react';
+import {
+  Facebook,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Twitter,
+  Youtube,
+} from 'lucide-react';
 import { MainContainer } from '@/components/layout/MainContainer';
 import { useLocale } from '@/contexts/LocaleContext';
 
@@ -39,13 +47,19 @@ export function Footer() {
             >
               {t('footer.logoPlaceholder')}
             </div>
-            <p className="mt-4 text-sm font-semibold text-foreground">{t('app.name')}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{t('footer.aboutBrief')}</p>
+            <p className="mt-4 text-sm font-semibold text-foreground">
+              {t('app.name')}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {t('footer.aboutBrief')}
+            </p>
           </div>
 
           {/* Quick links */}
           <nav aria-label={t('footer.quickLinks')}>
-            <h2 className="text-sm font-bold text-foreground">{t('footer.quickLinks')}</h2>
+            <h2 className="text-sm font-bold text-foreground">
+              {t('footer.quickLinks')}
+            </h2>
             <ul className="mt-4 space-y-2">
               {QUICK_LINKS.map((link) => (
                 <li key={link.key}>
@@ -63,7 +77,9 @@ export function Footer() {
 
           {/* Contact information */}
           <div>
-            <h2 className="text-sm font-bold text-foreground">{t('footer.contactInfo')}</h2>
+            <h2 className="text-sm font-bold text-foreground">
+              {t('footer.contactInfo')}
+            </h2>
             <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -82,7 +98,9 @@ export function Footer() {
 
           {/* Social media placeholders */}
           <div>
-            <h2 className="text-sm font-bold text-foreground">{t('footer.followUs')}</h2>
+            <h2 className="text-sm font-bold text-foreground">
+              {t('footer.followUs')}
+            </h2>
             <div className="mt-4 flex items-center gap-2">
               {SOCIAL_LINKS.map(({ name, icon: Icon }) => (
                 <span
@@ -100,7 +118,10 @@ export function Footer() {
 
         {/* Copyright */}
         <div className="mt-10 border-t border-border pt-6">
-          <p className="text-center text-sm text-muted-foreground" data-testid="text-copyright">
+          <p
+            className="text-center text-sm text-muted-foreground"
+            data-testid="text-copyright"
+          >
             {t('footer.copyright', { year })}
           </p>
         </div>

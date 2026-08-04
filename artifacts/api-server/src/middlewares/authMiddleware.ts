@@ -12,7 +12,9 @@ import {
 } from '../lib/auth';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace -- required for Express type augmentation
   namespace Express {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- interface merging with Express.User
     interface User extends AuthUser {}
 
     interface Request {

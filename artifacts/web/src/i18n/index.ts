@@ -20,17 +20,26 @@ export const translations: Record<Locale, Record<string, unknown>> = {
 };
 
 export function isLocale(value: unknown): value is Locale {
-  return typeof value === 'string' && (LOCALES as readonly string[]).includes(value);
+  return (
+    typeof value === 'string' && (LOCALES as readonly string[]).includes(value)
+  );
 }
 
 /**
  * Resolve a dot-separated key (e.g. "common.save") in a nested dictionary.
  * Returns undefined when the key does not resolve to a string.
  */
-export function resolveKey(dict: Record<string, unknown>, key: string): string | undefined {
+export function resolveKey(
+  dict: Record<string, unknown>,
+  key: string,
+): string | undefined {
   let node: unknown = dict;
   for (const part of key.split('.')) {
-    if (node !== null && typeof node === 'object' && part in (node as Record<string, unknown>)) {
+    if (
+      node !== null &&
+      typeof node === 'object' &&
+      part in (node as Record<string, unknown>)
+    ) {
       node = (node as Record<string, unknown>)[part];
     } else {
       return undefined;

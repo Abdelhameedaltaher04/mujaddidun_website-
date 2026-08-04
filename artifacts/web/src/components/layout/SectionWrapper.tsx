@@ -27,7 +27,11 @@ export function SectionWrapper({
     <section
       id={id}
       data-testid={testId}
-      className={cn('py-12 md:py-16', variant === 'muted' && 'bg-muted', className)}
+      className={cn(
+        'py-12 md:py-16',
+        variant === 'muted' && 'bg-muted',
+        className,
+      )}
     >
       <MainContainer>{children}</MainContainer>
     </section>

@@ -34,7 +34,10 @@ export function Breadcrumb({ items }: { items: BreadcrumbItemDef[] }) {
                     {item.label}
                   </Link>
                 ) : (
-                  <span aria-current={isLast ? 'page' : undefined} className="text-foreground">
+                  <span
+                    aria-current={isLast ? 'page' : undefined}
+                    className="text-foreground"
+                  >
                     {item.label}
                   </span>
                 )}

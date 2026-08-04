@@ -15,7 +15,29 @@
     "search": "Search",
     "home": "Home",
     "welcome": "Welcome",
-    "logout": "Log out"
+    "logout": "Log out",
+    "readMore": "Read More",
+    "viewAll": "View All",
+    "donate": "Donate Now",
+    "submit": "Submit",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "message": "Message",
+    "send": "Send Message",
+    "success": "Success",
+    "volunteerDesc": "Volunteer with us and be part of the change in our community",
+    "volunteerCTA": "Join as a Volunteer",
+    "contactDesc": "We are here to answer your inquiries",
+    "sendMsgSuccess": "Your message has been sent successfully! We will contact you soon.",
+    "joinUs": "Join Us",
+    "ourImpact": "Our Impact",
+    "date": "Date",
+    "location": "Location",
+    "register": "Register Now",
+    "name": "Name",
+    "subject": "Subject"
   },
   "nav": {
     "home": "Home",
@@ -36,7 +58,7 @@
   },
   "footer": {
     "logoPlaceholder": "Association Logo",
-    "aboutBrief": "Mujaddidun Charity and Development Association",
+    "aboutBrief": "Mujaddidun Charity Development Association - Jordan",
     "quickLinks": "Quick Links",
     "contactInfo": "Contact Information",
     "address": "Address",
@@ -59,11 +81,141 @@
       "partners": "Partners",
       "successStories": "Success Stories",
       "volunteerCta": "Volunteer CTA"
+    },
+    "stats": {
+      "years": "Years of Giving",
+      "beneficiaries": "Beneficiaries Annually",
+      "volunteers": "Active Volunteers",
+      "projects": "Sustainable Projects"
+    },
+    "about": {
+      "impactTitle": "Sustainable Impact",
+      "impactDesc": "We focus on long-term solutions"
+    },
+    "news": {
+      "sampleDate": "October 12, 2023",
+      "sampleTitle": "Sample news title reflecting recent association activities"
+    },
+    "events": {
+      "sampleDay": "15",
+      "sampleMonth": "Nov",
+      "sampleTitle": "Warm Winter Campaign",
+      "location": "Amman",
+      "register": "Register"
+    },
+    "partners": {
+      "partner": "Partner"
     }
   },
   "notFound": {
     "title": "Page not found",
     "description": "Sorry, the page you are looking for does not exist.",
     "backHome": "Back to home"
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Learn about Mujaddidun Association and our vision for a better tomorrow.",
+    "heading": "Mujaddidun Charity Development Association - Jordan",
+    "descriptionP1": "Mujaddidun Charity Development Association is a Jordanian association registered with the Ministry of Social Development under No. (1924) since 2009.",
+    "descriptionP2": "The association works to empower youth and serve the community by implementing developmental and humanitarian initiatives and projects, spreading the culture of volunteerism, promoting the values of social responsibility, and contributing to sustainable development.",
+    "descriptionP3": "The association strives to build a more cohesive society through partnership with institutions and individuals, and by delivering quality programs that serve all segments of the community.",
+    "mission": "Our Mission",
+    "vision": "Our Vision",
+    "values": "Our Values",
+    "missionText": "Empowering individuals and communities through sustainable developmental and humanitarian programs, and promoting a culture of volunteering and initiative in service of Jordanian society.",
+    "visionText": "A cohesive, aware, and proactive Jordanian society whose members participate in sustainable development and in creating positive impact.",
+    "value1": "Transparency",
+    "value2": "Responsibility",
+    "value3": "Volunteerism",
+    "value4": "Partnership",
+    "value5": "Empowerment",
+    "value6": "Sustainability",
+    "story": "Our Story",
+    "storyText": "Mujaddidun Charity Development Association is a Jordanian association registered with the Ministry of Social Development under No. (1924) since 2009, working to empower youth and serve the community through sustainable developmental and humanitarian initiatives.",
+    "valuesText1": "Transparency: Clarity in all our dealings and projects.",
+    "valuesText2": "Responsibility: Our commitment to the community and the trust of our partners.",
+    "valuesText3": "Sustainability: Focusing on projects with long-term impact."
+  },
+  "projects": {
+    "title": "Our Projects",
+    "subtitle": "We Feed . We Shelter . We Empower",
+    "feeding": "Feeding Projects",
+    "feedingDesc": "Providing healthy and sustainable food for families in need and distributing food parcels.",
+    "housing": "Housing Projects",
+    "housingDesc": "Restoring and rehabilitating homes of families in need to ensure a safe and dignified living environment.",
+    "empowerment": "Empowerment Projects",
+    "empowermentDesc": "Training and qualifying individuals to enter the labor market and build an independent and bright future."
+  },
+  "news": {
+    "title": "News",
+    "subtitle": "Latest updates and announcements from Mujaddidun Association.",
+    "empty": "No news available at the moment."
+  },
+  "events": {
+    "title": "Events",
+    "subtitle": "Join our upcoming events and be part of the action.",
+    "upcoming": "Upcoming Events",
+    "past": "Past Events",
+    "empty": "No events scheduled at the moment."
+  },
+  "gallery": {
+    "title": "Gallery",
+    "subtitle": "Moments of giving and hope from our projects and events."
+  },
+  "reports": {
+    "title": "Reports",
+    "subtitle": "Annual and financial reports to ensure transparency.",
+    "download": "Download Report",
+    "empty": "No reports available for download at the moment."
+  },
+  "successStories": {
+    "title": "Success Stories",
+    "subtitle": "Real experiences reflecting the impact of our programs on individuals and families.",
+    "itemTitle": "Success Story {item}",
+    "itemDesc": "A brief summary of the success story and how the association's initiatives impacted and changed their lives for the better..."
+  },
+  "partners": {
+    "title": "Our Partners",
+    "subtitle": "We are proud of our strategic partnerships that help expand our impact and serve the community.",
+    "partnerLabel": "Partner {item}"
+  },
+  "faq": {
+    "title": "FAQ",
+    "subtitle": "Answers to the most common questions about Mujaddidun Association and its projects.",
+    "q1": "What are the goals of Mujaddidun Association?",
+    "a1": "Mujaddidun Association seeks to provide support and care for those in need through sustainable projects that contribute to building a solidary and empowered community, focusing on feeding, housing, and empowerment projects."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We are here to listen. Contact us for any inquiries or suggestions.",
+    "addressValue": "Amman, Jordan - University Street"
+  },
+  "volunteer": {
+    "title": "Volunteer",
+    "subtitle": "Join the Mujaddidun team and contribute to building a better community.",
+    "formTitle": "Volunteer Registration Form",
+    "interests": "Areas of Interest",
+    "availability": "Availability",
+    "submitReg": "Submit Volunteer Application",
+    "regSuccess": "Volunteer application received successfully! We will contact you soon.",
+    "form": {
+      "personalInfo": "Personal Information",
+      "fullName": "Full Name",
+      "dob": "Date of Birth",
+      "experience": "Previous Experience (if any)"
+    },
+    "interestsList": {
+      "feeding": "Feeding Projects",
+      "housing": "Housing Projects",
+      "empowerment": "Empowerment Projects",
+      "admin": "Administrative Work",
+      "media": "Photography & Editing",
+      "events": "Event Management"
+    },
+    "availabilityList": {
+      "morning": "Morning",
+      "evening": "Evening",
+      "weekends": "Weekends"
+    }
   }
 }

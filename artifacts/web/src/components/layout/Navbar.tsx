@@ -74,7 +74,11 @@ export function Navbar() {
           {/* Actions */}
           <div className="flex items-center gap-2">
             <LanguageToggle />
-            <Button size="sm" className="hidden sm:inline-flex" data-testid="button-login">
+            <Button
+              size="sm"
+              className="hidden sm:inline-flex"
+              data-testid="button-login"
+            >
               {t('nav.login')}
             </Button>
             {/* Mobile menu toggle */}
@@ -88,7 +92,11 @@ export function Navbar() {
               onClick={() => setMobileOpen((open) => !open)}
               data-testid="button-mobile-menu"
             >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </Button>
           </div>
         </div>
