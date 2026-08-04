@@ -37,7 +37,9 @@
     "location": "Location",
     "register": "Register Now",
     "name": "Name",
-    "subject": "Subject"
+    "subject": "Subject",
+    "previous": "Previous",
+    "next": "Next"
   },
   "nav": {
     "home": "Home",
@@ -81,7 +83,10 @@
       "upcomingEvents": "Upcoming Events",
       "partners": "Partners",
       "successStories": "Success Stories",
-      "volunteerCta": "Volunteer CTA"
+      "volunteerCta": "Volunteer CTA",
+      "programs": "Programs",
+      "faq": "FAQ",
+      "contact": "Contact Us"
     },
     "stats": {
       "years": "Years of Giving",

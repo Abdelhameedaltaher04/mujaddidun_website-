@@ -37,7 +37,9 @@
     "location": "الموقع",
     "register": "سجل الآن",
     "name": "الاسم",
-    "subject": "الموضوع"
+    "subject": "الموضوع",
+    "previous": "السابق",
+    "next": "التالي"
   },
   "nav": {
     "home": "الرئيسية",
@@ -81,7 +83,10 @@
       "upcomingEvents": "الفعاليات القادمة",
       "partners": "الشركاء",
       "successStories": "قصص النجاح",
-      "volunteerCta": "انضم كمتطوع"
+      "volunteerCta": "انضم كمتطوع",
+      "programs": "البرامج",
+      "faq": "الأسئلة الشائعة",
+      "contact": "اتصل بنا"
     },
     "stats": {
       "years": "سنوات من العطاء",

@@ -1,0 +1,76 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate files.
+Do NOT modify the architecture.
+Do NOT modify routing.
+Do NOT modify the design system.
+Keep the official Majaddidun branding, colors, typography, spacing, accessibility, RTL/LTR support and responsiveness.
+
+========================================================
+TASK
+========================================================
+
+Improve the public website with the following UI/UX enhancements only.
+
+1. Partners Section
+- Redesign the Partners section as a professional responsive logo carousel/slider.
+- Logos should auto-scroll smoothly.
+- Pause on hover.
+- Support manual navigation.
+- Infinite loop.
+- Responsive on desktop, tablet and mobile.
+- Keep a clean modern NGO/corporate appearance.
+
+--------------------------------------------------------
+
+2. Homepage Section Order
+
+Reorganize the homepage sections into the following order:
+
+Hero
+Statistics
+About Us
+Projects
+Programs
+Partners
+FAQ
+Contact
+Footer
+
+Move the Projects section so it appears immediately after the About Us section.
+
+Move the FAQ section so it appears directly above the Footer.
+
+Do not remove any content.
+Only change the order.
+
+--------------------------------------------------------
+
+3. Hero Section Redesign
+
+The current Hero section feels too static.
+
+Redesign it into a much more premium and modern experience while keeping the existing branding and color palette.
+
+Requirements:
+
+• Add subtle background shapes or gradients.
+• Add elegant motion and entrance animations.
+• Improve typography hierarchy.
+• Improve spacing and composition.
+• Make the CTA buttons more attractive.
+• Add modern visual depth (glass effect, gradients, soft shadows, decorative elements).
+• The design should feel like a high-end charity platform rather than a basic landing page.
+• Keep excellent performance.
+• Do not use heavy animations.
+• Preserve accessibility and responsiveness.
+
+The Hero should immediately impress visitors and create a professional first impression.
+
+========================================================
+
+Run the project.
+Verify there are no build errors.
+Stop after these three UI improvements are completed.
