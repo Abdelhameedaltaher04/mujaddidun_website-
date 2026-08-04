@@ -48,7 +48,7 @@ export function SectionHeading({
       : 'from-primary to-secondary';
 
   const headingBlock = (
-    <div className={cn(!isCentered && action ? 'max-w-2xl' : 'max-w-2xl', isCentered && 'mx-auto')}>
+    <div className={cn(!isCentered && action ? 'max-w-3xl' : 'max-w-3xl', isCentered && 'mx-auto')}>
       {kicker ? (
         <div
           className={cn(
@@ -100,7 +100,7 @@ export function SectionHeading({
         />
       )}
       {description && (
-        <p className={cn('text-muted-foreground mt-4 text-balance', size === 'lg' ? 'text-lg' : 'text-base')}>
+        <p className={cn('text-muted-foreground mt-4', size === 'lg' ? 'text-lg' : 'text-base')}>
           {description}
         </p>
       )}

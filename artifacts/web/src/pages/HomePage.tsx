@@ -6,7 +6,7 @@ import { StatCounter } from '@/components/layout/StatCounter';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
-import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight, Users, CheckCircle2, TrendingUp, Phone, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight, Users, CheckCircle2, TrendingUp, Phone, Mail, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -312,15 +312,20 @@ export default function HomePage() {
                  />
                  <div className="space-y-4">
                     {[1, 2].map((i) => (
-                       <Link key={i} href="/news" className="flex gap-4 p-4 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group focus-ring-standard">
-                          <div className="w-24 h-24 rounded-xl bg-muted shrink-0 relative overflow-hidden">
+                       <div key={i} className="flex flex-col sm:flex-row gap-5 p-5 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group h-full items-start sm:items-center">
+                          <div className="w-24 h-24 rounded-xl bg-muted shrink-0 relative overflow-hidden flex items-center justify-center">
                              <div className="absolute inset-0 bg-primary/10"></div>
                           </div>
-                          <div className="flex flex-col justify-center">
-                             <div className="text-xs text-muted-foreground mb-1">{t(`news.items.${i}.date`)}</div>
-                             <h4 className="font-bold group-hover:text-primary transition-colors line-clamp-2">{t(`news.items.${i}.title`)}</h4>
+                          <div className="flex flex-col justify-center flex-1">
+                             <div className="text-sm font-medium text-primary mb-2">{t(`news.items.${i}.date`)}</div>
+                             <h4 className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2">{t(`news.items.${i}.title`)}</h4>
                           </div>
-                       </Link>
+                          <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
+                             <Button variant="outline" size="sm" className="w-full sm:w-auto group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors" asChild>
+                               <Link href="/news">{t('common.readMore')}</Link>
+                             </Button>
+                          </div>
+                       </div>
                     ))}
                  </div>
               </div>
@@ -339,19 +344,19 @@ export default function HomePage() {
                  />
                  <div className="space-y-4">
                     {[1, 2].map((i) => (
-                       <div key={i} className="flex gap-4 p-4 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group">
-                          <div className="w-16 h-16 rounded-xl bg-primary/10 flex flex-col items-center justify-center shrink-0 text-primary">
-                             <span className="text-xl font-bold font-display leading-none">{t(`events.items.${i}.day`)}</span>
-                             <span className="text-xs font-medium">{t(`events.items.${i}.month`)}</span>
+                       <div key={i} className="flex flex-col sm:flex-row gap-5 p-5 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group h-full items-start sm:items-center">
+                          <div className="w-24 h-24 rounded-xl bg-secondary/10 flex flex-col items-center justify-center shrink-0 text-secondary">
+                             <span className="text-2xl font-bold font-display leading-none mb-1">{t(`events.items.${i}.day`)}</span>
+                             <span className="text-sm font-medium uppercase tracking-wider">{t(`events.items.${i}.month`)}</span>
                           </div>
                           <div className="flex flex-col justify-center flex-1">
-                             <h4 className="font-bold mb-1 group-hover:text-primary transition-colors">{t(`events.items.${i}.title`)}</h4>
-                             <div className="text-sm text-muted-foreground flex gap-3">
-                                <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> {t(`events.items.${i}.location`)}</span>
+                             <div className="text-sm font-medium text-secondary mb-2 flex items-center gap-1">
+                                <MapPin className="w-4 h-4 shrink-0" /> {t(`events.items.${i}.location`)}
                              </div>
+                             <h4 className="font-bold text-foreground group-hover:text-secondary transition-colors line-clamp-2">{t(`events.items.${i}.title`)}</h4>
                           </div>
-                          <div className="flex items-center">
-                             <Button variant="outline" size="sm" className="group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors" asChild>
+                          <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
+                             <Button variant="outline" size="sm" className="w-full sm:w-auto group-hover:bg-secondary group-hover:text-secondary-foreground group-hover:border-secondary transition-colors" asChild>
                                <Link href="/events">{t('home.events.register')}</Link>
                              </Button>
                           </div>
@@ -365,8 +370,8 @@ export default function HomePage() {
         {/* VOLUNTEER CTA */}
         <SectionWrapper id="volunteer-cta" className="relative overflow-hidden border-y border-border" variant="default">
           <div className="absolute inset-0 bg-primary/5"></div>
-          <div className="relative z-10 max-w-3xl mx-auto text-center py-12">
-            <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="relative z-10 max-w-4xl mx-auto text-center py-12 md:py-16">
+            <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
               <Users className="w-8 h-8" />
             </div>
             <SectionHeading
@@ -374,9 +379,9 @@ export default function HomePage() {
               title={t('volunteer.subtitle')}
               description={t('common.volunteerDesc')}
               accent="secondary"
-              className="mb-8"
+              className="mb-8 lg:mb-10 max-w-3xl mx-auto"
             />
-            <Button size="lg" className="px-8" asChild>
+            <Button size="lg" className="px-10 h-14 text-lg font-bold shadow-md hover-elevate" asChild>
               <Link href="/volunteer">{t('common.volunteerCTA')}</Link>
             </Button>
           </div>

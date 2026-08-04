@@ -1,13 +1,10 @@
 import { Link } from 'wouter';
 import {
-  Facebook,
-  Instagram,
   Mail,
   MapPin,
   Phone,
-  Twitter,
-  Youtube,
 } from 'lucide-react';
+import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa6';
 import { MainContainer } from '@/components/layout/MainContainer';
 import { useLocale } from '@/contexts/LocaleContext';
 import logoUrl from '@/assets/mujaddidun-logo.png';
@@ -24,10 +21,9 @@ const QUICK_LINKS = [
 ] as const;
 
 const SOCIAL_LINKS = [
-  { name: 'Facebook', icon: Facebook },
-  { name: 'Twitter', icon: Twitter },
-  { name: 'Instagram', icon: Instagram },
-  { name: 'YouTube', icon: Youtube },
+  { name: 'Facebook', icon: FaFacebookF },
+  { name: 'Instagram', icon: FaInstagram },
+  { name: 'WhatsApp', icon: FaWhatsapp },
 ] as const;
 
 /**
@@ -104,16 +100,17 @@ export function Footer() {
             <h2 className="text-sm font-bold text-foreground">
               {t('footer.followUs')}
             </h2>
-            <div className="mt-4 flex items-center gap-2">
+            <div className="mt-4 flex items-center gap-3">
               {SOCIAL_LINKS.map(({ name, icon: Icon }) => (
-                <span
+                <a
                   key={name}
+                  href={`#${name.toLowerCase()}`}
                   aria-label={name}
-                  className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background text-muted-foreground"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-card border border-border text-muted-foreground transition-all duration-300 cursor-pointer hover:scale-110 hover:text-primary hover:border-primary/50 hover:shadow-lg hover:shadow-primary/20 focus-ring-standard"
                   data-testid={`social-${name.toLowerCase()}`}
                 >
                   <Icon className="h-4 w-4" aria-hidden="true" />
-                </span>
+                </a>
               ))}
             </div>
           </div>
