@@ -300,7 +300,20 @@
   "contact": {
     "title": "Contact Us",
     "subtitle": "We are here to listen. Contact us for any inquiries or suggestions.",
-    "addressValue": "Amman, Jordan - University Street"
+    "addressValue": "Amman, Jordan - University Street",
+    "fullName": "Full Name",
+    "form": {
+      "nameRequired": "Full name is required.",
+      "emailRequired": "Email address is required.",
+      "emailInvalid": "Please enter a valid email address.",
+      "phoneRequired": "Phone number is required.",
+      "phoneInvalid": "Please enter a valid phone number.",
+      "subjectRequired": "Subject is required.",
+      "successTitle": "Your message was sent successfully ✅",
+      "successMsg": "Thank you for contacting us. We will get back to you as soon as possible.",
+      "okBtn": "OK",
+      "optional": "(optional)"
+    }
   },
   "volunteer": {
     "title": "Volunteer",

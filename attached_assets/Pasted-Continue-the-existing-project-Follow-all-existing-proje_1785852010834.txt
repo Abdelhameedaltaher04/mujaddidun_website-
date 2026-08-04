@@ -1,0 +1,100 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate files.
+Do NOT modify routing.
+Do NOT modify architecture.
+Do NOT modify the design system.
+
+Keep the current branding, colors, typography, responsiveness, and accessibility.
+
+================================================
+
+TASK
+
+Enhance the "Contact Us" form with professional form validation.
+
+================================================
+
+Validation Rules
+
+The following fields are REQUIRED:
+
+- Full Name
+- Email Address
+- Phone Number
+- Subject
+
+The following field is OPTIONAL:
+
+- Message
+
+================================================
+
+Validation Requirements
+
+1. Show validation errors when the user attempts to submit the form without completing the required fields.
+
+2. Display clear error messages below each invalid field.
+
+Examples:
+
+الاسم الكامل مطلوب.
+
+البريد الإلكتروني مطلوب.
+
+يرجى إدخال بريد إلكتروني صحيح.
+
+رقم الهاتف مطلوب.
+
+الموضوع مطلوب.
+
+3. Validate the email format.
+
+4. Validate the phone number format (allow only valid phone number characters).
+
+5. Highlight invalid fields with a red border.
+
+6. Remove the error message immediately after the field becomes valid.
+
+================================================
+
+Successful Submission
+
+If all required fields are valid:
+
+- Display a professional success popup.
+
+Title:
+تم إرسال رسالتك بنجاح ✅
+
+Message:
+شكراً لتواصلك معنا، سيتم الرد عليك في أقرب وقت ممكن.
+
+Button:
+حسناً
+
+================================================
+
+UI Requirements
+
+- Smooth validation experience.
+- Smooth popup animation.
+- Fully responsive.
+- Accessible form.
+- Keep the current design unchanged.
+
+================================================
+
+IMPORTANT
+
+This is currently a frontend-only implementation.
+
+Do NOT connect APIs.
+
+Do NOT implement backend logic.
+
+Only implement client-side validation and the success popup.
+
+Stop after completing the Contact Us form validation.
