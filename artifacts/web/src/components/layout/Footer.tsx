@@ -15,10 +15,12 @@ import logoUrl from '@/assets/mujaddidun-logo.png';
 const QUICK_LINKS = [
   { key: 'nav.about', href: '/about' },
   { key: 'nav.projects', href: '/projects' },
+  { key: 'nav.programs', href: '/programs' },
   { key: 'nav.news', href: '/news' },
   { key: 'nav.events', href: '/events' },
   { key: 'nav.volunteer', href: '/volunteer' },
   { key: 'nav.contact', href: '/contact' },
+  { key: 'nav.donate', href: '/donate' },
 ] as const;
 
 const SOCIAL_LINKS = [

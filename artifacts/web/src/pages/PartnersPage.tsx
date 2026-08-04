@@ -17,10 +17,11 @@ export default function PartnersPage() {
       />
       <main className="flex-1">
         <SectionWrapper>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-              <div key={item} className="aspect-video bg-card rounded-xl border border-border flex items-center justify-center p-6 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all hover-elevate shadow-sm">
-                <span className="text-muted-foreground font-semibold">{t('partners.partnerLabel', { item })}</span>
+              <div key={item} className="aspect-[3/2] bg-card rounded-2xl border border-border flex flex-col items-center justify-center p-6 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all hover-elevate shadow-sm group">
+                <div className="w-16 h-16 rounded-full bg-muted mb-4 group-hover:bg-primary/5 transition-colors"></div>
+                <span className="text-foreground font-semibold text-center text-sm md:text-base">{t(`partners.items.${item}`)}</span>
               </div>
             ))}
           </div>

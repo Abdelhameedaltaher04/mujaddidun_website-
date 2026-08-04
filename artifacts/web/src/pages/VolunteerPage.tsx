@@ -50,62 +50,62 @@ export default function VolunteerPage() {
       <main className="flex-1">
         <SectionWrapper>
           <div className="max-w-3xl mx-auto">
-            <div className="bg-card border border-border rounded-xl p-6 md:p-10 shadow-sm">
-              <h2 className="text-2xl font-bold font-display mb-8 text-center">{t('volunteer.formTitle')}</h2>
+            <div className="bg-card border border-border rounded-2xl p-6 md:p-10 shadow-sm">
+              <h2 className="text-3xl font-bold font-display mb-8 text-center text-foreground">{t('volunteer.formTitle')}</h2>
               
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="space-y-4">
-                  <h3 className="font-semibold border-b border-border pb-2">{t('volunteer.form.personalInfo')}</h3>
+              <form onSubmit={handleSubmit} className="space-y-10">
+                <div className="space-y-6">
+                  <h3 className="text-xl font-bold font-display text-primary border-b border-border pb-3">{t('volunteer.form.personalInfo')}</h3>
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="fullName">{t('volunteer.form.fullName')}</Label>
-                      <Input id="fullName" required />
+                      <Label htmlFor="fullName" className="font-semibold">{t('volunteer.form.fullName')}</Label>
+                      <Input id="fullName" required className="rounded-xl bg-background h-11" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="dob">{t('volunteer.form.dob')}</Label>
-                      <Input id="dob" type="date" required />
+                      <Label htmlFor="dob" className="font-semibold">{t('volunteer.form.dob')}</Label>
+                      <Input id="dob" type="date" required className="rounded-xl bg-background h-11" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">{t('common.email')}</Label>
-                      <Input id="email" type="email" required dir="ltr" className="text-start" />
+                      <Label htmlFor="email" className="font-semibold">{t('common.email')}</Label>
+                      <Input id="email" type="email" required dir="ltr" className="text-start rounded-xl bg-background h-11" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone">{t('common.phone')}</Label>
-                      <Input id="phone" type="tel" required dir="ltr" className="text-start" />
+                      <Label htmlFor="phone" className="font-semibold">{t('common.phone')}</Label>
+                      <Input id="phone" type="tel" required dir="ltr" className="text-start rounded-xl bg-background h-11" />
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <h3 className="font-semibold border-b border-border pb-2">{t('volunteer.interests')}</h3>
-                  <div className="grid gap-3 sm:grid-cols-2">
+                <div className="space-y-6">
+                  <h3 className="text-xl font-bold font-display text-primary border-b border-border pb-3">{t('volunteer.interests')}</h3>
+                  <div className="grid gap-4 sm:grid-cols-2">
                     {interests.map((interest) => (
-                      <div key={interest.id} className="flex items-center space-x-2 space-x-reverse">
-                        <Checkbox id={`interest-${interest.id}`} />
-                        <Label htmlFor={`interest-${interest.id}`} className="cursor-pointer">{interest.label}</Label>
+                      <div key={interest.id} className="flex items-center space-x-2 space-x-reverse bg-background p-4 rounded-2xl border border-border hover:border-primary/50 transition-colors focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                        <Checkbox id={`interest-${interest.id}`} className="w-5 h-5 rounded-md" />
+                        <Label htmlFor={`interest-${interest.id}`} className="cursor-pointer font-medium w-full ms-2">{interest.label}</Label>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <h3 className="font-semibold border-b border-border pb-2">{t('volunteer.availability')}</h3>
-                  <div className="grid gap-3 sm:grid-cols-3">
+                <div className="space-y-6">
+                  <h3 className="text-xl font-bold font-display text-primary border-b border-border pb-3">{t('volunteer.availability')}</h3>
+                  <div className="grid gap-4 sm:grid-cols-3">
                     {times.map((time) => (
-                      <div key={time.id} className="flex items-center space-x-2 space-x-reverse">
-                        <Checkbox id={`time-${time.id}`} />
-                        <Label htmlFor={`time-${time.id}`} className="cursor-pointer">{time.label}</Label>
+                      <div key={time.id} className="flex items-center space-x-2 space-x-reverse bg-background p-4 rounded-2xl border border-border hover:border-primary/50 transition-colors focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                        <Checkbox id={`time-${time.id}`} className="w-5 h-5 rounded-md" />
+                        <Label htmlFor={`time-${time.id}`} className="cursor-pointer font-medium w-full ms-2">{time.label}</Label>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="experience">{t('volunteer.form.experience')}</Label>
-                  <Textarea id="experience" rows={4} />
+                <div className="space-y-3">
+                  <Label htmlFor="experience" className="font-semibold">{t('volunteer.form.experience')}</Label>
+                  <Textarea id="experience" rows={4} className="rounded-xl bg-background resize-none" />
                 </div>
 
-                <Button type="submit" size="lg" className="w-full">{t('volunteer.submitReg')}</Button>
+                <Button type="submit" size="lg" className="w-full h-14 text-lg font-bold rounded-xl">{t('volunteer.submitReg')}</Button>
               </form>
             </div>
           </div>

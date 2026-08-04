@@ -72,7 +72,7 @@ export default function DonatePage() {
                         onClick={() => setDonationType(type.id)}
                         aria-pressed={donationType === type.id}
                         className={cn(
-                          "px-4 py-3 rounded-xl border text-sm font-medium transition-all",
+                          "px-4 py-3 rounded-2xl border text-sm font-medium transition-all focus-ring-standard",
                           donationType === type.id 
                             ? "bg-primary text-primary-foreground border-primary" 
                             : "bg-background border-border text-foreground hover:border-primary hover:bg-primary/5"
@@ -95,7 +95,7 @@ export default function DonatePage() {
                         onClick={() => setFrequency(freq.id)}
                         aria-pressed={frequency === freq.id}
                         className={cn(
-                          "flex-1 px-4 py-3 rounded-xl border font-medium transition-all",
+                          "flex-1 px-4 py-3 rounded-2xl border font-medium transition-all focus-ring-standard",
                           frequency === freq.id 
                             ? "bg-secondary text-secondary-foreground border-secondary" 
                             : "bg-background border-border text-foreground hover:border-secondary hover:bg-secondary/5"
@@ -118,7 +118,7 @@ export default function DonatePage() {
                         onClick={() => setAmount(amt)}
                         aria-pressed={amount === amt}
                         className={cn(
-                          "px-2 py-4 rounded-xl border text-lg font-bold transition-all",
+                          "px-2 py-4 rounded-2xl border text-lg font-bold transition-all focus-ring-standard",
                           amount === amt 
                             ? "bg-primary text-primary-foreground border-primary" 
                             : "bg-background border-border text-foreground hover:border-primary hover:bg-primary/5"
@@ -128,14 +128,16 @@ export default function DonatePage() {
                       </button>
                     ))}
                     <div className="col-span-3 sm:col-span-1 relative h-full">
+                      <Label htmlFor="customAmount" className="sr-only">{t('donate.amount.customPlaceholder')}</Label>
                       <Input 
+                        id="customAmount"
                         type="number" 
                         min="1"
                         placeholder={t('donate.amount.customPlaceholder')}
                         value={amounts.includes(amount) ? '' : amount}
                         onChange={(e) => setAmount(e.target.value)}
                         className={cn(
-                          "h-full text-center rounded-xl",
+                          "h-full text-center rounded-2xl",
                           !amounts.includes(amount) && amount !== '' && "border-primary ring-1 ring-primary"
                         )}
                       />
@@ -149,20 +151,20 @@ export default function DonatePage() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="donorName">{t('donate.form.name')}</Label>
-                      <Input id="donorName" type="text" />
+                      <Input id="donorName" type="text" className="rounded-2xl h-11" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="donorPhone">{t('donate.form.phone')}</Label>
-                      <Input id="donorPhone" type="tel" required dir="ltr" className="text-start" />
+                      <Input id="donorPhone" type="tel" required dir="ltr" className="text-start rounded-2xl h-11" />
                     </div>
                     <div className="space-y-2 sm:col-span-2">
                       <Label htmlFor="donorEmail">{t('donate.form.email')}</Label>
-                      <Input id="donorEmail" type="email" dir="ltr" className="text-start" />
+                      <Input id="donorEmail" type="email" dir="ltr" className="text-start rounded-2xl h-11" />
                     </div>
                   </div>
                 </div>
 
-                <Button type="submit" size="lg" className="w-full text-lg h-14 bg-secondary hover:bg-secondary/90 text-secondary-foreground">
+                <Button type="submit" size="lg" className="w-full text-lg h-14 rounded-2xl bg-secondary hover:bg-secondary/90 text-secondary-foreground">
                   <Heart className="w-5 h-5 mx-2" />
                   {t('donate.submit')}
                 </Button>
@@ -172,7 +174,7 @@ export default function DonatePage() {
             {/* Sidebar / Bank Info */}
             <div className="space-y-6">
               <div className="bg-muted border border-border rounded-2xl p-6">
-                <div className="w-12 h-12 rounded-xl bg-background border border-border flex items-center justify-center mb-4 text-primary">
+                <div className="w-12 h-12 rounded-2xl bg-background border border-border flex items-center justify-center mb-4 text-primary">
                   <Building2 className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-display font-bold mb-3">{t('donate.bankTransfer.title')}</h3>

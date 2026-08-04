@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { key: 'nav.home', href: '/' },
   { key: 'nav.about', href: '/about' },
   { key: 'nav.projects', href: '/projects' },
+  { key: 'nav.programs', href: '/programs' },
   { key: 'nav.news', href: '/news' },
   { key: 'nav.events', href: '/events' },
   { key: 'nav.gallery', href: '/gallery' },
@@ -85,8 +86,18 @@ export function Navbar() {
               size="sm"
               className="hidden sm:inline-flex"
               data-testid="button-login"
+              asChild
             >
-              {t('nav.login')}
+              <Link href="/login">{t('nav.login')}</Link>
+            </Button>
+            <Button
+              size="sm"
+              variant="secondary"
+              className="hidden sm:inline-flex"
+              data-testid="button-donate"
+              asChild
+            >
+              <Link href="/donate">{t('nav.donate')}</Link>
             </Button>
             {/* Mobile menu toggle */}
             <Button
@@ -136,9 +147,12 @@ export function Navbar() {
                   </Link>
                 </li>
               ))}
-              <li className="pt-2 sm:hidden">
-                <Button className="w-full" data-testid="button-mobile-login">
-                  {t('nav.login')}
+              <li className="pt-2 sm:hidden flex flex-col gap-2">
+                <Button className="w-full" variant="secondary" data-testid="button-mobile-donate" asChild>
+                  <Link href="/donate" onClick={() => setMobileOpen(false)}>{t('nav.donate')}</Link>
+                </Button>
+                <Button className="w-full" data-testid="button-mobile-login" asChild>
+                  <Link href="/login" onClick={() => setMobileOpen(false)}>{t('nav.login')}</Link>
                 </Button>
               </li>
             </ul>

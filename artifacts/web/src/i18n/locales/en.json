@@ -54,7 +54,9 @@
     "login": "Login",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "mainNavigation": "Main navigation"
+    "mainNavigation": "Main navigation",
+    "programs": "Programs",
+    "donate": "Donate Now"
   },
   "footer": {
     "logoPlaceholder": "Association Logo",
@@ -116,9 +118,9 @@
     "title": "About Us",
     "subtitle": "Learn about Mujaddidun Association and our vision for a better tomorrow.",
     "heading": "Mujaddidun Charity Development Association - Jordan",
-    "descriptionP1": "Mujaddidun Charity Development Association is a Jordanian association registered with the Ministry of Social Development under No. (1924) since 2009.",
-    "descriptionP2": "The association works to empower youth and serve the community by implementing developmental and humanitarian initiatives and projects, spreading the culture of volunteerism, promoting the values of social responsibility, and contributing to sustainable development.",
-    "descriptionP3": "The association strives to build a more cohesive society through partnership with institutions and individuals, and by delivering quality programs that serve all segments of the community.",
+    "descriptionP1": "Mujaddidun Charity Development Association is a Jordanian society registered with the Ministry of Social Development under No. (1924) since 2009.",
+    "descriptionP2": "The association works to empower youth and serve the community by implementing developmental and humanitarian initiatives, spreading the culture of volunteerism, promoting values of social responsibility, and contributing to sustainable development under the motto 'We Feed . We Shelter . We Empower'.",
+    "descriptionP3": "The association seeks to build a more cohesive society through partnerships with institutions and individuals, and providing qualitative programs that serve various segments of society in Amman and different governorates.",
     "mission": "Our Mission",
     "vision": "Our Vision",
     "values": "Our Values",
@@ -131,7 +133,7 @@
     "value5": "Empowerment",
     "value6": "Sustainability",
     "story": "Our Story",
-    "storyText": "Mujaddidun Charity Development Association is a Jordanian association registered with the Ministry of Social Development under No. (1924) since 2009, working to empower youth and serve the community through sustainable developmental and humanitarian initiatives.",
+    "storyText": "Mujaddidun Charity Development Association was established in Jordan in 2009 and is registered with the Ministry of Social Development under No. (1924). We started with small youth initiatives, and as challenges grew, our vision expanded to include comprehensive projects in feeding, housing, and empowerment. We believe that every individual has the power to create change, and together we make an impact that spans generations under the motto 'We Feed . We Shelter . We Empower'.",
     "valuesText1": "Transparency: Clarity in all our dealings and projects.",
     "valuesText2": "Responsibility: Our commitment to the community and the trust of our partners.",
     "valuesText3": "Sustainability: Focusing on projects with long-term impact."
@@ -149,41 +151,131 @@
   "news": {
     "title": "News",
     "subtitle": "Latest updates and announcements from Mujaddidun Association.",
-    "empty": "No news available at the moment."
+    "empty": "No news available at the moment.",
+    "items": {
+      "1": {
+        "date": "Jan 15, 2024",
+        "title": "Mujaddidun launches Warm Winter campaign across Jordanian governorates",
+        "excerpt": "The winter campaign launched to distribute heaters and blankets to underprivileged families in Amman, Zarqa, and Irbid."
+      },
+      "2": {
+        "date": "Feb 05, 2024",
+        "title": "Graduation of the 5th cohort of Youth Professional Empowerment Program",
+        "excerpt": "The association celebrated the graduation of 50 young men and women from vocational training programs in cooperation with local partners."
+      },
+      "3": {
+        "date": "Mar 20, 2024",
+        "title": "Distribution of 5000 food parcels in preparation for the holy month of Ramadan",
+        "excerpt": "Preparations completed to secure food parcels for families in need before the arrival of the holy month."
+      }
+    }
   },
   "events": {
     "title": "Events",
     "subtitle": "Join our upcoming events and be part of the action.",
     "upcoming": "Upcoming Events",
     "past": "Past Events",
-    "empty": "No events scheduled at the moment."
+    "empty": "No events scheduled at the moment.",
+    "items": {
+      "1": {
+        "day": "12",
+        "month": "Apr",
+        "title": "Annual Charity Iftar",
+        "location": "Amman - Al Numan Halls",
+        "desc": "We invite you to attend the annual charity iftar to support the association's feeding projects."
+      },
+      "2": {
+        "day": "25",
+        "month": "May",
+        "title": "Tree Planting Campaign in Jerash",
+        "location": "Irbid & Jerash",
+        "desc": "A volunteer initiative to plant 1,000 forest and fruit trees with the participation of Mujaddidun youth."
+      }
+    }
   },
   "gallery": {
     "title": "Gallery",
-    "subtitle": "Moments of giving and hope from our projects and events."
+    "subtitle": "Moments of giving and hope from our projects and events.",
+    "items": {
+      "1": "Food Parcels Distribution in Amman",
+      "2": "Restoration of Dilapidated Homes in Zarqa",
+      "3": "Vocational Empowerment Courses for Youth",
+      "4": "Youth Volunteer Work",
+      "5": "Free Medical Campaigns",
+      "6": "Orphans Recreational Activities",
+      "7": "Warm Winter Campaign",
+      "8": "Feeding and Iftar Projects"
+    }
   },
   "reports": {
     "title": "Reports",
     "subtitle": "Annual and financial reports to ensure transparency.",
     "download": "Download Report",
-    "empty": "No reports available for download at the moment."
+    "empty": "No reports available for download at the moment.",
+    "items": {
+      "2021": "Annual and Financial Report 2021",
+      "2022": "Annual and Financial Report 2022",
+      "2023": "Annual and Financial Report 2023"
+    }
   },
   "successStories": {
     "title": "Success Stories",
     "subtitle": "Real experiences reflecting the impact of our programs on individuals and families.",
     "itemTitle": "Success Story {item}",
-    "itemDesc": "A brief summary of the success story and how the association's initiatives impacted and changed their lives for the better..."
+    "itemDesc": "A brief summary of the success story and how the association's initiatives impacted and changed their lives for the better...",
+    "items": {
+      "1": {
+        "title": "Abu Ahmed's Grocery Project",
+        "desc": "After relying on intermittent assistance, Abu Ahmed managed, through the empowerment program, to open a small grocery store that provides a decent income for his family of 5."
+      },
+      "2": {
+        "title": "Restoration of Um Saif's Home",
+        "desc": "Um Saif lived in a dilapidated house lacking basic living necessities. Thanks to your donations, the house was completely restored and furnished."
+      },
+      "3": {
+        "title": "Student Yasmeen's Scholarship",
+        "desc": "Yasmeen was unable to complete her university studies due to financial circumstances. Today, thanks to the sponsorship of benefactors, she is close to graduating with honors in nursing."
+      }
+    }
   },
   "partners": {
     "title": "Our Partners",
     "subtitle": "We are proud of our strategic partnerships that help expand our impact and serve the community.",
-    "partnerLabel": "Partner {item}"
+    "partnerLabel": "Partner {item}",
+    "items": {
+      "1": "Ministry of Social Development",
+      "2": "Jordan Food Bank",
+      "3": "Vocational Training Corporation",
+      "4": "Greater Amman Municipality",
+      "5": "Hashemite Charity Organization",
+      "6": "National Aid Fund",
+      "7": "King Hussein Cancer Foundation",
+      "8": "Tkiyet Um Ali"
+    }
   },
   "faq": {
     "title": "FAQ",
     "subtitle": "Answers to the most common questions about Mujaddidun Association and its projects.",
     "q1": "What are the goals of Mujaddidun Association?",
-    "a1": "Mujaddidun Association seeks to provide support and care for those in need through sustainable projects that contribute to building a solidary and empowered community, focusing on feeding, housing, and empowerment projects."
+    "a1": "Mujaddidun Association seeks to provide support and care for those in need through sustainable projects that contribute to building a solidary and empowered community, focusing on feeding, housing, and empowerment projects.",
+    "items": {
+      "1": {
+        "q": "What are the goals of Mujaddidun Association?",
+        "a": "Mujaddidun Association seeks to provide support and care for those in need through sustainable projects that contribute to building a solidary and empowered community, focusing on feeding, housing, and empowerment projects."
+      },
+      "2": {
+        "q": "How can I volunteer with the association?",
+        "a": "You can join our volunteer team by filling out the volunteer form on our volunteer page, and our team will contact you."
+      },
+      "3": {
+        "q": "Do my donations reach the beneficiaries directly?",
+        "a": "Yes, the association follows the highest transparency standards, and every donation is directed to the project you choose after a careful field study of the families in need."
+      },
+      "4": {
+        "q": "What donation methods are available?",
+        "a": "You can donate via direct bank transfer to the association's authorized accounts, or by visiting our headquarters."
+      }
+    }
   },
   "contact": {
     "title": "Contact Us",

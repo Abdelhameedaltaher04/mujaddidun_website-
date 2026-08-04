@@ -36,71 +36,71 @@ export default function ContactPage() {
         <SectionWrapper>
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
-              <h2 className="text-2xl font-bold font-display mb-6">{t('common.contactDesc')}</h2>
+              <h2 className="text-3xl font-bold font-display mb-6">{t('common.contactDesc')}</h2>
               
-              <div className="space-y-6 mt-8">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary/10 text-primary rounded-lg shrink-0">
+              <div className="space-y-6 mt-8 bg-card rounded-2xl border border-border p-6 md:p-8 shadow-sm">
+                <div className="flex items-start gap-4 group">
+                  <div className="p-4 bg-primary/10 text-primary rounded-2xl shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                     <MapPin className="w-6 h-6" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold">{t('footer.address')}</h3>
-                    <p className="text-muted-foreground mt-1">{t('contact.addressValue')}</p>
+                  <div className="pt-1">
+                    <h3 className="font-bold text-foreground text-lg mb-1">{t('footer.address')}</h3>
+                    <p className="text-muted-foreground">{t('contact.addressValue')}</p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary/10 text-primary rounded-lg shrink-0">
+                <div className="flex items-start gap-4 group">
+                  <div className="p-4 bg-secondary/10 text-secondary rounded-2xl shrink-0 group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors">
                     <Phone className="w-6 h-6" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold">{t('footer.phone')}</h3>
-                    <p className="text-muted-foreground mt-1" dir="ltr">+962 6 123 4567</p>
+                  <div className="pt-1">
+                    <h3 className="font-bold text-foreground text-lg mb-1">{t('footer.phone')}</h3>
+                    <p className="text-muted-foreground ltr-safe block" dir="ltr">+962 6 123 4567</p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary/10 text-primary rounded-lg shrink-0">
+                <div className="flex items-start gap-4 group">
+                  <div className="p-4 bg-info/10 text-info rounded-2xl shrink-0 group-hover:bg-info group-hover:text-info-foreground transition-colors">
                     <Mail className="w-6 h-6" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold">{t('footer.email')}</h3>
-                    <p className="text-muted-foreground mt-1">info@mujaddidun.org</p>
+                  <div className="pt-1">
+                    <h3 className="font-bold text-foreground text-lg mb-1">{t('footer.email')}</h3>
+                    <p className="text-muted-foreground ltr-safe block" dir="ltr">info@mujaddidun.org</p>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="bg-card border border-border rounded-xl p-6 md:p-8 shadow-sm">
+            <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">{t('common.firstName')}</Label>
-                    <Input id="firstName" required />
+                    <Input id="firstName" required className="rounded-xl bg-background" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">{t('common.lastName')}</Label>
-                    <Input id="lastName" required />
+                    <Input id="lastName" required className="rounded-xl bg-background" />
                   </div>
                 </div>
                 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="email">{t('common.email')}</Label>
-                    <Input id="email" type="email" required dir="ltr" className="text-start" />
+                    <Input id="email" type="email" required dir="ltr" className="text-start rounded-xl bg-background" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">{t('common.phone')}</Label>
-                    <Input id="phone" type="tel" dir="ltr" className="text-start" />
+                    <Input id="phone" type="tel" dir="ltr" className="text-start rounded-xl bg-background" />
                   </div>
                 </div>
                 
                 <div className="space-y-2">
                   <Label htmlFor="message">{t('common.message')}</Label>
-                  <Textarea id="message" rows={5} required />
+                  <Textarea id="message" rows={5} required className="rounded-xl bg-background resize-none" />
                 </div>
                 
-                <Button type="submit" className="w-full">{t('common.send')}</Button>
+                <Button type="submit" size="lg" className="w-full h-12 rounded-xl text-lg font-bold">{t('common.send')}</Button>
               </form>
             </div>
           </div>

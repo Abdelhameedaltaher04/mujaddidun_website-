@@ -32,7 +32,7 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
               <Button size="lg" variant="secondary" className="px-8 font-bold" asChild>
-                <Link href="/projects">{t('common.donate')}</Link>
+                <Link href="/donate">{t('common.donate')}</Link>
               </Button>
               <Button size="lg" variant="outline" className="px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10" asChild>
                 <Link href="/about">{t('about.story')}</Link>
@@ -125,7 +125,7 @@ export default function HomePage() {
                 <h3 className="text-xl font-bold font-display mb-2">{t('projects.feeding')}</h3>
                 <p className="text-muted-foreground mb-6 line-clamp-2">{t('projects.feedingDesc')}</p>
                 <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors" asChild>
-                  <Link href="/projects#feeding">{t('common.donate')}</Link>
+                  <Link href="/donate?program=feeding">{t('common.donate')}</Link>
                 </Button>
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function HomePage() {
                 <h3 className="text-xl font-bold font-display mb-2">{t('projects.housing')}</h3>
                 <p className="text-muted-foreground mb-6 line-clamp-2">{t('projects.housingDesc')}</p>
                 <Button variant="outline" className="w-full group-hover:bg-secondary group-hover:text-secondary-foreground group-hover:border-secondary transition-colors" asChild>
-                  <Link href="/projects#housing">{t('common.donate')}</Link>
+                  <Link href="/donate?program=housing">{t('common.donate')}</Link>
                 </Button>
               </div>
             </div>
@@ -151,7 +151,7 @@ export default function HomePage() {
                 <h3 className="text-xl font-bold font-display mb-2">{t('projects.empowerment')}</h3>
                 <p className="text-muted-foreground mb-6 line-clamp-2">{t('projects.empowermentDesc')}</p>
                 <Button variant="outline" className="w-full group-hover:bg-info group-hover:text-info-foreground group-hover:border-info transition-colors" asChild>
-                  <Link href="/projects#empowerment">{t('common.donate')}</Link>
+                  <Link href="/donate?program=empowerment">{t('common.donate')}</Link>
                 </Button>
               </div>
             </div>
@@ -178,11 +178,13 @@ export default function HomePage() {
                  </div>
                  <div className="space-y-4">
                     {[1, 2].map((i) => (
-                       <Link key={i} href="/news" className="flex gap-4 p-4 rounded-xl border border-border bg-card hover-elevate transition-all group">
-                          <div className="w-24 h-24 rounded-lg bg-muted shrink-0"></div>
+                       <Link key={i} href="/news" className="flex gap-4 p-4 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group focus-ring-standard">
+                          <div className="w-24 h-24 rounded-xl bg-muted shrink-0 relative overflow-hidden">
+                             <div className="absolute inset-0 bg-primary/10"></div>
+                          </div>
                           <div className="flex flex-col justify-center">
-                             <div className="text-xs text-muted-foreground mb-1">{t('home.news.sampleDate')}</div>
-                             <h4 className="font-bold group-hover:text-primary transition-colors line-clamp-2">{t('home.news.sampleTitle')}</h4>
+                             <div className="text-xs text-muted-foreground mb-1">{t(`news.items.${i}.date`)}</div>
+                             <h4 className="font-bold group-hover:text-primary transition-colors line-clamp-2">{t(`news.items.${i}.title`)}</h4>
                           </div>
                        </Link>
                     ))}
@@ -198,19 +200,21 @@ export default function HomePage() {
                  </div>
                  <div className="space-y-4">
                     {[1, 2].map((i) => (
-                       <div key={i} className="flex gap-4 p-4 rounded-xl border border-border bg-card">
-                          <div className="w-16 h-16 rounded-lg bg-primary/10 flex flex-col items-center justify-center shrink-0 text-primary">
-                             <span className="text-xl font-bold font-display leading-none">{t('home.events.sampleDay')}</span>
-                             <span className="text-xs font-medium">{t('home.events.sampleMonth')}</span>
+                       <div key={i} className="flex gap-4 p-4 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group">
+                          <div className="w-16 h-16 rounded-xl bg-primary/10 flex flex-col items-center justify-center shrink-0 text-primary">
+                             <span className="text-xl font-bold font-display leading-none">{t(`events.items.${i}.day`)}</span>
+                             <span className="text-xs font-medium">{t(`events.items.${i}.month`)}</span>
                           </div>
                           <div className="flex flex-col justify-center flex-1">
-                             <h4 className="font-bold mb-1">{t('home.events.sampleTitle')}</h4>
+                             <h4 className="font-bold mb-1 group-hover:text-primary transition-colors">{t(`events.items.${i}.title`)}</h4>
                              <div className="text-sm text-muted-foreground flex gap-3">
-                                <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> {t('home.events.location')}</span>
+                                <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> {t(`events.items.${i}.location`)}</span>
                              </div>
                           </div>
                           <div className="flex items-center">
-                             <Button variant="outline" size="sm" asChild><Link href="/events">{t('home.events.register')}</Link></Button>
+                             <Button variant="outline" size="sm" className="group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors" asChild>
+                               <Link href="/events">{t('home.events.register')}</Link>
+                             </Button>
                           </div>
                        </div>
                     ))}
@@ -243,7 +247,7 @@ export default function HomePage() {
            </div>
            <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-60">
               {[1, 2, 3, 4, 5].map((i) => (
-                 <div key={i} className="font-display font-bold text-xl text-muted-foreground">{t('home.partners.partner')} {i}</div>
+                 <div key={i} className="font-display font-bold text-xl text-muted-foreground hover:text-foreground transition-colors cursor-default">{t(`partners.items.${i}`)}</div>
               ))}
            </div>
         </SectionWrapper>

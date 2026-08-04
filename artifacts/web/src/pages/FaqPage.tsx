@@ -18,13 +18,15 @@ export default function FaqPage() {
       />
       <main className="flex-1">
         <SectionWrapper>
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-3xl mx-auto bg-card rounded-2xl border border-border p-6 md:p-8 shadow-sm">
             <Accordion type="single" collapsible className="w-full">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <AccordionItem key={item} value={`item-${item}`}>
-                  <AccordionTrigger className="text-lg font-medium text-start">{t('faq.q1')}</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground leading-relaxed text-base">
-                    {t('faq.a1')}
+              {[1, 2, 3, 4].map((item) => (
+                <AccordionItem key={item} value={`item-${item}`} className="border-border">
+                  <AccordionTrigger className="text-lg font-medium text-start hover:text-primary transition-colors focus-ring-standard rounded-md">
+                     {t(`faq.items.${item}.q`)}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground leading-relaxed text-base pt-2">
+                    {t(`faq.items.${item}.a`)}
                   </AccordionContent>
                 </AccordionItem>
               ))}
