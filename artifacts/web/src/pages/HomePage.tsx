@@ -6,76 +6,11 @@ import { StatCounter } from '@/components/layout/StatCounter';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
-import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight, Users, Phone, Mail, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
-import useEmblaCarousel from 'embla-carousel-react';
-import { useCallback, useEffect, useState } from 'react';
+import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight, Users, Phone, Mail, ChevronLeft, MapPin } from 'lucide-react';
+import { PartnersCarousel } from '@/components/layout/PartnersCarousel';
 import { cn } from '@/lib/utils';
 import logoUrl from '@/assets/mujaddidun-logo.png';
 
-function PartnersCarousel({ items, t, dir }: { items: number[], t: (key: string) => string, dir: string }) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ 
-    loop: true, 
-    direction: dir as 'rtl' | 'ltr',
-    align: 'start',
-  });
-  const [isPaused, setIsPaused] = useState(false);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const interval = setInterval(() => {
-      if (!isPaused) {
-        emblaApi.scrollNext();
-      }
-    }, 2500);
-
-    return () => clearInterval(interval);
-  }, [emblaApi, isPaused]);
-
-  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
-
-  return (
-    <div 
-      className="relative max-w-6xl mx-auto px-12 group"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocus={() => setIsPaused(true)}
-      onBlur={() => setIsPaused(false)}
-    >
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex touch-pan-y -ms-4 py-4" style={{ backfaceVisibility: 'hidden' }}>
-          {items.map((i) => (
-            <div key={i} className="flex-[0_0_50%] md:flex-[0_0_25%] lg:flex-[0_0_20%] min-w-0 ps-4">
-              <div className="h-28 bg-card rounded-2xl border border-border flex items-center justify-center p-4 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all shadow-sm hover-elevate">
-                <span className="font-display font-bold text-center text-sm md:text-base text-foreground">{t(`partners.items.${i}`)}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <Button 
-        variant="outline" 
-        size="icon" 
-        className="absolute top-1/2 -translate-y-1/2 start-0 rounded-full w-10 h-10 bg-background/80 backdrop-blur-sm z-10 opacity-0 group-hover:opacity-100 transition-opacity focus-ring-standard"
-        onClick={scrollPrev}
-        aria-label={t('common.previous')}
-      >
-        {dir === 'rtl' ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
-      </Button>
-      <Button 
-        variant="outline" 
-        size="icon" 
-        className="absolute top-1/2 -translate-y-1/2 end-0 rounded-full w-10 h-10 bg-background/80 backdrop-blur-sm z-10 opacity-0 group-hover:opacity-100 transition-opacity focus-ring-standard"
-        onClick={scrollNext}
-        aria-label={t('common.next')}
-      >
-        {dir === 'rtl' ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-      </Button>
-    </div>
-  );
-}
 
 export default function HomePage() {
   const { t, dir } = useLocale();
@@ -327,9 +262,20 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* PARTNERS (Redesigned) */}
-        <SectionWrapper id="partners" variant="muted">
-           <SectionHeading title={t('home.sections.partners')} accent="primary" />
-           <PartnersCarousel items={[1, 2, 3, 4, 5, 6, 7, 8]} t={t} dir={dir} />
+        <SectionWrapper id="partners" variant="muted" className="relative overflow-hidden">
+           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-50 pointer-events-none"></div>
+           <div className="absolute top-1/2 start-1/4 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[100px] opacity-30 mix-blend-screen pointer-events-none transform -translate-y-1/2 motion-safe:animate-pulse" style={{ animationDuration: '8s' }}></div>
+           <div className="absolute top-1/2 end-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] opacity-30 mix-blend-screen pointer-events-none transform -translate-y-1/2 motion-safe:animate-pulse" style={{ animationDuration: '10s' }}></div>
+           
+           <div className="relative z-10">
+             <SectionHeading 
+               kicker={t('home.sections.partners')}
+               title={t('partners.title')} 
+               description={t('partners.subtitle')}
+               accent="secondary" 
+             />
+             <PartnersCarousel />
+           </div>
         </SectionWrapper>
 
         {/* FAQ PREVIEW */}
