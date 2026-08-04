@@ -5,12 +5,14 @@ import { LocaleProvider } from '@/contexts/LocaleContext';
 import HomePage from '@/pages/HomePage';
 import NotFound from '@/pages/not-found';
 import { Route, Switch, Router as WouterRouter } from 'wouter';
+import LoginPage from '@/pages/login';
 
 const queryClient = new QueryClient();
 
 function Router() {
   return (
     <Switch>
+      <Route path="/login" component={LoginPage} />
       <Route path="/" component={HomePage} />
       <Route component={NotFound} />
     </Switch>
