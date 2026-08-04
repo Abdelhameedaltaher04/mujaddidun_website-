@@ -58,7 +58,9 @@
     "closeMenu": "Close menu",
     "mainNavigation": "Main navigation",
     "programs": "Programs",
-    "donate": "Donate Now"
+    "donate": "Donate Now",
+    "activities": "Activities",
+    "media": "Media"
   },
   "footer": {
     "logoPlaceholder": "Association Logo",

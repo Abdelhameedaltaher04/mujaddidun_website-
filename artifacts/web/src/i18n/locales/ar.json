@@ -58,7 +58,9 @@
     "closeMenu": "إغلاق القائمة",
     "mainNavigation": "التنقل الرئيسي",
     "programs": "البرامج",
-    "donate": "تبرع الآن"
+    "donate": "تبرع الآن",
+    "activities": "الأنشطة",
+    "media": "الإعلام"
   },
   "footer": {
     "logoPlaceholder": "شعار الجمعية",

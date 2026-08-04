@@ -1,0 +1,88 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate files.
+Do NOT modify routing.
+Do NOT modify architecture.
+Do NOT modify the design system.
+
+Keep the official Majaddidun branding, colors, typography, spacing and responsive behavior.
+
+================================================
+
+TASK
+
+Redesign the website navigation to create a cleaner and more modern experience.
+
+================================================
+
+1. Simplify the Desktop Navigation
+
+The current navbar contains too many separate navigation items.
+
+Reorganize the navigation into the following structure:
+
+Home
+
+About Us
+
+Activities ▼
+- Programs
+- Projects
+- Events
+- Gallery
+
+Media ▼
+- News
+
+Volunteer
+
+Contact Us
+
+Donate Now (Primary CTA)
+
+================================================
+
+2. Remove Unnecessary Navigation Items
+
+Remove the following items completely from BOTH the desktop navbar and the mobile navigation:
+
+- Partners
+- FAQ (Frequently Asked Questions)
+
+Do NOT delete the actual sections or pages.
+Only remove them from the navigation menu.
+
+================================================
+
+3. Full-Screen Mobile Navigation
+
+Replace the current small hamburger menu with a modern full-screen navigation overlay.
+
+Requirements:
+
+- Opens with a smooth slide/fade animation.
+- Covers the entire screen.
+- Background should use the website's branding (white with subtle orange accents).
+- Display navigation links centered vertically.
+- Large, easy-to-read menu items.
+- Include a clear Close (X) button.
+- Support smooth open/close animations.
+- Close when:
+  - Clicking the Close button.
+  - Selecting any navigation item.
+  - Pressing the ESC key (desktop).
+
+================================================
+
+4. Responsive Behavior
+
+- Desktop: Dropdown menus on hover.
+- Mobile: Dropdown menus open on tap.
+- Maintain full RTL support.
+- Preserve all existing routes and functionality.
+
+Do NOT modify any other pages or sections.
+
+Stop after completing the navigation redesign.
