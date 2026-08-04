@@ -63,7 +63,7 @@ export default function DonatePage() {
                 
                 {/* 1. Donation Type */}
                 <div className="space-y-4">
-                  <h3 className="text-xl font-display font-bold">{t('donate.types.title')}</h3>
+                  <h3 className="text-xl font-bold font-display text-primary border-b border-border pb-3">{t('donate.types.title')}</h3>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3" role="group" aria-label={t('donate.aria.typesGroup')}>
                     {types.map(type => (
                       <button
@@ -86,7 +86,7 @@ export default function DonatePage() {
 
                 {/* 2. Frequency */}
                 <div className="space-y-4">
-                  <h3 className="text-xl font-display font-bold">{t('donate.frequency.title')}</h3>
+                  <h3 className="text-xl font-bold font-display text-primary border-b border-border pb-3">{t('donate.frequency.title')}</h3>
                   <div className="flex gap-3" role="group" aria-label={t('donate.aria.frequencyGroup')}>
                     {frequencies.map(freq => (
                       <button
@@ -109,7 +109,7 @@ export default function DonatePage() {
 
                 {/* 3. Amount */}
                 <div className="space-y-4">
-                  <h3 className="text-xl font-display font-bold">{t('donate.amount.title')}</h3>
+                  <h3 className="text-xl font-bold font-display text-primary border-b border-border pb-3">{t('donate.amount.title')}</h3>
                   <div className="grid grid-cols-3 sm:grid-cols-5 gap-3" role="group" aria-label={t('donate.aria.amountGroup')}>
                     {amounts.map(amt => (
                       <button
@@ -147,7 +147,7 @@ export default function DonatePage() {
 
                 {/* 4. Personal Info */}
                 <div className="space-y-4">
-                  <h3 className="text-xl font-display font-bold">{t('donate.form.info')}</h3>
+                  <h3 className="text-xl font-bold font-display text-primary border-b border-border pb-3">{t('donate.form.info')}</h3>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="donorName">{t('donate.form.name')}</Label>
@@ -177,7 +177,7 @@ export default function DonatePage() {
                 <div className="w-12 h-12 rounded-2xl bg-background border border-border flex items-center justify-center mb-4 text-primary">
                   <Building2 className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-display font-bold mb-3">{t('donate.bankTransfer.title')}</h3>
+                <h3 className="text-xl font-bold font-display text-foreground mb-3">{t('donate.bankTransfer.title')}</h3>
                 <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
                   {t('donate.bankTransfer.desc')}
                 </p>

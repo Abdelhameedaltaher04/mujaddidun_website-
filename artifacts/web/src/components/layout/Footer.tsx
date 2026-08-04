@@ -16,8 +16,6 @@ const QUICK_LINKS = [
   { key: 'nav.news', href: '/news' },
   { key: 'nav.events', href: '/events' },
   { key: 'nav.volunteer', href: '/volunteer' },
-  { key: 'nav.contact', href: '/contact' },
-  { key: 'nav.donate', href: '/donate' },
 ] as const;
 
 const SOCIAL_LINKS = [
@@ -64,7 +62,7 @@ export function Footer() {
                 <li key={link.key}>
                   <Link
                     href={link.href}
-                    className="focus-ring-standard rounded-sm text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    className="focus-ring-standard rounded-sm text-sm text-muted-foreground transition-colors hover:text-primary"
                     data-testid={`link-footer-${link.key.split('.')[1]}`}
                   >
                     {t(link.key)}

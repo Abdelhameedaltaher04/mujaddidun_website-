@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
+import { SectionHeading } from '@/components/layout/SectionHeading';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,7 +37,7 @@ export default function ContactPage() {
         <SectionWrapper>
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
-              <h2 className="text-3xl font-bold font-display mb-6">{t('common.contactDesc')}</h2>
+              <SectionHeading title={t('common.contactDesc')} align="start" accent="primary" className="mb-6 lg:mb-8" />
               
               <div className="space-y-6 mt-8 bg-card rounded-2xl border border-border p-6 md:p-8 shadow-sm">
                 <div className="flex items-start gap-4 group">

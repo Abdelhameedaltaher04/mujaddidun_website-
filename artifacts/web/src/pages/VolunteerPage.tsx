@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
+import { SectionHeading } from '@/components/layout/SectionHeading';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -51,7 +52,7 @@ export default function VolunteerPage() {
         <SectionWrapper>
           <div className="max-w-3xl mx-auto">
             <div className="bg-card border border-border rounded-2xl p-6 md:p-10 shadow-sm">
-              <h2 className="text-3xl font-bold font-display mb-8 text-center text-foreground">{t('volunteer.formTitle')}</h2>
+              <SectionHeading title={t('volunteer.formTitle')} accent="primary" className="mb-8" />
               
               <form onSubmit={handleSubmit} className="space-y-10">
                 <div className="space-y-6">

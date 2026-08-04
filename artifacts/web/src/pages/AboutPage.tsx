@@ -22,13 +22,8 @@ export default function AboutPage() {
       />
       <main className="flex-1">
         <SectionWrapper id="about">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2
-              className="text-3xl font-display font-bold text-foreground mb-8"
-              data-testid="text-about-heading"
-            >
-              {t('about.heading')}
-            </h2>
+          <div className="max-w-3xl mx-auto">
+            <SectionHeading title={t('about.heading')} accent="primary" />
             <div className="space-y-6 text-start">
               <p className="text-lg leading-relaxed text-muted-foreground">
                 {t('about.descriptionP1')}
@@ -121,9 +116,7 @@ export default function AboutPage() {
         </SectionWrapper>
 
         <SectionWrapper id="values">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl font-display font-bold text-foreground mb-4">{t('about.values')}</h2>
-          </div>
+          <SectionHeading title={t('about.values')} accent="secondary" />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((num) => (
               <div

@@ -37,7 +37,7 @@ export default function HomePage() {
               {t('about.visionText')}
             </p>
             <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto animate-hero-up" style={{ animationDelay: '0.4s' }}>
-              <Button size="lg" className="px-10 h-14 text-lg font-bold bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-[0_0_40px_-10px_rgba(255,88,16,0.6)] border-none transition-all hover:scale-105" asChild>
+              <Button size="lg" variant="secondary" className="px-10 h-14 text-lg font-bold shadow-[0_0_40px_-10px_rgba(255,88,16,0.6)] transition-all hover:scale-105 hover-elevate-2" asChild>
                 <Link href="/donate">{t('common.donate')} <Heart className="w-5 h-5 ms-2" /></Link>
               </Button>
               <Button size="lg" variant="outline" className="px-10 h-14 text-lg font-bold border-primary-foreground/30 text-primary-foreground bg-primary-foreground/5 backdrop-blur-sm hover:bg-primary-foreground/15 transition-all" asChild>
@@ -51,18 +51,13 @@ export default function HomePage() {
 
         {/* STATISTICS SECTION */}
         <SectionWrapper id="statistics" className="pt-8 pb-12 md:pt-12 md:pb-16 -mt-16 relative z-20">
-          <div className="max-w-xl mx-auto text-center mb-6 animate-hero-up" style={{ animationDelay: '0.5s' }}>
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <span className="h-px w-6 bg-secondary" aria-hidden="true" />
-              <span className="text-xs md:text-sm font-bold tracking-wide text-secondary uppercase">
-                {t('home.sections.statistics')}
-              </span>
-              <span className="h-px w-6 bg-secondary" aria-hidden="true" />
-            </div>
-            <h2 className="text-xl md:text-2xl font-display font-bold text-foreground">
-              {t('common.ourImpact')}
-            </h2>
-          </div>
+          <SectionHeading
+            kicker={t('home.sections.statistics')}
+            title={t('common.ourImpact')}
+            size="md"
+            accent="secondary"
+            className="mb-6 lg:mb-8"
+          />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 bg-card rounded-2xl shadow-xl border border-border p-6 md:p-8 animate-hero-up" style={{ animationDelay: '0.6s' }}>
              <StatCounter target={10} suffix="+" label={t('home.stats.years')} duration={1400} colorClass="text-primary" />
              <StatCounter target={50} suffix="k+" label={t('home.stats.beneficiaries')} duration={2200} colorClass="text-secondary" />
