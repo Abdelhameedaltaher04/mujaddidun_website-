@@ -39,7 +39,8 @@
     "name": "Name",
     "subject": "Subject",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "close": "Close"
   },
   "nav": {
     "home": "Home",
