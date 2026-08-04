@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Al-Mujaddidun Platform",
+    "name": "Mujaddidun Platform",
     "tagline": "An educational and dawah platform"
   },
   "common": {
@@ -35,14 +35,14 @@
   },
   "footer": {
     "logoPlaceholder": "Association Logo",
-    "aboutBrief": "Al-Mujaddidun Charity and Development Association",
+    "aboutBrief": "Mujaddidun Charity and Development Association",
     "quickLinks": "Quick Links",
     "contactInfo": "Contact Information",
     "address": "Address",
     "phone": "Phone",
     "email": "Email",
     "followUs": "Follow Us",
-    "copyright": "© {year} Al-Mujaddidun Association. All rights reserved."
+    "copyright": "© {year} Mujaddidun Association. All rights reserved."
   },
   "breadcrumb": {
     "label": "Breadcrumb"

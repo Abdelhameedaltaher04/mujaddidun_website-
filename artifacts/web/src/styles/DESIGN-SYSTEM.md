@@ -1,9 +1,9 @@
-# Al-Mujaddidun Platform — Design System
+# Mujaddidun Platform — Design System
 
 ## 1. Identity & Philosophy
 **Vibe:** Trustworthy, Warm, Humane, Dignified.
 **Layout Paradigm:** Clean and minimal container-driven architecture.
-**Mood Aesthetic:** "Modern Charity" — characterized by deep rich tones (Emerald/Teal) signifying growth and trust, paired with warm, earth-toned accents (Amber/Terracotta) evoking humanity and care.
+**Mood Aesthetic:** "Modern Charity" — a bright Orange & White identity: energetic orange (#F97316) signifying warmth and action on clean white surfaces, with soft cream (#FFF7ED) supporting tones.
 **Bilingual Approach:** Arabic (RTL) first, English (LTR) secondary. We use logical CSS properties (`ms-`, `pe-`, `border-s-`) rather than physical directions (`ml-`, `pr-`, `border-l-`).
 
 ## 2. Typography
@@ -22,15 +22,15 @@ We use premium Google Fonts with flawless support for both Arabic and Latin scri
 - **Small / Muted:** `text-sm` — `font-sans text-muted-foreground`
 
 ## 3. Color Tokens
-All combinations meet WCAG AA contrast ratios.
+Contrast note: text/surface pairs target WCAG AA. The brand-mandated white-on-orange primary button (#FFFFFF on #F97316) is a deliberate brand choice below AA for small text — use it for large/bold labels.
 
 | Role | Light Mode HSL | Dark Mode HSL | Usage |
 |------|---------------|---------------|-------|
-| `--background` | `40 20% 98%` (Warm off-white) | `180 15% 10%` (Deep teal/slate) | App background |
-| `--foreground` | `180 20% 12%` | `40 20% 95%` | Main text |
-| `--primary` | `165 75% 25%` (Deep Emerald) | `165 60% 45%` | Primary actions, branding |
-| `--secondary` | `25 80% 55%` (Terracotta) | `25 80% 60%` | Accent actions, donation highlights |
-| `--accent` | `165 20% 92%` (Light Teal) | `180 15% 22%` | Hover states, soft highlights |
+| `--background` | `0 0% 100%` (White #FFFFFF) | `20 14% 10%` (Deep warm slate) | App background |
+| `--foreground` | `215 28% 17%` (#1F2937) | `33 30% 95%` | Main text |
+| `--primary` | `25 95% 53%` (Orange #F97316) | `27 96% 61%` | Primary actions, branding |
+| `--secondary` | `27 96% 61%` (Light Orange #FB923C) | `25 95% 53%` | Accent actions, donation highlights |
+| `--accent` | `33 100% 96%` (Cream #FFF7ED) | `20 12% 22%` | Hover states, soft highlights |
 | `--destructive`| `348 83% 47%` (Crimson) | `348 83% 55%` | Danger zones, deletions |
 | `--success` | `142 76% 36%` (Green) | `142 70% 45%` | Success alerts |
 | `--warning` | `38 92% 50%` (Amber) | `38 92% 55%` | Warnings |
@@ -47,15 +47,15 @@ All combinations meet WCAG AA contrast ratios.
 *Do not override these manually; use standard shadcn primitive patterns with our utility classes.*
 
 - **Buttons:** 
-  - `default`: Primary Emerald, slightly rounded (`rounded-lg`).
-  - `secondary`: Terracotta for distinctive actions (like "Donate Now").
+  - `default`: Primary Orange, slightly rounded (`rounded-lg`).
+  - `secondary`: Light Orange for distinctive actions (like "Donate Now").
   - `outline`: Border matching current theme, used for secondary actions.
   - *Interaction:* subtle scale/transform on active, use `.focus-ring-standard` for keyboard nav.
 - **Cards:** 
   - Standard `.card` styling. Clean border (`border-border`), subtle shadow. Padding `p-6`.
 - **Inputs & Textarea:**
   - Clear borders (`border-input`), `bg-background` for field.
-  - On focus, uses `--ring` (Emerald) for the outline.
+  - On focus, uses `--ring` (Orange, hover shade #EA580C) for the outline.
 - **Select:** 
   - Must display clearly in both RTL/LTR. Use logical property padding.
 - **Tables:** 

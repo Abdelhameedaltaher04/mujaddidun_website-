@@ -1,6 +1,6 @@
-# Al-Mujaddidun Charity and Development Association — Web Platform
+# Mujaddidun Charity and Development Association — Web Platform
 
-A production-quality, bilingual (Arabic RTL / English LTR) web platform for the Al-Mujaddidun Charity and Development Association. The project is developed **incrementally** — this repository currently contains the initialized architecture only; features are added phase by phase.
+A production-quality, bilingual (Arabic RTL / English LTR) web platform for the Mujaddidun Charity and Development Association. The project is developed **incrementally** — this repository currently contains the initialized architecture only; features are added phase by phase.
 
 ## Tech Stack
 

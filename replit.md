@@ -1,6 +1,6 @@
-# Al-Mujaddidun Charity Platform
+# Mujaddidun Charity Platform
 
-Production-quality bilingual (Arabic RTL / English LTR) web platform for the Al-Mujaddidun Charity and Development Association. Developed incrementally — currently at Phase 0 (architecture initialization only).
+Production-quality bilingual (Arabic RTL / English LTR) web platform for the Mujaddidun Charity and Development Association. Developed incrementally — currently at Phase 0 (architecture initialization only).
 
 ## Run & Operate
 
