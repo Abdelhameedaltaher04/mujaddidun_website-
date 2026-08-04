@@ -1,6 +1,8 @@
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
+import { SectionHeading } from '@/components/layout/SectionHeading';
+import { StatCounter } from '@/components/layout/StatCounter';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
@@ -112,37 +114,50 @@ export default function HomePage() {
         </section>
 
         {/* STATISTICS SECTION */}
-        <SectionWrapper id="statistics" className="py-8 md:py-12 -mt-16 relative z-20">
+        <SectionWrapper id="statistics" className="pt-8 pb-12 md:pt-12 md:pb-16 -mt-16 relative z-20">
+          <div className="max-w-xl mx-auto text-center mb-6 animate-hero-up" style={{ animationDelay: '0.5s' }}>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="h-px w-6 bg-secondary" aria-hidden="true" />
+              <span className="text-xs md:text-sm font-bold tracking-wide text-secondary uppercase">
+                {t('home.sections.statistics')}
+              </span>
+              <span className="h-px w-6 bg-secondary" aria-hidden="true" />
+            </div>
+            <h2 className="text-xl md:text-2xl font-display font-bold text-foreground">
+              {t('common.ourImpact')}
+            </h2>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 bg-card rounded-2xl shadow-xl border border-border p-6 md:p-8 animate-hero-up" style={{ animationDelay: '0.6s' }}>
-             <div className="text-center space-y-2">
-                <div className="text-3xl md:text-5xl font-display font-bold text-primary">10+</div>
-                <div className="text-sm md:text-base text-muted-foreground font-medium">{t('home.stats.years')}</div>
-             </div>
-             <div className="text-center space-y-2">
-                <div className="text-3xl md:text-5xl font-display font-bold text-secondary">50k+</div>
-                <div className="text-sm md:text-base text-muted-foreground font-medium">{t('home.stats.beneficiaries')}</div>
-             </div>
-             <div className="text-center space-y-2">
-                <div className="text-3xl md:text-5xl font-display font-bold text-primary">500+</div>
-                <div className="text-sm md:text-base text-muted-foreground font-medium">{t('home.stats.volunteers')}</div>
-             </div>
-             <div className="text-center space-y-2">
-                <div className="text-3xl md:text-5xl font-display font-bold text-secondary">20+</div>
-                <div className="text-sm md:text-base text-muted-foreground font-medium">{t('home.stats.projects')}</div>
-             </div>
+             <StatCounter target={10} suffix="+" label={t('home.stats.years')} duration={1400} colorClass="text-primary" />
+             <StatCounter target={50} suffix="k+" label={t('home.stats.beneficiaries')} duration={2200} colorClass="text-secondary" />
+             <StatCounter target={500} suffix="+" label={t('home.stats.volunteers')} duration={1900} colorClass="text-primary" />
+             <StatCounter target={20} suffix="+" label={t('home.stats.projects')} duration={1650} colorClass="text-secondary" />
           </div>
         </SectionWrapper>
 
-        {/* ABOUT PREVIEW */}
-        <SectionWrapper id="about-preview" variant="muted">
+        {/* ABOUT + FEATURED PROJECTS — ONE NARRATIVE ARC */}
+        <SectionWrapper id="about" variant="muted">
+          <SectionHeading
+            kicker={t('about.story')}
+            title={t('about.title')}
+            accent="primary"
+          />
+
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <h2 className="text-3xl lg:text-4xl font-display font-bold text-foreground">
-                {t('about.title')}
-              </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 {t('about.storyText')}
               </p>
+
+              <blockquote className="border-s-4 border-secondary ps-5 py-1">
+                <p className="text-foreground font-medium leading-relaxed italic">
+                  {t('about.missionText')}
+                </p>
+                <span className="block text-sm font-bold text-secondary mt-2">
+                  {t('about.mission')}
+                </span>
+              </blockquote>
+
               <ul className="space-y-3">
                 {[t('about.valuesText1'), t('about.valuesText2'), t('about.valuesText3')].map((val, i) => (
                   <li key={i} className="flex items-center gap-3">
@@ -176,14 +191,21 @@ export default function HomePage() {
                </div>
             </div>
           </div>
-        </SectionWrapper>
 
-        {/* FEATURED PROJECTS */}
-        <SectionWrapper id="featured-projects" variant="default">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl font-display font-bold mb-4">{t('home.sections.featuredProjects')}</h2>
-            <p className="text-muted-foreground">{t('projects.subtitle')}</p>
+          {/* Transition: from story to action */}
+          <div className="flex flex-col items-center my-16">
+            <span className="h-12 w-px bg-gradient-to-b from-transparent via-border to-border" aria-hidden="true" />
+            <span className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 my-2">
+              <Heart className="w-5 h-5" />
+            </span>
+            <span className="h-12 w-px bg-gradient-to-b from-border via-border to-transparent" aria-hidden="true" />
           </div>
+
+          <SectionHeading
+            title={t('home.sections.featuredProjects')}
+            description={t('projects.subtitle')}
+            accent="secondary"
+          />
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             <div className="group rounded-2xl overflow-hidden border border-border bg-card hover-elevate transition-all">
               <div className="aspect-[4/3] bg-primary/10 relative flex items-center justify-center p-6 text-center">
@@ -232,18 +254,20 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* PROGRAMS PREVIEW */}
-        <SectionWrapper id="programs" variant="muted">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl font-display font-bold mb-4">{t('home.sections.programs')}</h2>
-              <p className="text-muted-foreground">{t('programs.subtitle')}</p>
-            </div>
-            <Button variant="outline" className="shrink-0 font-bold" asChild>
-              <Link href="/programs">
-                {t('common.viewAll')} <ArrowIcon className="w-4 h-4 ms-2" />
-              </Link>
-            </Button>
-          </div>
+        <SectionWrapper id="programs" variant="default">
+          <SectionHeading
+            title={t('home.sections.programs')}
+            description={t('programs.subtitle')}
+            align="start"
+            accent="primary"
+            action={
+              <Button variant="outline" className="font-bold" asChild>
+                <Link href="/programs">
+                  {t('common.viewAll')} <ArrowIcon className="w-4 h-4 ms-2" />
+                </Link>
+              </Button>
+            }
+          />
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             {['feeding', 'housing', 'empowerment'].map(id => (
               <div key={id} className="flex flex-col bg-card rounded-2xl border border-border shadow-sm hover-elevate transition-all overflow-hidden group">
@@ -267,15 +291,21 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* LATEST NEWS & EVENTS GRID */}
-        <SectionWrapper id="news-events" variant="default">
+        <SectionWrapper id="news-events" variant="muted">
            <div className="grid lg:grid-cols-2 gap-12">
               <div>
-                 <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-2xl font-display font-bold">{t('home.sections.latestNews')}</h2>
-                    <Button variant="ghost" size="sm" asChild>
-                      <Link href="/news">{t('common.viewAll')}</Link>
-                    </Button>
-                 </div>
+                 <SectionHeading
+                   title={t('home.sections.latestNews')}
+                   align="start"
+                   size="md"
+                   accent="primary"
+                   className="mb-8"
+                   action={
+                     <Button variant="ghost" size="sm" asChild>
+                       <Link href="/news">{t('common.viewAll')}</Link>
+                     </Button>
+                   }
+                 />
                  <div className="space-y-4">
                     {[1, 2].map((i) => (
                        <Link key={i} href="/news" className="flex gap-4 p-4 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group focus-ring-standard">
@@ -291,12 +321,18 @@ export default function HomePage() {
                  </div>
               </div>
               <div>
-                 <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-2xl font-display font-bold">{t('home.sections.upcomingEvents')}</h2>
-                    <Button variant="ghost" size="sm" asChild>
-                      <Link href="/events">{t('common.viewAll')}</Link>
-                    </Button>
-                 </div>
+                 <SectionHeading
+                   title={t('home.sections.upcomingEvents')}
+                   align="start"
+                   size="md"
+                   accent="secondary"
+                   className="mb-8"
+                   action={
+                     <Button variant="ghost" size="sm" asChild>
+                       <Link href="/events">{t('common.viewAll')}</Link>
+                     </Button>
+                   }
+                 />
                  <div className="space-y-4">
                     {[1, 2].map((i) => (
                        <div key={i} className="flex gap-4 p-4 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group">
@@ -329,10 +365,13 @@ export default function HomePage() {
             <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6">
               <Users className="w-8 h-8" />
             </div>
-            <h2 className="text-3xl font-display font-bold mb-4">{t('volunteer.subtitle')}</h2>
-            <p className="text-lg text-muted-foreground mb-8">
-              {t('common.volunteerDesc')}
-            </p>
+            <SectionHeading
+              kicker={t('home.sections.volunteerCta')}
+              title={t('volunteer.subtitle')}
+              description={t('common.volunteerDesc')}
+              accent="secondary"
+              className="mb-8"
+            />
             <Button size="lg" className="px-8" asChild>
               <Link href="/volunteer">{t('common.volunteerCTA')}</Link>
             </Button>
@@ -341,19 +380,18 @@ export default function HomePage() {
 
         {/* PARTNERS (Redesigned) */}
         <SectionWrapper id="partners" variant="muted">
-           <div className="text-center mb-12">
-              <h2 className="text-3xl font-display font-bold">{t('home.sections.partners')}</h2>
-           </div>
+           <SectionHeading title={t('home.sections.partners')} accent="primary" />
            <PartnersCarousel items={[1, 2, 3, 4, 5, 6, 7, 8]} t={t} dir={dir} />
         </SectionWrapper>
 
         {/* FAQ PREVIEW */}
         <SectionWrapper id="faq" variant="default">
           <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-display font-bold mb-4">{t('home.sections.faq')}</h2>
-              <p className="text-muted-foreground">{t('faq.subtitle')}</p>
-            </div>
+            <SectionHeading
+              title={t('home.sections.faq')}
+              description={t('faq.subtitle')}
+              accent="secondary"
+            />
             <div className="space-y-4">
               {[1, 2, 3, 4].map(i => (
                 <details key={i} className="group bg-card border border-border rounded-2xl overflow-hidden [&_summary::-webkit-details-marker]:hidden shadow-sm">
@@ -385,8 +423,13 @@ export default function HomePage() {
              <div className="absolute top-0 end-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[80px] pointer-events-none transform translate-x-1/3 -translate-y-1/3"></div>
              <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
                <div className="max-w-2xl text-center lg:text-start lg:rtl:text-right lg:ltr:text-left">
-                 <h2 className="text-3xl font-display font-bold mb-4">{t('home.sections.contact')}</h2>
-                 <p className="text-lg text-muted-foreground mb-8">{t('common.contactDesc')}</p>
+                 <SectionHeading
+                   title={t('home.sections.contact')}
+                   description={t('common.contactDesc')}
+                   align="start"
+                   accent="primary"
+                   className="mb-8 mx-auto lg:mx-0"
+                 />
                  <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-6">
                     <div className="flex items-center justify-center sm:justify-start gap-4 bg-card px-6 py-3 rounded-full border border-border shadow-sm">
                       <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">

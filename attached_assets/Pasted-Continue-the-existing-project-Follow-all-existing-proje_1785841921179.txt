@@ -1,0 +1,88 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate files.
+Do NOT modify routing.
+Do NOT modify architecture.
+Do NOT change the Design System.
+Keep the official Majaddidun branding, logo, colors and typography.
+
+==================================================
+
+TASK
+
+Improve the Homepage presentation with the following enhancements.
+
+1. Merge "About Us" + "Projects"
+
+Instead of having two completely separate sections:
+
+- Integrate the Projects preview naturally inside the About Us section.
+- Start with the association story.
+- Then show the mission & values.
+- Then immediately present the featured projects as part of "What We Do".
+- The transition should feel natural and tell one continuous story.
+
+This should make the homepage flow feel much more professional.
+
+--------------------------------------------------
+
+2. Statistics Section
+
+Redesign the statistics cards.
+
+The numbers should NOT appear statically.
+
+Instead:
+
+• Animate each counter from 0 to its target value whenever the page loads.
+• Smooth easing animation.
+• Different animation durations for each card.
+• Trigger on first appearance in viewport.
+• Restart animation after page refresh.
+• Keep RTL support.
+
+Cards should feel premium and alive.
+
+--------------------------------------------------
+
+3. Creative Section Titles
+
+Every homepage section title currently looks too plain.
+
+Redesign ALL section headings professionally.
+
+Examples:
+
+About Us
+Programs
+Projects
+Partners
+Volunteer
+Contact
+FAQ
+
+Requirements:
+
+• Large modern typography
+• Decorative accent line or shape
+• Brand-colored highlight
+• Small subtitle above the heading
+• Elegant spacing
+• Better hierarchy
+• Soft reveal animation
+• More premium visual appearance
+• Consistent style across the whole website
+
+The titles should look like a premium NGO website, not simple black text.
+
+--------------------------------------------------
+
+Do NOT modify content.
+
+Do NOT change translations.
+
+Do NOT remove sections.
+
+Only improve presentation, hierarchy, animations and visual quality.
