@@ -16,6 +16,8 @@ import PartnersPage from '@/pages/PartnersPage';
 import FaqPage from '@/pages/FaqPage';
 import ContactPage from '@/pages/ContactPage';
 import VolunteerPage from '@/pages/VolunteerPage';
+import ProgramsPage from '@/pages/ProgramsPage';
+import DonatePage from '@/pages/DonatePage';
 
 import LoginPage from '@/pages/login';
 import NotFound from '@/pages/not-found';
@@ -38,6 +40,8 @@ function Router() {
       <Route path="/faq" component={FaqPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/volunteer" component={VolunteerPage} />
+      <Route path="/programs" component={ProgramsPage} />
+      <Route path="/donate" component={DonatePage} />
       <Route component={NotFound} />
     </Switch>
   );

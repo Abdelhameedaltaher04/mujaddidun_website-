@@ -217,5 +217,100 @@
       "evening": "Evening",
       "weekends": "Weekends"
     }
+  },
+  "programs": {
+    "title": "Programs",
+    "subtitle": "Working to create sustainable impact through comprehensive feeding, shelter, and empowerment programs.",
+    "filter": {
+      "all": "All",
+      "development": "Developmental",
+      "humanitarian": "Humanitarian",
+      "seasonal": "Seasonal"
+    },
+    "items": {
+      "feeding": {
+        "title": "Feeding Programs",
+        "desc": "Providing food security for underprivileged families to meet their basic nutritional needs.",
+        "activities": "Food parcels distribution, hot meals, food bank.",
+        "stats": "50,000+ annual beneficiaries"
+      },
+      "housing": {
+        "title": "Housing Rehabilitation",
+        "desc": "Restoring and equipping homes of poor families to ensure a safe and dignified living environment.",
+        "activities": "Roof maintenance, plumbing & electrical, basic furnishing.",
+        "stats": "200+ homes restored"
+      },
+      "empowerment": {
+        "title": "Youth Empowerment & Training",
+        "desc": "Equipping youth with the skills needed to enter the labor market and achieve financial independence.",
+        "activities": "Vocational courses, computer & language skills, career guidance.",
+        "stats": "1,500+ graduates"
+      },
+      "volunteerism": {
+        "title": "Volunteerism & Community Initiatives",
+        "desc": "Spreading the culture of volunteering and engaging youth in creating positive community change.",
+        "activities": "Cleanup campaigns, tree planting, university initiatives.",
+        "stats": "5,000+ volunteers"
+      },
+      "seasonal": {
+        "title": "Seasonal Campaigns",
+        "desc": "Meeting urgent and seasonal needs of families during holidays and different seasons.",
+        "activities": "Ramadan campaign, Adahi, Back to School, Warm Winter.",
+        "stats": "4 main seasons"
+      }
+    },
+    "labels": {
+      "activities": "Key Activities:",
+      "impact": "Impact:"
+    },
+    "aria": {
+      "filterGroup": "Filter programs"
+    }
+  },
+  "donate": {
+    "title": "Donate Now",
+    "subtitle": "Your giving makes a real impact. Help us provide food, shelter, and empowerment.",
+    "types": {
+      "title": "Donation Type",
+      "general": "General Donation",
+      "feeding": "Feeding",
+      "housing": "Housing",
+      "empowerment": "Empowerment",
+      "zakat": "Zakat & Sadaqah"
+    },
+    "frequency": {
+      "title": "Donation Frequency",
+      "once": "One-time",
+      "monthly": "Monthly"
+    },
+    "amount": {
+      "title": "Donation Amount",
+      "custom": "Custom amount",
+      "customPlaceholder": "Enter amount"
+    },
+    "currency": "JOD",
+    "form": {
+      "info": "Donor Information",
+      "name": "Name (Optional)",
+      "email": "Email (Optional)",
+      "phone": "Phone Number"
+    },
+    "bankTransfer": {
+      "title": "Direct Bank Transfer",
+      "desc": "You can also send your donations directly to our authorized bank accounts:",
+      "bankName": "Bank: Jordan Islamic Bank",
+      "accountName": "Account Name: Mujaddidun Charity Development Association",
+      "iban": "IBAN: JO00 JIBA 0000 0000 0000 0000 0000 00",
+      "swift": "SWIFT Code: JIBAJOAM",
+      "ibanValue": "JO00 JIBA 0000 0000 0000 0000 0000 00",
+      "swiftValue": "JIBAJOAM"
+    },
+    "submit": "Complete Donation",
+    "success": "Your donation request has been successfully registered. Thank you for your generosity!",
+    "aria": {
+      "typesGroup": "Select donation type",
+      "frequencyGroup": "Select donation frequency",
+      "amountGroup": "Select donation amount"
+    }
   }
 }
