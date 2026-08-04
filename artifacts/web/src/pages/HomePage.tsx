@@ -6,7 +6,7 @@ import { StatCounter } from '@/components/layout/StatCounter';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
-import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight, Users, CheckCircle2, TrendingUp, Phone, Mail, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
+import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight, Users, Phone, Mail, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -168,14 +168,6 @@ export default function HomePage() {
                 </span>
               </blockquote>
 
-              <ul className="space-y-3">
-                {[t('about.valuesText1'), t('about.valuesText2'), t('about.valuesText3')].map((val, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-success shrink-0" />
-                    <span className="text-foreground font-medium">{val.split(':')[0]}</span>
-                  </li>
-                ))}
-              </ul>
               <Button variant="link" className="p-0 h-auto text-primary font-bold group" asChild>
                 <Link href="/about">
                   {t('common.readMore')} <ArrowIcon className="w-4 h-4 ms-2 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
@@ -191,17 +183,6 @@ export default function HomePage() {
                        className="max-w-full max-h-full object-contain drop-shadow-sm"
                        data-testid="img-about-logo"
                      />
-                  </div>
-               </div>
-               <div className="absolute -bottom-6 -start-6 bg-card p-6 rounded-xl shadow-lg border border-border max-w-[240px] hidden md:block">
-                  <div className="flex gap-4 items-center">
-                    <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
-                      <TrendingUp className="w-6 h-6 text-secondary" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-foreground">{t('home.about.impactTitle')}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{t('home.about.impactDesc')}</p>
-                    </div>
                   </div>
                </div>
             </div>
