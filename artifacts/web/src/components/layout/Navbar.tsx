@@ -23,6 +23,11 @@ const NAV_ITEMS = [
   { key: 'nav.contact', href: '/contact' },
 ] as const;
 
+/** Mobile (hamburger) menu items: same list minus Partners and FAQ. */
+const MOBILE_NAV_ITEMS = NAV_ITEMS.filter(
+  (item) => item.key !== 'nav.partners' && item.key !== 'nav.faq',
+);
+
 /**
  * Sticky, responsive top navigation. Desktop shows inline links;
  * mobile collapses into a toggleable menu. Fully bilingual (RTL/LTR)
@@ -129,7 +134,7 @@ export function Navbar() {
         >
           <MainContainer width="wide" className="py-3">
             <ul className="flex flex-col gap-1">
-              {NAV_ITEMS.map((item) => (
+              {MOBILE_NAV_ITEMS.map((item) => (
                 <li key={item.key}>
                   <Link
                     href={item.href}
