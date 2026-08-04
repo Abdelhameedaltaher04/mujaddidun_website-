@@ -185,7 +185,7 @@ export default function HomePage() {
                           </div>
                           <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
                              <Button variant="outline" size="sm" className="w-full sm:w-auto group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors" asChild>
-                               <Link href="/news">{t('common.readMore')}</Link>
+                               <Link href={`/news/${i}`}>{t('common.readMore')}</Link>
                              </Button>
                           </div>
                        </div>

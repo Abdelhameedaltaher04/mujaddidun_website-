@@ -47,6 +47,8 @@ function ScrollToTop() {
   return null;
 }
 
+import NewsDetailsPage from '@/pages/NewsDetailsPage';
+
 function Router() {
   return (
     <Switch>
@@ -55,6 +57,7 @@ function Router() {
       <Route path="/about" component={AboutPage} />
       <Route path="/projects" component={ProjectsPage} />
       <Route path="/news" component={NewsPage} />
+      <Route path="/news/:id" component={NewsDetailsPage} />
       <Route path="/events" component={EventsPage} />
       <Route path="/gallery" component={GalleryPage} />
       <Route path="/success-stories" component={SuccessStoriesPage} />

@@ -4,6 +4,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Link } from 'wouter';
+import { Image as ImageIcon } from 'lucide-react';
 
 export default function NewsPage() {
   const { t } = useLocale();
@@ -20,8 +21,9 @@ export default function NewsPage() {
         <SectionWrapper>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-               <Link key={i} href="/news" className="flex flex-col rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group focus-ring-standard overflow-hidden">
-                  <div className="aspect-[16/9] bg-muted relative overflow-hidden">
+               <Link key={i} href={`/news/${i}`} className="flex flex-col rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group focus-ring-standard overflow-hidden">
+                  <div className="aspect-[16/9] bg-muted relative overflow-hidden flex items-center justify-center">
+                     <ImageIcon className="w-8 h-8 text-muted-foreground/30" />
                      <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors"></div>
                   </div>
                   <div className="flex flex-col justify-center p-6 flex-1">
