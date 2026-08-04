@@ -325,7 +325,11 @@ export default function HomePage() {
               title={t('volunteer.subtitle')}
               description={t('common.volunteerDesc')}
               accent="secondary"
-              className="mb-8 lg:mb-10 max-w-3xl mx-auto"
+              className="mb-8 lg:mb-10 max-w-3xl lg:max-w-none mx-auto [&>div]:lg:max-w-none"
+              titleClassName={cn(
+                'lg:whitespace-nowrap',
+                dir === 'rtl' ? 'lg:text-3xl' : 'lg:text-2xl',
+              )}
             />
             <Button size="lg" className="px-10 h-14 text-lg font-bold shadow-md hover-elevate" asChild>
               <Link href="/volunteer">{t('common.volunteerCTA')}</Link>
