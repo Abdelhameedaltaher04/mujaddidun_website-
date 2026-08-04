@@ -158,6 +158,15 @@ export default function HomePage() {
                 </span>
               </blockquote>
 
+              <blockquote className="border-s-4 border-primary ps-5 py-1">
+                <p className="text-foreground font-medium leading-relaxed italic">
+                  {t('about.visionText')}
+                </p>
+                <span className="block text-sm font-bold text-primary mt-2">
+                  {t('about.vision')}
+                </span>
+              </blockquote>
+
               <ul className="space-y-3">
                 {[t('about.valuesText1'), t('about.valuesText2'), t('about.valuesText3')].map((val, i) => (
                   <li key={i} className="flex items-center gap-3">
@@ -201,11 +210,6 @@ export default function HomePage() {
             <span className="h-12 w-px bg-gradient-to-b from-border via-border to-transparent" aria-hidden="true" />
           </div>
 
-          <SectionHeading
-            title={t('home.sections.featuredProjects')}
-            description={t('projects.subtitle')}
-            accent="secondary"
-          />
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             <div className="group rounded-2xl overflow-hidden border border-border bg-card hover-elevate transition-all">
               <div className="aspect-[4/3] bg-primary/10 relative flex items-center justify-center p-6 text-center">
