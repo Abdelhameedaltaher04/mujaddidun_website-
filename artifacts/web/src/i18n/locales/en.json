@@ -1,0 +1,24 @@
+{
+  "app": {
+    "name": "Al-Mujaddidun Platform",
+    "tagline": "An educational and dawah platform"
+  },
+  "common": {
+    "language": "Language",
+    "arabic": "العربية",
+    "english": "English",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "home": "Home",
+    "welcome": "Welcome"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "Sorry, the page you are looking for does not exist.",
+    "backHome": "Back to home"
+  }
+}
