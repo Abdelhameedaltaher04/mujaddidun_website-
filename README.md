@@ -101,3 +101,5 @@ pnpm --filter @workspace/db run push
 ## Project Status
 
 **Phase 0 — Initialization (current):** architecture, tooling, and conventions only. No pages, APIs, database schema, or authentication logic yet. Features are developed incrementally in subsequent phases.
+
+# mujaddidun_website-
