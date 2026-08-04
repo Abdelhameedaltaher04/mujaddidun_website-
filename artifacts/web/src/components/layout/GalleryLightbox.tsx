@@ -179,11 +179,13 @@ export function GalleryLightbox({
         onClick={(event) => event.stopPropagation()}
       >
         {renderItem(openIndex)}
-        <figcaption className="mt-4 text-center text-sm md:text-base font-semibold text-white">
-          {getLabel(openIndex)}
-          <span className="ms-3 text-white/50 font-normal" dir="ltr">
+        <figcaption className="mt-5 text-center">
+          <div className="text-sm md:text-base font-semibold text-white" data-testid="text-lightbox-title">
+            {getLabel(openIndex)}
+          </div>
+          <div className="mt-3 text-xs md:text-sm text-white/60 tracking-widest" dir="ltr" data-testid="text-lightbox-counter">
             {openIndex + 1} / {count}
-          </span>
+          </div>
         </figcaption>
       </figure>
     </div>
