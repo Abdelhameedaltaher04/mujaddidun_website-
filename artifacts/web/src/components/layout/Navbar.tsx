@@ -52,7 +52,7 @@ export function Navbar() {
               className="h-10 w-auto shrink-0"
               data-testid="img-navbar-logo"
             />
-            <span className="sr-only sm:not-sr-only">{t('app.name')}</span>
+            <span className="sr-only">{t('app.name')}</span>
           </Link>
 
           {/* Desktop navigation */}
