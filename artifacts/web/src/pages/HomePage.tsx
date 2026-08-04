@@ -201,60 +201,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Transition: from story to action */}
-          <div className="flex flex-col items-center my-16">
-            <span className="h-12 w-px bg-gradient-to-b from-transparent via-border to-border" aria-hidden="true" />
-            <span className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 my-2">
-              <Heart className="w-5 h-5" />
-            </span>
-            <span className="h-12 w-px bg-gradient-to-b from-border via-border to-transparent" aria-hidden="true" />
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-            <div className="group rounded-2xl overflow-hidden border border-border bg-card hover-elevate transition-all">
-              <div className="aspect-[4/3] bg-primary/10 relative flex items-center justify-center p-6 text-center">
-                 <Heart className="w-12 h-12 text-primary mb-4" />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold font-display mb-2">{t('projects.feeding')}</h3>
-                <p className="text-muted-foreground mb-6 line-clamp-2">{t('projects.feedingDesc')}</p>
-                <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors" asChild>
-                  <Link href="/donate?program=feeding">{t('common.donate')}</Link>
-                </Button>
-              </div>
-            </div>
-            <div className="group rounded-2xl overflow-hidden border border-border bg-card hover-elevate transition-all">
-              <div className="aspect-[4/3] bg-secondary/10 relative flex items-center justify-center p-6 text-center">
-                 <Home className="w-12 h-12 text-secondary mb-4" />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold font-display mb-2">{t('projects.housing')}</h3>
-                <p className="text-muted-foreground mb-6 line-clamp-2">{t('projects.housingDesc')}</p>
-                <Button variant="outline" className="w-full group-hover:bg-secondary group-hover:text-secondary-foreground group-hover:border-secondary transition-colors" asChild>
-                  <Link href="/donate?program=housing">{t('common.donate')}</Link>
-                </Button>
-              </div>
-            </div>
-            <div className="group rounded-2xl overflow-hidden border border-border bg-card hover-elevate transition-all">
-              <div className="aspect-[4/3] bg-info/10 relative flex items-center justify-center p-6 text-center">
-                 <GraduationCap className="w-12 h-12 text-info mb-4" />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold font-display mb-2">{t('projects.empowerment')}</h3>
-                <p className="text-muted-foreground mb-6 line-clamp-2">{t('projects.empowermentDesc')}</p>
-                <Button variant="outline" className="w-full group-hover:bg-info group-hover:text-info-foreground group-hover:border-info transition-colors" asChild>
-                  <Link href="/donate?program=empowerment">{t('common.donate')}</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div className="text-center mt-10">
-            <Button variant="link" className="font-bold text-primary" asChild>
-              <Link href="/projects">
-                {t('common.viewAll')} <ArrowIcon className="w-4 h-4 ms-2" />
-              </Link>
-            </Button>
-          </div>
         </SectionWrapper>
 
         {/* PROGRAMS PREVIEW */}
