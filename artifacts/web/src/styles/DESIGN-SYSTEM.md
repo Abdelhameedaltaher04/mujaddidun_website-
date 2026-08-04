@@ -3,7 +3,7 @@
 ## 1. Identity & Philosophy
 **Vibe:** Trustworthy, Warm, Humane, Dignified.
 **Layout Paradigm:** Clean and minimal container-driven architecture.
-**Mood Aesthetic:** "Modern Charity" — a bright Orange & White identity: energetic orange (#F97316) signifying warmth and action on clean white surfaces, with soft cream (#FFF7ED) supporting tones.
+**Mood Aesthetic:** "Modern Charity" — the official Mujaddidun brand identity: petrol teal-blue (#0071A0) from the logo wordmark for trust and stability, coral orange (#FF5810) from the logo icon/wave for warmth and action, on clean white with soft mint (#98C8B8-tinted) surfaces.
 **Bilingual Approach:** Arabic (RTL) first, English (LTR) secondary. We use logical CSS properties (`ms-`, `pe-`, `border-s-`) rather than physical directions (`ml-`, `pr-`, `border-l-`).
 
 ## 2. Typography
@@ -22,15 +22,15 @@ We use premium Google Fonts with flawless support for both Arabic and Latin scri
 - **Small / Muted:** `text-sm` — `font-sans text-muted-foreground`
 
 ## 3. Color Tokens
-Contrast note: text/surface pairs target WCAG AA. The brand-mandated white-on-orange primary button (#FFFFFF on #F97316) is a deliberate brand choice below AA for small text — use it for large/bold labels.
+Contrast note: text/surface pairs target WCAG AA. White on brand teal-blue (#0071A0) passes AA; white on brand coral orange (#FF5810, secondary) is a deliberate brand choice below AA for small text — use it for large/bold labels.
 
 | Role | Light Mode HSL | Dark Mode HSL | Usage |
 |------|---------------|---------------|-------|
-| `--background` | `0 0% 100%` (White #FFFFFF) | `20 14% 10%` (Deep warm slate) | App background |
+| `--background` | `0 0% 100%` (White #FFFFFF) | `200 30% 9%` (Deep petrol slate) | App background |
 | `--foreground` | `215 28% 17%` (#1F2937) | `33 30% 95%` | Main text |
-| `--primary` | `25 95% 53%` (Orange #F97316) | `27 96% 61%` | Primary actions, branding |
-| `--secondary` | `27 96% 61%` (Light Orange #FB923C) | `25 95% 53%` | Accent actions, donation highlights |
-| `--accent` | `33 100% 96%` (Cream #FFF7ED) | `20 12% 22%` | Hover states, soft highlights |
+| `--primary` | `198 100% 31%` (Brand Teal-Blue #0071A0) | `198 80% 55%` | Primary actions, branding |
+| `--secondary` | `17 100% 53%` (Brand Coral Orange #FF5810) | `17 100% 58%` | Accent actions, donation highlights |
+| `--accent` | `198 60% 94%` (Light Teal Tint) | `200 25% 21%` | Hover states, soft highlights |
 | `--destructive`| `348 83% 47%` (Crimson) | `348 83% 55%` | Danger zones, deletions |
 | `--success` | `142 76% 36%` (Green) | `142 70% 45%` | Success alerts |
 | `--warning` | `38 92% 50%` (Amber) | `38 92% 55%` | Warnings |
@@ -47,15 +47,15 @@ Contrast note: text/surface pairs target WCAG AA. The brand-mandated white-on-or
 *Do not override these manually; use standard shadcn primitive patterns with our utility classes.*
 
 - **Buttons:** 
-  - `default`: Primary Orange, slightly rounded (`rounded-lg`).
-  - `secondary`: Light Orange for distinctive actions (like "Donate Now").
+  - `default`: Primary Brand Teal-Blue, slightly rounded (`rounded-lg`).
+  - `secondary`: Brand Coral Orange for distinctive actions (like "Donate Now").
   - `outline`: Border matching current theme, used for secondary actions.
   - *Interaction:* subtle scale/transform on active, use `.focus-ring-standard` for keyboard nav.
 - **Cards:** 
   - Standard `.card` styling. Clean border (`border-border`), subtle shadow. Padding `p-6`.
 - **Inputs & Textarea:**
   - Clear borders (`border-input`), `bg-background` for field.
-  - On focus, uses `--ring` (Orange, hover shade #EA580C) for the outline.
+  - On focus, uses `--ring` (Brand Teal-Blue) for the outline.
 - **Select:** 
   - Must display clearly in both RTL/LTR. Use logical property padding.
 - **Tables:** 
