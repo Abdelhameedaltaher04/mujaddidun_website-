@@ -6,6 +6,7 @@ import { LanguageToggle } from '@/components/LanguageToggle';
 import { MainContainer } from '@/components/layout/MainContainer';
 import { useLocale } from '@/contexts/LocaleContext';
 import { cn } from '@/lib/utils';
+import logoUrl from '@/assets/mujaddidun-logo.png';
 
 /** Menu items: translation key + target path. */
 const NAV_ITEMS = [
@@ -42,10 +43,16 @@ export function Navbar() {
           {/* Brand */}
           <Link
             href="/"
-            className="focus-ring-standard rounded-md text-lg font-bold text-primary"
+            className="focus-ring-standard flex items-center gap-2 rounded-md text-lg font-bold text-primary"
             data-testid="link-navbar-brand"
           >
-            {t('app.name')}
+            <img
+              src={logoUrl}
+              alt=""
+              className="h-10 w-auto shrink-0"
+              data-testid="img-navbar-logo"
+            />
+            <span className="sr-only sm:not-sr-only">{t('app.name')}</span>
           </Link>
 
           {/* Desktop navigation */}

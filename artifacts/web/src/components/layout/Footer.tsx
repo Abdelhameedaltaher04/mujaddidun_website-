@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { MainContainer } from '@/components/layout/MainContainer';
 import { useLocale } from '@/contexts/LocaleContext';
+import logoUrl from '@/assets/mujaddidun-logo.png';
 
 const QUICK_LINKS = [
   { key: 'nav.about', href: '/about' },
@@ -28,7 +29,7 @@ const SOCIAL_LINKS = [
 ] as const;
 
 /**
- * Public site footer: logo placeholder, quick links, contact info,
+ * Public site footer: logo, quick links, contact info,
  * social media placeholders, and copyright line.
  */
 export function Footer() {
@@ -39,14 +40,14 @@ export function Footer() {
     <footer className="border-t border-border bg-muted" data-testid="footer">
       <MainContainer width="wide" className="py-12">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Logo placeholder + brief */}
+          {/* Logo + brief */}
           <div>
-            <div
-              className="flex h-16 w-16 items-center justify-center rounded-md border border-dashed border-border bg-background text-center text-xs text-muted-foreground"
-              data-testid="footer-logo-placeholder"
-            >
-              {t('footer.logoPlaceholder')}
-            </div>
+            <img
+              src={logoUrl}
+              alt={t('app.name')}
+              className="h-16 w-auto"
+              data-testid="img-footer-logo"
+            />
             <p className="mt-4 text-sm font-semibold text-foreground">
               {t('app.name')}
             </p>
