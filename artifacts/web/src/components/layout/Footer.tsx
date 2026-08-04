@@ -59,7 +59,7 @@ export function Footer() {
             <h2 className="text-sm font-bold text-foreground">
               {t('footer.quickLinks')}
             </h2>
-            <ul className="mt-4 space-y-2">
+            <ul className="mt-4 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
               {QUICK_LINKS.map((link) => (
                 <li key={link.key}>
                   <Link
