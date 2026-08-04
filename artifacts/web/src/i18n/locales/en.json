@@ -212,6 +212,16 @@
         "location": "Irbid & Jerash",
         "desc": "A volunteer initiative to plant 1,000 forest and fruit trees with the participation of Mujaddidun youth."
       }
+    },
+    "register": {
+      "loginRequiredTitle": "Login Required",
+      "loginRequiredMsg": "You must log in first before you can register for this event.",
+      "loginBtn": "Log in",
+      "cancelBtn": "Cancel",
+      "successTitle": "Registered Successfully 🎉",
+      "successMsg": "You have been registered for this event successfully. We will contact you when any updates are available.",
+      "okBtn": "OK",
+      "registered": "Registered ✓"
     }
   },
   "gallery": {
