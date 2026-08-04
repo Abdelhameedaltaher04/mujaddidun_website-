@@ -325,10 +325,10 @@ export default function HomePage() {
               title={t('volunteer.subtitle')}
               description={t('common.volunteerDesc')}
               accent="secondary"
-              className="mb-8 lg:mb-10 max-w-3xl lg:max-w-none mx-auto [&>div]:lg:max-w-none"
+              className="mb-8 lg:mb-10 max-w-3xl md:max-w-none mx-auto [&>div]:md:max-w-none"
               titleClassName={cn(
-                'lg:whitespace-nowrap',
-                dir === 'rtl' ? 'lg:text-3xl' : 'lg:text-2xl',
+                'md:whitespace-nowrap',
+                dir === 'rtl' ? 'md:text-2xl lg:text-3xl' : 'md:text-xl lg:text-2xl',
               )}
             />
             <Button size="lg" className="px-10 h-14 text-lg font-bold shadow-md hover-elevate" asChild>
