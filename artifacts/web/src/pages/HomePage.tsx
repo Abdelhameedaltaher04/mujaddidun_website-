@@ -325,9 +325,9 @@ export default function HomePage() {
               title={t('volunteer.subtitle')}
               description={t('common.volunteerDesc')}
               accent="secondary"
-              className="mb-8 lg:mb-10 max-w-3xl md:max-w-none mx-auto [&>div]:md:max-w-none"
+              className="mb-8 lg:mb-10 max-w-3xl md:max-w-none mx-auto md:[&>div]:max-w-none"
               titleClassName={cn(
-                'md:whitespace-nowrap',
+                'md:whitespace-nowrap md:text-nowrap',
                 dir === 'rtl' ? 'md:text-2xl lg:text-3xl' : 'md:text-xl lg:text-2xl',
               )}
             />
