@@ -10,6 +10,7 @@ import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight, Users, CheckCircle2,
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import logoUrl from '@/assets/mujaddidun-logo.png';
 
 function PartnersCarousel({ items, t, dir }: { items: number[], t: (key: string) => string, dir: string }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
@@ -181,10 +182,15 @@ export default function HomePage() {
                 </Link>
               </Button>
             </div>
-            <div className="relative">
-               <div className="aspect-square md:aspect-[4/3] rounded-2xl bg-primary/5 border border-primary/10 overflow-hidden relative">
-                  <div className="absolute inset-0 flex items-center justify-center text-primary/20">
-                     <Heart className="w-24 h-24" />
+            <div className="relative order-first lg:order-none">
+               <div className="aspect-square md:aspect-[4/3] rounded-2xl bg-primary/5 border border-primary/10 overflow-hidden relative shadow-sm">
+                  <div className="absolute inset-0 flex items-center justify-center p-10 md:p-14">
+                     <img
+                       src={logoUrl}
+                       alt={t('app.name')}
+                       className="max-w-full max-h-full object-contain drop-shadow-sm"
+                       data-testid="img-about-logo"
+                     />
                   </div>
                </div>
                <div className="absolute -bottom-6 -start-6 bg-card p-6 rounded-xl shadow-lg border border-border max-w-[240px] hidden md:block">
