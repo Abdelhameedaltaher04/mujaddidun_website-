@@ -2,7 +2,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { LocaleProvider } from '@/contexts/LocaleContext';
-import { Route, Switch, Router as WouterRouter } from 'wouter';
+import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
+import { useEffect } from 'react';
 
 import HomePage from '@/pages/HomePage';
 import AboutPage from '@/pages/AboutPage';
@@ -22,6 +23,29 @@ import LoginPage from '@/pages/login';
 import NotFound from '@/pages/not-found';
 
 const queryClient = new QueryClient();
+
+/**
+ * Scrolls to the very top of the page on every route change so users
+ * always land at the beginning of the destination page's first section.
+ * The navbar is sticky (in normal flow), so no extra offset is needed.
+ * Smooth scrolling is used unless the user prefers reduced motion.
+ */
+function ScrollToTop() {
+  const [location] = useLocation();
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    });
+  }, [location]);
+
+  return null;
+}
 
 function Router() {
   return (
@@ -51,6 +75,7 @@ function App() {
       <LocaleProvider>
         <TooltipProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+            <ScrollToTop />
             <Router />
           </WouterRouter>
           <Toaster />
