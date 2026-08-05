@@ -1,7 +1,8 @@
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
-import { MapPin, Phone, Mail } from 'lucide-react';
+import { MapPin, Phone, Mail, Zap, MessagesSquare, Clock, Facebook, Instagram } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
@@ -120,10 +121,10 @@ export default function ContactPage() {
             aria-hidden="true"
           ></div>
 
-          <div className="relative grid gap-10 lg:gap-16 lg:grid-cols-2 lg:items-center">
+          <div className="relative grid gap-10 lg:gap-14 lg:grid-cols-2 lg:items-stretch">
             {/* Contact info card */}
-            <div className="animate-hero-up">
-              <div className="group/card relative overflow-hidden bg-card rounded-[20px] border border-primary/15 p-7 md:p-9 shadow-[0_12px_35px_rgba(0,0,0,0.08)] transition-all duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-[0_18px_45px_rgba(0,0,0,0.11)]">
+            <div className="animate-hero-up flex">
+              <div className="group/card relative flex w-full flex-col overflow-hidden bg-card rounded-[20px] border border-primary/15 p-7 md:p-9 shadow-[0_12px_35px_rgba(0,0,0,0.08)] transition-all duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-[0_18px_45px_rgba(0,0,0,0.11)]">
                 {/* Decorative accents */}
                 <span className="absolute top-0 start-0 h-1.5 w-full bg-gradient-to-r from-primary via-primary/60 to-secondary" aria-hidden="true"></span>
                 <div
@@ -132,6 +133,10 @@ export default function ContactPage() {
                   aria-hidden="true"
                 ></div>
 
+                <span className="inline-flex w-fit items-center gap-2 rounded-full bg-secondary/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-widest text-secondary mb-4">
+                  <span className="h-1.5 w-1.5 rounded-full bg-secondary" aria-hidden="true"></span>
+                  {t('nav.contact')}
+                </span>
                 <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
                   {t('contact.title')}
                 </h2>
@@ -168,12 +173,58 @@ export default function ContactPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Quick highlights */}
+                <div className="mt-8 flex flex-wrap gap-2.5">
+                  {[
+                    { icon: Zap, label: t('common.contactHighlightFast') },
+                    { icon: MessagesSquare, label: t('common.contactHighlightConsult') },
+                    { icon: Clock, label: t('common.contactHighlight247') },
+                  ].map(({ icon: Icon, label }) => (
+                    <span
+                      key={label}
+                      className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3.5 py-2 text-sm font-medium text-foreground/80"
+                    >
+                      <Icon className="h-4 w-4 text-primary" aria-hidden="true" />
+                      {label}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Follow us */}
+                <div className="mt-auto pt-8">
+                  <div className="flex items-center justify-between gap-4 rounded-2xl border border-border/60 bg-muted/40 px-5 py-4">
+                    <span className="font-bold text-foreground">{t('footer.followUs')}</span>
+                    <div className="flex items-center gap-2.5">
+                      {[
+                        { icon: Facebook, label: 'Facebook' },
+                        { icon: Instagram, label: 'Instagram' },
+                        { icon: FaWhatsapp, label: 'WhatsApp' },
+                      ].map(({ icon: Icon, label }) => (
+                        <a
+                          key={label}
+                          href="#"
+                          aria-label={label}
+                          className="flex h-10 w-10 items-center justify-center rounded-full bg-card border border-border/70 text-muted-foreground transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:border-primary motion-safe:hover:scale-105"
+                          data-testid={`link-contact-social-${label.toLowerCase()}`}
+                        >
+                          <Icon className="h-4.5 w-4.5" aria-hidden="true" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Form card */}
-            <div className="animate-hero-up bg-card border border-primary/15 rounded-[20px] p-7 md:p-9 shadow-[0_12px_35px_rgba(0,0,0,0.08)]" style={{ animationDelay: '120ms' }}>
-              <form onSubmit={handleSubmit} noValidate className="space-y-6">
+            <div className="animate-hero-up relative overflow-hidden bg-card border border-primary/15 rounded-[20px] p-7 md:p-9 shadow-[0_12px_35px_rgba(0,0,0,0.08)]" style={{ animationDelay: '120ms' }}>
+              <div
+                className="absolute -bottom-24 -start-24 w-64 h-64 rounded-full pointer-events-none opacity-50"
+                style={{ background: 'radial-gradient(circle, hsl(20 100% 52% / 0.07) 0%, transparent 65%)' }}
+                aria-hidden="true"
+              ></div>
+              <form onSubmit={handleSubmit} noValidate className="relative space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">{t('contact.fullName')}</Label>
                   <Input
