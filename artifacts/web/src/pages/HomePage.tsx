@@ -8,7 +8,7 @@ import { StatCounter } from '@/components/layout/StatCounter';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
-import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight, Users, Phone, Mail, ChevronLeft, MapPin } from 'lucide-react';
+import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight, Users, ChevronLeft, MapPin } from 'lucide-react';
 import { PartnersCarousel } from '@/components/layout/PartnersCarousel';
 import { cn } from '@/lib/utils';
 import logoUrl from '@/assets/mujaddidun-logo.png';
@@ -107,16 +107,14 @@ export default function HomePage() {
                 </Link>
               </Button>
             </div>
-             <div className="relative order-first lg:order-none w-full max-w-md mx-auto">
-                <div className="aspect-[4/3] rounded-2xl bg-primary/5 border border-primary/10 overflow-hidden relative shadow-sm">
-                   <div className="absolute inset-0 flex items-center justify-center p-12 md:p-16">
-                     <img
-                       src={logoUrl}
-                       alt={t('app.name')}
-                        className="max-w-[78%] max-h-[78%] w-auto h-auto object-contain drop-shadow-sm"
-                       data-testid="img-about-logo"
-                     />
-                  </div>
+             <div className="relative order-first lg:order-none w-full">
+                <div className="aspect-[7/5] rounded-3xl bg-primary/5 border border-primary/10 overflow-hidden shadow-xl shadow-primary/10">
+                  <img
+                    src={logoUrl}
+                    alt={t('app.name')}
+                    className="h-full w-full object-cover object-center"
+                    data-testid="img-about-logo"
+                  />
                </div>
             </div>
           </div>
@@ -337,33 +335,17 @@ export default function HomePage() {
 
         {/* CONTACT PREVIEW */}
         <SectionWrapper id="contact" variant="muted">
-          <div className="bg-primary/5 rounded-3xl p-8 md:p-12 border border-primary/10 relative overflow-hidden">
+           <div className="bg-primary/5 rounded-3xl p-8 md:p-12 border border-primary/10 relative overflow-hidden">
              <div className="absolute top-0 end-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[80px] pointer-events-none transform translate-x-1/3 -translate-y-1/3"></div>
-             <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
-               <div className="max-w-2xl text-center lg:text-start lg:rtl:text-right lg:ltr:text-left">
+              <div className="relative z-10 flex flex-col items-center gap-6 text-center">
                  <SectionHeading
                    title={t('home.sections.contact')}
                    description={t('common.contactDesc')}
-                   align="start"
-                   accent="primary"
-                   className="mb-8 mx-auto lg:mx-0"
+                    align="center"
+                    accent="secondary"
+                    className="mb-2"
                  />
-                 <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-6">
-                    <div className="flex items-center justify-center sm:justify-start gap-4 bg-card px-6 py-3 rounded-full border border-border shadow-sm">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                        <Phone className="w-5 h-5" />
-                      </div>
-                      <span className="font-bold text-foreground ltr-safe block" dir="ltr">+962 6 123 4567</span>
-                    </div>
-                    <div className="flex items-center justify-center sm:justify-start gap-4 bg-card px-6 py-3 rounded-full border border-border shadow-sm">
-                      <div className="w-10 h-10 rounded-full bg-info/10 text-info flex items-center justify-center shrink-0">
-                        <Mail className="w-5 h-5" />
-                      </div>
-                      <span className="font-bold text-foreground ltr-safe block" dir="ltr">info@mujaddidun.org</span>
-                    </div>
-                 </div>
-               </div>
-               <div className="w-full lg:w-auto shrink-0 flex justify-center">
+                <div className="w-full sm:w-auto shrink-0 flex justify-center">
                   <Button size="lg" className="w-full sm:w-auto px-10 h-14 text-lg font-bold shadow-lg" asChild>
                     <Link href="/contact">{t('common.send')}</Link>
                   </Button>

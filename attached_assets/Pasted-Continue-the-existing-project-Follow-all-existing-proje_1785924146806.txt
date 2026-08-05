@@ -1,0 +1,107 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate files.
+Do NOT modify routing.
+Do NOT modify architecture.
+Do NOT modify the design system.
+
+Keep the current branding, colors, typography, animations, responsiveness, and accessibility.
+
+================================================
+
+TASK
+
+Complete the following UI improvements.
+
+================================================
+
+1. Home Page - About Us Image
+
+Improve the image in the Home Page "About Us" section.
+
+Requirements:
+
+- Do NOT make the image smaller.
+- Keep its current size or make it slightly larger if needed.
+- Improve the layout so the image and text feel balanced.
+- Make the image fit naturally inside its container.
+- Use object-fit: cover.
+- Add a modern border radius.
+- Add a soft elegant shadow.
+- Keep the image fully responsive.
+- Do NOT crop important parts of the image.
+
+================================================
+
+2. Contact Us Section
+
+Redesign the Contact Us section.
+
+Requirements:
+
+- Remove the email information completely.
+- Remove the phone number completely.
+- Keep only the contact form.
+- Reduce the width and height of the form container.
+- Center the form inside the section.
+- Remove any unnecessary empty space.
+- Keep the current validation and styling.
+
+================================================
+
+3. Section Titles
+
+Redesign ALL section titles across the entire website.
+
+The current black titles look too plain.
+
+Create one consistent premium style for every title.
+
+Requirements:
+
+- Better typography.
+- Brand orange accent.
+- Decorative underline or modern accent element.
+- Better spacing.
+- More modern and creative appearance.
+- Apply the same style consistently to every page and section.
+
+================================================
+
+4. Back To Top Button
+
+Add a floating Back To Top button.
+
+Requirements:
+
+- Bottom-right.
+- Hidden initially.
+- Appears after scrolling.
+- Smooth scroll to top.
+- Circular modern design.
+- Brand orange color.
+- Smooth hover animation.
+
+================================================
+
+5. Floating WhatsApp Button
+
+Add a floating WhatsApp button.
+
+Requirements:
+
+- Bottom-left.
+- Official WhatsApp icon.
+- Modern floating design.
+- Smooth hover animation.
+- Always visible while scrolling.
+- Clicking it should open the configured WhatsApp number directly.
+- Open in a new tab or the WhatsApp application depending on the user's device.
+
+================================================
+
+Do NOT modify anything else.
+
+Complete ALL five tasks before stopping.

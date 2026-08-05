@@ -40,10 +40,13 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   const { ref, isInView } = useInView<HTMLDivElement>();
   const isCentered = align === 'center';
-  const accentBg = accent === 'secondary' ? 'bg-secondary' : 'bg-primary';
-  const accentText = accent === 'secondary' ? 'text-secondary' : 'text-primary';
+  // Keep section titles visually consistent: the orange brand accent leads
+  // every title, while the prop remains available for existing call sites.
+  const resolvedAccent = accent === 'primary' ? 'secondary' : accent;
+  const accentBg = resolvedAccent === 'secondary' ? 'bg-secondary' : 'bg-primary';
+  const accentText = resolvedAccent === 'secondary' ? 'text-secondary' : 'text-primary';
   const accentGradient =
-    accent === 'secondary'
+    resolvedAccent === 'secondary'
       ? 'from-secondary to-primary'
       : 'from-primary to-secondary';
 
