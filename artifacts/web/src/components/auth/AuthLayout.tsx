@@ -42,32 +42,38 @@ export function AuthLayout({ eyebrow, title, description, children, footer }: Au
             </Link>
             <button
               type="button"
-              className="rounded-full border border-white/30 px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-white/10 focus-ring-standard"
+              className="inline-flex items-center rounded-full border border-white/30 bg-white/5 p-1 text-[11px] font-bold tracking-[0.08em] transition-colors hover:bg-white/10 focus-ring-standard"
               onClick={() => setLocale(isArabic ? 'en' : 'ar')}
               data-testid="button-auth-language"
               aria-label={t('auth.switchLanguage')}
             >
-              {isArabic ? 'English' : 'العربية'}
+              <span className={`rounded-full px-2 py-1 transition-colors ${isArabic ? 'bg-white text-primary' : 'text-white/75'}`}>
+                AR
+              </span>
+              <span className="px-0.5 text-white/45" aria-hidden="true">/</span>
+              <span className={`rounded-full px-2 py-1 transition-colors ${!isArabic ? 'bg-white text-primary' : 'text-white/75'}`}>
+                EN
+              </span>
             </button>
           </div>
 
-          <div className="relative z-10 max-w-md py-12 text-center lg:py-0">
-            <div className="mb-8 flex justify-center">
+          <div className="relative z-10 max-w-md py-10 text-center sm:py-12 lg:py-0">
+            <div className="mb-9 flex justify-center">
               <span className="inline-flex items-center justify-center rounded-[22px] bg-white p-4 shadow-[0_14px_40px_rgba(0,0,0,0.18)]">
                 <img
                   src={logoUrl}
                   alt="Al-Mujaddidun"
-                  className="h-20 w-auto sm:h-24"
+                  className="h-22 w-auto sm:h-[6.75rem]"
                   data-testid="img-auth-logo"
                 />
               </span>
             </div>
-            <p className="mb-5 text-xs font-bold uppercase tracking-[0.22em] text-[#bde3d8]">{t('auth.heritageEyebrow')}</p>
+            <p className="mb-4 text-xs font-bold uppercase tracking-[0.22em] text-[#bde3d8]">{t('auth.heritageEyebrow')}</p>
             <h2 className="font-display text-3xl font-bold leading-[1.22] tracking-tight sm:text-4xl">
               {t('auth.heritageTitle')}
             </h2>
-            <p className="mx-auto mt-6 max-w-sm text-base leading-8 text-white/75">{t('auth.heritageCopy')}</p>
-            <div className="mt-10 flex items-center justify-center gap-3 text-sm text-white/80">
+            <p className="mx-auto mt-5 max-w-sm text-base leading-8 text-white/75">{t('auth.heritageCopy')}</p>
+            <div className="mt-8 flex items-center justify-center gap-3 text-sm text-white/80">
               <ShieldCheck className="h-5 w-5 shrink-0 text-[#bde3d8]" aria-hidden="true" />
               <span>{t('auth.privacyNote')}</span>
             </div>
@@ -89,7 +95,7 @@ export function AuthLayout({ eyebrow, title, description, children, footer }: Au
             <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/45">AM / 01</span>
           </div>
 
-          <div className="flex flex-1 items-center justify-center py-12">
+          <div className="flex flex-1 items-center justify-center py-10 sm:py-12">
             <div className="w-full max-w-[500px]">
               <div className="mb-8">
                 {eyebrow && <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-secondary">{eyebrow}</p>}
