@@ -86,7 +86,7 @@ export function SectionHeading({
         id={id}
         className={cn(
           'bg-gradient-to-l from-primary via-primary to-secondary bg-clip-text font-display font-bold tracking-tight text-transparent text-balance leading-tight',
-          size === 'lg' ? 'text-3xl lg:text-4xl' : 'text-2xl',
+          size === 'lg' ? 'text-2xl lg:text-3xl' : 'text-xl lg:text-2xl',
           titleClassName,
         )}
       >

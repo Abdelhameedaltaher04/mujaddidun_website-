@@ -48,7 +48,7 @@ export function PageHeader({
               <span className="h-px w-5 bg-primary" />
             </div>
             <h1
-              className="bg-gradient-to-l from-primary via-primary to-secondary bg-clip-text font-display text-4xl font-bold tracking-tight text-transparent text-balance md:text-5xl"
+              className="bg-gradient-to-l from-primary via-primary to-secondary bg-clip-text font-display text-3xl font-bold tracking-tight text-transparent text-balance md:text-4xl"
               data-testid="text-page-title"
             >
               {title}
