@@ -20,11 +20,9 @@ import {
 } from '@/components/ui/dialog';
 import { FormEvent, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { isValidPhoneNumber, type CountryCode } from 'libphonenumber-js';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-/** Digits, spaces, dashes, parentheses, optional leading +; 7-20 chars. */
-const PHONE_PATTERN = /^\+?[0-9\s\-()]{7,20}$/;
-
 interface FormValues {
   name: string;
   email: string;
@@ -40,6 +38,7 @@ const EMPTY_VALUES: FormValues = { name: '', email: '', phone: '', subject: '', 
 export default function ContactPage() {
   const { t } = useLocale();
   const [values, setValues] = useState<FormValues>(EMPTY_VALUES);
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode>('JO');
   const [errors, setErrors] = useState<FormErrors>({});
   const [successOpen, setSuccessOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,8 +52,8 @@ export default function ContactPage() {
         if (!trimmed) return t('contact.form.emailRequired');
         return EMAIL_PATTERN.test(trimmed) ? undefined : t('contact.form.emailInvalid');
       case 'phone':
-        if (!trimmed) return t('contact.form.phoneRequired');
-        return PHONE_PATTERN.test(trimmed) ? undefined : t('contact.form.phoneInvalid');
+        if (!trimmed || trimmed === '+962') return t('contact.form.phoneRequired');
+        return isValidPhoneNumber(trimmed, phoneCountry) ? undefined : t('contact.form.phoneInvalid');
       case 'subject':
         return trimmed ? undefined : t('contact.form.subjectRequired');
       default:
@@ -264,6 +263,7 @@ export default function ContactPage() {
                       id="phone"
                       value={values.phone}
                       onChange={(value) => handleChange('phone', value)}
+                      onCountryChange={(country) => setPhoneCountry(country.code)}
                       ariaInvalid={!!errors.phone}
                       ariaDescribedBy={errors.phone ? 'error-phone' : undefined}
                       inputTestId="input-contact-phone"

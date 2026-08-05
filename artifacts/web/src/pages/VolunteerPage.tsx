@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { FormEvent, useState } from 'react';
+import { isValidPhoneNumber, type CountryCode } from 'libphonenumber-js';
 import {
   Dialog,
   DialogContent,
@@ -25,11 +26,10 @@ import { cn } from '@/lib/utils';
 import { FormContactHelp } from '@/components/layout/FormContactHelp';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const PHONE_PATTERN = /^\+?[0-9\s\-()]{7,20}$/;
-
 export default function VolunteerPage() {
   const { t } = useLocale();
   const [values, setValues] = useState({ fullName: '', dob: '', email: '', phone: '', experience: '' });
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode>('JO');
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -60,8 +60,8 @@ export default function VolunteerPage() {
       return EMAIL_PATTERN.test(trimmed) ? undefined : t('volunteer.form.validation.emailInvalid');
     }
     if (field === 'phone') {
-      if (!trimmed) return t('volunteer.form.validation.phoneRequired');
-      return PHONE_PATTERN.test(trimmed) ? undefined : t('volunteer.form.validation.phoneInvalid');
+      if (!trimmed || trimmed === '+962') return t('volunteer.form.validation.phoneRequired');
+      return isValidPhoneNumber(trimmed, phoneCountry) ? undefined : t('volunteer.form.validation.phoneInvalid');
     }
     return undefined;
   };
@@ -195,6 +195,7 @@ export default function VolunteerPage() {
                         id="phone"
                         value={values.phone}
                         onChange={(value) => updateValue('phone', value)}
+                        onCountryChange={(country) => setPhoneCountry(country.code)}
                         ariaInvalid={!!errors.phone}
                         ariaDescribedBy={errors.phone ? 'error-volunteer-phone' : undefined}
                         inputTestId="input-volunteer-phone"

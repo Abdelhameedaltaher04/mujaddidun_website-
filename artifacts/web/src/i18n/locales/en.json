@@ -451,6 +451,7 @@
     "phone": "Phone number",
     "phonePlaceholder": "+962 7X XXX XXXX",
     "selectCountry": "Select country",
+    "countrySelectorDescription": "Searchable country selector with flag, country name, and international dialing code",
     "countrySearch": "Search countries...",
     "noCountriesFound": "No countries found.",
     "phoneFormatHint": "Select your country and enter the local number.",

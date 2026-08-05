@@ -451,6 +451,7 @@
     "phone": "رقم الهاتف",
     "phonePlaceholder": "+962 7X XXX XXXX",
     "selectCountry": "اختر الدولة",
+    "countrySelectorDescription": "قائمة دول قابلة للبحث مع العلم واسم الدولة ورمز الاتصال الدولي",
     "countrySearch": "ابحث عن دولة...",
     "noCountriesFound": "لم يتم العثور على دولة.",
     "phoneFormatHint": "اختر دولتك وأدخل الرقم المحلي.",

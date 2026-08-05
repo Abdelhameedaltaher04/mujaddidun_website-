@@ -13,6 +13,7 @@ import { IconInput } from '@/components/ui/icon-input';
 import { CountryPhoneField } from '@/components/forms/CountryPhoneField';
 import { cn } from '@/lib/utils';
 import { FormContactHelp } from '@/components/layout/FormContactHelp';
+import { isValidPhoneNumber, type CountryCode } from 'libphonenumber-js';
 import {
   Dialog,
   DialogContent,
@@ -23,8 +24,6 @@ import {
 } from '@/components/ui/dialog';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const PHONE_PATTERN = /^\+?[0-9\s\-()]{7,20}$/;
-
 export default function DonatePage() {
   const { t } = useLocale();
   
@@ -33,6 +32,7 @@ export default function DonatePage() {
   const [amount, setAmount] = useState('50');
   const [donorName, setDonorName] = useState('');
   const [donorPhone, setDonorPhone] = useState('');
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode>('JO');
   const [donorEmail, setDonorEmail] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successOpen, setSuccessOpen] = useState(false);
@@ -59,8 +59,8 @@ export default function DonatePage() {
     const trimmedPhone = donorPhone.trim();
     const trimmedEmail = donorEmail.trim();
     const nextErrors: Record<string, string> = {};
-    if (!trimmedPhone) nextErrors.donorPhone = t('donate.form.validation.phoneRequired');
-    else if (!PHONE_PATTERN.test(trimmedPhone)) nextErrors.donorPhone = t('donate.form.validation.phoneInvalid');
+    if (!trimmedPhone || trimmedPhone === '+962') nextErrors.donorPhone = t('donate.form.validation.phoneRequired');
+    else if (!isValidPhoneNumber(trimmedPhone, phoneCountry)) nextErrors.donorPhone = t('donate.form.validation.phoneInvalid');
     if (trimmedEmail && !EMAIL_PATTERN.test(trimmedEmail)) {
       nextErrors.donorEmail = t('donate.form.validation.emailInvalid');
     }
@@ -83,7 +83,7 @@ export default function DonatePage() {
     if (errors[field]) {
       const trimmed = value.trim();
       const error = field === 'donorPhone'
-        ? (!trimmed ? t('donate.form.validation.phoneRequired') : PHONE_PATTERN.test(trimmed) ? '' : t('donate.form.validation.phoneInvalid'))
+        ? (!trimmed || trimmed === '+962' ? t('donate.form.validation.phoneRequired') : isValidPhoneNumber(trimmed, phoneCountry) ? '' : t('donate.form.validation.phoneInvalid'))
         : (trimmed && !EMAIL_PATTERN.test(trimmed) ? t('donate.form.validation.emailInvalid') : '');
       setErrors((prev) => ({ ...prev, [field]: error }));
     }
@@ -239,6 +239,7 @@ export default function DonatePage() {
                         id="donorPhone"
                         value={donorPhone}
                         onChange={(value) => updateDonorField('donorPhone', value)}
+                        onCountryChange={(country) => setPhoneCountry(country.code)}
                         ariaInvalid={!!errors.donorPhone}
                         ariaDescribedBy={errors.donorPhone ? 'error-donate-donorPhone' : undefined}
                         inputTestId="input-donate-phone"
