@@ -237,44 +237,48 @@ export function AuthSubmitButton({
   );
 }
 
-export function SocialLoginButtons() {
+function GoogleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" aria-hidden="true">
+      <path fill="#4285F4" d="M21.35 12.23c0-.71-.06-1.4-.18-2.05H12v3.88h5.24a4.48 4.48 0 0 1-1.94 2.94v2.45h3.14c1.84-1.7 2.91-4.2 2.91-7.22Z" />
+      <path fill="#34A853" d="M12 21.6c2.63 0 4.84-.87 6.44-2.35l-3.14-2.45c-.87.58-1.98.92-3.3.92-2.54 0-4.7-1.72-5.47-4.03H3.29v2.53A9.72 9.72 0 0 0 12 21.6Z" />
+      <path fill="#FBBC05" d="M6.53 13.69A5.85 5.85 0 0 1 6.23 12c0-.59.1-1.16.3-1.69V7.78H3.29A9.6 9.6 0 0 0 2.27 12c0 1.52.36 2.96 1.02 4.22l3.24-2.53Z" />
+      <path fill="#EA4335" d="M12 6.28c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.84 3.38 14.63 2.4 12 2.4a9.72 9.72 0 0 0-8.71 5.38l3.24 2.53c.77-2.31 2.93-4.03 5.47-4.03Z" />
+    </svg>
+  );
+}
+
+export function GoogleAuthButton({
+  label,
+  onClick,
+  testId,
+}: {
+  label: string;
+  onClick: () => void;
+  testId: string;
+}) {
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      onClick={onClick}
+      className="h-12 w-full rounded-xl border-border bg-white text-base font-semibold shadow-none transition-colors hover:border-primary/40 hover:bg-primary/[0.03] focus-visible:ring-2 focus-visible:ring-primary/30"
+      data-testid={testId}
+    >
+      <GoogleIcon />
+      <span>{label}</span>
+    </Button>
+  );
+}
+
+export function AuthDivider() {
   const { t } = useLocale();
 
   return (
-    <div className="space-y-3" data-testid="social-login-options">
-      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        <span className="h-px flex-1 bg-border" />
-        <span>{t('auth.socialLogin.or')}</span>
-        <span className="h-px flex-1 bg-border" />
-      </div>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <Button
-          type="button"
-          variant="outline"
-          disabled
-          title={t('auth.socialLogin.comingSoon')}
-          className="h-11 rounded-xl border-border bg-white font-semibold opacity-75"
-          data-testid="button-login-google"
-        >
-          <span className="mr-2 grid h-5 w-5 place-items-center rounded-full border border-[#4285F4] text-xs font-bold text-[#4285F4]" aria-hidden="true">G</span>
-          {t('auth.socialLogin.google')}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          disabled
-          title={t('auth.socialLogin.comingSoon')}
-          className="h-11 rounded-xl border-border bg-white font-semibold opacity-75"
-          data-testid="button-login-microsoft"
-        >
-          <span className="mr-2 grid h-5 w-5 grid-cols-2 gap-px" aria-hidden="true">
-            <span className="bg-[#f35325]" /><span className="bg-[#81bc06]" />
-            <span className="bg-[#05a6f0]" /><span className="bg-[#ffba08]" />
-          </span>
-          {t('auth.socialLogin.microsoft')}
-        </Button>
-      </div>
-      <p className="text-center text-xs text-muted-foreground">{t('auth.socialLogin.comingSoon')}</p>
+    <div className="flex items-center gap-3 text-xs text-muted-foreground" role="separator" data-testid="auth-divider">
+      <span className="h-px flex-1 bg-border" />
+      <span className="font-medium">{t('auth.socialLogin.or')}</span>
+      <span className="h-px flex-1 bg-border" />
     </div>
   );
 }

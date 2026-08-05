@@ -1,0 +1,88 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate files.
+Do NOT modify routing.
+Do NOT modify the design system.
+
+Keep the current branding, colors, typography, responsiveness, animations, and accessibility.
+
+================================================
+
+TASK
+
+Add Google Authentication support to both the Login and Register pages.
+
+================================================
+
+1. Login Page
+
+Add a professional button above the login form:
+
+- Continue with Google
+
+Requirements:
+
+- Use the official Google icon.
+- Match the existing UI design.
+- Full-width button.
+- Hover and focus effects.
+- Responsive on all screen sizes.
+
+================================================
+
+2. Register Page
+
+Add a professional button above the registration form:
+
+- Sign up with Google
+
+Requirements:
+
+- Use the official Google icon.
+- Match the Login page design exactly.
+- Full-width button.
+- Hover and focus effects.
+- Responsive on all screen sizes.
+
+================================================
+
+3. Divider
+
+Below the Google button, add a divider:
+
+────────── OR / أو ──────────
+
+Then display the existing form underneath.
+
+================================================
+
+4. Authentication Flow
+
+Prepare the application so that:
+
+- If the user already has an account linked to Google, sign them in.
+- If the user does not have an account, automatically create a new account using their Google profile and sign them in.
+
+Do NOT implement the backend OAuth flow yet.
+
+Only prepare the frontend UI and authentication flow for future Laravel integration.
+
+================================================
+
+5. UI Consistency
+
+Keep both Login and Register pages visually identical.
+
+Use the same button style, spacing, sizing, animations, and typography.
+
+================================================
+
+IMPORTANT
+
+Do NOT remove the existing email/password authentication.
+
+Google Sign-In must be an additional authentication option, not a replacement.
+
+Do NOT modify any other pages.

@@ -3,7 +3,7 @@ import { useLocation } from 'wouter';
 import { Checkbox } from '@/components/ui/checkbox';
 import { IconInput } from '@/components/ui/icon-input';
 import { CheckCircle2, Mail, User, XCircle } from 'lucide-react';
-import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError, PasswordField } from '@/components/auth/AuthLayout';
+import { AuthDivider, AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError, GoogleAuthButton, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 import { CountryPhoneField, type PhoneCountry } from '@/components/forms/CountryPhoneField';
 import { isValidPhoneNumber, type CountryCode } from 'libphonenumber-js';
@@ -40,6 +40,7 @@ export default function RegisterPage() {
   const [feedback, setFeedback] = useState<'success' | 'error' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [googleAuthRequested, setGoogleAuthRequested] = useState(false);
 
   const update = (field: keyof typeof form, value: string) => setForm((current) => ({ ...current, [field]: value }));
   const passwordRules = PASSWORD_RULES.map((rule) => ({ ...rule, valid: rule.test(form.password) }));
@@ -107,6 +108,15 @@ export default function RegisterPage() {
       description={t('auth.register.description')}
       footer={<AuthFooterLink prompt={t('auth.register.haveAccount')} label={t('auth.register.signIn')} href="/login" testId="link-login" />}
     >
+      <div className="mb-5 space-y-3">
+        <GoogleAuthButton
+          label={t('auth.socialLogin.registerWithGoogle')}
+          onClick={() => setGoogleAuthRequested(true)}
+          testId="button-register-google"
+        />
+        <AuthDivider />
+      </div>
+
       <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-label={t('auth.register.formLabel')}>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
@@ -170,7 +180,25 @@ export default function RegisterPage() {
         </div>
           <AuthSubmitButton loading={isSubmitting} label={t('auth.register.submit')} loadingLabel={t('common.loading')} testId="button-register-submit" />
       </form>
-       <AuthFeedbackDialog open={feedback !== null} kind={feedback ?? 'success'} title={feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.register.successTitle')} description={feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.register.successDescription')} actionLabel={feedback === 'error' ? t('auth.feedback.close') : t('auth.register.verifyEmail')} onOpenChange={(open) => !open && setFeedback(null)} onAction={() => { const current = feedback; setFeedback(null); if (current === 'success') setLocation(`/verify-email?email=${encodeURIComponent(form.email.trim())}`); }} />
+      <AuthFeedbackDialog
+        open={feedback !== null || googleAuthRequested}
+        kind={feedback === 'error' ? 'error' : 'success'}
+        title={googleAuthRequested ? t('auth.socialLogin.title') : feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.register.successTitle')}
+        description={googleAuthRequested ? t('auth.socialLogin.description') : feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.register.successDescription')}
+        actionLabel={googleAuthRequested || feedback === 'error' ? t('auth.feedback.close') : t('auth.register.verifyEmail')}
+        onOpenChange={(open) => {
+          if (!open) {
+            setFeedback(null);
+            setGoogleAuthRequested(false);
+          }
+        }}
+        onAction={() => {
+          const current = feedback;
+          setFeedback(null);
+          setGoogleAuthRequested(false);
+          if (current === 'success') setLocation(`/verify-email?email=${encodeURIComponent(form.email.trim())}`);
+        }}
+      />
     </AuthLayout>
   );
 }

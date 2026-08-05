@@ -3,7 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { Checkbox } from '@/components/ui/checkbox';
 import { IconInput } from '@/components/ui/icon-input';
 import { Mail } from 'lucide-react';
-import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError, PasswordField, SocialLoginButtons } from '@/components/auth/AuthLayout';
+import { AuthDivider, AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError, GoogleAuthButton, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { getApiError } from '@/services/api';
@@ -44,6 +44,7 @@ export default function LoginPage() {
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const [rateLimitSeconds, setRateLimitSeconds] = useState(0);
   const [postLoginPath, setPostLoginPath] = useState('/');
+  const [googleAuthRequested, setGoogleAuthRequested] = useState(false);
 
   useEffect(() => {
     if (rateLimitSeconds <= 0) return;
@@ -102,7 +103,16 @@ export default function LoginPage() {
       description={t('auth.login.description')}
       footer={<AuthFooterLink prompt={t('auth.login.noAccount')} label={t('auth.login.createAccount')} href="/register" testId="link-register" />}
     >
-       <form onSubmit={handleSubmit} noValidate className="space-y-5" aria-label={t('auth.login.formLabel')}>
+      <div className="mb-5 space-y-3">
+        <GoogleAuthButton
+          label={t('auth.socialLogin.loginWithGoogle')}
+          onClick={() => setGoogleAuthRequested(true)}
+          testId="button-login-google"
+        />
+        <AuthDivider />
+      </div>
+
+      <form onSubmit={handleSubmit} noValidate className="space-y-5" aria-label={t('auth.login.formLabel')}>
         <div className="space-y-2">
           <label htmlFor="login-email" className="block text-sm font-semibold text-foreground">
             {t('auth.email')}
@@ -163,20 +173,22 @@ export default function LoginPage() {
          )}
       </form>
 
-       <div className="mt-6">
-         <SocialLoginButtons />
-       </div>
-
       <AuthFeedbackDialog
-        open={feedback !== null}
+        open={feedback !== null || googleAuthRequested}
         kind={feedback ?? 'success'}
-        title={feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.login.successTitle')}
-        description={feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.login.successDescription')}
-        actionLabel={feedback === 'error' ? t('auth.feedback.close') : t('auth.feedback.continue')}
-        onOpenChange={(open) => !open && setFeedback(null)}
+        title={googleAuthRequested ? t('auth.socialLogin.title') : feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.login.successTitle')}
+        description={googleAuthRequested ? t('auth.socialLogin.description') : feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.login.successDescription')}
+        actionLabel={googleAuthRequested || feedback === 'error' ? t('auth.feedback.close') : t('auth.feedback.continue')}
+        onOpenChange={(open) => {
+          if (!open) {
+            setFeedback(null);
+            setGoogleAuthRequested(false);
+          }
+        }}
         onAction={() => {
           const current = feedback;
           setFeedback(null);
+          setGoogleAuthRequested(false);
            if (current === 'success') {
              const params = new URLSearchParams(window.location.search);
              const redirect = params.get('redirect');

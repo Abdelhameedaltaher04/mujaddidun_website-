@@ -506,9 +506,13 @@
       "signIn": "الانتقال إلى تسجيل الدخول"
     },
     "socialLogin": {
-      "or": "أو تابع باستخدام",
+      "or": "OR / أو",
       "google": "Google",
       "microsoft": "Microsoft",
+      "loginWithGoogle": "المتابعة باستخدام Google",
+      "registerWithGoogle": "التسجيل باستخدام Google",
+      "title": "تسجيل الدخول باستخدام Google",
+      "description": "سيتم تفعيل تسجيل الدخول باستخدام Google بعد اكتمال ربط OAuth مع Laravel.",
       "comingSoon": "تسجيل الدخول الاجتماعي سيكون متاحاً قريباً."
     },
     "sessionExpired": {

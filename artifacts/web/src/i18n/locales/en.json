@@ -506,9 +506,13 @@
       "signIn": "Go to sign in"
     },
     "socialLogin": {
-      "or": "Or continue with",
+      "or": "OR / أو",
       "google": "Google",
       "microsoft": "Microsoft",
+      "loginWithGoogle": "Continue with Google",
+      "registerWithGoogle": "Sign up with Google",
+      "title": "Continue with Google",
+      "description": "Google sign-in will be enabled once the Laravel OAuth integration is connected.",
       "comingSoon": "Social sign-in will be available soon."
     },
     "sessionExpired": {
