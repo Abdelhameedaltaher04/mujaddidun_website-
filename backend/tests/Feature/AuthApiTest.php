@@ -7,6 +7,7 @@ use App\Models\User;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Tests\TestCase;
 
@@ -21,8 +22,10 @@ class AuthApiTest extends TestCase
         $this->seed(RoleSeeder::class);
     }
 
-    public function test_a_user_can_register_and_receives_a_sanctum_token(): void
+    public function test_a_user_can_register_and_receives_a_verification_email_without_a_token(): void
     {
+        Notification::fake();
+
         $response = $this->postJson('/api/v1/auth/register', [
             'first_name' => 'Abood',
             'last_name' => 'Majed',
@@ -38,15 +41,20 @@ class AuthApiTest extends TestCase
             ->assertJsonPath('success', true)
             ->assertJsonPath('data.user.email', 'abood@example.com')
             ->assertJsonPath('data.user.role.slug', 'user')
-            ->assertJsonPath('data.token_type', 'Bearer')
-            ->assertJsonStructure(['data' => ['token']]);
+            ->assertJsonPath('data.email_verification_required', true)
+            ->assertJsonMissingPath('data.token');
 
         $this->assertDatabaseHas('users', [
             'email' => 'abood@example.com',
             'country_code' => 'JO',
             'role_id' => Role::where('slug', 'user')->value('id'),
+            'email_verified_at' => null,
         ]);
-        $this->assertDatabaseCount('personal_access_tokens', 1);
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+        Notification::assertSentTo(
+            User::where('email', 'abood@example.com')->first(),
+            \Illuminate\Auth\Notifications\VerifyEmail::class,
+        );
     }
 
     public function test_registration_validation_is_returned_in_the_standard_format(): void
@@ -134,6 +142,69 @@ class AuthApiTest extends TestCase
             'password' => 'StrongPassword1!',
         ])
             ->assertUnauthorized()
+            ->assertJsonPath('success', false);
+    }
+
+    public function test_unverified_users_cannot_login(): void
+    {
+        User::factory()->unverified()->create([
+            'role_id' => Role::where('slug', 'user')->value('id'),
+            'email' => 'unverified@example.com',
+            'password' => Hash::make('StrongPassword1!'),
+            'status' => 'active',
+        ]);
+
+        $this->postJson('/api/v1/auth/login', [
+            'email' => 'unverified@example.com',
+            'password' => 'StrongPassword1!',
+        ])
+            ->assertForbidden()
+            ->assertJsonPath('errors.code.0', 'email_not_verified');
+
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+    }
+
+    public function test_a_signed_verification_link_marks_the_user_verified(): void
+    {
+        $user = User::factory()->unverified()->create([
+            'role_id' => Role::where('slug', 'user')->value('id'),
+            'email' => 'verify@example.com',
+        ]);
+
+        $url = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => $user->id,
+                'hash' => sha1($user->email),
+            ],
+        );
+
+        $this->getJson(parse_url($url, PHP_URL_PATH).'?'.parse_url($url, PHP_URL_QUERY))
+            ->assertOk()
+            ->assertJsonPath('success', true)
+            ->assertJsonPath('data.user.email', 'verify@example.com');
+
+        $this->assertNotNull($user->fresh()->email_verified_at);
+    }
+
+    public function test_verification_resend_is_throttled(): void
+    {
+        Notification::fake();
+
+        User::factory()->unverified()->create([
+            'role_id' => Role::where('slug', 'user')->value('id'),
+            'email' => 'resend@example.com',
+        ]);
+
+        $payload = ['email' => 'resend@example.com'];
+
+        $this->postJson('/api/v1/auth/email/resend', $payload)
+            ->assertOk()
+            ->assertJsonPath('data.email_verification_sent', true);
+
+        $this->postJson('/api/v1/auth/email/resend', $payload)
+            ->assertStatus(429)
             ->assertJsonPath('success', false);
     }
 

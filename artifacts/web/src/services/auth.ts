@@ -29,6 +29,11 @@ interface AuthPayload {
   token_type: string;
 }
 
+interface RegistrationPayload {
+  user: AuthUser;
+  email_verification_required: boolean;
+}
+
 export interface RegisterInput {
   first_name: string;
   last_name: string;
@@ -48,7 +53,7 @@ export interface ResetPasswordInput {
 
 export const authApi = {
   async register(input: RegisterInput) {
-    const response = await apiClient.post<ApiEnvelope<AuthPayload>>(
+    const response = await apiClient.post<ApiEnvelope<RegistrationPayload>>(
       '/auth/register',
       input,
     );
@@ -80,5 +85,24 @@ export const authApi = {
 
   async resetPassword(input: ResetPasswordInput) {
     await apiClient.post<ApiEnvelope<null>>('/auth/reset-password', input);
+  },
+
+  async verifyEmail(
+    id: string,
+    hash: string,
+    signedParams: { expires: string; signature: string },
+  ) {
+    const params = new URLSearchParams(signedParams);
+    const response = await apiClient.get<ApiEnvelope<{ user: AuthUser }>>(
+      `/auth/email/verify/${encodeURIComponent(id)}/${encodeURIComponent(hash)}?${params.toString()}`,
+    );
+    return response.data.data.user;
+  },
+
+  async resendVerification(email: string) {
+    const response = await apiClient.post<
+      ApiEnvelope<{ email_verification_sent: boolean; retry_after: number }>
+    >('/auth/email/resend', { email });
+    return response.data.data;
   },
 };

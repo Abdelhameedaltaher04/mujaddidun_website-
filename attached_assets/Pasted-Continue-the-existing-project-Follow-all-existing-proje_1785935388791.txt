@@ -1,0 +1,102 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate files.
+Do NOT modify routing.
+Do NOT modify architecture.
+Do NOT modify the design system.
+
+Keep the current UI exactly as it is.
+
+================================================
+
+TASK
+
+Implement a complete Email Verification flow.
+
+================================================
+
+Requirements
+
+1. Registration
+
+- After a successful registration, the account should be created but marked as "email not verified".
+
+- Automatically send a verification email.
+
+================================================
+
+2. Verification Email
+
+Create a professional email template including:
+
+- Association logo
+- Welcome message
+- Verify Email button
+- Expiration notice
+- Footer with the association name
+
+================================================
+
+3. Verification Page
+
+Create a beautiful verification page.
+
+If verification succeeds:
+
+- Show a success illustration.
+- Display:
+  "تم تأكيد بريدك الإلكتروني بنجاح."
+
+- Show a button:
+  "الانتقال إلى تسجيل الدخول"
+
+If verification fails or expires:
+
+- Display an error illustration.
+- Explain that the verification link is invalid or expired.
+- Show a "Resend Verification Email" button.
+
+================================================
+
+4. Login Protection
+
+Users whose email is NOT verified:
+
+- Cannot log in.
+- Display a clear message:
+
+"يرجى تأكيد بريدك الإلكتروني قبل تسجيل الدخول."
+
+================================================
+
+5. Resend Verification
+
+Allow users to resend the verification email.
+
+Prevent spam by applying a cooldown (e.g. 60 seconds).
+
+================================================
+
+6. Security
+
+Use Laravel's built-in Email Verification features.
+
+Protect all verification routes.
+
+================================================
+
+7. UI
+
+Keep the existing design system.
+
+Fully responsive.
+
+Arabic & English supported.
+
+================================================
+
+Do NOT modify any other functionality.
+
+Only implement the complete Email Verification system.

@@ -24,3 +24,14 @@ only exposes the password-reset API.
 
 **How to apply:** Configure the backend `FRONTEND_URL` per environment and keep
 the reset page reading `token` and `email` from its query string.
+
+Registration creates an unverified user and sends Laravel's native verification
+notification before any bearer token is issued; login is blocked until the
+signed verification link is accepted.
+
+**Why:** Email verification is a security prerequisite for the separate React
+frontend's Sanctum token flow.
+
+**How to apply:** Preserve the `email_verified_at` check in login, use signed
+verification URLs with the configured expiry, and keep resend requests
+throttled.

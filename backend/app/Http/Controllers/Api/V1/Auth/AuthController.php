@@ -7,10 +7,14 @@ use App\Http\Requests\Api\V1\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Api\V1\Auth\LoginRequest;
 use App\Http\Requests\Api\V1\Auth\RegisterRequest;
 use App\Http\Requests\Api\V1\Auth\ResetPasswordRequest;
+use App\Http\Requests\Api\V1\Auth\ResendVerificationRequest;
 use App\Http\Resources\Api\V1\Auth\UserResource;
 use App\Services\Auth\AuthService;
+use Illuminate\Auth\Events\Verified;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Password;
 
 class AuthController extends BaseController
@@ -28,9 +32,8 @@ class AuthController extends BaseController
 
         return $this->success([
             'user' => new UserResource($result['user']),
-            'token' => $result['token'],
-            'token_type' => $result['token_type'],
-        ], 'Registration completed successfully.', 201);
+            'email_verification_required' => true,
+        ], 'Registration completed. Please verify your email address.', 201);
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -46,6 +49,14 @@ class AuthController extends BaseController
                 'The provided credentials are incorrect.',
                 ['email' => ['The provided credentials are incorrect.']],
                 401,
+            );
+        }
+
+        if ($result['email_not_verified'] ?? false) {
+            return $this->error(
+                'Email address is not verified.',
+                ['code' => ['email_not_verified']],
+                403,
             );
         }
 
@@ -98,5 +109,47 @@ class AuthController extends BaseController
         }
 
         return $this->success(null, 'Password reset successfully.');
+    }
+
+    public function verifyEmail(Request $request, int $id, string $hash): JsonResponse
+    {
+        if (! $request->hasValidSignature()) {
+            return $this->error('The email verification link is invalid or expired.', null, 400);
+        }
+
+        $user = User::query()->find($id);
+
+        if (! $user || ! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
+            return $this->error('The email verification link is invalid.', null, 400);
+        }
+
+        if (! $user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+            event(new Verified($user));
+        }
+
+        return $this->success([
+            'user' => new UserResource($user->fresh('role')),
+        ], 'Email address verified successfully.');
+    }
+
+    public function resendVerification(ResendVerificationRequest $request): JsonResponse
+    {
+        $result = $this->authService->resendEmailVerification(
+            $request->string('email')->toString(),
+        );
+
+        if ($result['throttled']) {
+            return $this->error(
+                'Please wait before requesting another verification email.',
+                ['retry_after' => [(string) $result['retry_after']]],
+                429,
+            );
+        }
+
+        return $this->success([
+            'email_verification_sent' => $result['sent'],
+            'retry_after' => $result['retry_after'],
+        ], 'If the account exists and is not verified, a verification email has been sent.');
     }
 }

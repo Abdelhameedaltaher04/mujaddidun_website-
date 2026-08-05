@@ -515,7 +515,8 @@
       "noAccount": "New to Mujaddidun?",
       "createAccount": "Create an account",
       "successTitle": "You are signed in",
-      "successDescription": "This preview sign-in was completed successfully. Welcome back to Mujaddidun."
+      "successDescription": "This preview sign-in was completed successfully. Welcome back to Mujaddidun.",
+      "emailNotVerified": "Please verify your email address before signing in."
     },
     "register": {
       "eyebrow": "Join the circle",
@@ -528,7 +529,8 @@
       "haveAccount": "Already have an account?",
       "signIn": "Sign in",
       "successTitle": "Your account is ready",
-      "successDescription": "This preview registration was completed successfully. You can now sign in to continue."
+      "successDescription": "Your account was created successfully. Check your email and follow the verification link to activate your account.",
+      "verifyEmail": "Continue to email verification"
     },
     "forgot": {
       "eyebrow": "Account access",
@@ -551,6 +553,21 @@
       "backToLogin": "Back to sign in",
       "successTitle": "Password updated",
       "successDescription": "Your new password has been accepted in this preview. Sign in to continue."
+    },
+    "verify": {
+      "eyebrow": "Email verification",
+      "loadingTitle": "Verifying your email",
+      "loadingDescription": "Just a moment while we confirm your verification link.",
+      "successTitle": "Your email has been verified successfully.",
+      "successDescription": "Your account is ready. Sign in to begin your journey with Mujaddidun.",
+      "errorTitle": "We could not verify your email",
+      "errorDescription": "This verification link is invalid or expired. Request a new link to continue.",
+      "goToLogin": "Go to sign in",
+      "resend": "Resend verification email",
+      "resendCooldown": "You can resend in {seconds} seconds",
+      "expirationNotice": "Verification links expire after one hour. Request a new link if yours has expired.",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
     }
   },
   "donate": {

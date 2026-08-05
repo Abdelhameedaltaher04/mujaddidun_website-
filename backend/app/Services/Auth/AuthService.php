@@ -5,7 +5,9 @@ namespace App\Services\Auth;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -38,12 +40,10 @@ class AuthService
                 'locale' => 'ar',
             ]);
 
-            $token = $user->createToken($tokenName);
+            event(new Registered($user));
 
             return [
                 'user' => $user->load('role'),
-                'token' => $token->plainTextToken,
-                'token_type' => 'Bearer',
             ];
         });
     }
@@ -56,6 +56,10 @@ class AuthService
             return null;
         }
 
+        if (! $user->hasVerifiedEmail()) {
+            return ['email_not_verified' => true];
+        }
+
         $user->forceFill(['last_login_at' => now()])->save();
         $token = $user->createToken($tokenName);
 
@@ -64,6 +68,34 @@ class AuthService
             'token' => $token->plainTextToken,
             'token_type' => 'Bearer',
         ];
+    }
+
+    /**
+     * Send a verification message without revealing whether an address exists.
+     *
+     * @return array{sent: bool, throttled: bool, retry_after: int}
+     */
+    public function resendEmailVerification(string $email): array
+    {
+        $key = 'email-verification-resend:'.hash('sha256', $email);
+        $user = User::query()->where('email', $email)->first();
+
+        if (! $user || $user->hasVerifiedEmail()) {
+            return ['sent' => false, 'throttled' => false, 'retry_after' => 0];
+        }
+
+        if (! Cache::add($key, true, now()->addSeconds(60))) {
+            return ['sent' => false, 'throttled' => true, 'retry_after' => 60];
+        }
+
+        try {
+            $user->sendEmailVerificationNotification();
+        } catch (\Throwable $exception) {
+            Cache::forget($key);
+            throw $exception;
+        }
+
+        return ['sent' => true, 'throttled' => false, 'retry_after' => 60];
     }
 
     public function logout(User $user, ?string $plainTextToken = null): void

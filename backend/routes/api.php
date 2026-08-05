@@ -27,6 +27,11 @@ Route::prefix('auth')->group(function (): void {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+    Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
+        ->middleware('signed')
+        ->name('verification.verify');
+    Route::post('/email/resend', [AuthController::class, 'resendVerification'])
+        ->middleware('throttle:6,1');
 
     Route::middleware('auth:sanctum')->group(function (): void {
         Route::post('/logout', [AuthController::class, 'logout']);

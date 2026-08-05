@@ -171,7 +171,7 @@ export default function RegisterPage() {
         </div>
          <Button type="submit" disabled={isSubmitting} className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-register-submit">{isSubmitting ? t('common.loading') : t('auth.register.submit')}</Button>
       </form>
-      <AuthFeedbackDialog open={feedback !== null} kind={feedback ?? 'success'} title={feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.register.successTitle')} description={feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.register.successDescription')} actionLabel={feedback === 'error' ? t('auth.feedback.close') : t('auth.register.signIn')} onOpenChange={(open) => !open && setFeedback(null)} onAction={() => { const current = feedback; setFeedback(null); if (current === 'success') setLocation('/login'); }} />
+       <AuthFeedbackDialog open={feedback !== null} kind={feedback ?? 'success'} title={feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.register.successTitle')} description={feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.register.successDescription')} actionLabel={feedback === 'error' ? t('auth.feedback.close') : t('auth.register.verifyEmail')} onOpenChange={(open) => !open && setFeedback(null)} onAction={() => { const current = feedback; setFeedback(null); if (current === 'success') setLocation(`/verify-email?email=${encodeURIComponent(form.email.trim())}`); }} />
     </AuthLayout>
   );
 }

@@ -51,7 +51,11 @@ export default function LoginPage() {
     } catch (error) {
       const apiError = getApiError(error);
       setErrors((current) => ({ ...current, ...apiError.fields }));
-      setFeedbackMessage(apiError.message);
+      setFeedbackMessage(
+        apiError.fields.code === 'email_not_verified'
+          ? t('auth.login.emailNotVerified')
+          : apiError.message,
+      );
       setFeedback('error');
     } finally {
       setIsSubmitting(false);
