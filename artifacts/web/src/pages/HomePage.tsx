@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { SectionHeading } from '@/components/layout/SectionHeading';
+import { MainContainer } from '@/components/layout/MainContainer';
 import { StatCounter } from '@/components/layout/StatCounter';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
@@ -257,21 +258,23 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* PARTNERS (Redesigned) */}
-        <SectionWrapper id="partners" variant="muted" className="relative overflow-hidden">
+        <section id="partners" className="relative w-[100vw] overflow-hidden bg-muted py-12 md:py-16">
            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-50 pointer-events-none"></div>
            <div className="absolute top-1/2 start-1/4 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[100px] opacity-30 mix-blend-screen pointer-events-none transform -translate-y-1/2 motion-safe:animate-pulse" style={{ animationDuration: '8s' }}></div>
            <div className="absolute top-1/2 end-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] opacity-30 mix-blend-screen pointer-events-none transform -translate-y-1/2 motion-safe:animate-pulse" style={{ animationDuration: '10s' }}></div>
            
            <div className="relative z-10">
-             <SectionHeading 
-               kicker={t('home.sections.partners')}
-               title={t('partners.title')} 
-               description={t('partners.subtitle')}
-               accent="secondary" 
-             />
+             <MainContainer>
+               <SectionHeading 
+                 kicker={t('home.sections.partners')}
+                 title={t('partners.title')} 
+                 description={t('partners.subtitle')}
+                 accent="secondary" 
+               />
+             </MainContainer>
              <PartnersCarousel />
            </div>
-        </SectionWrapper>
+        </section>
 
         {/* FAQ PREVIEW */}
         <SectionWrapper id="faq" variant="default">
