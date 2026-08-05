@@ -3,7 +3,7 @@ import { useLocation } from 'wouter';
 import { Checkbox } from '@/components/ui/checkbox';
 import { IconInput } from '@/components/ui/icon-input';
 import { CheckCircle2, Mail, User, XCircle } from 'lucide-react';
-import { AuthDivider, AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError, GoogleAuthButton, PasswordField } from '@/components/auth/AuthLayout';
+import { AuthDivider, AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError, FormError, GoogleAuthButton, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 import { CountryPhoneField, type PhoneCountry } from '@/components/forms/CountryPhoneField';
 import { isValidPhoneNumber, type CountryCode } from 'libphonenumber-js';
@@ -37,10 +37,10 @@ export default function RegisterPage() {
   const [phoneCountry, setPhoneCountry] = useState<CountryCode>('JO');
   const [terms, setTerms] = useState(false);
   const [errors, setErrors] = useState<RegisterErrors>({});
-  const [feedback, setFeedback] = useState<'success' | 'error' | null>(null);
+  const [feedback, setFeedback] = useState<'success' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [feedbackMessage, setFeedbackMessage] = useState('');
   const [googleAuthRequested, setGoogleAuthRequested] = useState(false);
+  const [formError, setFormError] = useState('');
 
   const update = (field: keyof typeof form, value: string) => setForm((current) => ({ ...current, [field]: value }));
   const passwordRules = PASSWORD_RULES.map((rule) => ({ ...rule, valid: rule.test(form.password) }));
@@ -70,7 +70,7 @@ export default function RegisterPage() {
     if (!validate() || isSubmitting) return;
 
     setIsSubmitting(true);
-    setFeedbackMessage('');
+    setFormError('');
     try {
       await authApi.register({
         first_name: form.firstName.trim(),
@@ -94,8 +94,12 @@ export default function RegisterPage() {
         fieldMap[keyMap[field] ?? field as keyof RegisterErrors] = message;
       });
       setErrors((current) => ({ ...current, ...fieldMap }));
-      setFeedbackMessage(apiError.message);
-      setFeedback('error');
+      const knownFieldKeys = new Set(['firstName', 'lastName', 'email', 'phone', 'password', 'confirmPassword', 'terms']);
+      setFormError(
+        Object.keys(fieldMap).some((key) => knownFieldKeys.has(key))
+          ? ''
+          : apiError.message,
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -113,6 +117,7 @@ export default function RegisterPage() {
           label={t('auth.socialLogin.registerWithGoogle')}
           onClick={() => setGoogleAuthRequested(true)}
           testId="button-register-google"
+          disabled={isSubmitting}
         />
         <AuthDivider />
       </div>
@@ -121,18 +126,18 @@ export default function RegisterPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <label htmlFor="register-first-name" className="block text-sm font-semibold text-foreground">{t('auth.firstName')}</label>
-            <IconInput icon={User} id="register-first-name" value={form.firstName} onChange={(event) => update('firstName', event.target.value)} autoComplete="given-name" placeholder={t('auth.firstNamePlaceholder')} aria-invalid={Boolean(errors.firstName)} aria-describedby={errors.firstName ? 'register-first-name-error' : undefined} data-testid="input-register-first-name" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
+            <IconInput icon={User} id="register-first-name" value={form.firstName} onChange={(event) => update('firstName', event.target.value)} autoComplete="given-name" autoFocus placeholder={t('auth.firstNamePlaceholder')} disabled={isSubmitting} aria-invalid={Boolean(errors.firstName)} aria-describedby={errors.firstName ? 'register-first-name-error' : undefined} data-testid="input-register-first-name" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
             <FieldError id="register-first-name-error" message={errors.firstName} testId="error-register-first-name" />
           </div>
           <div className="space-y-2">
             <label htmlFor="register-last-name" className="block text-sm font-semibold text-foreground">{t('auth.lastName')}</label>
-            <IconInput icon={User} id="register-last-name" value={form.lastName} onChange={(event) => update('lastName', event.target.value)} autoComplete="family-name" placeholder={t('auth.lastNamePlaceholder')} aria-invalid={Boolean(errors.lastName)} aria-describedby={errors.lastName ? 'register-last-name-error' : undefined} data-testid="input-register-last-name" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
+            <IconInput icon={User} id="register-last-name" value={form.lastName} onChange={(event) => update('lastName', event.target.value)} autoComplete="family-name" placeholder={t('auth.lastNamePlaceholder')} disabled={isSubmitting} aria-invalid={Boolean(errors.lastName)} aria-describedby={errors.lastName ? 'register-last-name-error' : undefined} data-testid="input-register-last-name" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
             <FieldError id="register-last-name-error" message={errors.lastName} testId="error-register-last-name" />
           </div>
         </div>
         <div className="space-y-2">
           <label htmlFor="register-email" className="block text-sm font-semibold text-foreground">{t('auth.email')}</label>
-          <IconInput icon={Mail} id="register-email" type="email" value={form.email} onChange={(event) => update('email', event.target.value)} autoComplete="email" placeholder={t('auth.emailPlaceholder')} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'register-email-error' : undefined} data-testid="input-register-email" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
+          <IconInput icon={Mail} id="register-email" type="email" value={form.email} onChange={(event) => update('email', event.target.value)} autoComplete="email" placeholder={t('auth.emailPlaceholder')} disabled={isSubmitting} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'register-email-error' : undefined} data-testid="input-register-email" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
           <FieldError id="register-email-error" message={errors.email} testId="error-register-email" />
         </div>
         <div className="space-y-2">
@@ -147,12 +152,13 @@ export default function RegisterPage() {
             ariaDescribedBy={errors.phone ? 'register-phone-error' : undefined}
             inputTestId="input-register-phone"
             selectorTestId="button-register-country"
+            disabled={isSubmitting}
           />
           <p className="text-xs text-muted-foreground">{t('auth.phoneFormatHint')}</p>
           <FieldError id="register-phone-error" message={errors.phone} testId="error-register-phone" />
         </div>
         <div className="space-y-2">
-          <PasswordField id="register-password" label={t('auth.password')} value={form.password} onChange={(value) => update('password', value)} error={errors.password} autoComplete="new-password" placeholder={t('auth.passwordPlaceholder')} testId="field-register-password" inputTestId="input-register-password" />
+          <PasswordField id="register-password" label={t('auth.password')} value={form.password} onChange={(value) => update('password', value)} error={errors.password} autoComplete="new-password" placeholder={t('auth.passwordPlaceholder')} testId="field-register-password" inputTestId="input-register-password" disabled={isSubmitting} />
           <div className="grid gap-x-4 gap-y-1 rounded-xl border border-border/70 bg-muted/30 p-3 sm:grid-cols-2" aria-live="polite" data-testid="register-password-checklist">
             {passwordRules.map((rule) => (
               <div key={rule.key} className={`flex items-center gap-2 text-xs ${rule.valid ? 'text-primary' : 'text-muted-foreground'}`}>
@@ -163,7 +169,7 @@ export default function RegisterPage() {
           </div>
         </div>
         <div className="space-y-2">
-          <PasswordField id="register-confirm-password" label={t('auth.confirmPassword')} value={form.confirmPassword} onChange={(value) => update('confirmPassword', value)} error={confirmPasswordError} autoComplete="new-password" placeholder={t('auth.confirmPasswordPlaceholder')} testId="field-register-confirm-password" inputTestId="input-register-confirm-password" />
+          <PasswordField id="register-confirm-password" label={t('auth.confirmPassword')} value={form.confirmPassword} onChange={(value) => update('confirmPassword', value)} error={confirmPasswordError} autoComplete="new-password" placeholder={t('auth.confirmPasswordPlaceholder')} testId="field-register-confirm-password" inputTestId="input-register-confirm-password" disabled={isSubmitting} />
           {form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword && (
             <p className="flex items-center gap-2 text-xs font-medium text-primary" role="status" data-testid="success-register-confirm-password">
               <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
@@ -173,19 +179,20 @@ export default function RegisterPage() {
         </div>
         <div className="space-y-2 pt-1">
           <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-muted-foreground" htmlFor="register-terms">
-            <Checkbox id="register-terms" checked={terms} onCheckedChange={(checked) => setTerms(checked === true)} aria-invalid={Boolean(errors.terms)} aria-describedby={errors.terms ? 'register-terms-error' : undefined} data-testid="checkbox-accept-terms" className="mt-1" />
+            <Checkbox id="register-terms" checked={terms} onCheckedChange={(checked) => setTerms(checked === true)} disabled={isSubmitting} aria-invalid={Boolean(errors.terms)} aria-describedby={errors.terms ? 'register-terms-error' : undefined} data-testid="checkbox-accept-terms" className="mt-1" />
             <span>{t('auth.register.acceptTerms')} <a href="/terms" className="font-semibold text-primary underline-offset-4 hover:underline" data-testid="link-terms">{t('auth.register.terms')}</a></span>
           </label>
           <FieldError id="register-terms-error" message={errors.terms} testId="error-register-terms" />
         </div>
+        <FormError message={formError} testId="error-register-form" />
           <AuthSubmitButton loading={isSubmitting} label={t('auth.register.submit')} loadingLabel={t('common.loading')} testId="button-register-submit" />
       </form>
       <AuthFeedbackDialog
         open={feedback !== null || googleAuthRequested}
-        kind={feedback === 'error' ? 'error' : 'success'}
-        title={googleAuthRequested ? t('auth.socialLogin.title') : feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.register.successTitle')}
-        description={googleAuthRequested ? t('auth.socialLogin.description') : feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.register.successDescription')}
-        actionLabel={googleAuthRequested || feedback === 'error' ? t('auth.feedback.close') : t('auth.register.verifyEmail')}
+        kind="success"
+        title={googleAuthRequested ? t('auth.socialLogin.title') : t('auth.register.successTitle')}
+        description={googleAuthRequested ? t('auth.socialLogin.description') : t('auth.register.successDescription')}
+        actionLabel={googleAuthRequested ? t('auth.feedback.close') : t('auth.register.verifyEmail')}
         onOpenChange={(open) => {
           if (!open) {
             setFeedback(null);

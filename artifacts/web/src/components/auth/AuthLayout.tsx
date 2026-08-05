@@ -134,6 +134,8 @@ interface PasswordFieldProps {
   testId: string;
   inputTestId: string;
   onBlur?: () => void;
+  disabled?: boolean;
+  autoFocus?: boolean;
 }
 
 export function PasswordField({
@@ -147,6 +149,8 @@ export function PasswordField({
   testId,
   inputTestId,
   onBlur,
+  disabled = false,
+  autoFocus = false,
 }: PasswordFieldProps) {
   const { t } = useLocale();
   const [visible, setVisible] = useState(false);
@@ -176,6 +180,8 @@ export function PasswordField({
              setCapsLockOn(false);
              onBlur?.();
            }}
+           disabled={disabled}
+           autoFocus={autoFocus}
           autoComplete={autoComplete}
           placeholder={placeholder}
           aria-invalid={Boolean(error)}
@@ -187,6 +193,7 @@ export function PasswordField({
           type="button"
           className="absolute end-2 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-primary focus-ring-standard"
           onClick={() => setVisible((current) => !current)}
+           disabled={disabled}
           aria-label={visible ? t('auth.hidePassword') : t('auth.showPassword')}
           data-testid={`${testId}-toggle`}
         >
@@ -252,16 +259,19 @@ export function GoogleAuthButton({
   label,
   onClick,
   testId,
+  disabled = false,
 }: {
   label: string;
   onClick: () => void;
   testId: string;
+  disabled?: boolean;
 }) {
   return (
     <Button
       type="button"
       variant="outline"
       onClick={onClick}
+      disabled={disabled}
       className="h-12 w-full rounded-xl border-border bg-white text-base font-semibold shadow-none transition-colors hover:border-primary/40 hover:bg-primary/[0.03] focus-visible:ring-2 focus-visible:ring-primary/30"
       data-testid={testId}
     >
@@ -380,7 +390,20 @@ export function AuthFooterLink({ prompt, label, href, testId }: { prompt: string
 export function FieldError({ id, message, testId }: { id: string; message?: string; testId: string }) {
   if (!message) return null;
   return (
-    <p id={id} className="text-xs font-medium text-destructive" role="alert" data-testid={testId}>
+    <p id={id} className="animate-in fade-in-0 slide-in-from-top-1 text-xs font-medium text-destructive" role="alert" data-testid={testId}>
+      {message}
+    </p>
+  );
+}
+
+export function FormError({ message, testId = 'auth-form-error' }: { message?: string; testId?: string }) {
+  if (!message) return null;
+  return (
+    <p
+      className="animate-in fade-in-0 slide-in-from-top-1 rounded-xl border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm font-medium text-destructive"
+      role="alert"
+      data-testid={testId}
+    >
       {message}
     </p>
   );

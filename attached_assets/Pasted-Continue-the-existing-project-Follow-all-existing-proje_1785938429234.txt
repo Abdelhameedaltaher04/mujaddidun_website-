@@ -1,0 +1,173 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate files.
+Do NOT modify routing.
+Do NOT modify the design system.
+
+Keep the current branding, colors, typography, responsiveness, RTL support, animations, and accessibility.
+
+================================================
+
+TASK
+
+Complete all remaining Authentication UI/UX improvements.
+
+================================================
+
+1. Caps Lock Detection
+
+For every password field:
+
+- Login
+- Register
+- Forgot Password
+- Reset Password
+
+Detect when Caps Lock is ON.
+
+Display a small warning message:
+
+"مفتاح Caps Lock مفعل."
+
+Hide it automatically when Caps Lock is turned off.
+
+================================================
+
+2. Enter Key
+
+Pressing Enter anywhere inside a form should submit it.
+
+Apply to:
+
+- Login
+- Register
+- Forgot Password
+- Reset Password
+
+================================================
+
+3. Loading State
+
+When submitting any authentication form:
+
+- Disable all inputs.
+- Disable the submit button.
+- Show a loading spinner inside the button.
+- Prevent multiple submissions.
+
+================================================
+
+4. Error Messages
+
+Prepare the UI to display Laravel validation errors exactly under the related fields.
+
+Support:
+
+- Invalid email
+- Wrong password
+- Email already exists
+- Phone already exists
+- Email not verified
+- Account disabled
+- Password validation
+- General server errors
+
+Do NOT use generic popup messages.
+
+================================================
+
+5. Success Messages
+
+Show professional success messages for:
+
+- Registration completed
+- Password reset email sent
+- Password changed successfully
+- Verification email resent
+
+================================================
+
+6. Remember Me
+
+Prepare the checkbox to work with backend authentication.
+
+Keep the current design.
+
+================================================
+
+7. Redirect Logic
+
+Prepare the application for role-based redirects.
+
+After login:
+
+Admin → Admin Dashboard
+
+Moderator → Moderator Dashboard
+
+Volunteer → Volunteer Dashboard
+
+User → Home Page
+
+If dashboards are not implemented yet, keep the logic ready.
+
+================================================
+
+8. Session Expiration
+
+Prepare a professional session expiration dialog.
+
+Message:
+
+"انتهت جلسة تسجيل الدخول، يرجى تسجيل الدخول مرة أخرى."
+
+After confirmation:
+
+Redirect to Login.
+
+================================================
+
+9. Rate Limiting
+
+When Laravel returns Too Many Requests:
+
+Disable Login button.
+
+Show countdown.
+
+Example:
+
+"عدد كبير من المحاولات، يرجى المحاولة بعد 60 ثانية."
+
+================================================
+
+10. Form Accessibility
+
+- Correct autocomplete attributes.
+- Proper focus states.
+- Keyboard navigation.
+- Screen reader labels.
+- Autofocus on the first field.
+
+================================================
+
+11. Animations
+
+- Smooth loading transitions.
+- Smooth validation appearance.
+- Button hover effects.
+- Success animations.
+
+================================================
+
+IMPORTANT
+
+Do NOT redesign any page.
+
+Do NOT change spacing or layout.
+
+Do NOT implement backend logic.
+
+Only complete the authentication UI so it is production-ready and ready for Laravel integration.

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { Checkbox } from '@/components/ui/checkbox';
 import { IconInput } from '@/components/ui/icon-input';
 import { Mail } from 'lucide-react';
-import { AuthDivider, AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError, GoogleAuthButton, PasswordField } from '@/components/auth/AuthLayout';
+import { AuthDivider, AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError, FormError, GoogleAuthButton, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { getApiError } from '@/services/api';
@@ -39,9 +39,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [errors, setErrors] = useState<LoginErrors>({});
-  const [feedback, setFeedback] = useState<'success' | 'error' | null>(null);
+  const [feedback, setFeedback] = useState<'success' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [formError, setFormError] = useState('');
   const [rateLimitSeconds, setRateLimitSeconds] = useState(0);
   const [postLoginPath, setPostLoginPath] = useState('/');
   const [googleAuthRequested, setGoogleAuthRequested] = useState(false);
@@ -70,27 +70,34 @@ export default function LoginPage() {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    setFeedbackMessage('');
+    setFormError('');
     try {
       const authenticatedUser = await login(email.trim(), password, remember);
       setPostLoginPath(getPostLoginPath(authenticatedUser.role?.slug));
       setFeedback('success');
     } catch (error) {
       const apiError = getApiError(error);
-      setErrors((current) => ({ ...current, ...apiError.fields }));
+      const nextFields: LoginErrors = {};
+      if (apiError.fields.email) nextFields.email = apiError.fields.email;
+      if (apiError.fields.password) nextFields.password = apiError.fields.password;
+      if (apiError.status === 401 && !nextFields.password) {
+        nextFields.password = t('auth.login.invalidCredentials');
+      }
+      setErrors(nextFields);
       if (apiError.status === 429) {
         setRateLimitSeconds(apiError.retryAfter || 60);
       }
-      setFeedbackMessage(
+      setFormError(
         apiError.fields.code === 'email_not_verified'
           ? t('auth.login.emailNotVerified')
-          : apiError.status === 401
-            ? t('auth.login.invalidCredentials')
-            : apiError.status === 403 && apiError.fields.code === 'account_disabled'
-              ? t('auth.login.accountDisabled')
-          : apiError.message,
+          : apiError.status === 403 && apiError.fields.code === 'account_disabled'
+            ? t('auth.login.accountDisabled')
+            : apiError.status === 429
+              ? t('auth.login.rateLimitCountdown', { seconds: apiError.retryAfter || 60 })
+              : apiError.status === 401
+                ? ''
+                : apiError.message,
       );
-      setFeedback('error');
     } finally {
       setIsSubmitting(false);
     }
@@ -108,6 +115,7 @@ export default function LoginPage() {
           label={t('auth.socialLogin.loginWithGoogle')}
           onClick={() => setGoogleAuthRequested(true)}
           testId="button-login-google"
+          disabled={isSubmitting || rateLimitSeconds > 0}
         />
         <AuthDivider />
       </div>
@@ -123,6 +131,8 @@ export default function LoginPage() {
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+            disabled={isSubmitting || rateLimitSeconds > 0}
+            autoFocus
             autoComplete="email"
             placeholder={t('auth.emailPlaceholder')}
             aria-invalid={Boolean(errors.email)}
@@ -143,6 +153,7 @@ export default function LoginPage() {
           placeholder={t('auth.passwordPlaceholder')}
           testId="field-login-password"
           inputTestId="input-login-password"
+          disabled={isSubmitting || rateLimitSeconds > 0}
         />
 
         <div className="flex items-center justify-between gap-4">
@@ -151,6 +162,7 @@ export default function LoginPage() {
               id="login-remember"
               checked={remember}
               onCheckedChange={(checked) => setRemember(checked === true)}
+                disabled={isSubmitting || rateLimitSeconds > 0}
               data-testid="checkbox-remember-me"
             />
             <span>{t('auth.login.rememberMe')}</span>
@@ -171,14 +183,15 @@ export default function LoginPage() {
              {t('auth.login.rateLimitCountdown', { seconds: rateLimitSeconds })}
            </p>
          )}
+         <FormError message={formError} testId="error-login-form" />
       </form>
 
       <AuthFeedbackDialog
         open={feedback !== null || googleAuthRequested}
-        kind={feedback ?? 'success'}
-        title={googleAuthRequested ? t('auth.socialLogin.title') : feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.login.successTitle')}
-        description={googleAuthRequested ? t('auth.socialLogin.description') : feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.login.successDescription')}
-        actionLabel={googleAuthRequested || feedback === 'error' ? t('auth.feedback.close') : t('auth.feedback.continue')}
+        kind="success"
+        title={googleAuthRequested ? t('auth.socialLogin.title') : t('auth.login.successTitle')}
+        description={googleAuthRequested ? t('auth.socialLogin.description') : t('auth.login.successDescription')}
+        actionLabel={googleAuthRequested ? t('auth.feedback.close') : t('auth.feedback.continue')}
         onOpenChange={(open) => {
           if (!open) {
             setFeedback(null);
