@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight, Users, ChevronLeft, MapPin } from 'lucide-react';
 import { PartnersCarousel } from '@/components/layout/PartnersCarousel';
+import { ContactPanel } from '@/components/layout/ContactPanel';
 import { cn } from '@/lib/utils';
 import logoUrl from '@/assets/mujaddidun-logo.png';
 
@@ -334,29 +335,8 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* CONTACT PREVIEW */}
-        <SectionWrapper id="contact" variant="muted">
-            <div className="max-w-4xl mx-auto bg-primary/5 rounded-3xl p-4 md:p-5 border border-primary/10 relative overflow-hidden">
-             <div className="absolute top-0 end-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[80px] pointer-events-none transform translate-x-1/3 -translate-y-1/3"></div>
-               <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-center md:text-start">
-                 <div className="flex-1 flex flex-col md:flex-row md:items-center gap-3 md:gap-6">
-                 <SectionHeading
-                   title={t('home.sections.contact')}
-                    align="start"
-                    accent="secondary"
-                    size="md"
-                    className="mb-0 shrink-0 [&>div]:max-w-none"
-                 />
-                   <p className="text-muted-foreground text-sm md:text-base">
-                     {t('common.contactDesc')}
-                   </p>
-                 </div>
-                 <div className="w-full md:w-auto shrink-0 flex justify-center">
-                   <Button size="lg" className="w-full md:w-auto px-8 h-11 text-base font-bold shadow-lg" asChild>
-                    <Link href="/contact">{t('common.send')}</Link>
-                  </Button>
-                 </div>
-             </div>
-          </div>
+        <SectionWrapper id="contact" variant="default" className="py-8 md:py-10">
+          <ContactPanel />
         </SectionWrapper>
 
       </main>
