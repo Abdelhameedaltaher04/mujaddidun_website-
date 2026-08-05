@@ -25,6 +25,7 @@ import RegisterPage from '@/pages/register';
 import ForgotPasswordPage from '@/pages/forgot-password';
 import ResetPasswordPage from '@/pages/reset-password';
 import VerifyEmailPage from '@/pages/verify-email';
+import ProfilePage from '@/pages/ProfilePage';
 import NotFound from '@/pages/not-found';
 
 const queryClient = new QueryClient();
@@ -62,6 +63,7 @@ function Router() {
       <Route path="/forgot-password" component={ForgotPasswordPage} />
       <Route path="/reset-password" component={ResetPasswordPage} />
       <Route path="/verify-email" component={VerifyEmailPage} />
+      <Route path="/profile" component={ProfilePage} />
       <Route path="/" component={HomePage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/projects" component={ProjectsPage} />

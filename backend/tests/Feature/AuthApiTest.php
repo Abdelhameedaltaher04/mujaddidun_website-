@@ -6,6 +6,8 @@ use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
@@ -230,5 +232,73 @@ class AuthApiTest extends TestCase
             'email' => 'reset@example.com',
             'password' => 'NewPassword1!',
         ])->assertOk();
+    }
+
+    public function test_an_authenticated_user_can_view_and_update_their_profile(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create([
+            'role_id' => Role::where('slug', 'user')->value('id'),
+            'first_name' => 'Old',
+            'last_name' => 'Name',
+            'email' => 'profile@example.com',
+            'phone' => '+962791234567',
+            'country_code' => 'JO',
+        ]);
+
+        $token = $user->createToken('profile-test')->plainTextToken;
+
+        $this->withHeader('Authorization', "Bearer {$token}")
+            ->getJson('/api/v1/profile')
+            ->assertOk()
+            ->assertJsonPath('data.user.email', 'profile@example.com')
+            ->assertJsonPath('data.user.role.slug', 'user');
+
+        $avatar = UploadedFile::fake()->image('avatar.webp', 200, 200);
+
+        $this->withHeader('Authorization', "Bearer {$token}")
+            ->post('/api/v1/profile', [
+                'first_name' => 'Updated',
+                'last_name' => 'Member',
+                'phone' => '+966501234567',
+                'country_code' => 'SA',
+                'avatar' => $avatar,
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.user.first_name', 'Updated')
+            ->assertJsonPath('data.user.country_code', 'SA')
+            ->assertJsonPath('data.user.avatar_path', fn ($path) => is_string($path));
+
+        $updated = $user->fresh();
+        $this->assertSame('Updated', $updated->first_name);
+        $this->assertSame('SA', $updated->country_code);
+        Storage::disk('public')->assertExists($updated->avatar_path);
+    }
+
+    public function test_an_authenticated_user_must_provide_the_current_password_to_change_it(): void
+    {
+        $user = User::factory()->create([
+            'role_id' => Role::where('slug', 'user')->value('id'),
+            'email' => 'profile-password@example.com',
+            'password' => Hash::make('CurrentPassword1!'),
+        ]);
+        $token = $user->createToken('profile-password-test')->plainTextToken;
+
+        $this->withHeader('Authorization', "Bearer {$token}")
+            ->postJson('/api/v1/profile/password', [
+                'current_password' => 'WrongPassword1!',
+                'new_password' => 'NewPassword1!',
+                'password_confirmation' => 'NewPassword1!',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonPath('errors.current_password.0', 'The current password is incorrect.');
+
+        $this->withHeader('Authorization', "Bearer {$token}")
+            ->postJson('/api/v1/profile/password', [
+                'current_password' => 'CurrentPassword1!',
+                'new_password' => 'NewPassword1!',
+                'password_confirmation' => 'NewPassword1!',
+            ])
+            ->assertOk();
     }
 }

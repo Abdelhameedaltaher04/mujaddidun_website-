@@ -570,6 +570,51 @@
       "signIn": "تسجيل الدخول"
     }
   },
+  "profile": {
+    "eyebrow": "مساحة حسابك",
+    "title": "ملفي الشخصي",
+    "description": "راجع معلوماتك الشخصية وحدّث إعدادات الأمان لحسابك.",
+    "backHome": "العودة إلى الرئيسية",
+    "informationTitle": "معلومات الملف الشخصي",
+    "informationDescription": "تفاصيل حسابك الحالية.",
+    "name": "الاسم",
+    "country": "الدولة",
+    "role": "الدور",
+    "accountStatus": "حالة الحساب",
+    "emailVerification": "تأكيد البريد الإلكتروني",
+    "memberSince": "عضو منذ",
+    "verified": "تم التأكيد",
+    "notVerified": "غير مؤكد",
+    "notAvailable": "غير متوفر",
+    "status": {
+      "active": "نشط"
+    },
+    "roles": {
+      "user": "مستخدم"
+    },
+    "editTitle": "تعديل الملف الشخصي",
+    "editDescription": "يمكنك تعديل معلوماتك الأساسية، بينما لا يمكن تغيير البريد الإلكتروني مباشرة.",
+    "profilePicture": "الصورة الشخصية",
+    "avatarHint": "JPG أو PNG أو WEBP، بحد أقصى 2MB.",
+    "avatarInvalid": "اختر صورة بصيغة JPG أو PNG أو WEBP وبحجم لا يتجاوز 2MB.",
+    "avatarRemoved": "تمت إزالة الصورة الشخصية.",
+    "upload": "رفع صورة",
+    "remove": "إزالة",
+    "emailLocked": "لا يمكن تغيير البريد الإلكتروني من هذه الصفحة.",
+    "saveChanges": "حفظ التغييرات",
+    "profileSaved": "تم حفظ تغييرات الملف الشخصي بنجاح.",
+    "passwordTitle": "تغيير كلمة المرور",
+    "passwordDescription": "أدخل كلمة المرور الحالية أولاً لتأكيد هويتك.",
+    "currentPassword": "كلمة المرور الحالية",
+    "changePassword": "تغيير كلمة المرور",
+    "passwordSaved": "تم تغيير كلمة المرور بنجاح.",
+    "validation": {
+      "firstName": "يرجى إدخال الاسم الأول.",
+      "lastName": "يرجى إدخال اسم العائلة.",
+      "phone": "يرجى إدخال رقم الهاتف.",
+      "currentPassword": "يرجى إدخال كلمة المرور الحالية."
+    }
+  },
   "donate": {
     "title": "تبرع الآن",
     "subtitle": "عطاؤك يصنع أثراً حقيقياً. ساهم معنا في توفير الغذاء والمأوى والتمكين.",

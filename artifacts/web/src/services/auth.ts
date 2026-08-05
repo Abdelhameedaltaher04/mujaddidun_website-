@@ -15,6 +15,7 @@ export interface AuthUser {
   phone: string | null;
   country_code: string | null;
   avatar_path: string | null;
+  avatar_url: string | null;
   bio: string | null;
   locale: string;
   status: string;
@@ -48,6 +49,21 @@ export interface ResetPasswordInput {
   token: string;
   email: string;
   password: string;
+  password_confirmation: string;
+}
+
+export interface UpdateProfileInput {
+  first_name: string;
+  last_name: string;
+  phone: string;
+  country_code: string;
+  avatar?: File;
+  remove_avatar?: boolean;
+}
+
+export interface ChangePasswordInput {
+  current_password: string;
+  new_password: string;
   password_confirmation: string;
 }
 
@@ -104,5 +120,39 @@ export const authApi = {
       ApiEnvelope<{ email_verification_sent: boolean; retry_after: number }>
     >('/auth/email/resend', { email });
     return response.data.data;
+  },
+
+  async getProfile() {
+    const response = await apiClient.get<ApiEnvelope<{ user: AuthUser }>>(
+      '/profile',
+    );
+    return response.data.data.user;
+  },
+
+  async updateProfile(input: UpdateProfileInput) {
+    const formData = new FormData();
+    formData.append('first_name', input.first_name);
+    formData.append('last_name', input.last_name);
+    formData.append('phone', input.phone);
+    formData.append('country_code', input.country_code);
+    if (input.avatar) formData.append('avatar', input.avatar);
+    if (input.remove_avatar) formData.append('remove_avatar', '1');
+
+    const response = await apiClient.post<ApiEnvelope<{ user: AuthUser }>>(
+      '/profile',
+      formData,
+    );
+    return response.data.data.user;
+  },
+
+  async removeAvatar() {
+    const response = await apiClient.delete<ApiEnvelope<{ user: AuthUser }>>(
+      '/profile/avatar',
+    );
+    return response.data.data.user;
+  },
+
+  async changePassword(input: ChangePasswordInput) {
+    await apiClient.post<ApiEnvelope<null>>('/profile/password', input);
   },
 };

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { LanguageToggle } from '@/components/LanguageToggle';
 import { MainContainer } from '@/components/layout/MainContainer';
@@ -218,14 +218,14 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <LanguageToggle />
             {isAuthenticated ? (
-              <Button
-                size="sm"
-                className="hidden sm:inline-flex"
-                data-testid="button-logout"
-                onClick={() => void handleLogout()}
-              >
-                {user?.first_name || t('common.logout')}
-              </Button>
+              <div className="hidden items-center gap-2 sm:flex">
+                <Button size="sm" variant="outline" asChild data-testid="link-profile">
+                  <Link href="/profile">{user?.first_name || t('profile.title')}</Link>
+                </Button>
+                <Button size="icon" variant="ghost" aria-label={t('common.logout')} data-testid="button-logout" onClick={() => void handleLogout()}>
+                  <LogOut className="h-4 w-4" aria-hidden="true" />
+                </Button>
+              </div>
             ) : (
               <Button
                 size="sm"
@@ -379,15 +379,15 @@ export function Navbar() {
               </Link>
             </Button>
             {isAuthenticated ? (
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full"
-                data-testid="button-mobile-logout"
-                onClick={() => void handleLogout()}
-              >
-                {user?.first_name || t('common.logout')}
-              </Button>
+              <div className="grid gap-2">
+                <Button size="lg" variant="outline" className="w-full" asChild data-testid="link-mobile-profile">
+                  <Link href="/profile" onClick={closeMobile}>{t('profile.title')}</Link>
+                </Button>
+                <Button size="lg" variant="ghost" className="w-full" data-testid="button-mobile-logout" onClick={() => void handleLogout()}>
+                  <LogOut className="h-4 w-4" aria-hidden="true" />
+                  {t('common.logout')}
+                </Button>
+              </div>
             ) : (
               <Button
                 size="lg"

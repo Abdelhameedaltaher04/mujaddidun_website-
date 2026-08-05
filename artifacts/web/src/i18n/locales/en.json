@@ -570,6 +570,51 @@
       "signIn": "Sign in"
     }
   },
+  "profile": {
+    "eyebrow": "Your account space",
+    "title": "My Profile",
+    "description": "Review your personal information and keep your account security up to date.",
+    "backHome": "Back to home",
+    "informationTitle": "Profile information",
+    "informationDescription": "Your current account details.",
+    "name": "Name",
+    "country": "Country",
+    "role": "User role",
+    "accountStatus": "Account status",
+    "emailVerification": "Email verification",
+    "memberSince": "Member since",
+    "verified": "Verified",
+    "notVerified": "Not verified",
+    "notAvailable": "Not available",
+    "status": {
+      "active": "Active"
+    },
+    "roles": {
+      "user": "User"
+    },
+    "editTitle": "Edit profile",
+    "editDescription": "Update your basic information. Your email address cannot be changed directly.",
+    "profilePicture": "Profile picture",
+    "avatarHint": "JPG, PNG, or WEBP, up to 2MB.",
+    "avatarInvalid": "Choose a JPG, PNG, or WEBP image no larger than 2MB.",
+    "avatarRemoved": "Your profile picture was removed.",
+    "upload": "Upload image",
+    "remove": "Remove",
+    "emailLocked": "Your email address cannot be changed from this page.",
+    "saveChanges": "Save changes",
+    "profileSaved": "Your profile changes were saved successfully.",
+    "passwordTitle": "Change password",
+    "passwordDescription": "Enter your current password first to confirm your identity.",
+    "currentPassword": "Current password",
+    "changePassword": "Change password",
+    "passwordSaved": "Your password was changed successfully.",
+    "validation": {
+      "firstName": "Please enter your first name.",
+      "lastName": "Please enter your last name.",
+      "phone": "Please enter your phone number.",
+      "currentPassword": "Please enter your current password."
+    }
+  },
   "donate": {
     "title": "Donate Now",
     "subtitle": "Your giving makes a real impact. Help us provide food, shelter, and empowerment.",
