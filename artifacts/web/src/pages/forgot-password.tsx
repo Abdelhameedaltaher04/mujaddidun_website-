@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { IconInput } from '@/components/ui/icon-input';
+import { Mail } from 'lucide-react';
 import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, FieldError } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 
@@ -29,7 +30,7 @@ export default function ForgotPasswordPage() {
       <form onSubmit={handleSubmit} noValidate className="space-y-5" aria-label={t('auth.forgot.formLabel')}>
         <div className="space-y-2">
           <label htmlFor="forgot-email" className="block text-sm font-semibold text-foreground">{t('auth.email')}</label>
-          <Input id="forgot-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" placeholder={t('auth.emailPlaceholder')} aria-invalid={Boolean(error)} aria-describedby={error ? 'forgot-email-error' : undefined} data-testid="input-forgot-email" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
+          <IconInput icon={Mail} id="forgot-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" placeholder={t('auth.emailPlaceholder')} aria-invalid={Boolean(error)} aria-describedby={error ? 'forgot-email-error' : undefined} data-testid="input-forgot-email" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
           <FieldError id="forgot-email-error" message={error} testId="error-forgot-email" />
         </div>
         <Button type="submit" className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-send-reset-link">{t('auth.forgot.submit')}</Button>

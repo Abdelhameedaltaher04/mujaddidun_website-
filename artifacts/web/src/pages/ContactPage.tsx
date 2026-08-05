@@ -1,12 +1,12 @@
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
-import { MapPin, Phone, Mail, Zap, MessagesSquare, Clock, Facebook, Instagram } from 'lucide-react';
+import { MapPin, Phone, Mail, Zap, MessagesSquare, Clock, Facebook, Instagram, User, Tag } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
+import { IconInput } from '@/components/ui/icon-input';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import {
@@ -227,7 +227,8 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} noValidate className="relative space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">{t('contact.fullName')}</Label>
-                  <Input
+                  <IconInput
+                    icon={User}
                     id="name"
                     value={values.name}
                     onChange={(e) => handleChange('name', e.target.value)}
@@ -242,7 +243,8 @@ export default function ContactPage() {
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="email">{t('common.email')}</Label>
-                    <Input
+                    <IconInput
+                      icon={Mail}
                       id="email"
                       type="email"
                       dir="ltr"
@@ -257,7 +259,8 @@ export default function ContactPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">{t('common.phone')}</Label>
-                    <Input
+                    <IconInput
+                      icon={Phone}
                       id="phone"
                       type="tel"
                       dir="ltr"
@@ -274,7 +277,8 @@ export default function ContactPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="subject">{t('common.subject')}</Label>
-                  <Input
+                  <IconInput
+                    icon={Tag}
                     id="subject"
                     value={values.subject}
                     onChange={(e) => handleChange('subject', e.target.value)}

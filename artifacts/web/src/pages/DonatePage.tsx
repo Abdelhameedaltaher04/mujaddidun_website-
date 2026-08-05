@@ -8,7 +8,8 @@ import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Building2, Heart } from 'lucide-react';
+import { Building2, Heart, User, Phone, Mail } from 'lucide-react';
+import { IconInput } from '@/components/ui/icon-input';
 import { cn } from '@/lib/utils';
 import { FormContactHelp } from '@/components/layout/FormContactHelp';
 import {
@@ -222,7 +223,8 @@ export default function DonatePage() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="donorName">{t('donate.form.name')}</Label>
-                      <Input
+                      <IconInput
+                        icon={User}
                         id="donorName"
                         type="text"
                         value={donorName}
@@ -232,7 +234,8 @@ export default function DonatePage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="donorPhone">{t('donate.form.phone')}</Label>
-                      <Input
+                      <IconInput
+                        icon={Phone}
                         id="donorPhone"
                         type="tel"
                         required
@@ -248,7 +251,8 @@ export default function DonatePage() {
                     </div>
                     <div className="space-y-2 sm:col-span-2">
                       <Label htmlFor="donorEmail">{t('donate.form.email')}</Label>
-                      <Input
+                      <IconInput
+                        icon={Mail}
                         id="donorEmail"
                         type="email"
                         dir="ltr"

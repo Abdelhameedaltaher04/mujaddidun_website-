@@ -1,4 +1,5 @@
-import { AlertTriangle, ArrowLeft, ArrowRight, CheckCircle2, Eye, EyeOff, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, ArrowRight, CheckCircle2, Eye, EyeOff, Lock, ShieldCheck } from 'lucide-react';
+import logoUrl from '@/assets/mujaddidun-logo.png';
 import { useState, type ReactNode } from 'react';
 import { Link } from 'wouter';
 import { useLocale } from '@/contexts/LocaleContext';
@@ -50,13 +51,23 @@ export function AuthLayout({ eyebrow, title, description, children, footer }: Au
             </button>
           </div>
 
-          <div className="relative z-10 max-w-md py-12 lg:py-0">
+          <div className="relative z-10 max-w-md py-12 text-center lg:py-0">
+            <div className="mb-8 flex justify-center">
+              <span className="inline-flex items-center justify-center rounded-[22px] bg-white p-4 shadow-[0_14px_40px_rgba(0,0,0,0.18)]">
+                <img
+                  src={logoUrl}
+                  alt="Al-Mujaddidun"
+                  className="h-20 w-auto sm:h-24"
+                  data-testid="img-auth-logo"
+                />
+              </span>
+            </div>
             <p className="mb-5 text-xs font-bold uppercase tracking-[0.22em] text-[#bde3d8]">{t('auth.heritageEyebrow')}</p>
             <h2 className="font-display text-3xl font-bold leading-[1.22] tracking-tight sm:text-4xl">
               {t('auth.heritageTitle')}
             </h2>
-            <p className="mt-6 max-w-sm text-base leading-8 text-white/75">{t('auth.heritageCopy')}</p>
-            <div className="mt-10 flex items-center gap-3 border-s border-white/25 ps-4 text-sm text-white/80">
+            <p className="mx-auto mt-6 max-w-sm text-base leading-8 text-white/75">{t('auth.heritageCopy')}</p>
+            <div className="mt-10 flex items-center justify-center gap-3 text-sm text-white/80">
               <ShieldCheck className="h-5 w-5 shrink-0 text-[#bde3d8]" aria-hidden="true" />
               <span>{t('auth.privacyNote')}</span>
             </div>
@@ -130,6 +141,12 @@ export function PasswordField({
         {label}
       </label>
       <div className="relative">
+        <span
+          className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5 text-muted-foreground/70"
+          aria-hidden="true"
+        >
+          <Lock className="h-[18px] w-[18px]" />
+        </span>
         <Input
           id={id}
           type={visible ? 'text' : 'password'}
@@ -141,7 +158,7 @@ export function PasswordField({
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
           data-testid={inputTestId}
-          className="h-12 rounded-xl border-border bg-white pe-12 text-base shadow-none"
+          className="h-12 rounded-xl border-border bg-white ps-11 pe-12 text-base shadow-none"
         />
         <button
           type="button"

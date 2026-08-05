@@ -6,7 +6,8 @@ import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { SectionHeading } from '@/components/layout/SectionHeading';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { IconInput } from '@/components/ui/icon-input';
+import { User, CalendarDays, Mail, Phone } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
@@ -141,7 +142,8 @@ export default function VolunteerPage() {
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="fullName" className="font-semibold">{t('volunteer.form.fullName')}</Label>
-                      <Input
+                      <IconInput
+                        icon={User}
                         id="fullName"
                         required
                         value={values.fullName}
@@ -155,7 +157,8 @@ export default function VolunteerPage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="dob" className="font-semibold">{t('volunteer.form.dob')}</Label>
-                      <Input
+                      <IconInput
+                        icon={CalendarDays}
                         id="dob"
                         type="date"
                         required
@@ -170,7 +173,8 @@ export default function VolunteerPage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email" className="font-semibold">{t('common.email')}</Label>
-                      <Input
+                      <IconInput
+                        icon={Mail}
                         id="email"
                         type="email"
                         required
@@ -186,7 +190,8 @@ export default function VolunteerPage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone" className="font-semibold">{t('common.phone')}</Label>
-                      <Input
+                      <IconInput
+                        icon={Phone}
                         id="phone"
                         type="tel"
                         required

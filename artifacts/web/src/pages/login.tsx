@@ -2,7 +2,8 @@ import { useState, type FormEvent } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { IconInput } from '@/components/ui/icon-input';
+import { Mail } from 'lucide-react';
 import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, FieldError, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 
@@ -50,7 +51,8 @@ export default function LoginPage() {
           <label htmlFor="login-email" className="block text-sm font-semibold text-foreground">
             {t('auth.email')}
           </label>
-          <Input
+          <IconInput
+            icon={Mail}
             id="login-email"
             type="email"
             value={email}

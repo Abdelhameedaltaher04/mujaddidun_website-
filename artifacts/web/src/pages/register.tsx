@@ -2,7 +2,8 @@ import { useState, type FormEvent } from 'react';
 import { useLocation } from 'wouter';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { IconInput } from '@/components/ui/icon-input';
+import { Mail, Phone, User } from 'lucide-react';
 import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, FieldError, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 
@@ -59,18 +60,18 @@ export default function RegisterPage() {
       <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-label={t('auth.register.formLabel')}>
         <div className="space-y-2">
           <label htmlFor="register-full-name" className="block text-sm font-semibold text-foreground">{t('auth.fullName')}</label>
-          <Input id="register-full-name" value={form.fullName} onChange={(event) => update('fullName', event.target.value)} autoComplete="name" placeholder={t('auth.fullNamePlaceholder')} aria-invalid={Boolean(errors.fullName)} aria-describedby={errors.fullName ? 'register-full-name-error' : undefined} data-testid="input-register-full-name" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
+          <IconInput icon={User} id="register-full-name" value={form.fullName} onChange={(event) => update('fullName', event.target.value)} autoComplete="name" placeholder={t('auth.fullNamePlaceholder')} aria-invalid={Boolean(errors.fullName)} aria-describedby={errors.fullName ? 'register-full-name-error' : undefined} data-testid="input-register-full-name" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
           <FieldError id="register-full-name-error" message={errors.fullName} testId="error-register-full-name" />
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <label htmlFor="register-email" className="block text-sm font-semibold text-foreground">{t('auth.email')}</label>
-            <Input id="register-email" type="email" value={form.email} onChange={(event) => update('email', event.target.value)} autoComplete="email" placeholder={t('auth.emailPlaceholder')} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'register-email-error' : undefined} data-testid="input-register-email" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
+            <IconInput icon={Mail} id="register-email" type="email" value={form.email} onChange={(event) => update('email', event.target.value)} autoComplete="email" placeholder={t('auth.emailPlaceholder')} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'register-email-error' : undefined} data-testid="input-register-email" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
             <FieldError id="register-email-error" message={errors.email} testId="error-register-email" />
           </div>
           <div className="space-y-2">
             <label htmlFor="register-phone" className="block text-sm font-semibold text-foreground">{t('auth.phone')}</label>
-            <Input id="register-phone" type="tel" value={form.phone} onChange={(event) => update('phone', event.target.value)} autoComplete="tel" placeholder={t('auth.phonePlaceholder')} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'register-phone-error' : undefined} data-testid="input-register-phone" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
+            <IconInput icon={Phone} id="register-phone" type="tel" value={form.phone} onChange={(event) => update('phone', event.target.value)} autoComplete="tel" placeholder={t('auth.phonePlaceholder')} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'register-phone-error' : undefined} data-testid="input-register-phone" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
             <FieldError id="register-phone-error" message={errors.phone} testId="error-register-phone" />
           </div>
         </div>
