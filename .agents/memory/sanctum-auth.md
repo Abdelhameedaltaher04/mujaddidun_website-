@@ -15,3 +15,12 @@ contract, revoke only the presented bearer token on logout, and use Laravel's
 password broker for reset links and reset-token validation. Any confirmation field
 needed by service code must have its own validation rule so it survives
 `validated()` filtering.
+
+Password-reset notifications must point to the React `/reset-password` route,
+not a server-rendered Laravel page.
+
+**Why:** The Vite application owns the authentication screens while Laravel
+only exposes the password-reset API.
+
+**How to apply:** Configure the backend `FRONTEND_URL` per environment and keep
+the reset page reading `token` and `email` from its query string.

@@ -6,6 +6,8 @@ import { IconInput } from '@/components/ui/icon-input';
 import { Mail } from 'lucide-react';
 import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, FieldError, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { getApiError } from '@/services/api';
 
 interface LoginErrors {
   email?: string;
@@ -16,12 +18,15 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function LoginPage() {
   const { t } = useLocale();
+  const { login } = useAuth();
   const [, setLocation] = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [errors, setErrors] = useState<LoginErrors>({});
   const [feedback, setFeedback] = useState<'success' | 'error' | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
 
   const validate = () => {
     const nextErrors: LoginErrors = {};
@@ -33,10 +38,24 @@ export default function LoginPage() {
     return Object.keys(nextErrors).length === 0;
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!validate()) return;
-    setFeedback(email.toLowerCase().includes('error') ? 'error' : 'success');
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setFeedbackMessage('');
+    try {
+      await login(email.trim(), password, remember);
+      setFeedback('success');
+    } catch (error) {
+      const apiError = getApiError(error);
+      setErrors((current) => ({ ...current, ...apiError.fields }));
+      setFeedbackMessage(apiError.message);
+      setFeedback('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -94,8 +113,8 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <Button type="submit" className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-login-submit">
-          {t('auth.login.submit')}
+         <Button type="submit" disabled={isSubmitting} className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-login-submit">
+          {isSubmitting ? t('common.loading') : t('auth.login.submit')}
         </Button>
       </form>
 
@@ -103,13 +122,17 @@ export default function LoginPage() {
         open={feedback !== null}
         kind={feedback ?? 'success'}
         title={feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.login.successTitle')}
-        description={feedback === 'error' ? t('auth.feedback.errorDescription') : t('auth.login.successDescription')}
+        description={feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.login.successDescription')}
         actionLabel={feedback === 'error' ? t('auth.feedback.close') : t('auth.feedback.continue')}
         onOpenChange={(open) => !open && setFeedback(null)}
         onAction={() => {
           const current = feedback;
           setFeedback(null);
-          if (current === 'success') setLocation('/');
+           if (current === 'success') {
+             const params = new URLSearchParams(window.location.search);
+             const redirect = params.get('redirect');
+             setLocation(redirect && redirect.startsWith('/') ? redirect : '/');
+           }
         }}
       />
     </AuthLayout>

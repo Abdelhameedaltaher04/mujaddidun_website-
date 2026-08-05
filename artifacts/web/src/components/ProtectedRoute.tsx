@@ -1,5 +1,5 @@
-import { useAuth } from '@workspace/replit-auth-web';
-import { Redirect } from 'wouter';
+import { useAuth } from '@/contexts/AuthContext';
+import { Redirect, useLocation } from 'wouter';
 import type { ComponentType } from 'react';
 
 export function ProtectedRoute({
@@ -8,6 +8,7 @@ export function ProtectedRoute({
   component: ComponentType;
 }) {
   const { isLoading, isAuthenticated } = useAuth();
+  const [location] = useLocation();
 
   if (isLoading) {
     return (
@@ -18,7 +19,7 @@ export function ProtectedRoute({
   }
 
   if (!isAuthenticated) {
-    return <Redirect to="/login" />;
+    return <Redirect to={`/login?redirect=${encodeURIComponent(location)}`} />;
   }
 
   return <Component />;

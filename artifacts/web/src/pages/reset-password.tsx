@@ -3,6 +3,8 @@ import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
+import { authApi } from '@/services/auth';
+import { getApiError } from '@/services/api';
 
 export default function ResetPasswordPage() {
   const { t } = useLocale();
@@ -11,8 +13,10 @@ export default function ResetPasswordPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<{ password?: string; confirmPassword?: string }>({});
   const [feedback, setFeedback] = useState<'success' | 'error' | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors: typeof errors = {};
     if (!password) nextErrors.password = t('auth.validation.passwordRequired');
@@ -20,9 +24,31 @@ export default function ResetPasswordPage() {
     if (!confirmPassword) nextErrors.confirmPassword = t('auth.validation.confirmPasswordRequired');
     else if (password !== confirmPassword) nextErrors.confirmPassword = t('auth.validation.passwordMismatch');
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length === 0) {
-      // Placeholder-only failure path until the real reset API is connected.
-      setFeedback(password.toLowerCase().includes('error') ? 'error' : 'success');
+    if (Object.keys(nextErrors).length === 0 && !isSubmitting) {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get('token') || '';
+      const email = params.get('email') || '';
+      setFeedbackMessage('');
+      setIsSubmitting(true);
+      try {
+        await authApi.resetPassword({
+          token,
+          email,
+          password,
+          password_confirmation: confirmPassword,
+        });
+        setFeedback('success');
+      } catch (error) {
+        const apiError = getApiError(error);
+        setFeedbackMessage(apiError.message);
+        setErrors((current) => ({
+          ...current,
+          ...(apiError.fields.email ? { password: apiError.fields.email } : {}),
+        }));
+        setFeedback('error');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -32,13 +58,13 @@ export default function ResetPasswordPage() {
         <PasswordField id="reset-password" label={t('auth.newPassword')} value={password} onChange={setPassword} error={errors.password} autoComplete="new-password" placeholder={t('auth.passwordPlaceholder')} testId="field-reset-password" inputTestId="input-reset-password" />
         <PasswordField id="reset-confirm-password" label={t('auth.confirmPassword')} value={confirmPassword} onChange={setConfirmPassword} error={errors.confirmPassword} autoComplete="new-password" placeholder={t('auth.confirmPasswordPlaceholder')} testId="field-reset-confirm-password" inputTestId="input-reset-confirm-password" />
         <p className="text-xs leading-5 text-muted-foreground">{t('auth.passwordHint')}</p>
-        <Button type="submit" className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-reset-password">{t('auth.reset.submit')}</Button>
+         <Button type="submit" disabled={isSubmitting} className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-reset-password">{isSubmitting ? t('common.loading') : t('auth.reset.submit')}</Button>
       </form>
       <AuthFeedbackDialog
         open={feedback !== null}
         kind={feedback ?? 'success'}
         title={feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.reset.successTitle')}
-        description={feedback === 'error' ? t('auth.feedback.errorDescription') : t('auth.reset.successDescription')}
+         description={feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.reset.successDescription')}
         actionLabel={feedback === 'error' ? t('auth.feedback.close') : t('auth.feedback.signIn')}
         onOpenChange={(open) => !open && setFeedback(null)}
         onAction={() => {

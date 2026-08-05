@@ -1,0 +1,118 @@
+Continue the existing project.
+
+The React frontend and Laravel backend already exist.
+
+Now connect the frontend to the Laravel API.
+
+================================================
+
+TASK
+
+Integrate the React application with the Laravel backend.
+
+================================================
+
+Requirements
+
+1. Configure a centralized API service.
+
+- Use Axios.
+- Create a reusable API client.
+- Read the API URL from environment variables (.env).
+
+Example:
+
+VITE_API_URL=http://localhost:8000/api/v1
+
+================================================
+
+2. Authentication
+
+Connect the following pages to the real Laravel API:
+
+- Login
+- Register
+- Forgot Password
+- Reset Password
+- Logout
+
+Replace all placeholder logic with real API requests.
+
+================================================
+
+3. Token Handling
+
+Use Laravel Sanctum authentication.
+
+Store authentication securely.
+
+Automatically include authentication credentials in protected requests.
+
+Handle unauthorized (401) responses by redirecting the user to Login.
+
+================================================
+
+4. Protected Routes
+
+Protect pages that require authentication.
+
+Guests should be redirected to Login.
+
+After successful login, redirect the user back to the page they originally requested.
+
+================================================
+
+5. API Error Handling
+
+Display validation errors returned by Laravel under the correct form fields.
+
+Display user-friendly error messages.
+
+Handle:
+
+- 400
+- 401
+- 403
+- 404
+- 422
+- 500
+
+================================================
+
+6. Loading States
+
+Show loading indicators while requests are in progress.
+
+Prevent duplicate submissions.
+
+================================================
+
+7. Current User
+
+After login:
+
+- Fetch the authenticated user's profile.
+- Store it in a global state (Context or Zustand).
+- Display the user's information throughout the application.
+
+================================================
+
+8. Code Quality
+
+Use reusable services.
+
+Do not duplicate API calls.
+
+Keep the code clean and maintainable.
+
+================================================
+
+IMPORTANT
+
+Do NOT change the existing UI.
+
+Do NOT redesign any pages.
+
+Only replace placeholder logic with real Laravel API integration.
+
+Ensure the entire authentication flow works correctly from frontend to backend.

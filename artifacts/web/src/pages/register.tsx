@@ -8,6 +8,8 @@ import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, FieldError, PasswordFie
 import { useLocale } from '@/contexts/LocaleContext';
 import { CountryPhoneField, type PhoneCountry } from '@/components/forms/CountryPhoneField';
 import { isValidPhoneNumber, type CountryCode } from 'libphonenumber-js';
+import { authApi } from '@/services/auth';
+import { getApiError } from '@/services/api';
 
 interface RegisterErrors {
   firstName?: string;
@@ -37,6 +39,8 @@ export default function RegisterPage() {
   const [terms, setTerms] = useState(false);
   const [errors, setErrors] = useState<RegisterErrors>({});
   const [feedback, setFeedback] = useState<'success' | 'error' | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
 
   const update = (field: keyof typeof form, value: string) => setForm((current) => ({ ...current, [field]: value }));
   const passwordRules = PASSWORD_RULES.map((rule) => ({ ...rule, valid: rule.test(form.password) }));
@@ -61,9 +65,40 @@ export default function RegisterPage() {
     return Object.keys(nextErrors).length === 0;
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (validate()) setFeedback(form.email.toLowerCase().includes('error') ? 'error' : 'success');
+    if (!validate() || isSubmitting) return;
+
+    setIsSubmitting(true);
+    setFeedbackMessage('');
+    try {
+      await authApi.register({
+        first_name: form.firstName.trim(),
+        last_name: form.lastName.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        country_code: phoneCountry,
+        password: form.password,
+        password_confirmation: form.confirmPassword,
+      });
+      setFeedback('success');
+    } catch (error) {
+      const apiError = getApiError(error);
+      const fieldMap: RegisterErrors = {};
+      Object.entries(apiError.fields).forEach(([field, message]) => {
+        const keyMap: Record<string, keyof RegisterErrors> = {
+          first_name: 'firstName',
+          last_name: 'lastName',
+          password_confirmation: 'confirmPassword',
+        };
+        fieldMap[keyMap[field] ?? field as keyof RegisterErrors] = message;
+      });
+      setErrors((current) => ({ ...current, ...fieldMap }));
+      setFeedbackMessage(apiError.message);
+      setFeedback('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -134,9 +169,9 @@ export default function RegisterPage() {
           </label>
           <FieldError id="register-terms-error" message={errors.terms} testId="error-register-terms" />
         </div>
-        <Button type="submit" className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-register-submit">{t('auth.register.submit')}</Button>
+         <Button type="submit" disabled={isSubmitting} className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-register-submit">{isSubmitting ? t('common.loading') : t('auth.register.submit')}</Button>
       </form>
-      <AuthFeedbackDialog open={feedback !== null} kind={feedback ?? 'success'} title={feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.register.successTitle')} description={feedback === 'error' ? t('auth.feedback.errorDescription') : t('auth.register.successDescription')} actionLabel={feedback === 'error' ? t('auth.feedback.close') : t('auth.feedback.signIn')} onOpenChange={(open) => !open && setFeedback(null)} onAction={() => { const current = feedback; setFeedback(null); if (current === 'success') setLocation('/login'); }} />
+      <AuthFeedbackDialog open={feedback !== null} kind={feedback ?? 'success'} title={feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.register.successTitle')} description={feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.register.successDescription')} actionLabel={feedback === 'error' ? t('auth.feedback.close') : t('auth.register.signIn')} onOpenChange={(open) => !open && setFeedback(null)} onAction={() => { const current = feedback; setFeedback(null); if (current === 'success') setLocation('/login'); }} />
     </AuthLayout>
   );
 }

@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/dialog';
 import { CheckCircle2 } from 'lucide-react';
 import { useLocation } from 'wouter';
-import { useAuth } from '@workspace/replit-auth-web';
+import { useAuth } from '@/contexts/AuthContext';
 import { FormContactHelp } from '@/components/layout/FormContactHelp';
 
 export default function EventsPage() {
@@ -132,7 +132,7 @@ export default function EventsPage() {
             <Button
               onClick={() => {
                 setLoginPromptOpen(false);
-                navigate('/login');
+                 navigate(`/login?redirect=${encodeURIComponent('/events')}`);
               }}
               data-testid="button-dialog-login"
             >

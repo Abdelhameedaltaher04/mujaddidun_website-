@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { LanguageToggle } from '@/components/LanguageToggle';
 import { MainContainer } from '@/components/layout/MainContainer';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import logoUrl from '@/assets/mujaddidun-logo.png';
 
@@ -56,6 +57,7 @@ const keySlug = (key: string) => key.split('.')[1];
  */
 export function Navbar() {
   const { t } = useLocale();
+  const { user, isAuthenticated, logout } = useAuth();
   const [location] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -105,6 +107,11 @@ export function Navbar() {
   const closeMobile = () => {
     setMobileOpen(false);
     setOpenMobileGroup(null);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    closeMobile();
   };
 
   return (
@@ -210,14 +217,25 @@ export function Navbar() {
           {/* Actions */}
           <div className="flex items-center gap-2">
             <LanguageToggle />
-            <Button
-              size="sm"
-              className="hidden sm:inline-flex"
-              data-testid="button-login"
-              asChild
-            >
-              <Link href="/login">{t('nav.login')}</Link>
-            </Button>
+            {isAuthenticated ? (
+              <Button
+                size="sm"
+                className="hidden sm:inline-flex"
+                data-testid="button-logout"
+                onClick={() => void handleLogout()}
+              >
+                {user?.first_name || t('common.logout')}
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                className="hidden sm:inline-flex"
+                data-testid="button-login"
+                asChild
+              >
+                <Link href="/login">{t('nav.login')}</Link>
+              </Button>
+            )}
             <Button
               size="sm"
               variant="secondary"
@@ -360,17 +378,29 @@ export function Navbar() {
                 {t('nav.donate')}
               </Link>
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full"
-              data-testid="button-mobile-login"
-              asChild
-            >
-              <Link href="/login" onClick={closeMobile}>
-                {t('nav.login')}
-              </Link>
-            </Button>
+            {isAuthenticated ? (
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full"
+                data-testid="button-mobile-logout"
+                onClick={() => void handleLogout()}
+              >
+                {user?.first_name || t('common.logout')}
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full"
+                data-testid="button-mobile-login"
+                asChild
+              >
+                <Link href="/login" onClick={closeMobile}>
+                  {t('nav.login')}
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       )}

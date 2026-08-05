@@ -85,6 +85,7 @@ file and provide:
   `DB_USERNAME`, and `DB_PASSWORD`);
 - production frontend origins in `CORS_ALLOWED_ORIGINS`;
 - matching `SANCTUM_STATEFUL_DOMAINS` values for cookie-based authentication.
+- `FRONTEND_URL` for password-reset links sent to the React application.
 
 Run migrations and `php artisan db:seed --class=RoleSeeder` in the deployment
 environment before accepting registrations. Run Laravel's normal production
