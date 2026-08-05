@@ -329,7 +329,20 @@
       "personalInfo": "Personal Information",
       "fullName": "Full Name",
       "dob": "Date of Birth",
-      "experience": "Previous Experience (if any)"
+      "experience": "Previous Experience (if any)",
+      "validation": {
+        "fullNameRequired": "Full name is required.",
+        "dobRequired": "Date of birth is required.",
+        "emailRequired": "Email address is required.",
+        "emailInvalid": "Please enter a valid email address.",
+        "phoneRequired": "Phone number is required.",
+        "phoneInvalid": "Please enter a valid phone number.",
+        "interestRequired": "Please select at least one area of interest.",
+        "availabilityRequired": "Please select at least one availability time.",
+        "successTitle": "Your application was sent successfully ✅",
+        "successMsg": "Thank you for joining us. We will contact you soon.",
+        "okBtn": "OK"
+      }
     },
     "interestsList": {
       "feeding": "Feeding Projects",
@@ -420,7 +433,13 @@
       "info": "Donor Information",
       "name": "Name (Optional)",
       "email": "Email (Optional)",
-      "phone": "Phone Number"
+      "phone": "Phone Number",
+      "validation": {
+        "phoneRequired": "Phone number is required.",
+        "phoneInvalid": "Please enter a valid phone number.",
+        "emailInvalid": "Please enter a valid email address.",
+        "amountInvalid": "Please enter a valid amount."
+      }
     },
     "bankTransfer": {
       "title": "Direct Bank Transfer",
@@ -434,6 +453,9 @@
     },
     "submit": "Complete Donation",
     "success": "Your donation request has been successfully registered. Thank you for your generosity!",
+    "successTitle": "Donation request submitted successfully ✅",
+    "successMsg": "Thank you for your generosity. Your request has been received.",
+    "successOk": "OK",
     "aria": {
       "typesGroup": "Select donation type",
       "frequencyGroup": "Select donation frequency",

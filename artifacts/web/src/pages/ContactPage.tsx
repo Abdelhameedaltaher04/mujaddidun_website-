@@ -41,6 +41,7 @@ export default function ContactPage() {
   const [values, setValues] = useState<FormValues>(EMPTY_VALUES);
   const [errors, setErrors] = useState<FormErrors>({});
   const [successOpen, setSuccessOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateField = (field: keyof FormValues, value: string): string | undefined => {
     const trimmed = value.trim();
@@ -78,8 +79,12 @@ export default function ContactPage() {
     });
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
+    const trimmedValues = Object.fromEntries(
+      Object.entries(values).map(([key, value]) => [key, value.trim()]),
+    ) as FormValues;
+    setValues(trimmedValues);
+    setIsSubmitting(true);
     setSuccessOpen(true);
-    setValues(EMPTY_VALUES);
   };
 
   const fieldError = (field: keyof FormValues) =>
@@ -217,8 +222,14 @@ export default function ContactPage() {
                   />
                 </div>
 
-                <Button type="submit" size="lg" className="w-full h-12 rounded-xl text-lg font-bold" data-testid="button-contact-submit">
-                  {t('common.send')}
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={isSubmitting}
+                  className="w-full h-12 rounded-xl text-lg font-bold"
+                  data-testid="button-contact-submit"
+                >
+                  {isSubmitting ? t('common.loading') : t('common.send')}
                 </Button>
               </form>
             </div>
@@ -228,7 +239,16 @@ export default function ContactPage() {
       <Footer />
 
       {/* Success dialog */}
-      <Dialog open={successOpen} onOpenChange={setSuccessOpen}>
+      <Dialog
+        open={successOpen}
+        onOpenChange={(open) => {
+          setSuccessOpen(open);
+          if (!open) {
+            setIsSubmitting(false);
+            setValues(EMPTY_VALUES);
+          }
+        }}
+      >
         <DialogContent className="max-w-md rounded-2xl" data-testid="dialog-contact-success">
           <DialogHeader>
             <DialogTitle className="font-display text-xl">
@@ -239,7 +259,14 @@ export default function ContactPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="pt-2">
-            <Button onClick={() => setSuccessOpen(false)} data-testid="button-contact-success-ok">
+            <Button
+              onClick={() => {
+                setSuccessOpen(false);
+                setIsSubmitting(false);
+                setValues(EMPTY_VALUES);
+              }}
+              data-testid="button-contact-success-ok"
+            >
               {t('contact.form.okBtn')}
             </Button>
           </DialogFooter>

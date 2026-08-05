@@ -7,17 +7,32 @@ import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
 import { Building2, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE_PATTERN = /^\+?[0-9\s\-()]{7,20}$/;
 
 export default function DonatePage() {
   const { t } = useLocale();
-  const { toast } = useToast();
   
   const [donationType, setDonationType] = useState('general');
   const [frequency, setFrequency] = useState('once');
   const [amount, setAmount] = useState('50');
+  const [donorName, setDonorName] = useState('');
+  const [donorPhone, setDonorPhone] = useState('');
+  const [donorEmail, setDonorEmail] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const types = [
     { id: 'general', label: t('donate.types.general') },
@@ -36,12 +51,62 @@ export default function DonatePage() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    toast({
-      title: t('common.success'),
-      description: t('donate.success'),
-    });
-    (e.target as HTMLFormElement).reset();
+    if (isSubmitting) return;
+    const trimmedPhone = donorPhone.trim();
+    const trimmedEmail = donorEmail.trim();
+    const nextErrors: Record<string, string> = {};
+    if (!trimmedPhone) nextErrors.donorPhone = t('donate.form.validation.phoneRequired');
+    else if (!PHONE_PATTERN.test(trimmedPhone)) nextErrors.donorPhone = t('donate.form.validation.phoneInvalid');
+    if (trimmedEmail && !EMAIL_PATTERN.test(trimmedEmail)) {
+      nextErrors.donorEmail = t('donate.form.validation.emailInvalid');
+    }
+    const numericAmount = Number(amount.trim());
+    if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
+      nextErrors.amount = t('donate.form.validation.amountInvalid');
+    }
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+    setDonorName(donorName.trim());
+    setDonorPhone(trimmedPhone);
+    setDonorEmail(trimmedEmail);
+    setIsSubmitting(true);
+    setSuccessOpen(true);
   };
+
+  const updateDonorField = (field: 'donorName' | 'donorPhone' | 'donorEmail', value: string) => {
+    const setters = { donorName: setDonorName, donorPhone: setDonorPhone, donorEmail: setDonorEmail };
+    setters[field](value);
+    if (errors[field]) {
+      const trimmed = value.trim();
+      const error = field === 'donorPhone'
+        ? (!trimmed ? t('donate.form.validation.phoneRequired') : PHONE_PATTERN.test(trimmed) ? '' : t('donate.form.validation.phoneInvalid'))
+        : (trimmed && !EMAIL_PATTERN.test(trimmed) ? t('donate.form.validation.emailInvalid') : '');
+      setErrors((prev) => ({ ...prev, [field]: error }));
+    }
+  };
+
+  const updateAmount = (value: string) => {
+    setAmount(value);
+    if (errors.amount) {
+      const numericAmount = Number(value.trim());
+      setErrors((prev) => ({
+        ...prev,
+        amount: Number.isFinite(numericAmount) && numericAmount > 0
+          ? ''
+          : t('donate.form.validation.amountInvalid'),
+      }));
+    }
+  };
+
+  const fieldError = (field: string) =>
+    errors[field] ? (
+      <p className="text-sm text-destructive" role="alert" data-testid={`error-donate-${field}`}>
+        {errors[field]}
+      </p>
+    ) : null;
+
+  const invalidClass = (field: string) =>
+    errors[field] ? 'border-destructive focus-visible:ring-destructive' : undefined;
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -59,7 +124,7 @@ export default function DonatePage() {
           <div className="grid gap-12 lg:grid-cols-[1fr_400px]">
             {/* Form Section */}
             <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
-              <form onSubmit={handleSubmit} className="space-y-10">
+              <form onSubmit={handleSubmit} noValidate className="space-y-10">
                 
                 {/* 1. Donation Type */}
                 <div className="space-y-4">
@@ -135,12 +200,16 @@ export default function DonatePage() {
                         min="1"
                         placeholder={t('donate.amount.customPlaceholder')}
                         value={amounts.includes(amount) ? '' : amount}
-                        onChange={(e) => setAmount(e.target.value)}
+                        onChange={(e) => updateAmount(e.target.value)}
+                        aria-invalid={!!errors.amount}
+                        aria-describedby={errors.amount ? 'error-donate-amount' : undefined}
                         className={cn(
                           "h-full text-center rounded-2xl",
-                          !amounts.includes(amount) && amount !== '' && "border-primary ring-1 ring-primary"
+                          !amounts.includes(amount) && amount !== '' && "border-primary ring-1 ring-primary",
+                          invalidClass('amount')
                         )}
                       />
+                      {fieldError('amount')}
                     </div>
                   </div>
                 </div>
@@ -151,22 +220,57 @@ export default function DonatePage() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="donorName">{t('donate.form.name')}</Label>
-                      <Input id="donorName" type="text" className="rounded-2xl h-11" />
+                      <Input
+                        id="donorName"
+                        type="text"
+                        value={donorName}
+                        onChange={(e) => updateDonorField('donorName', e.target.value)}
+                        className="rounded-2xl h-11"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="donorPhone">{t('donate.form.phone')}</Label>
-                      <Input id="donorPhone" type="tel" required dir="ltr" className="text-start rounded-2xl h-11" />
+                      <Input
+                        id="donorPhone"
+                        type="tel"
+                        required
+                        dir="ltr"
+                        value={donorPhone}
+                        onChange={(e) => updateDonorField('donorPhone', e.target.value)}
+                        aria-invalid={!!errors.donorPhone}
+                        aria-describedby={errors.donorPhone ? 'error-donate-donorPhone' : undefined}
+                        className={cn('text-start rounded-2xl h-11', invalidClass('donorPhone'))}
+                        data-testid="input-donate-phone"
+                      />
+                      {fieldError('donorPhone')}
                     </div>
                     <div className="space-y-2 sm:col-span-2">
                       <Label htmlFor="donorEmail">{t('donate.form.email')}</Label>
-                      <Input id="donorEmail" type="email" dir="ltr" className="text-start rounded-2xl h-11" />
+                      <Input
+                        id="donorEmail"
+                        type="email"
+                        dir="ltr"
+                        value={donorEmail}
+                        onChange={(e) => updateDonorField('donorEmail', e.target.value)}
+                        aria-invalid={!!errors.donorEmail}
+                        aria-describedby={errors.donorEmail ? 'error-donate-donorEmail' : undefined}
+                        className={cn('text-start rounded-2xl h-11', invalidClass('donorEmail'))}
+                        data-testid="input-donate-email"
+                      />
+                      {fieldError('donorEmail')}
                     </div>
                   </div>
                 </div>
 
-                <Button type="submit" size="lg" className="w-full text-lg h-14 rounded-2xl bg-secondary hover:bg-secondary/90 text-secondary-foreground">
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={isSubmitting}
+                  className="w-full text-lg h-14 rounded-2xl bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+                  data-testid="button-donate-submit"
+                >
                   <Heart className="w-5 h-5 mx-2" />
-                  {t('donate.submit')}
+                  {isSubmitting ? t('common.loading') : t('donate.submit')}
                 </Button>
               </form>
             </div>
@@ -204,6 +308,42 @@ export default function DonatePage() {
         </SectionWrapper>
       </main>
       <Footer />
+      <Dialog
+        open={successOpen}
+        onOpenChange={(open) => {
+          setSuccessOpen(open);
+          if (!open) {
+            setIsSubmitting(false);
+            setDonorName('');
+            setDonorPhone('');
+            setDonorEmail('');
+          }
+        }}
+      >
+        <DialogContent className="max-w-md rounded-2xl" data-testid="dialog-donate-success">
+          <DialogHeader>
+            <DialogTitle className="font-display text-xl">{t('donate.successTitle')}</DialogTitle>
+            <DialogDescription className="pt-2 text-base leading-relaxed">
+              {t('donate.successMsg')}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="pt-2">
+            <Button
+              onClick={() => {
+                setSuccessOpen(false);
+                setIsSubmitting(false);
+                setDonorName('');
+                setDonorPhone('');
+                setDonorEmail('');
+                setErrors({});
+              }}
+              data-testid="button-donate-success-ok"
+            >
+              {t('donate.successOk')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
