@@ -82,23 +82,21 @@ export function SectionHeading({
       <h2
         id={id}
         className={cn(
-          'font-display font-bold text-foreground text-balance',
+          'font-display font-bold tracking-tight text-foreground text-balance leading-tight',
           size === 'lg' ? 'text-3xl lg:text-4xl' : 'text-2xl',
           titleClassName,
         )}
       >
         {title}
       </h2>
-      {kicker && (
-        <span
-          aria-hidden="true"
-          className={cn(
-            'block h-1.5 w-16 rounded-full mt-4 bg-gradient-to-r',
-            accentGradient,
-            isCentered && 'mx-auto',
-          )}
-        />
-      )}
+      <span
+        aria-hidden="true"
+        className={cn(
+          'block h-1.5 w-16 rounded-full mt-4 bg-gradient-to-r',
+          accentGradient,
+          isCentered && 'mx-auto',
+        )}
+      />
       {description && (
         <p className={cn('text-muted-foreground mt-4', size === 'lg' ? 'text-lg' : 'text-base')}>
           {description}

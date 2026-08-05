@@ -2,7 +2,6 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
-import { SectionHeading } from '@/components/layout/SectionHeading';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,7 +15,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { MapPin, Phone, Mail } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -107,43 +105,7 @@ export default function ContactPage() {
       />
       <main className="flex-1">
         <SectionWrapper>
-          <div className="grid gap-12 lg:grid-cols-2">
-            <div>
-              <SectionHeading title={t('common.contactDesc')} align="start" accent="primary" className="mb-6 lg:mb-8" />
-              
-              <div className="space-y-6 mt-8 bg-card rounded-2xl border border-border p-6 md:p-8 shadow-sm">
-                <div className="flex items-start gap-4 group">
-                  <div className="p-4 bg-primary/10 text-primary rounded-2xl shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <MapPin className="w-6 h-6" />
-                  </div>
-                  <div className="pt-1">
-                    <h3 className="font-bold text-foreground text-lg mb-1">{t('footer.address')}</h3>
-                    <p className="text-muted-foreground">{t('contact.addressValue')}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4 group">
-                  <div className="p-4 bg-secondary/10 text-secondary rounded-2xl shrink-0 group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors">
-                    <Phone className="w-6 h-6" />
-                  </div>
-                  <div className="pt-1">
-                    <h3 className="font-bold text-foreground text-lg mb-1">{t('footer.phone')}</h3>
-                    <p className="text-muted-foreground ltr-safe block" dir="ltr">+962 6 123 4567</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4 group">
-                  <div className="p-4 bg-info/10 text-info rounded-2xl shrink-0 group-hover:bg-info group-hover:text-info-foreground transition-colors">
-                    <Mail className="w-6 h-6" />
-                  </div>
-                  <div className="pt-1">
-                    <h3 className="font-bold text-foreground text-lg mb-1">{t('footer.email')}</h3>
-                    <p className="text-muted-foreground ltr-safe block" dir="ltr">info@mujaddidun.org</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
+          <div className="max-w-2xl mx-auto w-full">
             <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
               <form onSubmit={handleSubmit} noValidate className="space-y-6">
                 <div className="space-y-2">

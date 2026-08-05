@@ -1,0 +1,96 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate files.
+Do NOT modify routing.
+Do NOT modify architecture.
+Do NOT modify the design system.
+
+Keep the current branding, colors, typography, animations, responsiveness, and accessibility.
+
+================================================
+
+TASK
+
+Apply the following UI improvements only.
+
+================================================
+
+1. Home Page - About Us Image
+
+- Resize the image in the "About Us" section on the Home page.
+- Make it fit naturally within the layout.
+- Keep the aspect ratio.
+- Do NOT crop or stretch the image.
+- Make the section look more balanced.
+
+================================================
+
+2. Contact Us Section
+
+Simplify the Contact Us section.
+
+- Remove the email address.
+- Remove the phone number.
+- Keep only the contact form.
+- Reduce the size of the contact form container so it doesn't occupy unnecessary space.
+- Center the form nicely within the section.
+- Keep the current validation and styling.
+
+================================================
+
+3. Section Titles
+
+Improve the design of ALL section titles across the website.
+
+Current titles look too plain.
+
+Create a more premium appearance by:
+
+- Adding a subtle orange accent.
+- Better typography.
+- Decorative underline or accent element.
+- Better spacing.
+- Modern and elegant styling.
+
+Apply the same style consistently to every section title.
+
+================================================
+
+4. Scroll To Top Button
+
+Add a floating "Back to Top" button.
+
+Requirements:
+
+- Fixed at the bottom-right of the screen.
+- Hidden at the top of the page.
+- Appears after scrolling down.
+- Smooth scroll back to the top when clicked.
+- Modern circular design.
+- Brand orange color.
+- Smooth hover animation.
+- Fully responsive.
+
+================================================
+
+5. Floating WhatsApp Button
+
+Add a floating WhatsApp button.
+
+Requirements:
+
+- Fixed at the bottom-left of the screen.
+- Use the official WhatsApp icon.
+- Brand-consistent design.
+- Hover animation.
+- Always visible while scrolling.
+- Clicking it should open WhatsApp directly using the configured WhatsApp number.
+- Open in a new tab/app depending on the user's device.
+
+================================================
+
+Do NOT modify anything else.
+
+Stop after completing these improvements.

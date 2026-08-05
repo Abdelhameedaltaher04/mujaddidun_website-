@@ -107,13 +107,13 @@ export default function HomePage() {
                 </Link>
               </Button>
             </div>
-            <div className="relative order-first lg:order-none">
-               <div className="aspect-square md:aspect-[4/3] rounded-2xl bg-primary/5 border border-primary/10 overflow-hidden relative shadow-sm">
-                  <div className="absolute inset-0 flex items-center justify-center p-10 md:p-14">
+             <div className="relative order-first lg:order-none w-full max-w-md mx-auto">
+                <div className="aspect-[4/3] rounded-2xl bg-primary/5 border border-primary/10 overflow-hidden relative shadow-sm">
+                   <div className="absolute inset-0 flex items-center justify-center p-12 md:p-16">
                      <img
                        src={logoUrl}
                        alt={t('app.name')}
-                       className="max-w-full max-h-full object-contain drop-shadow-sm"
+                        className="max-w-[78%] max-h-[78%] w-auto h-auto object-contain drop-shadow-sm"
                        data-testid="img-about-logo"
                      />
                   </div>
