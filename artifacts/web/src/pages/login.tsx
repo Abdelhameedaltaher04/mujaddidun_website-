@@ -1,6 +1,7 @@
 import { useAuth } from '@workspace/replit-auth-web';
 import { Redirect } from 'wouter';
 import { Button } from '@/components/ui/button';
+import { FormContactHelp } from '@/components/layout/FormContactHelp';
 
 export default function LoginPage() {
   const { isLoading, isAuthenticated, login } = useAuth();
@@ -25,6 +26,7 @@ export default function LoginPage() {
         <Button onClick={login} data-testid="button-login">
           Log in
         </Button>
+        <FormContactHelp />
       </div>
     </div>
   );
