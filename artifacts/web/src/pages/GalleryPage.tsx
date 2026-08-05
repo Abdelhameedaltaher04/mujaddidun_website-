@@ -3,6 +3,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
+import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { GalleryLightbox } from '@/components/layout/GalleryLightbox';
 import { useLocale } from '@/contexts/LocaleContext';
 
@@ -56,6 +57,7 @@ export default function GalleryPage() {
           </div>
         </SectionWrapper>
       </main>
+      <ContactCtaSection />
       <Footer />
       <GalleryLightbox
         openIndex={openIndex}

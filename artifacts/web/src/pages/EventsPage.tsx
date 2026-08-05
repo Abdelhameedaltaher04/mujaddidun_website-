@@ -3,6 +3,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
+import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from '@/components/ui/button';
@@ -106,6 +107,7 @@ export default function EventsPage() {
           <FormContactHelp />
         </SectionWrapper>
       </main>
+      <ContactCtaSection />
       <Footer />
 
       {/* Login required dialog (guests) */}

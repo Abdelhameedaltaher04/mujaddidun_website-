@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
+import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { SectionHeading } from '@/components/layout/SectionHeading';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
@@ -264,6 +265,7 @@ export default function VolunteerPage() {
           </div>
         </SectionWrapper>
       </main>
+      <ContactCtaSection />
       <Footer />
       <Dialog
         open={successOpen}

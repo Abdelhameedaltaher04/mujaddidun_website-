@@ -3,6 +3,7 @@ import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { SectionHeading } from '@/components/layout/SectionHeading';
+import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 import {
@@ -156,6 +157,7 @@ export default function AboutPage() {
           </div>
         </SectionWrapper>
       </main>
+      <ContactCtaSection />
       <Footer />
     </div>
   );

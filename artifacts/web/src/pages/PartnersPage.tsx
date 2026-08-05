@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
+import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { useLocale } from '@/contexts/LocaleContext';
 
 export default function PartnersPage() {
@@ -27,6 +28,7 @@ export default function PartnersPage() {
           </div>
         </SectionWrapper>
       </main>
+      <ContactCtaSection />
       <Footer />
     </div>
   );

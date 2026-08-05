@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight, Users, ChevronLeft, MapPin } from 'lucide-react';
 import { PartnersCarousel } from '@/components/layout/PartnersCarousel';
-import { ContactPanel } from '@/components/layout/ContactPanel';
+import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { cn } from '@/lib/utils';
 import logoUrl from '@/assets/mujaddidun-logo.png';
 
@@ -335,9 +335,7 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* CONTACT PREVIEW */}
-        <SectionWrapper id="contact" variant="default" className="py-8 md:py-10">
-          <ContactPanel />
-        </SectionWrapper>
+        <ContactCtaSection id="contact" />
 
       </main>
       <Footer />
