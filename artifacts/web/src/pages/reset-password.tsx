@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useLocation } from 'wouter';
-import { Button } from '@/components/ui/button';
-import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, PasswordField } from '@/components/auth/AuthLayout';
+import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 import { authApi } from '@/services/auth';
 import { getApiError } from '@/services/api';
@@ -58,7 +57,7 @@ export default function ResetPasswordPage() {
         <PasswordField id="reset-password" label={t('auth.newPassword')} value={password} onChange={setPassword} error={errors.password} autoComplete="new-password" placeholder={t('auth.passwordPlaceholder')} testId="field-reset-password" inputTestId="input-reset-password" />
         <PasswordField id="reset-confirm-password" label={t('auth.confirmPassword')} value={confirmPassword} onChange={setConfirmPassword} error={errors.confirmPassword} autoComplete="new-password" placeholder={t('auth.confirmPasswordPlaceholder')} testId="field-reset-confirm-password" inputTestId="input-reset-confirm-password" />
         <p className="text-xs leading-5 text-muted-foreground">{t('auth.passwordHint')}</p>
-         <Button type="submit" disabled={isSubmitting} className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-reset-password">{isSubmitting ? t('common.loading') : t('auth.reset.submit')}</Button>
+         <AuthSubmitButton loading={isSubmitting} label={t('auth.reset.submit')} loadingLabel={t('common.loading')} testId="button-reset-password" />
       </form>
       <AuthFeedbackDialog
         open={feedback !== null}

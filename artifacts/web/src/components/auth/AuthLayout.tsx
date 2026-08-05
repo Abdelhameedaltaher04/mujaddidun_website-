@@ -1,11 +1,22 @@
 import { AlertTriangle, ArrowLeft, ArrowRight, CheckCircle2, Eye, EyeOff, Lock, ShieldCheck } from 'lucide-react';
 import logoUrl from '@/assets/mujaddidun-logo.png';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Link } from 'wouter';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { getLoginUrl, SESSION_EXPIRED_EVENT } from '@/services/api';
 
 interface AuthLayoutProps {
   eyebrow?: string;
@@ -139,6 +150,7 @@ export function PasswordField({
 }: PasswordFieldProps) {
   const { t } = useLocale();
   const [visible, setVisible] = useState(false);
+  const [capsLockOn, setCapsLockOn] = useState(false);
   const errorId = `${id}-error`;
 
   return (
@@ -158,7 +170,12 @@ export function PasswordField({
           type={visible ? 'text' : 'password'}
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          onBlur={onBlur}
+           onKeyDown={(event) => setCapsLockOn(event.getModifierState('CapsLock'))}
+           onKeyUp={(event) => setCapsLockOn(event.getModifierState('CapsLock'))}
+           onBlur={() => {
+             setCapsLockOn(false);
+             onBlur?.();
+           }}
           autoComplete={autoComplete}
           placeholder={placeholder}
           aria-invalid={Boolean(error)}
@@ -176,12 +193,123 @@ export function PasswordField({
           {visible ? <EyeOff className="h-4 w-4" aria-hidden="true" /> : <Eye className="h-4 w-4" aria-hidden="true" />}
         </button>
       </div>
+      {capsLockOn && (
+        <p className="flex items-center gap-2 text-xs font-medium text-secondary" role="status" aria-live="polite" data-testid={`${testId}-caps-lock-warning`}>
+          <AlertTriangle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          {t('auth.capsLockWarning')}
+        </p>
+      )}
       {error && (
         <p id={errorId} className="text-xs font-medium text-destructive" role="alert" data-testid={`${testId}-error`}>
           {error}
         </p>
       )}
     </div>
+  );
+}
+
+export function AuthSubmitButton({
+  loading,
+  label,
+  loadingLabel,
+  testId,
+}: {
+  loading: boolean;
+  label: string;
+  loadingLabel: string;
+  testId: string;
+}) {
+  return (
+    <Button
+      type="submit"
+      disabled={loading}
+      aria-busy={loading}
+      className="h-12 w-full rounded-xl text-base font-bold"
+      data-testid={testId}
+    >
+      {loading ? (
+        <span className="inline-flex items-center justify-center gap-2">
+          <Spinner className="size-4" aria-label={loadingLabel} />
+          <span>{loadingLabel}</span>
+        </span>
+      ) : label}
+    </Button>
+  );
+}
+
+export function SocialLoginButtons() {
+  const { t } = useLocale();
+
+  return (
+    <div className="space-y-3" data-testid="social-login-options">
+      <div className="flex items-center gap-3 text-xs text-muted-foreground">
+        <span className="h-px flex-1 bg-border" />
+        <span>{t('auth.socialLogin.or')}</span>
+        <span className="h-px flex-1 bg-border" />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Button
+          type="button"
+          variant="outline"
+          disabled
+          title={t('auth.socialLogin.comingSoon')}
+          className="h-11 rounded-xl border-border bg-white font-semibold opacity-75"
+          data-testid="button-login-google"
+        >
+          <span className="mr-2 grid h-5 w-5 place-items-center rounded-full border border-[#4285F4] text-xs font-bold text-[#4285F4]" aria-hidden="true">G</span>
+          {t('auth.socialLogin.google')}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          disabled
+          title={t('auth.socialLogin.comingSoon')}
+          className="h-11 rounded-xl border-border bg-white font-semibold opacity-75"
+          data-testid="button-login-microsoft"
+        >
+          <span className="mr-2 grid h-5 w-5 grid-cols-2 gap-px" aria-hidden="true">
+            <span className="bg-[#f35325]" /><span className="bg-[#81bc06]" />
+            <span className="bg-[#05a6f0]" /><span className="bg-[#ffba08]" />
+          </span>
+          {t('auth.socialLogin.microsoft')}
+        </Button>
+      </div>
+      <p className="text-center text-xs text-muted-foreground">{t('auth.socialLogin.comingSoon')}</p>
+    </div>
+  );
+}
+
+export function SessionExpiredDialog() {
+  const { dir, t } = useLocale();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handleSessionExpired = () => setOpen(true);
+    window.addEventListener(SESSION_EXPIRED_EVENT, handleSessionExpired);
+    return () => window.removeEventListener(SESSION_EXPIRED_EVENT, handleSessionExpired);
+  }, []);
+
+  const goToLogin = () => {
+    setOpen(false);
+    window.location.assign(getLoginUrl());
+  };
+
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogContent dir={dir} className="rounded-2xl border-border">
+        <AlertDialogHeader className="text-start">
+          <AlertDialogTitle className="font-display text-xl">{t('auth.sessionExpired.title')}</AlertDialogTitle>
+          <AlertDialogDescription className="pt-1 text-start leading-7">
+            {t('auth.sessionExpired.description')}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="mt-3 sm:justify-start">
+          <AlertDialogAction onClick={goToLogin} data-testid="button-session-expired-login">
+            {t('auth.sessionExpired.action')}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { FloatingActions } from '@/components/layout/FloatingActions';
+import { SessionExpiredDialog } from '@/components/auth/AuthLayout';
 import { LocaleProvider } from '@/contexts/LocaleContext';
 import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
 import { useEffect } from 'react';
@@ -92,6 +93,7 @@ function App() {
             <ScrollToTop />
             <Router />
             <FloatingActions />
+            <SessionExpiredDialog />
           </WouterRouter>
           <Toaster />
         </TooltipProvider>

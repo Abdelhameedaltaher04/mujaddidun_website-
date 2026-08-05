@@ -1,10 +1,9 @@
 import { useState, type FormEvent } from 'react';
 import { useLocation } from 'wouter';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
 import { IconInput } from '@/components/ui/icon-input';
 import { CheckCircle2, Mail, User, XCircle } from 'lucide-react';
-import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, FieldError, PasswordField } from '@/components/auth/AuthLayout';
+import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 import { CountryPhoneField, type PhoneCountry } from '@/components/forms/CountryPhoneField';
 import { isValidPhoneNumber, type CountryCode } from 'libphonenumber-js';
@@ -169,7 +168,7 @@ export default function RegisterPage() {
           </label>
           <FieldError id="register-terms-error" message={errors.terms} testId="error-register-terms" />
         </div>
-         <Button type="submit" disabled={isSubmitting} className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-register-submit">{isSubmitting ? t('common.loading') : t('auth.register.submit')}</Button>
+          <AuthSubmitButton loading={isSubmitting} label={t('auth.register.submit')} loadingLabel={t('common.loading')} testId="button-register-submit" />
       </form>
        <AuthFeedbackDialog open={feedback !== null} kind={feedback ?? 'success'} title={feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.register.successTitle')} description={feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.register.successDescription')} actionLabel={feedback === 'error' ? t('auth.feedback.close') : t('auth.register.verifyEmail')} onOpenChange={(open) => !open && setFeedback(null)} onAction={() => { const current = feedback; setFeedback(null); if (current === 'success') setLocation(`/verify-email?email=${encodeURIComponent(form.email.trim())}`); }} />
     </AuthLayout>

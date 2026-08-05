@@ -435,6 +435,7 @@
     "switchLanguage": "Switch language",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
+    "capsLockWarning": "Caps Lock is on.",
     "email": "Email address",
     "emailPlaceholder": "you@example.com",
     "password": "Password",
@@ -504,6 +505,17 @@
       "continue": "Continue",
       "signIn": "Go to sign in"
     },
+    "socialLogin": {
+      "or": "Or continue with",
+      "google": "Google",
+      "microsoft": "Microsoft",
+      "comingSoon": "Social sign-in will be available soon."
+    },
+    "sessionExpired": {
+      "title": "Your session has expired",
+      "description": "Your sign-in session has expired. Please sign in again.",
+      "action": "Return to sign in"
+    },
     "login": {
       "eyebrow": "Welcome back",
       "title": "Sign in to your community",
@@ -516,7 +528,10 @@
       "createAccount": "Create an account",
       "successTitle": "You are signed in",
       "successDescription": "This preview sign-in was completed successfully. Welcome back to Mujaddidun.",
-      "emailNotVerified": "Please verify your email address before signing in."
+      "emailNotVerified": "Please verify your email address before signing in.",
+      "invalidCredentials": "The email address or password is incorrect.",
+      "accountDisabled": "This account has been disabled.",
+      "rateLimitCountdown": "Too many attempts. Please try again in {seconds} seconds."
     },
     "register": {
       "eyebrow": "Join the circle",

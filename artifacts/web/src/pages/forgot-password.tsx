@@ -1,9 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import { useLocation } from 'wouter';
-import { Button } from '@/components/ui/button';
 import { IconInput } from '@/components/ui/icon-input';
 import { Mail } from 'lucide-react';
-import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, FieldError } from '@/components/auth/AuthLayout';
+import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 import { authApi } from '@/services/auth';
 import { getApiError } from '@/services/api';
@@ -49,7 +48,7 @@ export default function ForgotPasswordPage() {
           <IconInput icon={Mail} id="forgot-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" placeholder={t('auth.emailPlaceholder')} aria-invalid={Boolean(error)} aria-describedby={error ? 'forgot-email-error' : undefined} data-testid="input-forgot-email" className="h-12 rounded-xl border-border bg-white text-base shadow-none" />
           <FieldError id="forgot-email-error" message={error} testId="error-forgot-email" />
         </div>
-         <Button type="submit" disabled={isSubmitting} className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-send-reset-link">{isSubmitting ? t('common.loading') : t('auth.forgot.submit')}</Button>
+         <AuthSubmitButton loading={isSubmitting} label={t('auth.forgot.submit')} loadingLabel={t('common.loading')} testId="button-send-reset-link" />
       </form>
       <AuthFeedbackDialog open={feedback !== null} kind={feedback ?? 'success'} title={feedback === 'error' ? t('auth.feedback.errorTitle') : t('auth.forgot.successTitle')} description={feedback === 'error' ? feedbackMessage || t('auth.feedback.errorDescription') : t('auth.forgot.successDescription')} actionLabel={feedback === 'error' ? t('auth.feedback.close') : t('auth.forgot.backToLogin')} onOpenChange={(open) => !open && setFeedback(null)} onAction={() => { setFeedback(null); if (feedback === 'success') setLocation('/login'); }} />
     </AuthLayout>

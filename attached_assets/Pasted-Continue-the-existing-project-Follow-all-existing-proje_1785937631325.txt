@@ -1,0 +1,154 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate files.
+Do NOT modify routing.
+Do NOT modify architecture.
+Do NOT modify the design system.
+
+Keep the current branding, colors, typography, responsiveness, animations, and accessibility.
+
+================================================
+
+TASK
+
+Complete the Authentication experience professionally.
+
+================================================
+
+1. Social Login
+
+Prepare authentication for:
+
+- Continue with Google
+- Continue with Microsoft
+
+Requirements:
+
+- Add professional buttons to the Login page.
+- Keep them disabled or clearly marked until the backend OAuth integration is completed.
+- Do NOT implement OAuth yet.
+
+================================================
+
+2. Remember Me
+
+Prepare full Remember Me functionality.
+
+- Keep the existing checkbox.
+- Structure the code so it works immediately once the backend authentication is connected.
+
+================================================
+
+3. Caps Lock Detection
+
+When the user is typing in any password field:
+
+- Detect if Caps Lock is enabled.
+- Display a small warning message:
+
+"مفتاح Caps Lock مفعل."
+
+Hide the warning automatically when Caps Lock is turned off.
+
+================================================
+
+4. Enter Key Support
+
+On all authentication forms:
+
+- Pressing Enter should submit the form.
+
+Applies to:
+
+- Login
+- Register
+- Forgot Password
+- Reset Password
+
+================================================
+
+5. Submit Protection
+
+While a request is being submitted:
+
+- Disable the submit button.
+- Show a loading spinner.
+- Prevent duplicate submissions.
+
+================================================
+
+6. Error Handling
+
+Replace generic error messages with user-friendly messages.
+
+Prepare the UI to display backend validation errors directly.
+
+Examples:
+
+- البريد الإلكتروني غير موجود.
+- كلمة المرور غير صحيحة.
+- البريد الإلكتروني غير مؤكد.
+- تم تعطيل الحساب.
+- عدد المحاولات كبير، يرجى المحاولة لاحقًا.
+
+Until the backend is connected, use placeholder responses that match the future Laravel API format.
+
+================================================
+
+7. Redirect Logic
+
+Prepare authentication redirects.
+
+After successful login:
+
+- Normal User → Home Page.
+- Admin → Admin Dashboard.
+- Moderator → Moderator Dashboard.
+- Volunteer → Volunteer Dashboard (if available).
+
+If role-based dashboards are not implemented yet, keep the logic ready.
+
+================================================
+
+8. Session Expired
+
+Prepare a professional session expiration flow.
+
+When the authentication token expires:
+
+- Display a dialog:
+
+"انتهت جلسة تسجيل الدخول، يرجى تسجيل الدخول مرة أخرى."
+
+- Redirect the user to the Login page after confirmation.
+
+================================================
+
+9. Rate Limiting UI
+
+Prepare the interface for login rate limiting.
+
+When the backend returns a rate-limit response:
+
+- Disable the Login button.
+- Show a countdown timer.
+
+Example:
+
+"عدد كبير من المحاولات. يرجى المحاولة بعد 60 ثانية."
+
+The countdown should update every second.
+
+================================================
+
+IMPORTANT
+
+Do NOT redesign the pages.
+
+Do NOT change the existing UI.
+
+Do NOT implement backend authentication yet.
+
+Only complete the frontend authentication experience and prepare it for seamless Laravel integration.

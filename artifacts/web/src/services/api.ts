@@ -3,6 +3,9 @@ import axios, { type AxiosError, type AxiosRequestConfig } from 'axios';
 const API_URL = (import.meta.env.VITE_API_URL || '/api/v1').replace(/\/$/, '');
 const ACCESS_TOKEN_KEY = 'mujaddidun.access_token';
 const SESSION_TOKEN_KEY = 'mujaddidun.session_token';
+export const SESSION_EXPIRED_EVENT = 'mujaddidun:session-expired';
+
+let sessionExpirationNoticeActive = false;
 
 export const apiClient = axios.create({
   baseURL: API_URL,
@@ -58,6 +61,10 @@ function loginUrl(): string {
   return `${base.replace(/\/$/, '/') }login${query}`;
 }
 
+export function getLoginUrl(): string {
+  return loginUrl();
+}
+
 apiClient.interceptors.request.use((config) => {
   const token = readToken();
   if (token) {
@@ -75,11 +82,20 @@ apiClient.interceptors.response.use(
     if (
       error.response?.status === 401 &&
       typeof window !== 'undefined' &&
-      !error.config?.url?.includes('/auth/login')
+      readToken() &&
+      ![
+        '/auth/login',
+        '/auth/register',
+        '/auth/forgot-password',
+        '/auth/reset-password',
+        '/auth/email/verify',
+        '/auth/email/resend',
+      ].some((path) => error.config?.url?.includes(path))
     ) {
       clearAccessToken();
-      if (!window.location.pathname.endsWith('/login')) {
-        window.location.assign(loginUrl());
+      if (!sessionExpirationNoticeActive) {
+        sessionExpirationNoticeActive = true;
+        window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT));
       }
     }
     return Promise.reject(error);
@@ -95,13 +111,14 @@ export interface ApiEnvelope<T> {
 
 export interface ApiErrorData {
   message?: string;
-  errors?: Record<string, string[]>;
+  errors?: Record<string, string[] | string>;
 }
 
 export function getApiError(error: unknown): {
   message: string;
   fields: Record<string, string>;
   status?: number;
+  retryAfter?: number;
 } {
   const axiosError = error as AxiosError<ApiErrorData | string>;
   const response = axiosError.response;
@@ -118,6 +135,16 @@ export function getApiError(error: unknown): {
   const statusMessage = response?.status
     ? `Request failed with status ${response.status}.`
     : undefined;
+  const retryAfterHeader =
+    response?.headers && typeof response.headers.get === 'function'
+      ? response.headers.get('Retry-After')
+      : response?.headers?.['retry-after'];
+  const retryAfterValue = fieldErrors.retry_after;
+  const retryAfter = Number(
+    Array.isArray(retryAfterValue)
+      ? retryAfterValue[0]
+      : retryAfterValue ?? retryAfterHeader,
+  );
 
   return {
     message:
@@ -128,10 +155,13 @@ export function getApiError(error: unknown): {
     fields: Object.fromEntries(
       Object.entries(fieldErrors).map(([key, messages]) => [
         key,
-        messages?.[0] || 'Please check this field.',
+        Array.isArray(messages)
+          ? messages.filter(Boolean).join(' ')
+          : messages || 'Please check this field.',
       ]),
     ),
     status: response?.status,
+    retryAfter: Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : undefined,
   };
 }
 

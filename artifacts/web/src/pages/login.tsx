@@ -1,10 +1,9 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
 import { IconInput } from '@/components/ui/icon-input';
 import { Mail } from 'lucide-react';
-import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, FieldError, PasswordField } from '@/components/auth/AuthLayout';
+import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError, PasswordField, SocialLoginButtons } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { getApiError } from '@/services/api';
@@ -15,6 +14,22 @@ interface LoginErrors {
 }
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function getPostLoginPath(roleSlug?: string): string {
+  switch (roleSlug) {
+    case 'admin':
+      // Keep this branch ready for the admin dashboard route.
+      return '/';
+    case 'moderator':
+      // Keep this branch ready for the moderator dashboard route.
+      return '/';
+    case 'volunteer':
+      // Keep this branch ready for the volunteer dashboard route.
+      return '/';
+    default:
+      return '/';
+  }
+}
 
 export default function LoginPage() {
   const { t } = useLocale();
@@ -27,6 +42,16 @@ export default function LoginPage() {
   const [feedback, setFeedback] = useState<'success' | 'error' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [rateLimitSeconds, setRateLimitSeconds] = useState(0);
+  const [postLoginPath, setPostLoginPath] = useState('/');
+
+  useEffect(() => {
+    if (rateLimitSeconds <= 0) return;
+    const timer = window.setInterval(() => {
+      setRateLimitSeconds((current) => Math.max(0, current - 1));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [rateLimitSeconds]);
 
   const validate = () => {
     const nextErrors: LoginErrors = {};
@@ -46,14 +71,22 @@ export default function LoginPage() {
     setIsSubmitting(true);
     setFeedbackMessage('');
     try {
-      await login(email.trim(), password, remember);
+      const authenticatedUser = await login(email.trim(), password, remember);
+      setPostLoginPath(getPostLoginPath(authenticatedUser.role?.slug));
       setFeedback('success');
     } catch (error) {
       const apiError = getApiError(error);
       setErrors((current) => ({ ...current, ...apiError.fields }));
+      if (apiError.status === 429) {
+        setRateLimitSeconds(apiError.retryAfter || 60);
+      }
       setFeedbackMessage(
         apiError.fields.code === 'email_not_verified'
           ? t('auth.login.emailNotVerified')
+          : apiError.status === 401
+            ? t('auth.login.invalidCredentials')
+            : apiError.status === 403 && apiError.fields.code === 'account_disabled'
+              ? t('auth.login.accountDisabled')
           : apiError.message,
       );
       setFeedback('error');
@@ -69,7 +102,7 @@ export default function LoginPage() {
       description={t('auth.login.description')}
       footer={<AuthFooterLink prompt={t('auth.login.noAccount')} label={t('auth.login.createAccount')} href="/register" testId="link-register" />}
     >
-      <form onSubmit={handleSubmit} noValidate className="space-y-5" aria-label={t('auth.login.formLabel')}>
+       <form onSubmit={handleSubmit} noValidate className="space-y-5" aria-label={t('auth.login.formLabel')}>
         <div className="space-y-2">
           <label htmlFor="login-email" className="block text-sm font-semibold text-foreground">
             {t('auth.email')}
@@ -117,10 +150,22 @@ export default function LoginPage() {
           </Link>
         </div>
 
-         <Button type="submit" disabled={isSubmitting} className="h-12 w-full rounded-xl text-base font-bold" data-testid="button-login-submit">
-          {isSubmitting ? t('common.loading') : t('auth.login.submit')}
-        </Button>
+         <AuthSubmitButton
+           loading={isSubmitting || rateLimitSeconds > 0}
+           label={t('auth.login.submit')}
+           loadingLabel={rateLimitSeconds > 0 ? t('auth.login.rateLimitCountdown', { seconds: rateLimitSeconds }) : t('common.loading')}
+           testId="button-login-submit"
+         />
+         {rateLimitSeconds > 0 && (
+           <p className="text-center text-xs font-medium text-secondary" role="status" aria-live="polite" data-testid="login-rate-limit">
+             {t('auth.login.rateLimitCountdown', { seconds: rateLimitSeconds })}
+           </p>
+         )}
       </form>
+
+       <div className="mt-6">
+         <SocialLoginButtons />
+       </div>
 
       <AuthFeedbackDialog
         open={feedback !== null}
@@ -135,7 +180,7 @@ export default function LoginPage() {
            if (current === 'success') {
              const params = new URLSearchParams(window.location.search);
              const redirect = params.get('redirect');
-             setLocation(redirect && redirect.startsWith('/') ? redirect : '/');
+              setLocation(redirect && redirect.startsWith('/') ? redirect : postLoginPath);
            }
         }}
       />
