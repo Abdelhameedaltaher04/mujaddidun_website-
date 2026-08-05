@@ -1,0 +1,46 @@
+Please improve the Contact Us page and make it look much more modern, premium, and balanced.
+
+1. Remove these sections completely
+Remove the "نحن هنا للإجابة على استفساراتكم" heading above the contact information card.
+Remove the entire "تحتاج إلى مساعدة؟" section below the form, including:
+WhatsApp button
+Contact Us button
+Email link
+Help/Chat icon
+Divider line
+
+After removing them, do not leave any empty space.
+
+2. Improve the overall layout
+Keep the contact form on the left.
+Keep the contact information card on the right.
+Vertically center both sections so they align perfectly.
+Reduce excessive white space and make the layout feel more compact and professional.
+Increase the spacing between the two columns slightly for better balance.
+3. Redesign the contact information card
+
+The current card looks too simple. Redesign it with a premium appearance:
+
+Larger border radius (18–20px).
+Soft shadow.
+Thin border using the brand color with low opacity.
+Better internal spacing.
+Modern typography with stronger hierarchy.
+Use colorful icon containers that match the brand.
+Add subtle hover animations.
+Add a small decorative accent (gradient line or corner highlight) without making it distracting.
+4. Improve the contact form
+Make the inputs slightly taller.
+Increase border radius to 12–14px.
+Better focus state using the primary brand color.
+Add consistent spacing between fields.
+Make the submit button larger and more attractive with a subtle gradient and hover animation.
+Improve the typography and alignment.
+5. Visual enhancements
+Add a subtle background pattern or very light gradient to the section.
+Add a modern entrance animation when the page loads.
+Keep the design minimal, elegant, and premium.
+Maintain full RTL support and responsiveness.
+Design Inspiration
+
+The final page should resemble the quality of modern websites like Stripe, Linear, Framer, Vercel, or Webflow—clean, spacious, elegant, and premium. Avoid generic cards and unnecessary empty areas. The page should immediately feel polished and professionally designed while remaining consistent with the rest of the website's branding.

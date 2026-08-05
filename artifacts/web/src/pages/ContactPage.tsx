@@ -1,7 +1,6 @@
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
-import { SectionHeading } from '@/components/layout/SectionHeading';
 import { MapPin, Phone, Mail } from 'lucide-react';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { useLocale } from '@/contexts/LocaleContext';
@@ -19,7 +18,6 @@ import {
 } from '@/components/ui/dialog';
 import { FormEvent, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { FormContactHelp } from '@/components/layout/FormContactHelp';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 /** Digits, spaces, dashes, parentheses, optional leading +; 7-20 chars. */
@@ -98,6 +96,10 @@ export default function ContactPage() {
   const invalidClass = (field: keyof FormValues) =>
     errors[field] ? 'border-destructive focus-visible:ring-destructive' : undefined;
 
+  /** Shared premium input styling: taller, 13px radius, primary focus ring. */
+  const inputClass =
+    'h-12 rounded-[13px] bg-background border-border/80 transition-shadow duration-300 focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:border-primary';
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Navbar />
@@ -107,45 +109,70 @@ export default function ContactPage() {
         breadcrumbs={[{ label: t('nav.home'), href: '/' }, { label: t('contact.title') }]}
       />
       <main className="flex-1">
-        <SectionWrapper>
-          <div className="grid gap-12 lg:grid-cols-2">
-            <div>
-              <SectionHeading title={t('common.contactDesc')} align="start" accent="primary" className="mb-6 lg:mb-8" />
+        <SectionWrapper className="relative overflow-hidden">
+          {/* Subtle section backdrop */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(ellipse 60% 50% at 15% 0%, hsl(197 100% 31% / 0.05), transparent 65%), radial-gradient(ellipse 50% 45% at 90% 100%, hsl(20 100% 52% / 0.04), transparent 60%)',
+            }}
+            aria-hidden="true"
+          ></div>
 
-              <div className="space-y-6 mt-8 bg-card rounded-2xl border border-border p-6 md:p-8 shadow-sm">
-                <div className="flex items-start gap-4 group">
-                  <div className="p-4 bg-primary/10 text-primary rounded-2xl shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <MapPin className="w-6 h-6" aria-hidden="true" />
-                  </div>
-                  <div className="pt-1">
-                    <h3 className="font-bold text-foreground text-lg mb-1">{t('footer.address')}</h3>
-                    <p className="text-muted-foreground">{t('contact.addressValue')}</p>
-                  </div>
-                </div>
+          <div className="relative grid gap-10 lg:gap-16 lg:grid-cols-2 lg:items-center">
+            {/* Contact info card */}
+            <div className="animate-hero-up">
+              <div className="group/card relative overflow-hidden bg-card rounded-[20px] border border-primary/15 p-7 md:p-9 shadow-[0_12px_35px_rgba(0,0,0,0.08)] transition-all duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-[0_18px_45px_rgba(0,0,0,0.11)]">
+                {/* Decorative accents */}
+                <span className="absolute top-0 start-0 h-1.5 w-full bg-gradient-to-r from-primary via-primary/60 to-secondary" aria-hidden="true"></span>
+                <div
+                  className="absolute -top-20 -end-20 w-56 h-56 rounded-full pointer-events-none opacity-60"
+                  style={{ background: 'radial-gradient(circle, hsl(197 100% 31% / 0.08) 0%, transparent 65%)' }}
+                  aria-hidden="true"
+                ></div>
 
-                <div className="flex items-start gap-4 group">
-                  <div className="p-4 bg-secondary/10 text-secondary rounded-2xl shrink-0 group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors">
-                    <Phone className="w-6 h-6" aria-hidden="true" />
-                  </div>
-                  <div className="pt-1">
-                    <h3 className="font-bold text-foreground text-lg mb-1">{t('footer.phone')}</h3>
-                    <p className="text-muted-foreground ltr-safe block" dir="ltr">+962 6 123 4567</p>
-                  </div>
-                </div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
+                  {t('contact.title')}
+                </h2>
+                <p className="text-muted-foreground mb-8">{t('common.contactDesc')}</p>
 
-                <div className="flex items-start gap-4 group">
-                  <div className="p-4 bg-info/10 text-info rounded-2xl shrink-0 group-hover:bg-info group-hover:text-info-foreground transition-colors">
-                    <Mail className="w-6 h-6" aria-hidden="true" />
+                <div className="space-y-3">
+                  <div className="flex items-center gap-4 group rounded-2xl p-3 -m-1 transition-colors duration-300 hover:bg-primary/5">
+                    <div className="p-3.5 bg-primary/10 text-primary rounded-xl shrink-0 transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground motion-safe:group-hover:scale-105">
+                      <MapPin className="w-5 h-5" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-foreground text-sm uppercase tracking-wide mb-0.5">{t('footer.address')}</h3>
+                      <p className="text-muted-foreground">{t('contact.addressValue')}</p>
+                    </div>
                   </div>
-                  <div className="pt-1">
-                    <h3 className="font-bold text-foreground text-lg mb-1">{t('footer.email')}</h3>
-                    <p className="text-muted-foreground ltr-safe block" dir="ltr">info@mujaddidun.org</p>
+
+                  <div className="flex items-center gap-4 group rounded-2xl p-3 -m-1 transition-colors duration-300 hover:bg-secondary/5">
+                    <div className="p-3.5 bg-secondary/10 text-secondary rounded-xl shrink-0 transition-all duration-300 group-hover:bg-secondary group-hover:text-secondary-foreground motion-safe:group-hover:scale-105">
+                      <Phone className="w-5 h-5" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-foreground text-sm uppercase tracking-wide mb-0.5">{t('footer.phone')}</h3>
+                      <p className="text-muted-foreground ltr-safe block" dir="ltr">+962 6 123 4567</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4 group rounded-2xl p-3 -m-1 transition-colors duration-300 hover:bg-info/5">
+                    <div className="p-3.5 bg-info/10 text-info rounded-xl shrink-0 transition-all duration-300 group-hover:bg-info group-hover:text-info-foreground motion-safe:group-hover:scale-105">
+                      <Mail className="w-5 h-5" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-foreground text-sm uppercase tracking-wide mb-0.5">{t('footer.email')}</h3>
+                      <p className="text-muted-foreground ltr-safe block" dir="ltr">info@mujaddidun.org</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
+            {/* Form card */}
+            <div className="animate-hero-up bg-card border border-primary/15 rounded-[20px] p-7 md:p-9 shadow-[0_12px_35px_rgba(0,0,0,0.08)]" style={{ animationDelay: '120ms' }}>
               <form onSubmit={handleSubmit} noValidate className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">{t('contact.fullName')}</Label>
@@ -155,7 +182,7 @@ export default function ContactPage() {
                     onChange={(e) => handleChange('name', e.target.value)}
                     aria-invalid={!!errors.name}
                     aria-describedby={errors.name ? 'error-name' : undefined}
-                    className={cn('rounded-xl bg-background', invalidClass('name'))}
+                    className={cn(inputClass, invalidClass('name'))}
                     data-testid="input-contact-name"
                   />
                   {fieldError('name')}
@@ -172,7 +199,7 @@ export default function ContactPage() {
                       onChange={(e) => handleChange('email', e.target.value)}
                       aria-invalid={!!errors.email}
                       aria-describedby={errors.email ? 'error-email' : undefined}
-                      className={cn('text-start rounded-xl bg-background', invalidClass('email'))}
+                      className={cn('text-start', inputClass, invalidClass('email'))}
                       data-testid="input-contact-email"
                     />
                     {fieldError('email')}
@@ -187,7 +214,7 @@ export default function ContactPage() {
                       onChange={(e) => handleChange('phone', e.target.value)}
                       aria-invalid={!!errors.phone}
                       aria-describedby={errors.phone ? 'error-phone' : undefined}
-                      className={cn('text-start rounded-xl bg-background', invalidClass('phone'))}
+                      className={cn('text-start', inputClass, invalidClass('phone'))}
                       data-testid="input-contact-phone"
                     />
                     {fieldError('phone')}
@@ -202,7 +229,7 @@ export default function ContactPage() {
                     onChange={(e) => handleChange('subject', e.target.value)}
                     aria-invalid={!!errors.subject}
                     aria-describedby={errors.subject ? 'error-subject' : undefined}
-                    className={cn('rounded-xl bg-background', invalidClass('subject'))}
+                    className={cn(inputClass, invalidClass('subject'))}
                     data-testid="input-contact-subject"
                   />
                   {fieldError('subject')}
@@ -218,7 +245,7 @@ export default function ContactPage() {
                     rows={5}
                     value={values.message}
                     onChange={(e) => handleChange('message', e.target.value)}
-                    className="rounded-xl bg-background resize-none"
+                    className={cn("rounded-[13px] bg-background resize-none border-border/80 transition-shadow duration-300 focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:border-primary")}
                     data-testid="input-contact-message"
                   />
                 </div>
@@ -227,13 +254,12 @@ export default function ContactPage() {
                   type="submit"
                   size="lg"
                   disabled={isSubmitting}
-                  className="w-full h-12 rounded-xl text-lg font-bold"
+                  className="w-full h-14 rounded-[14px] text-lg font-bold text-white bg-gradient-to-br from-primary via-primary to-[#005a80] shadow-[0_8px_24px_rgba(0,113,160,0.3)] transition-all duration-300 motion-safe:hover:scale-[1.02] hover:shadow-[0_12px_30px_rgba(0,113,160,0.4)]"
                   data-testid="button-contact-submit"
                 >
                   {isSubmitting ? t('common.loading') : t('common.send')}
                 </Button>
               </form>
-              <FormContactHelp />
             </div>
           </div>
         </SectionWrapper>
