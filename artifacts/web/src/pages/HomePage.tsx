@@ -77,7 +77,7 @@ export default function HomePage() {
             accent="primary"
           />
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div className="space-y-6">
               <p className="text-lg text-muted-foreground leading-relaxed">
                 {t('about.storyText')}
@@ -232,10 +232,10 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* VOLUNTEER CTA */}
-         <SectionWrapper id="volunteer-cta" className="relative overflow-hidden border-y border-border py-8 md:py-10" variant="default">
+         <SectionWrapper id="volunteer-cta" className="relative overflow-hidden border-y border-border py-4 md:py-6" variant="default">
           <div className="absolute inset-0 bg-primary/5"></div>
-           <div className="relative z-10 max-w-4xl mx-auto text-center py-6 md:py-8">
-             <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+           <div className="relative z-10 max-w-4xl mx-auto text-center py-3 md:py-4">
+             <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
               <Users className="w-8 h-8" />
             </div>
             <SectionHeading
@@ -243,7 +243,7 @@ export default function HomePage() {
               title={t('volunteer.subtitle')}
               description={t('common.volunteerDesc')}
               accent="secondary"
-               className="mb-5 lg:mb-6 max-w-none mx-auto [&>div]:max-w-none"
+               className="mb-4 lg:mb-5 max-w-none mx-auto [&>div]:max-w-none"
               titleClassName={cn(
                 'whitespace-nowrap text-nowrap',
                 dir === 'rtl'

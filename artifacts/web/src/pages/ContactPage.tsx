@@ -106,8 +106,8 @@ export default function ContactPage() {
       <main className="flex-1">
         <SectionWrapper>
           <div className="max-w-2xl mx-auto w-full">
-            <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
-              <form onSubmit={handleSubmit} noValidate className="space-y-6">
+            <div className="bg-card border border-border rounded-2xl p-4 md:p-5 shadow-sm">
+              <form onSubmit={handleSubmit} noValidate className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">{t('contact.fullName')}</Label>
                   <Input
@@ -122,7 +122,7 @@ export default function ContactPage() {
                   {fieldError('name')}
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
                     <Label htmlFor="email">{t('common.email')}</Label>
                     <Input
@@ -155,33 +155,34 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="subject">{t('common.subject')}</Label>
-                  <Input
-                    id="subject"
-                    value={values.subject}
-                    onChange={(e) => handleChange('subject', e.target.value)}
-                    aria-invalid={!!errors.subject}
-                    aria-describedby={errors.subject ? 'error-subject' : undefined}
-                    className={cn('rounded-xl bg-background', invalidClass('subject'))}
-                    data-testid="input-contact-subject"
-                  />
-                  {fieldError('subject')}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="message">
-                    {t('common.message')}{' '}
-                    <span className="text-muted-foreground font-normal">{t('contact.form.optional')}</span>
-                  </Label>
-                  <Textarea
-                    id="message"
-                    rows={5}
-                    value={values.message}
-                    onChange={(e) => handleChange('message', e.target.value)}
-                    className="rounded-xl bg-background resize-none"
-                    data-testid="input-contact-message"
-                  />
+                <div className="grid gap-4 md:grid-cols-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="subject">{t('common.subject')}</Label>
+                    <Input
+                      id="subject"
+                      value={values.subject}
+                      onChange={(e) => handleChange('subject', e.target.value)}
+                      aria-invalid={!!errors.subject}
+                      aria-describedby={errors.subject ? 'error-subject' : undefined}
+                      className={cn('rounded-xl bg-background', invalidClass('subject'))}
+                      data-testid="input-contact-subject"
+                    />
+                    {fieldError('subject')}
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="message">
+                      {t('common.message')}{' '}
+                      <span className="text-muted-foreground font-normal">{t('contact.form.optional')}</span>
+                    </Label>
+                    <Textarea
+                      id="message"
+                      rows={2}
+                      value={values.message}
+                      onChange={(e) => handleChange('message', e.target.value)}
+                      className="rounded-xl bg-background resize-none"
+                      data-testid="input-contact-message"
+                    />
+                  </div>
                 </div>
 
                 <Button
