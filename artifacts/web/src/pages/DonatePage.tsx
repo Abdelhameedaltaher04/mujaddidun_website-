@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Building2, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FormContactHelp } from '@/components/layout/FormContactHelp';
 import {
   Dialog,
   DialogContent,
@@ -273,6 +274,7 @@ export default function DonatePage() {
                   {isSubmitting ? t('common.loading') : t('donate.submit')}
                 </Button>
               </form>
+              <FormContactHelp />
             </div>
 
             {/* Sidebar / Bank Info */}

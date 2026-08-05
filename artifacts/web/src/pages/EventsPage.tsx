@@ -17,6 +17,7 @@ import {
 import { CheckCircle2 } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { useAuth } from '@workspace/replit-auth-web';
+import { FormContactHelp } from '@/components/layout/FormContactHelp';
 
 export default function EventsPage() {
   const { t } = useLocale();
@@ -102,6 +103,7 @@ export default function EventsPage() {
               </div>
             </TabsContent>
           </Tabs>
+          <FormContactHelp />
         </SectionWrapper>
       </main>
       <Footer />

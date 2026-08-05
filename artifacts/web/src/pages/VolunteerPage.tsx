@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+import { FormContactHelp } from '@/components/layout/FormContactHelp';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_PATTERN = /^\+?[0-9\s\-()]{7,20}$/;
@@ -258,6 +259,7 @@ export default function VolunteerPage() {
                   {isSubmitting ? t('common.loading') : t('volunteer.submitReg')}
                 </Button>
               </form>
+              <FormContactHelp />
             </div>
           </div>
         </SectionWrapper>

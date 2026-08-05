@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dialog';
 import { FormEvent, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { FormContactHelp } from '@/components/layout/FormContactHelp';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 /** Digits, spaces, dashes, parentheses, optional leading +; 7-20 chars. */
@@ -193,6 +194,7 @@ export default function ContactPage() {
                   {isSubmitting ? t('common.loading') : t('common.send')}
                 </Button>
               </form>
+              <FormContactHelp />
             </div>
           </div>
         </SectionWrapper>
