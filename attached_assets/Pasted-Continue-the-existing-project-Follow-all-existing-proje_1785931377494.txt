@@ -1,0 +1,105 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate files.
+Do NOT modify routing.
+Do NOT modify architecture.
+Do NOT modify the design system.
+
+Keep the current branding, colors, typography, responsiveness, animations, and accessibility.
+
+================================================
+
+TASK
+
+Improve the Register form only.
+
+================================================
+
+1. Name Fields
+
+Replace the single "Full Name" field with two separate fields displayed on the same row (desktop):
+
+- First Name
+- Last Name
+
+On mobile, stack them vertically.
+
+Both fields are required.
+
+================================================
+
+2. Phone Number
+
+Replace the current phone input with an international phone input.
+
+Requirements:
+
+- Display country flags.
+- Searchable country selector.
+- Default country: Jordan (+962).
+- Automatically insert the country calling code.
+- Store the complete international phone number.
+
+================================================
+
+3. Country-Based Phone Validation
+
+Validate the phone number based on the selected country.
+
+Examples:
+
+Jordan (+962)
+- Mobile number only.
+- Exactly 9 digits after +962.
+- Must start with 7.
+
+Saudi Arabia (+966)
+- Exactly 9 digits.
+
+United Arab Emirates (+971)
+- Exactly 9 digits.
+
+Egypt (+20)
+- Exactly 10 digits.
+
+Every country must validate according to its official phone number format.
+
+Display a clear validation message when the entered phone number is invalid for the selected country.
+
+================================================
+
+4. Password Validation
+
+Implement live password validation.
+
+Requirements:
+
+- Minimum 8 characters.
+- At least one uppercase letter.
+- At least one lowercase letter.
+- At least one number.
+- At least one special character.
+
+Show a live checklist while typing.
+
+================================================
+
+5. Confirm Password
+
+- Must exactly match the Password field.
+- Show an inline success indicator when matched.
+- Show an inline error when not matched.
+
+================================================
+
+6. UI
+
+Keep the existing design.
+
+Do NOT redesign the page.
+
+Keep the form fully responsive.
+
+Only implement these improvements.

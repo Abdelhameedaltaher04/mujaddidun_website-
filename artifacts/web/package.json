@@ -76,6 +76,7 @@
     "zod": "catalog:"
   },
   "dependencies": {
-    "embla-carousel-auto-scroll": "^8.6.0"
+    "embla-carousel-auto-scroll": "^8.6.0",
+    "libphonenumber-js": "^1.13.10"
   }
 }
