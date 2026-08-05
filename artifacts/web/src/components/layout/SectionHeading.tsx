@@ -85,7 +85,7 @@ export function SectionHeading({
       <h2
         id={id}
         className={cn(
-          'font-display font-bold tracking-tight text-foreground text-balance leading-tight',
+          'bg-gradient-to-l from-primary via-primary to-secondary bg-clip-text font-display font-bold tracking-tight text-transparent text-balance leading-tight',
           size === 'lg' ? 'text-3xl lg:text-4xl' : 'text-2xl',
           titleClassName,
         )}
