@@ -59,14 +59,13 @@ explicit and operational rather than content-oriented.
 
 ## 2. Entity relationship diagram
 
-The diagram shows the logical relationships. `role_user` is the many-to-many
-bridge between users and roles. `personal_access_tokens` is polymorphic, so its
+The diagram shows the logical relationships. Each user belongs to one primary
+role through `users.role_id`. `personal_access_tokens` is polymorphic, so its
 tokenable relationship is represented separately from normal foreign keys.
 
 ```mermaid
 erDiagram
-    users ||--o{ role_user : assigned
-    roles ||--o{ role_user : grants
+    roles ||--o{ users : assigns
     users ||--o| volunteers : has_profile
     users ||--o{ news : authors
     news_categories ||--o{ news : categorizes
@@ -87,6 +86,7 @@ erDiagram
 
     users {
         bigint id PK
+        bigint role_id FK
         varchar first_name
         varchar last_name
         varchar email UK
@@ -100,12 +100,6 @@ erDiagram
         bigint id PK
         varchar name UK
         varchar slug UK
-    }
-
-    role_user {
-        bigint user_id PK, FK
-        bigint role_id PK, FK
-        bigint assigned_by FK
     }
 
     news_categories {
@@ -224,13 +218,14 @@ erDiagram
 
 ### 3.1 `users`
 
-Stores authentication credentials and the canonical user profile. A user can
-have more than one role through `role_user`; this avoids a role column becoming
-a limitation if a moderator also becomes a volunteer.
+Stores authentication credentials and the canonical user profile. Each user has
+one primary role through `users.role_id`; volunteer participation is modeled by
+the separate `volunteers` profile and application tables.
 
 | Column | Type | Null | Default | Key / constraints |
 |---|---|---:|---|---|
 | `id` | `BIGINT UNSIGNED` | No | auto increment | Primary key |
+| `role_id` | `BIGINT UNSIGNED` | No | — | FK to `roles.id`, `RESTRICT` |
 | `first_name` | `VARCHAR(100)` | No | — | Required |
 | `last_name` | `VARCHAR(100)` | No | — | Required |
 | `email` | `VARCHAR(255)` | No | — | Unique; normalize to lowercase in application code |
@@ -258,7 +253,7 @@ a limitation if a moderator also becomes a volunteer.
 
 **Relationships**
 
-- Many-to-many with `roles` through `role_user`.
+- Belongs to one `roles` record.
 - Has zero or one `volunteers` profile.
 - Has many authored `news`, created `events`, created `programs`,
   `gallery_albums`, and uploaded `gallery_images`.
@@ -281,34 +276,7 @@ the stable authorization identifier.
 | `created_at` | `DATETIME` | No | — | Laravel timestamp |
 | `updated_at` | `DATETIME` | No | — | Laravel timestamp |
 
-**Relationships**
-
-- Many-to-many with `users` through `role_user`.
-
-### 3.3 `role_user`
-
-Laravel-style pivot table for user-role assignments.
-
-| Column | Type | Null | Default | Key / constraints |
-|---|---|---:|---|---|
-| `user_id` | `BIGINT UNSIGNED` | No | — | Composite primary key; FK to `users.id` |
-| `role_id` | `BIGINT UNSIGNED` | No | — | Composite primary key; FK to `roles.id` |
-| `assigned_by` | `BIGINT UNSIGNED` | Yes | `NULL` | FK to `users.id`, `SET NULL` |
-| `assigned_at` | `DATETIME` | No | current UTC time | — |
-
-**Constraints**
-
-- Composite primary key: (`user_id`, `role_id`).
-- FK `user_id` references `users.id` with `CASCADE`.
-- FK `role_id` references `roles.id` with `CASCADE`.
-- FK `assigned_by` references `users.id` with `SET NULL`.
-
-**Relationships**
-
-- Belongs to one `users` record and one `roles` record.
-- Records the optional administrator who granted the role.
-
-### 3.4 `password_reset_tokens`
+### 3.3 `password_reset_tokens`
 
 Laravel password-reset infrastructure table. It follows the framework's
 standard schema and is not soft-deleted because tokens expire and are replaced.
@@ -325,7 +293,7 @@ standard schema and is not soft-deleted because tokens expire and are replaced.
   Laravel's standard table uses email as its primary key and user email changes
   must not be blocked by expired reset records.
 
-### 3.5 `personal_access_tokens`
+### 3.4 `personal_access_tokens`
 
 Laravel Sanctum token table for API authentication.
 
@@ -352,7 +320,7 @@ Laravel Sanctum token table for API authentication.
 
 - Belongs polymorphically to the authenticatable user model.
 
-### 3.6 `sessions` (optional database-backed session storage)
+### 3.5 `sessions` (optional database-backed session storage)
 
 This table is only required if Laravel sessions are moved from the current
 file-backed driver to the database driver.
@@ -868,7 +836,7 @@ homepage content settings, donation instructions, and feature flags.
 
 | Relationship | Cardinality | Implementation |
 |---|---|---|
-| Users ↔ Roles | Many-to-many | `role_user` composite primary key |
+| Role → Users | One-to-many | `users.role_id` foreign key |
 | Users → Volunteer profile | One-to-zero-or-one | `volunteers.user_id` unique nullable FK |
 | News category → News | One-to-many | `news.news_category_id` nullable FK |
 | User → News | One-to-many | `news.author_id` nullable FK |
@@ -939,7 +907,7 @@ The next implementation phase may translate this design into Laravel migration
 files in dependency order:
 
 1. Laravel/framework support tables.
-2. `users`, `roles`, and `role_user`.
+2. `roles` and `users`.
 3. News, events, programs, gallery, and volunteer tables.
 4. Donations, contact messages, partners, FAQs, and website settings.
 
