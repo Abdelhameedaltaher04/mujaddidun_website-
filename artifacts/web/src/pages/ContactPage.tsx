@@ -3,7 +3,6 @@ import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { MapPin, Phone, Mail } from 'lucide-react';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
-import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -265,7 +264,6 @@ export default function ContactPage() {
           </div>
         </SectionWrapper>
       </main>
-      <ContactCtaSection />
       <Footer />
 
       {/* Success dialog */}
