@@ -8,8 +8,9 @@ import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Building2, Heart, User, Phone, Mail } from 'lucide-react';
+import { Building2, Heart, User, Mail } from 'lucide-react';
 import { IconInput } from '@/components/ui/icon-input';
+import { CountryPhoneField } from '@/components/forms/CountryPhoneField';
 import { cn } from '@/lib/utils';
 import { FormContactHelp } from '@/components/layout/FormContactHelp';
 import {
@@ -234,18 +235,13 @@ export default function DonatePage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="donorPhone">{t('donate.form.phone')}</Label>
-                      <IconInput
-                        icon={Phone}
+                      <CountryPhoneField
                         id="donorPhone"
-                        type="tel"
-                        required
-                        dir="ltr"
                         value={donorPhone}
-                        onChange={(e) => updateDonorField('donorPhone', e.target.value)}
-                        aria-invalid={!!errors.donorPhone}
-                        aria-describedby={errors.donorPhone ? 'error-donate-donorPhone' : undefined}
-                        className={cn('text-start rounded-2xl h-11', invalidClass('donorPhone'))}
-                        data-testid="input-donate-phone"
+                        onChange={(value) => updateDonorField('donorPhone', value)}
+                        ariaInvalid={!!errors.donorPhone}
+                        ariaDescribedBy={errors.donorPhone ? 'error-donate-donorPhone' : undefined}
+                        inputTestId="input-donate-phone"
                       />
                       {fieldError('donorPhone')}
                     </div>

@@ -3,17 +3,11 @@ import { useLocation } from 'wouter';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { IconInput } from '@/components/ui/icon-input';
-import { CheckCircle2, ChevronDown, Mail, Phone, User, XCircle } from 'lucide-react';
+import { CheckCircle2, Mail, User, XCircle } from 'lucide-react';
 import { AuthFeedbackDialog, AuthFooterLink, AuthLayout, FieldError, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import {
-  getCountries,
-  getCountryCallingCode,
-  isValidPhoneNumber,
-  type CountryCode,
-} from 'libphonenumber-js';
+import { CountryPhoneField, type PhoneCountry } from '@/components/forms/CountryPhoneField';
+import { isValidPhoneNumber, type CountryCode } from 'libphonenumber-js';
 
 interface RegisterErrors {
   firstName?: string;
@@ -27,21 +21,6 @@ interface RegisterErrors {
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-type Country = {
-  code: CountryCode;
-  name: string;
-  dialCode: string;
-  flag: string;
-};
-
-const COUNTRIES: Country[] = getCountries().map((code) => ({
-  code,
-  name: code,
-  dialCode: `+${getCountryCallingCode(code)}`,
-  flag: code.replace(/./g, (letter) => String.fromCodePoint(127397 + letter.charCodeAt(0))),
-}));
-const DEFAULT_COUNTRY = COUNTRIES.find((country) => country.code === 'JO') ?? COUNTRIES[0];
-
 const PASSWORD_RULES = [
   { key: 'length', test: (value: string) => value.length >= 8 },
   { key: 'uppercase', test: (value: string) => /[A-Z]/.test(value) },
@@ -51,32 +30,19 @@ const PASSWORD_RULES = [
 ] as const;
 
 export default function RegisterPage() {
-  const { dir, locale, t } = useLocale();
+  const { t } = useLocale();
   const [, setLocation] = useLocation();
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '+962', password: '', confirmPassword: '' });
-  const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY);
-  const [countryPickerOpen, setCountryPickerOpen] = useState(false);
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode>('JO');
   const [terms, setTerms] = useState(false);
   const [errors, setErrors] = useState<RegisterErrors>({});
   const [feedback, setFeedback] = useState<'success' | 'error' | null>(null);
 
   const update = (field: keyof typeof form, value: string) => setForm((current) => ({ ...current, [field]: value }));
-  const phoneDigits = form.phone.startsWith(selectedCountry.dialCode)
-    ? form.phone.slice(selectedCountry.dialCode.length).replace(/\D/g, '')
-    : form.phone.replace(/\D/g, '');
   const passwordRules = PASSWORD_RULES.map((rule) => ({ ...rule, valid: rule.test(form.password) }));
   const confirmPasswordError = form.confirmPassword && form.password !== form.confirmPassword
     ? t('auth.validation.passwordMismatch')
     : errors.confirmPassword;
-
-  const selectCountry = (country: Country) => {
-    const currentDigits = form.phone.startsWith(selectedCountry.dialCode)
-      ? form.phone.slice(selectedCountry.dialCode.length).replace(/\D/g, '')
-      : form.phone.replace(/\D/g, '');
-    setSelectedCountry(country);
-    setCountryPickerOpen(false);
-    update('phone', `${country.dialCode}${currentDigits}`);
-  };
 
   const validate = () => {
     const nextErrors: RegisterErrors = {};
@@ -84,8 +50,8 @@ export default function RegisterPage() {
     if (!form.lastName.trim()) nextErrors.lastName = t('auth.validation.lastNameRequired');
     if (!form.email.trim()) nextErrors.email = t('auth.validation.emailRequired');
     else if (!emailPattern.test(form.email.trim())) nextErrors.email = t('auth.validation.emailInvalid');
-    if (!phoneDigits) nextErrors.phone = t('auth.validation.phoneRequired');
-    else if (!isValidPhoneNumber(form.phone, selectedCountry.code)) nextErrors.phone = t('auth.validation.phoneInvalidCountry');
+    if (!form.phone.trim() || form.phone === '+962') nextErrors.phone = t('auth.validation.phoneRequired');
+    else if (!isValidPhoneNumber(form.phone, phoneCountry)) nextErrors.phone = t('auth.validation.phoneInvalidCountry');
     if (!form.password) nextErrors.password = t('auth.validation.passwordRequired');
     else if (passwordRules.some((rule) => !rule.valid)) nextErrors.password = t('auth.validation.passwordWeak');
     if (!form.confirmPassword) nextErrors.confirmPassword = t('auth.validation.confirmPasswordRequired');
@@ -127,43 +93,17 @@ export default function RegisterPage() {
         </div>
         <div className="space-y-2">
           <label htmlFor="register-phone" className="block text-sm font-semibold text-foreground">{t('auth.phone')}</label>
-          <div className="flex gap-2" dir="ltr">
-            <Popover open={countryPickerOpen} onOpenChange={setCountryPickerOpen}>
-              <PopoverTrigger asChild>
-                <button
-                  type="button"
-                  className="inline-flex h-12 shrink-0 items-center gap-1.5 rounded-xl border border-border bg-white px-3 text-sm font-semibold text-foreground shadow-none transition-colors hover:border-primary focus-ring-standard"
-                  aria-label={t('auth.selectCountry')}
-                  data-testid="button-register-country"
-                >
-                  <span className="text-lg leading-none" aria-hidden="true">{selectedCountry.flag}</span>
-                  <span>{selectedCountry.dialCode}</span>
-                  <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent align="start" className="w-[280px] p-0" dir={dir}>
-                <Command>
-                  <CommandInput placeholder={t('auth.countrySearch')} />
-                  <CommandList>
-                    <CommandEmpty>{t('auth.noCountriesFound')}</CommandEmpty>
-                    {COUNTRIES.map((country) => (
-                      <CommandItem
-                        key={country.code}
-                        value={`${new Intl.DisplayNames([locale === 'ar' ? 'ar' : 'en'], { type: 'region' }).of(country.code) ?? country.code} ${country.code} ${country.dialCode}`}
-                        onSelect={() => selectCountry(country)}
-                        className="gap-3 py-2.5"
-                      >
-                        <span className="text-lg leading-none" aria-hidden="true">{country.flag}</span>
-                        <span className="flex-1">{new Intl.DisplayNames([locale === 'ar' ? 'ar' : 'en'], { type: 'region' }).of(country.code) ?? country.code}</span>
-                        <span className="text-xs text-muted-foreground" dir="ltr">{country.dialCode}</span>
-                      </CommandItem>
-                    ))}
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-            <IconInput icon={Phone} id="register-phone" type="tel" value={phoneDigits} onChange={(event) => update('phone', `${selectedCountry.dialCode}${event.target.value.replace(/\D/g, '')}`)} autoComplete="tel" placeholder={t('auth.phonePlaceholder')} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'register-phone-error' : undefined} data-testid="input-register-phone" className="h-12 min-w-0 flex-1 rounded-xl border-border bg-white text-base shadow-none" />
-          </div>
+          <CountryPhoneField
+            value={form.phone}
+            onChange={(value) => update('phone', value)}
+            onCountryChange={(country: PhoneCountry) => setPhoneCountry(country.code)}
+            id="register-phone"
+            placeholder={t('auth.phonePlaceholder')}
+            ariaInvalid={Boolean(errors.phone)}
+            ariaDescribedBy={errors.phone ? 'register-phone-error' : undefined}
+            inputTestId="input-register-phone"
+            selectorTestId="button-register-country"
+          />
           <p className="text-xs text-muted-foreground">{t('auth.phoneFormatHint')}</p>
           <FieldError id="register-phone-error" message={errors.phone} testId="error-register-phone" />
         </div>

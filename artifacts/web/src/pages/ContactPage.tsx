@@ -4,6 +4,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { MapPin, Phone, Mail, Zap, MessagesSquare, Clock, Facebook, Instagram, User, Tag } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { IconInput } from '@/components/ui/icon-input';
+import { CountryPhoneField } from '@/components/forms/CountryPhoneField';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
@@ -259,17 +260,13 @@ export default function ContactPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">{t('common.phone')}</Label>
-                    <IconInput
-                      icon={Phone}
+                    <CountryPhoneField
                       id="phone"
-                      type="tel"
-                      dir="ltr"
                       value={values.phone}
-                      onChange={(e) => handleChange('phone', e.target.value)}
-                      aria-invalid={!!errors.phone}
-                      aria-describedby={errors.phone ? 'error-phone' : undefined}
-                      className={cn('text-start', inputClass, invalidClass('phone'))}
-                      data-testid="input-contact-phone"
+                      onChange={(value) => handleChange('phone', value)}
+                      ariaInvalid={!!errors.phone}
+                      ariaDescribedBy={errors.phone ? 'error-phone' : undefined}
+                      inputTestId="input-contact-phone"
                     />
                     {fieldError('phone')}
                   </div>

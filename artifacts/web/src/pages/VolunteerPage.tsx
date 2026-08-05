@@ -7,7 +7,8 @@ import { SectionHeading } from '@/components/layout/SectionHeading';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Button } from '@/components/ui/button';
 import { IconInput } from '@/components/ui/icon-input';
-import { User, CalendarDays, Mail, Phone } from 'lucide-react';
+import { CountryPhoneField } from '@/components/forms/CountryPhoneField';
+import { User, CalendarDays, Mail } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
@@ -190,18 +191,13 @@ export default function VolunteerPage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone" className="font-semibold">{t('common.phone')}</Label>
-                      <IconInput
-                        icon={Phone}
+                      <CountryPhoneField
                         id="phone"
-                        type="tel"
-                        required
-                        dir="ltr"
                         value={values.phone}
-                        onChange={(e) => updateValue('phone', e.target.value)}
-                        aria-invalid={!!errors.phone}
-                        aria-describedby={errors.phone ? 'error-volunteer-phone' : undefined}
-                        className={cn('text-start rounded-xl bg-background h-11', invalidClass('phone'))}
-                        data-testid="input-volunteer-phone"
+                        onChange={(value) => updateValue('phone', value)}
+                        ariaInvalid={!!errors.phone}
+                        ariaDescribedBy={errors.phone ? 'error-volunteer-phone' : undefined}
+                        inputTestId="input-volunteer-phone"
                       />
                       {fieldError('phone')}
                     </div>
