@@ -173,12 +173,17 @@ export function GalleryLightbox({
       {/* Media */}
       <figure
         className={cn(
-          'mx-14 md:mx-24 max-w-5xl w-full motion-safe:transition-transform motion-safe:duration-300',
+          'w-[80vw] max-w-[80vw] motion-safe:transition-transform motion-safe:duration-300',
           visible ? 'scale-100' : 'scale-95',
         )}
         onClick={(event) => event.stopPropagation()}
       >
-        {renderItem(openIndex)}
+        <div
+          className="flex h-[min(80vh,calc(100vh-7rem))] max-h-[80vh] w-full max-w-[80vw] items-center justify-center overflow-hidden [&>*]:max-h-full [&>*]:max-w-full [&>*]:object-contain [&_img]:max-h-full [&_img]:max-w-full [&_img]:object-contain"
+          data-testid="lightbox-media-frame"
+        >
+          {renderItem(openIndex)}
+        </div>
         <figcaption className="mt-5 text-center">
           <div className="text-sm md:text-base font-semibold text-white" data-testid="text-lightbox-title">
             {getLabel(openIndex)}
