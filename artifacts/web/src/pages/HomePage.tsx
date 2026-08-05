@@ -259,7 +259,7 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* PARTNERS (Redesigned) */}
-        <section id="partners" className="relative w-[100vw] overflow-hidden bg-muted py-12 md:py-16">
+        <section id="partners" className="relative w-full overflow-hidden bg-muted py-12 md:py-16">
            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-50 pointer-events-none"></div>
            <div className="absolute top-1/2 start-1/4 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[100px] opacity-30 mix-blend-screen pointer-events-none transform -translate-y-1/2 motion-safe:animate-pulse" style={{ animationDuration: '8s' }}></div>
            <div className="absolute top-1/2 end-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] opacity-30 mix-blend-screen pointer-events-none transform -translate-y-1/2 motion-safe:animate-pulse" style={{ animationDuration: '10s' }}></div>
