@@ -1,0 +1,148 @@
+Continue the existing project.
+
+Follow all existing project conventions.
+
+Do NOT recreate the project.
+Do NOT modify the UI that has already been completed.
+Do NOT redesign existing pages.
+Keep the current branding, colors, typography, spacing, responsiveness and animations.
+
+================================================
+
+TASK
+
+Implement a complete Authentication System (Frontend Only).
+
+This is ONLY the frontend implementation.
+
+Do NOT connect Laravel APIs yet.
+
+================================================
+
+Create the following pages:
+
+1. Login
+2. Register
+3. Forgot Password
+4. Reset Password
+
+================================================
+
+Requirements
+
+Login
+
+Fields:
+
+- Email
+- Password
+
+Features:
+
+- Show / Hide Password
+- Remember Me
+- Forgot Password link
+- Login button
+
+================================================
+
+Register
+
+Fields:
+
+- Full Name
+- Email
+- Phone Number
+- Password
+- Confirm Password
+
+Features:
+
+- Show / Hide Password
+- Accept Terms & Conditions
+- Register button
+
+================================================
+
+Forgot Password
+
+Fields:
+
+- Email
+
+Button:
+
+- Send Reset Link
+
+================================================
+
+Reset Password
+
+Fields:
+
+- New Password
+- Confirm Password
+
+Button:
+
+- Reset Password
+
+================================================
+
+Validation
+
+Implement professional client-side validation for all forms.
+
+Validate:
+
+- Required fields
+- Email format
+- Phone format
+- Password confirmation
+- Password strength
+
+Display clear validation messages.
+
+================================================
+
+Success & Error States
+
+Create professional success and error dialogs.
+
+Use placeholder logic only.
+
+Do NOT connect APIs.
+
+================================================
+
+Routing
+
+Create proper routes for all authentication pages.
+
+================================================
+
+Design
+
+Use the existing design system.
+
+Authentication pages must match the rest of the website.
+
+Keep everything fully responsive.
+
+================================================
+
+IMPORTANT
+
+Frontend only.
+
+No backend.
+
+No Laravel integration.
+
+No database.
+
+No authentication logic.
+
+Only build the complete frontend authentication experience.
+
+Stop after completing the authentication UI.
