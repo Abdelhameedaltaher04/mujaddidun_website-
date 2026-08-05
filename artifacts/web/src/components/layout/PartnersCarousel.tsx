@@ -51,7 +51,7 @@ export function PartnersCarousel() {
 
   return (
     <div 
-      className="relative max-w-7xl mx-auto px-4 md:px-12 group"
+      className="relative w-full group"
       onMouseEnter={() => emblaApi?.plugins().autoScroll?.stop()}
       onMouseLeave={() => {
         const isReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

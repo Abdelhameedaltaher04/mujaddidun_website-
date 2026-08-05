@@ -5,8 +5,31 @@ import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { SectionHeading } from '@/components/layout/SectionHeading';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
-import { Heart, Home, GraduationCap, ArrowLeft, ArrowRight } from 'lucide-react';
+import {
+  Heart,
+  Home,
+  GraduationCap,
+  ArrowLeft,
+  ArrowRight,
+  ShieldCheck,
+  UserCheck,
+  HeartHandshake,
+  Users,
+  Rocket,
+  Leaf,
+  type LucideIcon,
+} from 'lucide-react';
 import { useLocale } from '@/contexts/LocaleContext';
+
+/** Icon per value: 1 transparency, 2 responsibility, 3 volunteerism, 4 partnership, 5 empowerment, 6 sustainability. */
+const VALUE_ICONS: { num: number; Icon: LucideIcon }[] = [
+  { num: 1, Icon: ShieldCheck },
+  { num: 2, Icon: UserCheck },
+  { num: 3, Icon: HeartHandshake },
+  { num: 4, Icon: Users },
+  { num: 5, Icon: Rocket },
+  { num: 6, Icon: Leaf },
+];
 
 export default function AboutPage() {
   const { t, dir } = useLocale();
@@ -118,16 +141,16 @@ export default function AboutPage() {
         <SectionWrapper id="values">
           <SectionHeading title={t('about.values')} accent="secondary" />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3, 4, 5, 6].map((num) => (
+            {VALUE_ICONS.map(({ num, Icon }) => (
               <div
                 key={num}
-                className="p-8 rounded-2xl border border-border bg-card shadow-sm text-center hover-elevate-2 transition-all"
+                className="group p-8 rounded-2xl border border-border bg-card shadow-sm text-center hover-elevate-2 transition-all hover:shadow-md"
                 data-testid={`card-value-${num}`}
               >
-                <div className="h-10 w-10 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <span className="h-2.5 w-2.5 rounded-full bg-primary" aria-hidden="true" />
+                <div className="h-14 w-14 mx-auto rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center mb-4 transition-all duration-300 motion-safe:group-hover:scale-110 group-hover:bg-secondary group-hover:text-secondary-foreground group-hover:shadow-lg group-hover:shadow-secondary/25">
+                  <Icon className="h-7 w-7" aria-hidden="true" />
                 </div>
-                <p className="text-lg font-semibold text-foreground">{t(`about.value${num}`)}</p>
+                <p className="text-lg font-semibold text-foreground transition-colors group-hover:text-secondary">{t(`about.value${num}`)}</p>
               </div>
             ))}
           </div>
