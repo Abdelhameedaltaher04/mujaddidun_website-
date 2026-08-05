@@ -107,7 +107,7 @@ export default function HomePage() {
                 </Link>
               </Button>
             </div>
-             <div className="relative order-first lg:order-none w-full">
+             <div className="relative order-first lg:order-none w-full lg:-translate-x-4 lg:scale-[1.04]">
                 <div className="aspect-[7/5] rounded-3xl bg-primary/5 border border-primary/10 overflow-hidden shadow-xl shadow-primary/10">
                   <img
                     src={logoUrl}
@@ -232,10 +232,10 @@ export default function HomePage() {
         </SectionWrapper>
 
         {/* VOLUNTEER CTA */}
-        <SectionWrapper id="volunteer-cta" className="relative overflow-hidden border-y border-border" variant="default">
+         <SectionWrapper id="volunteer-cta" className="relative overflow-hidden border-y border-border py-8 md:py-10" variant="default">
           <div className="absolute inset-0 bg-primary/5"></div>
-          <div className="relative z-10 max-w-4xl mx-auto text-center py-12 md:py-16">
-            <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+           <div className="relative z-10 max-w-4xl mx-auto text-center py-6 md:py-8">
+             <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
               <Users className="w-8 h-8" />
             </div>
             <SectionHeading
@@ -243,7 +243,7 @@ export default function HomePage() {
               title={t('volunteer.subtitle')}
               description={t('common.volunteerDesc')}
               accent="secondary"
-              className="mb-8 lg:mb-10 max-w-none mx-auto [&>div]:max-w-none"
+               className="mb-5 lg:mb-6 max-w-none mx-auto [&>div]:max-w-none"
               titleClassName={cn(
                 'whitespace-nowrap text-nowrap',
                 dir === 'rtl'
@@ -335,9 +335,9 @@ export default function HomePage() {
 
         {/* CONTACT PREVIEW */}
         <SectionWrapper id="contact" variant="muted">
-           <div className="bg-primary/5 rounded-3xl p-8 md:p-12 border border-primary/10 relative overflow-hidden">
+            <div className="bg-primary/5 rounded-3xl p-6 md:p-8 border border-primary/10 relative overflow-hidden">
              <div className="absolute top-0 end-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[80px] pointer-events-none transform translate-x-1/3 -translate-y-1/3"></div>
-              <div className="relative z-10 flex flex-col items-center gap-6 text-center">
+               <div className="relative z-10 flex flex-col items-center gap-4 text-center">
                  <SectionHeading
                    title={t('home.sections.contact')}
                    description={t('common.contactDesc')}
