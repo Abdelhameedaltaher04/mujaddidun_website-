@@ -5,3 +5,4 @@
 - [Vite HMR ghost crashes](web-hmr-crashes.md) — runtime errors citing removed code are stale-HMR artifacts; clear .vite cache + restart instead of debugging.
 - [Workspace package installs](workspace-package-installs.md) — scoped frontend dependencies must be added with the package filter, not the root-targeting package callback.
 - [Laravel backend environment](laravel-backend-environment.md) — keep deployable defaults in `.env.example`; protected local `.env` files must not be edited or exposed.
+- [Laravel Sanctum auth](sanctum-auth.md) — validated confirmation fields and bearer-token revocation need explicit handling in API auth flows.

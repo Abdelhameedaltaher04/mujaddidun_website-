@@ -7,14 +7,14 @@ Laravel 12 backend architecture for the Al-Mujaddidun platform.
 - PHP 8.3+
 - Laravel 12
 - MySQL
-- Laravel Sanctum, installed and configured for future authentication work
+- Laravel Sanctum for bearer-token authentication
 
 ## API foundation
 
 - API routes are served under `/api/v1`.
 - `GET /api/v1/health` is the architecture health endpoint.
 - Laravel's API middleware stack is configured through `statefulApi()`, with
-  Sanctum available for future `auth:sanctum` route protection.
+  protected routes using `auth:sanctum`.
 - CORS allows configured frontend origins through `CORS_ALLOWED_ORIGINS` and
   supports credentialed Sanctum requests.
 - Successful JSON responses use:
@@ -42,15 +42,14 @@ Domain boundaries are prepared under:
 - `app/Repositories`
 - `app/Services`
 
-Each boundary contains folders for `Auth`, `News`, `Events`, `Programs`,
-`Gallery`, `Volunteers`, `Donations`, `Contact`, `Dashboard`, `Users`, `Roles`,
-and `Settings`. Empty folders are retained with `.gitkeep` files until their
-business capabilities are implemented.
+The Auth boundary is implemented with its controller, Form Requests, resource,
+and service. The remaining boundaries contain folders for `News`, `Events`,
+`Programs`, `Gallery`, `Volunteers`, `Donations`, `Contact`, `Dashboard`,
+`Users`, `Roles`, and `Settings`. Empty folders are retained with `.gitkeep`
+files until their business capabilities are implemented.
 
 `BaseController`, `ApiResponse`, `ApiFormRequest`, and the exception
-configuration in `bootstrap/app.php` form the shared API foundation. Domain
-controllers, services, repositories, models, migrations, and business routes
-are intentionally not implemented in this phase.
+configuration in `bootstrap/app.php` form the shared API foundation.
 
 ## Environment
 
@@ -64,10 +63,11 @@ tables during setup.
 
 ## Current scope
 
-This phase only establishes the backend architecture. It intentionally contains:
+The current backend scope contains:
 
-- No database migrations or tables
-- No authentication routes or token issuance
+- The complete database migration and Eloquent model layer
+- The Authentication API listed above
+- Role seeding for `admin`, `moderator`, `volunteer`, and `user`
 - No domain endpoints
 - No frontend integration
 
@@ -86,6 +86,7 @@ file and provide:
 - production frontend origins in `CORS_ALLOWED_ORIGINS`;
 - matching `SANCTUM_STATEFUL_DOMAINS` values for cookie-based authentication.
 
-Run Laravel's normal production optimization commands only in the deployment
-environment. Secrets and environment-specific credentials must not be
-committed.
+Run migrations and `php artisan db:seed --class=RoleSeeder` in the deployment
+environment before accepting registrations. Run Laravel's normal production
+optimization commands only in the deployment environment. Secrets and
+environment-specific credentials must not be committed.

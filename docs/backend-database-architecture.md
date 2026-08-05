@@ -92,6 +92,8 @@ erDiagram
         varchar email UK
         varchar password
         varchar status
+        varchar phone
+        char country_code
         datetime email_verified_at
         datetime deleted_at
     }
@@ -230,6 +232,7 @@ the separate `volunteers` profile and application tables.
 | `last_name` | `VARCHAR(100)` | No | — | Required |
 | `email` | `VARCHAR(255)` | No | — | Unique; normalize to lowercase in application code |
 | `phone` | `VARCHAR(30)` | Yes | `NULL` | Index; store normalized international value |
+| `country_code` | `CHAR(2)` | Yes | `NULL` | ISO 3166-1 alpha-2 country code |
 | `password` | `VARCHAR(255)` | No | — | Hashed password only |
 | `avatar_path` | `VARCHAR(500)` | Yes | `NULL` | Relative object/storage path |
 | `bio` | `TEXT` | Yes | `NULL` | Profile biography |

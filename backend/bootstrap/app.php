@@ -32,7 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return response()->json([
                 'success' => false,
-                'message' => 'The given data was invalid.',
+                'message' => 'Validation failed.',
                 'errors' => $exception->errors(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         });

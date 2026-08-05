@@ -1,0 +1,126 @@
+Continue the existing project.
+
+The database layer is complete.
+
+Now implement the Authentication API using Laravel Sanctum.
+
+================================================
+
+TECH STACK
+
+- Laravel 12
+- Sanctum
+- MySQL
+
+================================================
+
+TASK
+
+Implement a complete authentication system.
+
+================================================
+
+Create the following APIs:
+
+POST /api/v1/auth/register
+
+POST /api/v1/auth/login
+
+POST /api/v1/auth/logout
+
+GET /api/v1/auth/me
+
+POST /api/v1/auth/forgot-password
+
+POST /api/v1/auth/reset-password
+
+================================================
+
+Registration
+
+Validate:
+
+- First Name
+- Last Name
+- Email
+- Phone Number
+- Country Code
+- Password
+- Confirm Password
+
+Store passwords using Laravel Hash.
+
+Prevent duplicate emails.
+
+================================================
+
+Login
+
+Allow login using:
+
+- Email
+- Password
+
+Return:
+
+- User
+- Sanctum Token
+
+================================================
+
+Logout
+
+Revoke the current access token.
+
+================================================
+
+Current User
+
+Return the authenticated user's profile.
+
+================================================
+
+Forgot Password
+
+Generate and send a password reset link using Laravel's password broker.
+
+================================================
+
+Reset Password
+
+Validate the reset token.
+
+Update the password securely.
+
+================================================
+
+Validation
+
+Return validation errors in a consistent JSON format.
+
+Example:
+
+{
+  "success": false,
+  "message": "Validation failed.",
+  "errors": {
+    "email": ["The email field is required."]
+  }
+}
+
+================================================
+
+Security
+
+- Use Laravel Form Requests.
+- Use Policies where appropriate.
+- Protect routes with Sanctum middleware.
+- Follow Laravel security best practices.
+
+================================================
+
+Do NOT connect the React frontend yet.
+
+Do NOT implement Admin Dashboard.
+
+Only complete the Authentication API.

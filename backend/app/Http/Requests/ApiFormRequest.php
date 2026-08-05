@@ -18,7 +18,7 @@ abstract class ApiFormRequest extends FormRequest
     {
         throw new HttpResponseException(
             ApiResponse::error(
-                'The given data was invalid.',
+                'Validation failed.',
                 $validator->errors(),
                 422,
             ),
