@@ -18,7 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->statefulApi();
+        // This API uses Sanctum personal access tokens in the Authorization
+        // header. Cookie-based SPA statefulness would incorrectly require a
+        // CSRF token for public JSON endpoints such as registration.
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(function (Request $request, \Throwable $e): bool {
@@ -61,9 +63,11 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => $status >= 500
-                    ? 'An unexpected error occurred.'
+                    ? (config('app.debug')
+                        ? $exception->getMessage()
+                        : 'An unexpected error occurred.')
                     : $exception->getMessage(),
-                'errors' => $status >= 500 ? null : [],
+                'errors' => $status >= 500 && ! config('app.debug') ? null : [],
             ], $status);
         });
     })->create();

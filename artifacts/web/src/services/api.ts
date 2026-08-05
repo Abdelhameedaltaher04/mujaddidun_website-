@@ -103,12 +103,28 @@ export function getApiError(error: unknown): {
   fields: Record<string, string>;
   status?: number;
 } {
-  const axiosError = error as AxiosError<ApiErrorData>;
+  const axiosError = error as AxiosError<ApiErrorData | string>;
   const response = axiosError.response;
-  const fieldErrors = response?.data?.errors ?? {};
+  const responseData = response?.data;
+  const structuredData =
+    responseData && typeof responseData === 'object' ? responseData : undefined;
+  const fieldErrors = structuredData?.errors ?? {};
+  const rawResponseMessage =
+    typeof responseData === 'string'
+      ? responseData.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+      : structuredData?.message;
+  const requestMessage =
+    error instanceof Error && error.message ? error.message : undefined;
+  const statusMessage = response?.status
+    ? `Request failed with status ${response.status}.`
+    : undefined;
 
   return {
-    message: response?.data?.message || 'Unable to complete the request.',
+    message:
+      rawResponseMessage ||
+      requestMessage ||
+      statusMessage ||
+      'The server did not return an error message.',
     fields: Object.fromEntries(
       Object.entries(fieldErrors).map(([key, messages]) => [
         key,
