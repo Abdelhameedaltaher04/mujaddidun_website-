@@ -17,6 +17,7 @@
     "welcome": "Welcome",
     "logout": "Log out",
     "readMore": "Read More",
+    "readLess": "Show Less",
     "viewAll": "View All",
     "donate": "Donate Now",
     "submit": "Submit",
@@ -296,6 +297,14 @@
       "4": {
         "q": "What donation methods are available?",
         "a": "You can donate via direct bank transfer to the association's authorized accounts, or by visiting our headquarters."
+      },
+      "5": {
+        "q": "Does the association offer training programs?",
+        "a": "Yes. The association offers vocational and skills training to help young people grow and improve their employment opportunities."
+      },
+      "6": {
+        "q": "How can I contact the association team?",
+        "a": "You can contact us through the website contact form or the contact details provided on the Contact Us page."
       }
     }
   },

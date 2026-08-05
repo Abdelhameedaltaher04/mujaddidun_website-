@@ -1,4 +1,5 @@
 import { Navbar } from '@/components/layout/Navbar';
+import { useState } from 'react';
 import { Footer } from '@/components/layout/Footer';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { SectionHeading } from '@/components/layout/SectionHeading';
@@ -16,6 +17,7 @@ import logoUrl from '@/assets/mujaddidun-logo.png';
 export default function HomePage() {
   const { t, dir } = useLocale();
   const ArrowIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
+  const [faqExpanded, setFaqExpanded] = useState(false);
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -284,26 +286,50 @@ export default function HomePage() {
               description={t('faq.subtitle')}
               accent="secondary"
             />
-            <div className="space-y-4">
-              {[1, 2, 3, 4].map(i => (
-                <details key={i} className="group bg-card border border-border rounded-2xl overflow-hidden [&_summary::-webkit-details-marker]:hidden shadow-sm">
-                  <summary className="flex items-center justify-between p-6 font-bold cursor-pointer hover:bg-muted/50 transition-colors focus-ring-standard text-foreground">
-                    <span className="pe-4">{t(`faq.items.${i}.q`)}</span>
-                    <span className="w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center shrink-0 group-open:rotate-180 transition-transform">
-                      <ChevronLeft className="w-5 h-5 -rotate-90" />
-                    </span>
-                  </summary>
-                  <div className="p-6 pt-0 text-muted-foreground leading-relaxed">
-                    {t(`faq.items.${i}.a`)}
+            <div className="space-y-4" id="home-faq-items">
+              {[1, 2, 3, 4, 5, 6].map(i => (
+                <div
+                  key={i}
+                  className={cn(
+                    'grid transition-[grid-template-rows,opacity] duration-500 ease-in-out',
+                    i > 2 && !faqExpanded
+                      ? 'grid-rows-[0fr] opacity-0 pointer-events-none'
+                      : 'grid-rows-[1fr] opacity-100',
+                  )}
+                >
+                  <div className="min-h-0 overflow-hidden">
+                    <details className="group bg-card border border-border rounded-2xl overflow-hidden [&_summary::-webkit-details-marker]:hidden shadow-sm">
+                      <summary className="flex items-center justify-between p-6 font-bold cursor-pointer hover:bg-muted/50 transition-colors focus-ring-standard text-foreground">
+                        <span className="pe-4">{t(`faq.items.${i}.q`)}</span>
+                        <span className="w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center shrink-0 group-open:rotate-180 transition-transform">
+                          <ChevronLeft className="w-5 h-5 -rotate-90" />
+                        </span>
+                      </summary>
+                      <div className="p-6 pt-0 text-muted-foreground leading-relaxed">
+                        {t(`faq.items.${i}.a`)}
+                      </div>
+                    </details>
                   </div>
-                </details>
+                </div>
               ))}
             </div>
             <div className="text-center mt-8">
-              <Button variant="link" className="font-bold text-primary text-lg" asChild>
-                <Link href="/faq">
-                  {t('common.readMore')} <ArrowIcon className="w-5 h-5 ms-2" />
-                </Link>
+              <Button
+                type="button"
+                variant="link"
+                className="font-bold text-primary text-lg"
+                onClick={() => setFaqExpanded((expanded) => !expanded)}
+                aria-expanded={faqExpanded}
+                aria-controls="home-faq-items"
+                data-testid="button-faq-toggle"
+              >
+                {faqExpanded ? t('common.readLess') : t('common.readMore')}
+                <ArrowIcon
+                  className={cn(
+                    'w-5 h-5 ms-2 transition-transform duration-300',
+                    faqExpanded && 'rotate-180',
+                  )}
+                />
               </Button>
             </div>
           </div>
