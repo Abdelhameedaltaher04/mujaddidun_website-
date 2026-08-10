@@ -1,0 +1,220 @@
+Continue the existing project.
+
+The Admin Dashboard Layout, Dashboard Overview, and Users Management page are complete.
+
+================================================
+
+TASK
+
+Build the complete News Management module for the Admin Dashboard.
+
+Route:
+
+/admin/news
+
+================================================
+
+NEWS LIST
+
+Create a professional news management table/list containing:
+
+- Featured Image
+- Title
+- Category
+- Author
+- Status
+- Publication Date
+- Last Updated
+- Actions
+
+Statuses:
+
+- Draft
+- Published
+- Archived
+
+================================================
+
+SEARCH & FILTERS
+
+Add:
+
+- Search by title
+- Filter by category
+- Filter by status
+- Filter by publication date
+- Clear filters
+
+Search and filters must work together.
+
+================================================
+
+CREATE NEWS
+
+Create an "Add News" page/form.
+
+Fields:
+
+- Title Arabic
+- Title English
+- Short Description Arabic
+- Short Description English
+- Full Content Arabic
+- Full Content English
+- Featured Image
+- Category
+- Author
+- Status
+- Publication Date
+
+Requirements:
+
+- Arabic and English content must be supported.
+- Use a professional rich text editor for the full content.
+- Image preview before upload.
+- Required field validation.
+- Character limits where appropriate.
+- Save as Draft.
+- Publish.
+
+================================================
+
+EDIT NEWS
+
+Allow Admin to edit all news information.
+
+The edit form must use the same reusable form component as Create News.
+
+================================================
+
+NEWS DETAILS
+
+Allow Admin to preview the complete news article before publishing.
+
+The preview should display the article as it will appear on the public website.
+
+Support:
+
+- Arabic
+- English
+- Featured image
+- Content formatting
+
+================================================
+
+ACTIONS
+
+Provide:
+
+- View
+- Edit
+- Publish
+- Unpublish
+- Archive
+- Delete
+
+Dangerous actions must require confirmation.
+
+================================================
+
+IMAGE UPLOAD
+
+Featured image requirements:
+
+- JPG
+- PNG
+- WEBP
+- Maximum 5MB
+- Preview before upload
+- Replace image
+- Remove image
+
+Prepare the implementation for Laravel storage/API integration.
+
+================================================
+
+PAGINATION
+
+Implement:
+
+- Pagination
+- Items per page
+- Current page
+- Previous / Next
+- Total results
+
+Keep it ready for Laravel server-side pagination.
+
+================================================
+
+LOADING & ERROR STATES
+
+Add:
+
+- Skeleton loading
+- Empty state
+- API error state
+- Retry button
+- Upload loading state
+- Form submission loading state
+
+Display backend validation errors under the relevant fields.
+
+================================================
+
+API READY
+
+Create a dedicated news service.
+
+Prepare endpoints:
+
+GET    /news
+GET    /news/{id}
+POST   /news
+PUT    /news/{id}
+PATCH  /news/{id}/publish
+PATCH  /news/{id}/archive
+DELETE /news/{id}
+
+Do not place API calls directly inside UI components.
+
+================================================
+
+ACCESS CONTROL
+
+Only Admin and authorized Moderator users can manage news.
+
+Keep the structure ready for Laravel Policies/Permissions.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Full management table.
+
+Tablet:
+- Responsive table.
+
+Mobile:
+- Convert rows into clean cards where appropriate.
+
+Do not cause horizontal scrolling on the entire page.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website.
+
+Do NOT modify Authentication.
+
+Do NOT modify Users Management.
+
+Do NOT create database migrations.
+
+Do NOT connect the API yet.
+
+Use temporary mock data only where necessary, but keep the entire module ready for Laravel API integration.
+
+Build the complete News Management module.

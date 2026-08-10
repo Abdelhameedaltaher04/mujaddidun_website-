@@ -13,8 +13,15 @@ import type { ComponentType } from 'react';
  */
 export function AdminRoute({
   component: Component,
+  /**
+   * Roles allowed to view the route. Defaults to admin only; content
+   * modules (e.g. news) also allow moderators, mirroring the Laravel
+   * policies that will authorize the same operations server-side.
+   */
+  roles = ['admin'],
 }: {
   component: ComponentType;
+  roles?: string[];
 }) {
   const { isLoading, isAuthenticated, user } = useAuth();
   const [location] = useLocation();
@@ -35,7 +42,7 @@ export function AdminRoute({
     return <Redirect to={`/login?redirect=${encodeURIComponent(location)}`} />;
   }
 
-  if (user?.role?.slug !== 'admin') {
+  if (!user?.role?.slug || !roles.includes(user.role.slug)) {
     return <Redirect to="/403" />;
   }
 

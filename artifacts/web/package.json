@@ -76,6 +76,10 @@
     "zod": "catalog:"
   },
   "dependencies": {
+    "@tiptap/extension-link": "^3.29.2",
+    "@tiptap/extension-text-align": "^3.29.2",
+    "@tiptap/react": "^3.29.2",
+    "@tiptap/starter-kit": "^3.29.2",
     "axios": "^1.19.0",
     "embla-carousel-auto-scroll": "^8.6.0",
     "libphonenumber-js": "^1.13.10",
