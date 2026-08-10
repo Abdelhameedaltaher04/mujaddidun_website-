@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PublicFileController extends BaseController
 {
     /** Directories on the public disk that may be served publicly. */
-    private const ALLOWED_PREFIXES = ['news-covers/'];
+    private const ALLOWED_PREFIXES = ['news-covers/', 'event-covers/'];
 
     public function show(string $path): Response
     {

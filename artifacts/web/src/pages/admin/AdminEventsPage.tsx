@@ -36,6 +36,16 @@ import type {
 
 type DialogKind = 'view' | 'publish' | 'cancel' | 'delete' | null;
 
+/**
+ * Native date inputs emit transient values while typing the year
+ * (e.g. 0002-08-10); only forward plausible, complete dates to the API.
+ */
+function completeDate(value: string): string | undefined {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value) && value >= '1900-01-01'
+    ? value
+    : undefined;
+}
+
 /** Events management list: search/filter, paginate, preview, act. */
 export default function AdminEventsPage() {
   const { t } = useLocale();
@@ -59,8 +69,8 @@ export default function AdminEventsPage() {
         filters.registrationStatus !== 'all'
           ? (filters.registrationStatus as RegistrationOpenStatus)
           : undefined,
-      date_from: filters.dateFrom || undefined,
-      date_to: filters.dateTo || undefined,
+      date_from: completeDate(filters.dateFrom),
+      date_to: completeDate(filters.dateTo),
       location: filters.location.trim() || undefined,
       page,
       per_page: perPage,

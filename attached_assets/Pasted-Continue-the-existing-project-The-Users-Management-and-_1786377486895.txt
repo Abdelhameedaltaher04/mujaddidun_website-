@@ -1,0 +1,288 @@
+Continue the existing project.
+
+The Users Management and News Management modules are now successfully connected to the real Laravel API.
+
+================================================
+
+TASK
+
+Connect the Events Management module to the real Laravel backend.
+
+Do NOT modify the existing UI design.
+
+Do NOT modify Authentication, Users, or News.
+
+================================================
+
+BACKEND
+
+Use the existing:
+
+- Laravel backend
+- Existing database
+- Laravel Sanctum
+- API versioning
+- Existing authorization system
+- Existing API response structure
+
+Do NOT create duplicate systems.
+
+================================================
+
+EVENTS API
+
+Implement:
+
+GET    /api/v1/events
+GET    /api/v1/events/{id}
+POST   /api/v1/events
+PUT    /api/v1/events/{id}
+PATCH  /api/v1/events/{id}/publish
+PATCH  /api/v1/events/{id}/cancel
+DELETE /api/v1/events/{id}
+
+================================================
+
+EVENT REGISTRATIONS
+
+Implement:
+
+GET    /api/v1/events/{id}/registrations
+PATCH  /api/v1/registrations/{id}/confirm
+PATCH  /api/v1/registrations/{id}/cancel
+PATCH  /api/v1/registrations/{id}/attended
+
+================================================
+
+DATABASE
+
+Use the existing database architecture.
+
+If Events or Event Registrations tables do not exist:
+
+- Create Laravel migrations.
+- Create Models.
+- Create relationships.
+- Add foreign keys.
+- Add appropriate indexes.
+
+Do NOT delete existing data.
+
+================================================
+
+EVENT DATA
+
+Support:
+
+- Arabic title
+- English title
+- Arabic short description
+- English short description
+- Arabic full description
+- English full description
+- Event image
+- Arabic location
+- English location
+- Event date
+- Start time
+- End time
+- Maximum participants
+- Registration start date
+- Registration end date
+- Registration status
+- Event status
+
+Event statuses:
+
+- Draft
+- Upcoming
+- Ongoing
+- Completed
+- Cancelled
+
+================================================
+
+VALIDATION
+
+Use Laravel Form Requests.
+
+Validate:
+
+- Required titles
+- Required descriptions
+- Valid event date
+- Start time before end time
+- Registration period
+- Maximum participants
+- Valid image
+- Maximum image size
+
+Return validation errors using the existing API response format.
+
+================================================
+
+IMAGE STORAGE
+
+Use Laravel Storage.
+
+Support:
+
+- JPG
+- PNG
+- WEBP
+
+Maximum 5MB.
+
+Return the correct public image URL.
+
+================================================
+
+REGISTRATION LOGIC
+
+Implement server-side validation.
+
+A user cannot register when:
+
+- Registration is closed.
+- Event is cancelled.
+- Event has reached maximum capacity.
+- User is already registered.
+
+When registration succeeds:
+
+- Create Event Registration.
+- Associate it with the authenticated user.
+- Return a success response.
+
+================================================
+
+REGISTRATION STATUS
+
+Support:
+
+- Pending
+- Confirmed
+- Cancelled
+- Attended
+
+Admin/authorized users can update registration status according to permissions.
+
+================================================
+
+AUTHORIZATION
+
+Use Laravel Policies.
+
+Only authorized Admin/Moderator users can:
+
+- Create events.
+- Edit events.
+- Publish events.
+- Cancel events.
+- Delete events.
+- Manage registrations.
+
+Unauthorized requests must return:
+
+403 Forbidden
+
+================================================
+
+SEARCH & FILTERING
+
+Implement server-side:
+
+- Search by event title.
+- Filter by status.
+- Filter by registration status.
+- Filter by location.
+- Filter by date.
+
+================================================
+
+PAGINATION
+
+Implement server-side pagination.
+
+Support:
+
+- page
+- per_page
+
+Return pagination metadata.
+
+================================================
+
+API RESOURCES
+
+Use Laravel API Resources.
+
+Maintain the existing standardized API response format.
+
+================================================
+
+FRONTEND
+
+Connect the existing Events Management page to the real API.
+
+Replace all mock data.
+
+Create/use:
+
+services/events.ts
+services/eventRegistrations.ts
+
+Do not put API requests directly inside UI components.
+
+================================================
+
+LOADING & ERRORS
+
+Keep the existing:
+
+- Skeleton loading
+- Empty states
+- Error states
+- Retry
+- Form loading
+- Image upload progress
+- Confirmation dialogs
+
+Display real Laravel validation errors.
+
+================================================
+
+PUBLIC WEBSITE
+
+Do NOT connect the public Events section yet.
+
+Complete and test the Admin Events module first.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Admin retrieves events.
+2. Admin searches events.
+3. Admin filters events.
+4. Pagination works.
+5. Admin creates an event.
+6. Admin edits an event.
+7. Admin uploads event image.
+8. Admin publishes event.
+9. Admin cancels event.
+10. Admin views registrations.
+11. Authorized admin confirms registration.
+12. Authorized admin cancels registration.
+13. Authorized admin marks attendance.
+14. Full-capacity event prevents registration.
+15. Closed registration prevents registration.
+16. Duplicate registration is prevented.
+17. Unauthorized users receive 403.
+18. Unauthenticated users receive 401.
+
+Fix any issues found.
+
+At the end, provide a clear PASS/FAIL checklist.

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Events\EventAdminController;
+use App\Http\Controllers\Api\V1\Events\EventRegistrationController;
 use App\Http\Controllers\Api\V1\Files\PublicFileController;
 use App\Http\Controllers\Api\V1\News\NewsAdminController;
 use App\Http\Controllers\Api\V1\Users\ProfileController;
@@ -70,6 +72,22 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::patch('/news/{news}/unpublish', [NewsAdminController::class, 'unpublish'])->whereNumber('news');
     Route::patch('/news/{news}/archive', [NewsAdminController::class, 'archive'])->whereNumber('news');
     Route::delete('/news/{news}', [NewsAdminController::class, 'destroy'])->whereNumber('news');
+
+    // Admin events management (authorization enforced by EventPolicy).
+    Route::get('/events', [EventAdminController::class, 'index']);
+    Route::post('/events', [EventAdminController::class, 'store']);
+    Route::get('/events/{event}', [EventAdminController::class, 'show'])->whereNumber('event');
+    Route::put('/events/{event}', [EventAdminController::class, 'update'])->whereNumber('event');
+    Route::patch('/events/{event}/publish', [EventAdminController::class, 'publish'])->whereNumber('event');
+    Route::patch('/events/{event}/cancel', [EventAdminController::class, 'cancel'])->whereNumber('event');
+    Route::delete('/events/{event}', [EventAdminController::class, 'destroy'])->whereNumber('event');
+
+    // Event registrations.
+    Route::get('/events/{event}/registrations', [EventRegistrationController::class, 'index'])->whereNumber('event');
+    Route::post('/events/{event}/register', [EventRegistrationController::class, 'register'])->whereNumber('event');
+    Route::patch('/registrations/{registration}/confirm', [EventRegistrationController::class, 'confirm'])->whereNumber('registration');
+    Route::patch('/registrations/{registration}/cancel', [EventRegistrationController::class, 'cancel'])->whereNumber('registration');
+    Route::patch('/registrations/{registration}/attended', [EventRegistrationController::class, 'attended'])->whereNumber('registration');
 });
 
 // Public file serving from the public storage disk (images are public

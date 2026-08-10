@@ -1,13 +1,13 @@
 /**
- * Admin event registrations service.
+ * Admin event registrations service — connected to the real Laravel API.
  *
- * Future endpoints:
+ * Endpoints (under /api/v1, Sanctum bearer auth, EventPolicy):
  *   GET   /events/{id}/registrations   (server-side filters + pagination)
  *   PATCH /registrations/{id}/confirm
  *   PATCH /registrations/{id}/cancel
  *   PATCH /registrations/{id}/attended
  */
-import { mockEventsDb } from './mocks/adminEventsMock';
+import { apiClient, type ApiEnvelope } from './api';
 import type { PaginatedResponse } from './adminNews';
 
 export type RegistrationStatus =
@@ -40,27 +40,45 @@ export interface RegistrationsListParams {
   per_page?: number;
 }
 
+type ListEnvelope = ApiEnvelope<EventRegistration[]> & {
+  meta: PaginatedResponse<EventRegistration>['meta'];
+};
+
+async function setStatus(
+  id: number,
+  action: 'confirm' | 'cancel' | 'attended',
+): Promise<EventRegistration> {
+  const response = await apiClient.patch<ApiEnvelope<EventRegistration>>(
+    `/registrations/${id}/${action}`,
+  );
+  return response.data.data;
+}
+
 export const adminEventRegistrationsApi = {
   /** GET /events/{id}/registrations */
   async listRegistrations(
     eventId: number,
     params: RegistrationsListParams,
   ): Promise<PaginatedResponse<EventRegistration>> {
-    return mockEventsDb.listRegistrations(eventId, params);
+    const response = await apiClient.get<ListEnvelope>(
+      `/events/${eventId}/registrations`,
+      { params },
+    );
+    return { data: response.data.data, meta: response.data.meta };
   },
 
   /** PATCH /registrations/{id}/confirm */
   async confirmRegistration(id: number): Promise<EventRegistration> {
-    return mockEventsDb.setRegistrationStatus(id, 'confirmed');
+    return setStatus(id, 'confirm');
   },
 
   /** PATCH /registrations/{id}/cancel */
   async cancelRegistration(id: number): Promise<EventRegistration> {
-    return mockEventsDb.setRegistrationStatus(id, 'cancelled');
+    return setStatus(id, 'cancel');
   },
 
   /** PATCH /registrations/{id}/attended */
   async markAttended(id: number): Promise<EventRegistration> {
-    return mockEventsDb.setRegistrationStatus(id, 'attended');
+    return setStatus(id, 'attended');
   },
 };

@@ -1,20 +1,17 @@
 /**
- * Admin events management service.
+ * Admin events management service — connected to the real Laravel API.
  *
- * Mirrors the future Laravel endpoints (noted per function) with the exact
- * payload shapes (paginator envelope, multipart-ready input), so the API
- * swap replaces only the mock calls with `apiClient` requests.
- *
- * Future endpoints:
- *   GET    /events           (list; server-side filters + pagination)
+ * Endpoints (under /api/v1, Sanctum bearer auth, EventPolicy — admins and
+ * moderators):
+ *   GET    /events           (server-side filters + pagination)
  *   GET    /events/{id}
  *   POST   /events           (multipart when image present)
- *   PUT    /events/{id}
+ *   PUT    /events/{id}      (sent as POST + _method=PUT for multipart)
  *   PATCH  /events/{id}/publish   { publish: boolean }
  *   PATCH  /events/{id}/cancel
  *   DELETE /events/{id}
  */
-import { mockEventsDb } from './mocks/adminEventsMock';
+import { apiClient, type ApiEnvelope } from './api';
 
 export type EventStatus =
   | 'draft'
@@ -72,9 +69,15 @@ export interface AdminEvent {
  * seats remaining. The Laravel API will enforce the same rule server-side.
  */
 export function isRegistrationEffectivelyOpen(event: AdminEvent): boolean {
+  const today = new Date().toISOString().slice(0, 10);
+  const windowOpen =
+    (!event.registration_start_date ||
+      event.registration_start_date <= today) &&
+    (!event.registration_end_date || today <= event.registration_end_date);
   return (
     event.registration_status === 'open' &&
     (event.status === 'upcoming' || event.status === 'ongoing') &&
+    windowOpen &&
     event.registrations_count < event.max_participants
   );
 }
@@ -115,41 +118,93 @@ export interface EventInput {
   remove_image: boolean;
 }
 
+type ListEnvelope = ApiEnvelope<AdminEvent[]> & {
+  meta: PaginatedResponse<AdminEvent>['meta'];
+};
+
+/** Laravel multipart body for create/update. */
+function buildFormData(input: EventInput, method?: 'PUT'): FormData {
+  const form = new FormData();
+  if (method) form.append('_method', method);
+  form.append('title_ar', input.title_ar);
+  form.append('title_en', input.title_en);
+  form.append('excerpt_ar', input.excerpt_ar);
+  form.append('excerpt_en', input.excerpt_en);
+  form.append('description_ar', input.description_ar);
+  form.append('description_en', input.description_en);
+  form.append('location_ar', input.location_ar);
+  form.append('location_en', input.location_en);
+  form.append('event_date', input.event_date);
+  form.append('start_time', input.start_time);
+  form.append('end_time', input.end_time);
+  form.append('max_participants', String(input.max_participants));
+  // Always sent: Laravel turns '' into null, so an explicit empty value
+  // clears the date while an omitted field would keep the stored one.
+  form.append('registration_start_date', input.registration_start_date ?? '');
+  form.append('registration_end_date', input.registration_end_date ?? '');
+  form.append('registration_status', input.registration_status);
+  form.append('status', input.status);
+  if (input.image) {
+    form.append('image', input.image);
+  }
+  form.append('remove_image', input.remove_image ? '1' : '0');
+  return form;
+}
+
 export const adminEventsApi = {
   /** GET /events */
   async listEvents(
     params: EventsListParams,
   ): Promise<PaginatedResponse<AdminEvent>> {
-    return mockEventsDb.list(params);
+    const response = await apiClient.get<ListEnvelope>('/events', { params });
+    return { data: response.data.data, meta: response.data.meta };
   },
 
   /** GET /events/{id} */
   async getEvent(id: number): Promise<AdminEvent> {
-    return mockEventsDb.get(id);
+    const response = await apiClient.get<ApiEnvelope<AdminEvent>>(
+      `/events/${id}`,
+    );
+    return response.data.data;
   },
 
   /** POST /events */
   async createEvent(input: EventInput): Promise<AdminEvent> {
-    return mockEventsDb.create(input);
+    const response = await apiClient.post<ApiEnvelope<AdminEvent>>(
+      '/events',
+      buildFormData(input),
+    );
+    return response.data.data;
   },
 
-  /** PUT /events/{id} */
+  /** PUT /events/{id} — POST + _method=PUT so PHP parses multipart bodies. */
   async updateEvent(id: number, input: EventInput): Promise<AdminEvent> {
-    return mockEventsDb.update(id, input);
+    const response = await apiClient.post<ApiEnvelope<AdminEvent>>(
+      `/events/${id}`,
+      buildFormData(input, 'PUT'),
+    );
+    return response.data.data;
   },
 
   /** PATCH /events/{id}/publish */
   async setPublished(id: number, publish: boolean): Promise<AdminEvent> {
-    return mockEventsDb.setPublished(id, publish);
+    const response = await apiClient.patch<ApiEnvelope<AdminEvent>>(
+      `/events/${id}/publish`,
+      { publish },
+    );
+    return response.data.data;
   },
 
   /** PATCH /events/{id}/cancel */
   async cancelEvent(id: number): Promise<AdminEvent> {
-    return mockEventsDb.cancel(id);
+    const response = await apiClient.patch<ApiEnvelope<AdminEvent>>(
+      `/events/${id}/cancel`,
+    );
+    return response.data.data;
   },
 
   /** DELETE /events/{id} */
   async deleteEvent(id: number): Promise<void> {
-    return mockEventsDb.remove(id);
+    await apiClient.delete(`/events/${id}`);
   },
 };

@@ -17,6 +17,8 @@ class Event extends Model
         'title_ar',
         'title_en',
         'slug',
+        'excerpt_ar',
+        'excerpt_en',
         'description_ar',
         'description_en',
         'location_ar',
@@ -25,6 +27,9 @@ class Event extends Model
         'ends_at',
         'registration_required',
         'capacity',
+        'registration_starts_at',
+        'registration_ends_at',
+        'registration_status',
         'status',
         'cover_image_path',
         'is_featured',
@@ -35,6 +40,8 @@ class Event extends Model
         return [
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
+            'registration_starts_at' => 'datetime',
+            'registration_ends_at' => 'datetime',
             'registration_required' => 'boolean',
             'is_featured' => 'boolean',
         ];
