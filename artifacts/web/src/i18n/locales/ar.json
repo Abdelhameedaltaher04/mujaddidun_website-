@@ -725,6 +725,48 @@
       "title": "مرحبًا بك في لوحة التحكم",
       "subtitle": "إدارة منصة مجددون",
       "greeting": "أهلًا، {name}"
+    },
+    "dashboard": {
+      "title": "لوحة التحكم",
+      "subtitle": "نظرة عامة على منصة مجددون",
+      "vsLastMonth": "مقارنة بالشهر الماضي",
+      "recentActivity": "آخر النشاطات",
+      "quickActions": "إجراءات سريعة",
+      "stats": {
+        "users": "إجمالي المستخدمين",
+        "news": "إجمالي الأخبار",
+        "events": "إجمالي الفعاليات",
+        "volunteerApplications": "طلبات التطوع",
+        "donations": "إجمالي التبرعات",
+        "contactMessages": "رسائل التواصل"
+      },
+      "charts": {
+        "usersGrowth": "نمو المستخدمين",
+        "usersGrowthDesc": "التسجيلات الجديدة خلال آخر 12 شهرًا",
+        "donations": "التبرعات",
+        "donationsDesc": "قيمة التبرعات الشهرية (دينار أردني)",
+        "activity": "نشاط الفعاليات والتطوع",
+        "activityDesc": "الفعاليات وطلبات التطوع خلال آخر 12 شهرًا"
+      }
+    },
+    "activity": {
+      "user_registered": "مستخدم جديد سجل في المنصة",
+      "news_published": "تم نشر خبر جديد",
+      "event_created": "تم إنشاء فعالية جديدة",
+      "volunteer_applied": "مستخدم تقدم بطلب تطوع",
+      "donation_received": "تم استلام تبرع جديد"
+    },
+    "activityStatus": {
+      "pending": "قيد المراجعة",
+      "approved": "معتمد",
+      "completed": "مكتمل"
+    },
+    "quickActions": {
+      "addNews": "إضافة خبر",
+      "addEvent": "إضافة فعالية",
+      "addProgram": "إضافة برنامج",
+      "addImage": "إضافة صورة",
+      "reviewVolunteers": "مراجعة طلبات التطوع"
     }
   },
   "forbidden": {

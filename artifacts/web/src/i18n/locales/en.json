@@ -725,6 +725,48 @@
       "title": "Welcome to the Admin Dashboard",
       "subtitle": "Managing the Mujaddidun platform",
       "greeting": "Hello, {name}"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Overview of the Mujaddidun platform",
+      "vsLastMonth": "vs. last month",
+      "recentActivity": "Recent Activity",
+      "quickActions": "Quick Actions",
+      "stats": {
+        "users": "Total Users",
+        "news": "Total News",
+        "events": "Total Events",
+        "volunteerApplications": "Volunteer Applications",
+        "donations": "Total Donations",
+        "contactMessages": "Contact Messages"
+      },
+      "charts": {
+        "usersGrowth": "Users Growth",
+        "usersGrowthDesc": "New registrations over the last 12 months",
+        "donations": "Donations",
+        "donationsDesc": "Monthly donation value (JOD)",
+        "activity": "Events & Volunteer Activity",
+        "activityDesc": "Events and volunteer applications over the last 12 months"
+      }
+    },
+    "activity": {
+      "user_registered": "A new user registered on the platform",
+      "news_published": "A news article was published",
+      "event_created": "A new event was created",
+      "volunteer_applied": "A user applied to volunteer",
+      "donation_received": "A new donation was received"
+    },
+    "activityStatus": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "completed": "Completed"
+    },
+    "quickActions": {
+      "addNews": "Add News",
+      "addEvent": "Add Event",
+      "addProgram": "Add Program",
+      "addImage": "Add Image",
+      "reviewVolunteers": "Review Volunteer Applications"
     }
   },
   "forbidden": {

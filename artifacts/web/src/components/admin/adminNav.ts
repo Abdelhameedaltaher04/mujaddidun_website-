@@ -28,7 +28,12 @@ export interface AdminNavItem {
  * breadcrumbs both derive from this list so labels never drift.
  */
 export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
-  { key: 'dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+  {
+    key: 'dashboard',
+    href: '/admin/dashboard',
+    icon: LayoutDashboard,
+    exact: true,
+  },
   { key: 'users', href: '/admin/users', icon: Users },
   { key: 'news', href: '/admin/news', icon: Newspaper },
   { key: 'events', href: '/admin/events', icon: CalendarDays },

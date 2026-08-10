@@ -4,7 +4,13 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { FloatingActions } from '@/components/layout/FloatingActions';
 import { SessionExpiredDialog } from '@/components/auth/AuthLayout';
 import { LocaleProvider } from '@/contexts/LocaleContext';
-import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
+import {
+  Redirect,
+  Route,
+  Switch,
+  Router as WouterRouter,
+  useLocation,
+} from 'wouter';
 import { useEffect } from 'react';
 
 import HomePage from '@/pages/HomePage';
@@ -72,6 +78,9 @@ function Router() {
       <Route path="/profile" component={ProfilePage} />
       <Route path="/403" component={ForbiddenPage} />
       <Route path="/admin">
+        <Redirect to="/admin/dashboard" />
+      </Route>
+      <Route path="/admin/dashboard">
         <AdminRoute component={AdminDashboardPage} />
       </Route>
       <Route path="/admin/*">

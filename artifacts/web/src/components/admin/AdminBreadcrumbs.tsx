@@ -28,7 +28,7 @@ export function AdminBreadcrumbs() {
             <BreadcrumbPage>{t('admin.nav.dashboard')}</BreadcrumbPage>
           ) : (
             <BreadcrumbLink asChild>
-              <Link href="/admin" data-testid="link-breadcrumb-dashboard">
+              <Link href="/admin/dashboard" data-testid="link-breadcrumb-dashboard">
                 {t('admin.nav.dashboard')}
               </Link>
             </BreadcrumbLink>

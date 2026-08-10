@@ -39,7 +39,7 @@ export function AdminSidebar() {
     >
       <SidebarHeader>
         <Link
-          href="/admin"
+          href="/admin/dashboard"
           className="flex items-center gap-2 px-1 py-1.5"
           data-testid="link-admin-logo"
           onClick={closeMobileDrawer}
