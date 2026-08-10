@@ -1,0 +1,221 @@
+Continue the existing project.
+
+The Admin Dashboard Layout, Dashboard Overview, Users, News, Events, Programs, Gallery, Partners, and FAQs Management are complete.
+
+================================================
+
+TASK
+
+Build the complete Donations Management module for the Admin Dashboard.
+
+Route:
+
+/admin/donations
+
+================================================
+
+DONATIONS LIST
+
+Create a professional donations management table containing:
+
+- Donor Name
+- Email
+- Phone
+- Donation Amount
+- Currency
+- Donation Method
+- Transaction ID
+- Donation Status
+- Donation Date
+- Actions
+
+Donation statuses:
+
+- Pending
+- Completed
+- Failed
+- Refunded
+- Cancelled
+
+================================================
+
+STATISTICS
+
+At the top of the page display:
+
+- Total Donations
+- Total Completed Donations
+- Pending Donations
+- Number of Donors
+- Total Donations This Month
+
+Use professional statistic cards.
+
+Keep the structure ready for Laravel API data.
+
+================================================
+
+SEARCH & FILTERS
+
+Add:
+
+- Search by donor name
+- Search by email
+- Search by transaction ID
+- Filter by donation status
+- Filter by payment method
+- Filter by date range
+- Clear filters
+
+Filters must work together.
+
+================================================
+
+DONATION DETAILS
+
+When Admin opens a donation, display:
+
+- Donor Name
+- Email
+- Phone
+- Amount
+- Currency
+- Payment Method
+- Transaction ID
+- Status
+- Donation Date
+- Notes if available
+
+================================================
+
+DONATION ACTIONS
+
+Provide:
+
+- View Details
+- Mark as Completed
+- Mark as Failed
+- Refund
+- Cancel
+
+Dangerous actions such as Refund and Cancel require confirmation.
+
+================================================
+
+DONATION DETAILS / RECEIPT
+
+Provide a professional donation receipt view.
+
+Include:
+
+- Association logo
+- Association name
+- Donor name
+- Donation amount
+- Currency
+- Transaction ID
+- Donation date
+- Payment status
+
+Add:
+
+- Print Receipt
+- Download Receipt
+
+Prepare the structure for generating the real receipt through Laravel later.
+
+================================================
+
+PAGINATION
+
+Implement:
+
+- Pagination
+- Items per page
+- Current page
+- Previous / Next
+- Total results
+
+Keep it ready for Laravel server-side pagination.
+
+================================================
+
+LOADING & ERROR STATES
+
+Add:
+
+- Skeleton loading
+- Empty state
+- API error state
+- Retry button
+- Action loading
+- Confirmation dialogs
+
+Display backend errors clearly.
+
+================================================
+
+API READY
+
+Create a dedicated Donations service.
+
+Prepare endpoints:
+
+GET    /donations
+GET    /donations/{id}
+PATCH  /donations/{id}/status
+PATCH  /donations/{id}/refund
+PATCH  /donations/{id}/cancel
+
+Statistics:
+
+GET    /donations/statistics
+
+Do not put API calls directly inside UI components.
+
+================================================
+
+ACCESS CONTROL
+
+Only Admin users can manage donations.
+
+Moderators should have read-only access if the permission system allows it.
+
+Keep the structure ready for Laravel Policies and Permissions.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Full management table.
+
+Tablet:
+- Responsive table.
+
+Mobile:
+- Clean donation cards.
+
+Do not cause horizontal scrolling on the entire page.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website.
+
+Do NOT modify Authentication.
+
+Do NOT modify Users, News, Events, Programs, Gallery, Partners, or FAQs.
+
+Do NOT create database migrations.
+
+Do NOT connect the API yet.
+
+Do NOT implement real payment processing yet.
+
+Use temporary mock data only where necessary.
+
+Keep everything ready for Laravel API integration.
+
+Build the complete Donations Management module.

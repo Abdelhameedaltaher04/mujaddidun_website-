@@ -1,0 +1,217 @@
+Continue the existing project.
+
+The Admin Dashboard Layout, Dashboard Overview, Users, News, Events, Programs, Gallery, and Partners Management are complete.
+
+================================================
+
+TASK
+
+Build the complete FAQ Management module for the Admin Dashboard.
+
+Route:
+
+/admin/faqs
+
+================================================
+
+FAQ LIST
+
+Create a professional FAQ management interface containing:
+
+- Question
+- Category
+- Display Order
+- Status
+- Created Date
+- Last Updated
+- Actions
+
+Statuses:
+
+- Published
+- Draft
+- Archived
+
+================================================
+
+CREATE FAQ
+
+Create an "Add FAQ" form.
+
+Fields:
+
+- Question Arabic
+- Question English
+- Answer Arabic
+- Answer English
+- Category
+- Display Order
+- Status
+
+Requirements:
+
+- Arabic and English support.
+- Question is required.
+- Answer is required.
+- Category is optional.
+- Display Order must be a positive number.
+- Save as Draft.
+- Publish.
+
+================================================
+
+EDIT FAQ
+
+Allow Admin to edit:
+
+- Question
+- Answer
+- Category
+- Display Order
+- Status
+
+Use the same reusable form component for Create and Edit.
+
+================================================
+
+FAQ PREVIEW
+
+Allow Admin to preview how the FAQ will appear on the public website.
+
+Use an accordion-style preview matching the existing public FAQ design.
+
+The preview must support:
+
+- Arabic
+- English
+- Open/Close animation
+
+================================================
+
+DISPLAY ORDER
+
+Allow Admin to control FAQ ordering.
+
+Support:
+
+- Display Order field.
+- Drag & Drop reordering if practical.
+- Save ordering.
+
+The order must be ready to control the FAQ section on the public website.
+
+================================================
+
+SEARCH & FILTERS
+
+Add:
+
+- Search by question
+- Filter by category
+- Filter by status
+- Clear filters
+
+================================================
+
+ACTIONS
+
+Provide:
+
+- View
+- Edit
+- Publish
+- Unpublish
+- Archive
+- Delete
+
+Dangerous actions require confirmation.
+
+================================================
+
+PAGINATION
+
+Implement:
+
+- Pagination
+- Items per page
+- Current page
+- Previous / Next
+- Total results
+
+Keep the structure ready for Laravel server-side pagination.
+
+================================================
+
+LOADING & ERROR STATES
+
+Add:
+
+- Skeleton loading
+- Empty state
+- API error state
+- Retry button
+- Form submission loading
+- Delete loading
+
+Display backend validation errors under the relevant fields.
+
+================================================
+
+API READY
+
+Create a dedicated FAQ service.
+
+Prepare endpoints:
+
+GET    /faqs
+GET    /faqs/{id}
+POST   /faqs
+PUT    /faqs/{id}
+PATCH  /faqs/{id}/status
+PATCH  /faqs/reorder
+DELETE /faqs/{id}
+
+Do not place API calls directly inside UI components.
+
+================================================
+
+ACCESS CONTROL
+
+Only Admin and authorized Moderator users can manage FAQs.
+
+Keep the structure ready for Laravel Policies and Permissions.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Professional table/list.
+
+Tablet:
+- Adaptive layout.
+
+Mobile:
+- Convert items into clean cards/accordions where appropriate.
+
+Do not cause horizontal scrolling on the entire page.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website.
+
+Do NOT modify Authentication.
+
+Do NOT modify Users, News, Events, Programs, Gallery, or Partners.
+
+Do NOT create database migrations.
+
+Do NOT connect the API yet.
+
+Use temporary mock data only where necessary.
+
+Keep everything ready for Laravel API integration.
+
+Build the complete FAQ Management module.
