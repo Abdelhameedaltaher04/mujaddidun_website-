@@ -27,7 +27,12 @@ import ForgotPasswordPage from '@/pages/forgot-password';
 import ResetPasswordPage from '@/pages/reset-password';
 import VerifyEmailPage from '@/pages/verify-email';
 import ProfilePage from '@/pages/ProfilePage';
+import ForbiddenPage from '@/pages/forbidden';
 import NotFound from '@/pages/not-found';
+
+import AdminDashboardPage from '@/pages/admin/AdminDashboardPage';
+import AdminComingSoonPage from '@/pages/admin/AdminComingSoonPage';
+import { AdminRoute } from '@/components/admin/AdminRoute';
 
 const queryClient = new QueryClient();
 
@@ -65,6 +70,13 @@ function Router() {
       <Route path="/reset-password" component={ResetPasswordPage} />
       <Route path="/verify-email" component={VerifyEmailPage} />
       <Route path="/profile" component={ProfilePage} />
+      <Route path="/403" component={ForbiddenPage} />
+      <Route path="/admin">
+        <AdminRoute component={AdminDashboardPage} />
+      </Route>
+      <Route path="/admin/*">
+        <AdminRoute component={AdminComingSoonPage} />
+      </Route>
       <Route path="/" component={HomePage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/projects" component={ProjectsPage} />
@@ -84,6 +96,16 @@ function Router() {
   );
 }
 
+/**
+ * Public-site floating actions (WhatsApp, back-to-top) are hidden inside
+ * the admin dashboard so the management UI stays uncluttered.
+ */
+function PublicChrome() {
+  const [location] = useLocation();
+  if (location.startsWith('/admin')) return null;
+  return <FloatingActions />;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -92,7 +114,7 @@ function App() {
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
             <ScrollToTop />
             <Router />
-            <FloatingActions />
+            <PublicChrome />
             <SessionExpiredDialog />
           </WouterRouter>
           <Toaster />

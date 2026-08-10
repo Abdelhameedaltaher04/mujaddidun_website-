@@ -688,5 +688,48 @@
       "frequencyGroup": "Select donation frequency",
       "amountGroup": "Select donation amount"
     }
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "toggleSidebar": "Toggle sidebar",
+    "comingSoon": "This section is under construction and will be available soon.",
+    "nav": {
+      "label": "Admin navigation",
+      "dashboard": "Dashboard",
+      "users": "Users",
+      "news": "News",
+      "events": "Events",
+      "programs": "Programs",
+      "gallery": "Gallery",
+      "partners": "Partners",
+      "faqs": "FAQs",
+      "donations": "Donations",
+      "volunteerApplications": "Volunteer Applications",
+      "contactMessages": "Contact Messages",
+      "settings": "Website Settings"
+    },
+    "notifications": {
+      "label": "Notifications",
+      "empty": "No new notifications."
+    },
+    "userMenu": {
+      "profile": "Profile"
+    },
+    "roles": {
+      "admin": "Admin",
+      "moderator": "Moderator",
+      "volunteer": "Volunteer",
+      "user": "User"
+    },
+    "welcome": {
+      "title": "Welcome to the Admin Dashboard",
+      "subtitle": "Managing the Mujaddidun platform",
+      "greeting": "Hello, {name}"
+    }
+  },
+  "forbidden": {
+    "title": "Access denied",
+    "description": "You do not have permission to access this page.",
+    "backHome": "Back to home"
   }
 }

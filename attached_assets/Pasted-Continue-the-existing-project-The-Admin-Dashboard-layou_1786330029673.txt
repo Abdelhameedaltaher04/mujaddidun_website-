@@ -1,0 +1,159 @@
+Continue the existing project.
+
+The Admin Dashboard layout is now complete.
+
+================================================
+
+TASK
+
+Build the Admin Dashboard Overview page.
+
+Do NOT build CRUD pages yet.
+
+================================================
+
+PAGE
+
+Route:
+
+/admin/dashboard
+
+Page title:
+
+"لوحة التحكم"
+
+Subtitle:
+
+"نظرة عامة على منصة مجددون"
+
+================================================
+
+STATISTICS CARDS
+
+Create professional statistic cards for:
+
+1. إجمالي المستخدمين
+2. إجمالي الأخبار
+3. إجمالي الفعاليات
+4. طلبات التطوع
+5. إجمالي التبرعات
+6. رسائل التواصل
+
+Each card should include:
+
+- Icon
+- Title
+- Value
+- Small trend indicator
+- Subtle hover animation
+
+Use realistic placeholder values for now.
+
+IMPORTANT:
+
+Clearly structure the cards so the placeholder values can later be replaced by Laravel API data.
+
+================================================
+
+CHARTS
+
+Create:
+
+1. Users Growth Chart
+
+Show user registrations over time.
+
+2. Donations Chart
+
+Show donations over time.
+
+3. Events / Volunteer Activity
+
+Show activity over time.
+
+Use a professional chart library already compatible with the project.
+
+Do NOT hardcode the architecture around mock data.
+
+Create reusable chart components.
+
+================================================
+
+RECENT ACTIVITY
+
+Create a "آخر النشاطات" section showing examples such as:
+
+- مستخدم جديد سجل في المنصة.
+- تم نشر خبر جديد.
+- تم إنشاء فعالية جديدة.
+- مستخدم تقدم بطلب تطوع.
+- تم استلام تبرع جديد.
+
+Each activity should include:
+
+- Icon
+- Description
+- Date/time
+- Status where appropriate
+
+================================================
+
+QUICK ACTIONS
+
+Create a "إجراءات سريعة" section with:
+
+- إضافة خبر
+- إضافة فعالية
+- إضافة برنامج
+- إضافة صورة
+- مراجعة طلبات التطوع
+
+These should be visually ready for future routing.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Statistics in a clean grid.
+- Charts arranged professionally.
+
+Tablet:
+- Adaptive grid.
+
+Mobile:
+- Single-column layout where necessary.
+- No horizontal scrolling.
+
+================================================
+
+API READY
+
+Create a clean service structure so the following can later be loaded from Laravel:
+
+- Dashboard statistics
+- Users statistics
+- News statistics
+- Events statistics
+- Donations statistics
+- Volunteer statistics
+- Recent activities
+- Chart data
+
+For now use temporary mock data only.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website.
+
+Do NOT modify Authentication.
+
+Do NOT implement CRUD.
+
+Do NOT create database changes.
+
+Do NOT hardcode mock data directly inside UI components.
+
+Keep the dashboard ready for Laravel API integration.

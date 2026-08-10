@@ -688,5 +688,48 @@
       "frequencyGroup": "اختر دورية التبرع",
       "amountGroup": "اختر مبلغ التبرع"
     }
+  },
+  "admin": {
+    "title": "لوحة التحكم",
+    "toggleSidebar": "تبديل الشريط الجانبي",
+    "comingSoon": "هذا القسم قيد الإنشاء وسيتوفر قريبًا.",
+    "nav": {
+      "label": "التنقل في لوحة التحكم",
+      "dashboard": "لوحة التحكم",
+      "users": "المستخدمون",
+      "news": "الأخبار",
+      "events": "الفعاليات",
+      "programs": "البرامج",
+      "gallery": "معرض الصور",
+      "partners": "الشركاء",
+      "faqs": "الأسئلة الشائعة",
+      "donations": "التبرعات",
+      "volunteerApplications": "طلبات التطوع",
+      "contactMessages": "رسائل التواصل",
+      "settings": "إعدادات الموقع"
+    },
+    "notifications": {
+      "label": "الإشعارات",
+      "empty": "لا توجد إشعارات جديدة."
+    },
+    "userMenu": {
+      "profile": "الملف الشخصي"
+    },
+    "roles": {
+      "admin": "مدير",
+      "moderator": "مشرف",
+      "volunteer": "متطوع",
+      "user": "مستخدم"
+    },
+    "welcome": {
+      "title": "مرحبًا بك في لوحة التحكم",
+      "subtitle": "إدارة منصة مجددون",
+      "greeting": "أهلًا، {name}"
+    }
+  },
+  "forbidden": {
+    "title": "غير مصرح بالوصول",
+    "description": "ليست لديك الصلاحيات اللازمة للوصول إلى هذه الصفحة.",
+    "backHome": "العودة إلى الرئيسية"
   }
 }

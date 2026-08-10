@@ -1,0 +1,165 @@
+Continue the existing project.
+
+Authentication is now completed and tested.
+
+We are now starting the Admin Dashboard.
+
+================================================
+
+TASK
+
+Create the complete Admin Dashboard layout only.
+
+Do NOT build the individual management pages yet.
+
+================================================
+
+ACCESS CONTROL
+
+- Only authenticated users with the Admin role can access the Admin Dashboard.
+- Non-authenticated users → redirect to Login.
+- Authenticated non-admin users → redirect to a 403 Unauthorized page.
+- Do not rely only on frontend checks; keep the structure ready for Laravel backend authorization.
+
+================================================
+
+LAYOUT
+
+Create a professional responsive Admin Dashboard containing:
+
+1. Sidebar
+2. Top Navbar
+3. Main Content Area
+4. Breadcrumbs
+5. Responsive Mobile Navigation
+
+================================================
+
+SIDEBAR
+
+Create navigation items for:
+
+- Dashboard
+- Users
+- News
+- Events
+- Programs
+- Gallery
+- Partners
+- FAQs
+- Donations
+- Volunteer Applications
+- Contact Messages
+- Website Settings
+
+Each item must have:
+
+- Professional icon
+- Label
+- Active state
+- Hover state
+
+The sidebar must:
+
+- Be collapsible on desktop.
+- Become a drawer on mobile.
+- Remember its collapsed/expanded state.
+- Support RTL correctly.
+
+================================================
+
+TOP NAVBAR
+
+Include:
+
+- Sidebar toggle button
+- Breadcrumb/page title
+- Search button/input
+- Notifications icon
+- Language switcher AR / EN
+- Admin avatar
+- Admin name
+- Admin role
+- User dropdown
+- Logout
+
+================================================
+
+MAIN CONTENT
+
+Create a reusable dashboard content container.
+
+Include a temporary welcome section:
+
+"مرحبًا بك في لوحة التحكم"
+
+"إدارة منصة مجددون"
+
+Do not create real statistics or CRUD functionality yet.
+
+================================================
+
+DESIGN
+
+Use the existing Majaddidun branding.
+
+Keep:
+
+- Existing colors
+- Existing typography
+- Existing logo
+- Existing spacing system
+- Existing border radius
+- Existing shadows
+
+The Admin Dashboard should feel like the same product but more professional and management-oriented.
+
+Do NOT redesign the public website.
+
+================================================
+
+RESPONSIVENESS
+
+Desktop:
+- Fixed/collapsible sidebar.
+- Full dashboard content.
+
+Tablet:
+- Collapsible sidebar.
+
+Mobile:
+- Sidebar becomes a drawer.
+- Navbar remains accessible.
+- Content adapts without horizontal scrolling.
+
+================================================
+
+ARCHITECTURE
+
+Use reusable components.
+
+Example:
+
+AdminLayout
+AdminSidebar
+AdminNavbar
+AdminBreadcrumbs
+AdminUserMenu
+AdminNotifications
+AdminMobileMenu
+
+Do not duplicate layout code.
+
+================================================
+
+IMPORTANT
+
+Do NOT create CRUD pages yet.
+
+Do NOT connect dashboard statistics to the API yet.
+
+Do NOT modify the existing public website.
+
+Do NOT modify the existing authentication pages.
+
+Only create the reusable Admin Dashboard layout and access control.
