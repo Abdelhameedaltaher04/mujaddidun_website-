@@ -38,6 +38,7 @@ import NotFound from '@/pages/not-found';
 
 import AdminDashboardPage from '@/pages/admin/AdminDashboardPage';
 import AdminComingSoonPage from '@/pages/admin/AdminComingSoonPage';
+import AdminUsersPage from '@/pages/admin/AdminUsersPage';
 import { AdminRoute } from '@/components/admin/AdminRoute';
 
 const queryClient = new QueryClient();
@@ -82,6 +83,9 @@ function Router() {
       </Route>
       <Route path="/admin/dashboard">
         <AdminRoute component={AdminDashboardPage} />
+      </Route>
+      <Route path="/admin/users">
+        <AdminRoute component={AdminUsersPage} />
       </Route>
       <Route path="/admin/*">
         <AdminRoute component={AdminComingSoonPage} />

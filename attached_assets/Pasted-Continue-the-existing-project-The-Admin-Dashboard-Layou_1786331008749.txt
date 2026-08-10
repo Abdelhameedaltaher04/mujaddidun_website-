@@ -1,0 +1,237 @@
+Continue the existing project.
+
+The Admin Dashboard Layout and Dashboard Overview are complete.
+
+================================================
+
+TASK
+
+Build the complete Users Management page.
+
+Route:
+
+/admin/users
+
+================================================
+
+USER LIST
+
+Create a professional users table containing:
+
+- Profile Picture
+- First Name
+- Last Name
+- Email
+- Phone Number
+- Role
+- Email Verification Status
+- Account Status
+- Registration Date
+- Actions
+
+================================================
+
+SEARCH & FILTERS
+
+Add:
+
+- Search by name
+- Search by email
+- Search by phone
+- Filter by role
+- Filter by account status
+- Filter by email verification status
+- Date filter
+- Clear filters button
+
+Search and filters should work together.
+
+================================================
+
+PAGINATION
+
+Implement:
+
+- Pagination
+- Items per page
+- Current page indicator
+- Previous / Next
+- Total results count
+
+Keep the structure ready for Laravel server-side pagination.
+
+================================================
+
+USER DETAILS
+
+When clicking a user:
+
+Open a professional user details page or modal containing:
+
+- Profile picture
+- Full name
+- Email
+- Phone
+- Country
+- Role
+- Account status
+- Email verification status
+- Registration date
+- Last activity
+- Relevant account information
+
+================================================
+
+USER ACTIONS
+
+Provide actions:
+
+- View
+- Edit
+- Activate
+- Deactivate
+- Change Role
+- Delete
+
+Dangerous actions must require confirmation.
+
+Use professional confirmation dialogs.
+
+================================================
+
+EDIT USER
+
+Allow Admin to edit:
+
+- First Name
+- Last Name
+- Phone
+- Role
+- Account Status
+
+Do not allow Admin to directly edit the user's password.
+
+================================================
+
+ROLES
+
+Support:
+
+- Admin
+- Moderator
+- Volunteer
+- User
+
+Role changes must require confirmation.
+
+================================================
+
+ACCOUNT STATUS
+
+Support:
+
+- Active
+- Suspended
+
+When suspending a user:
+
+- Show confirmation dialog.
+- Explain that the user will no longer be able to access protected features.
+- Revoke active authentication tokens through the backend when API integration is available.
+
+================================================
+
+DELETE USER
+
+Before deleting:
+
+Show a confirmation dialog.
+
+Example:
+
+"هل أنت متأكد من حذف هذا المستخدم؟ لا يمكن التراجع عن هذا الإجراء."
+
+Do not delete immediately.
+
+================================================
+
+EMPTY STATE
+
+If there are no users:
+
+Display a professional empty state:
+
+"لا يوجد مستخدمون حتى الآن."
+
+================================================
+
+LOADING & ERROR STATES
+
+Add:
+
+- Skeleton loading
+- Loading indicators
+- API error state
+- Retry button
+- Empty state
+
+Do not show generic errors when Laravel provides a specific error.
+
+================================================
+
+API READY
+
+Create a dedicated users service.
+
+Prepare endpoints for:
+
+GET    /users
+GET    /users/{id}
+POST   /users
+PUT    /users/{id}
+PATCH  /users/{id}/status
+PATCH  /users/{id}/role
+DELETE /users/{id}
+
+Do not hardcode API responses inside UI components.
+
+Keep the page ready for Laravel API integration.
+
+================================================
+
+ACCESS CONTROL
+
+Only Admin users can access this page.
+
+Non-admin users must receive 403 access handling.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Full table.
+
+Tablet:
+- Responsive table with horizontal scrolling only inside the table container.
+
+Mobile:
+- Convert each user row into a clean responsive card/list where appropriate.
+
+Do not cause horizontal scrolling on the entire page.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website.
+
+Do NOT modify Authentication.
+
+Do NOT modify the Dashboard Overview.
+
+Do NOT create database migrations.
+
+Do NOT use fake backend authentication.
+
+Build the complete Users Management frontend and keep it fully ready for the Laravel API.
