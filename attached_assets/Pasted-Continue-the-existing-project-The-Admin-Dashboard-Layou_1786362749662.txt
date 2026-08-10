@@ -1,0 +1,261 @@
+Continue the existing project.
+
+The Admin Dashboard Layout, Dashboard Overview, Users, News, Events, and Programs Management are complete.
+
+================================================
+
+TASK
+
+Build the complete Gallery Management module for the Admin Dashboard.
+
+Route:
+
+/admin/gallery
+
+================================================
+
+GALLERY STRUCTURE
+
+Use an album-based gallery system.
+
+Create two levels:
+
+1. Albums
+2. Images inside each album
+
+================================================
+
+ALBUMS
+
+Display albums in a professional grid containing:
+
+- Cover Image
+- Album Title
+- Number of Images
+- Album Status
+- Created Date
+- Last Updated
+- Actions
+
+Statuses:
+
+- Published
+- Draft
+- Archived
+
+================================================
+
+CREATE ALBUM
+
+Fields:
+
+- Album Title Arabic
+- Album Title English
+- Description Arabic
+- Description English
+- Cover Image
+- Status
+
+Requirements:
+
+- Arabic and English support.
+- Required title validation.
+- Cover image preview.
+- JPG / PNG / WEBP.
+- Maximum 5MB.
+- Save as Draft.
+- Publish.
+
+================================================
+
+ALBUM DETAILS
+
+When opening an album:
+
+Display all images in a professional responsive grid.
+
+Each image should support:
+
+- Preview
+- Edit metadata
+- Replace
+- Delete
+- Set as album cover
+
+================================================
+
+IMAGE UPLOAD
+
+Implement a professional image uploader.
+
+Support:
+
+- Multiple image upload
+- Drag & Drop
+- Upload progress
+- Image previews before upload
+- Remove selected images before saving
+- JPG
+- PNG
+- WEBP
+- Maximum 5MB per image
+
+================================================
+
+IMAGE METADATA
+
+Each image can have:
+
+- Title Arabic
+- Title English
+- Alt Text Arabic
+- Alt Text English
+- Caption Arabic
+- Caption English
+
+Alt text is required for accessibility.
+
+================================================
+
+IMAGE VIEWER
+
+When Admin clicks an image:
+
+Open a fullscreen lightbox.
+
+Support:
+
+- Previous
+- Next
+- Close
+- Zoom
+- Image counter
+
+Example:
+
+1 / 12
+
+================================================
+
+ALBUM ACTIONS
+
+Provide:
+
+- View
+- Edit
+- Publish
+- Unpublish
+- Archive
+- Set Cover
+- Delete
+
+Dangerous actions require confirmation.
+
+================================================
+
+SEARCH & FILTERS
+
+For albums:
+
+- Search by title
+- Filter by status
+- Filter by date
+- Clear filters
+
+================================================
+
+PAGINATION
+
+Implement:
+
+- Pagination
+- Items per page
+- Current page
+- Previous / Next
+- Total results
+
+Keep the structure ready for Laravel server-side pagination.
+
+================================================
+
+LOADING & ERROR STATES
+
+Add:
+
+- Skeleton loading
+- Empty state
+- API error state
+- Retry button
+- Upload loading
+- Upload error
+- Delete loading
+
+================================================
+
+API READY
+
+Create dedicated services for:
+
+- Gallery Albums
+- Gallery Images
+
+Prepare endpoints:
+
+GET    /gallery/albums
+GET    /gallery/albums/{id}
+POST   /gallery/albums
+PUT    /gallery/albums/{id}
+DELETE /gallery/albums/{id}
+
+Images:
+
+GET    /gallery/albums/{id}/images
+POST   /gallery/albums/{id}/images
+PUT    /gallery/images/{id}
+DELETE /gallery/images/{id}
+PATCH  /gallery/images/{id}/cover
+
+Do not put API calls directly inside UI components.
+
+================================================
+
+ACCESS CONTROL
+
+Only Admin and authorized Moderator users can manage the gallery.
+
+Keep the structure ready for Laravel Policies and Permissions.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Professional album grid.
+
+Tablet:
+- Adaptive grid.
+
+Mobile:
+- Single/two-column layout depending on screen size.
+
+The entire page must remain responsive without horizontal scrolling.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website.
+
+Do NOT modify Authentication.
+
+Do NOT modify Users, News, Events, or Programs.
+
+Do NOT create database migrations.
+
+Do NOT connect the API yet.
+
+Use temporary mock data only where necessary.
+
+Keep everything ready for Laravel API integration.
+
+Build the complete Gallery Management module.

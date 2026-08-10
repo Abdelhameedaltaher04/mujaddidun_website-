@@ -47,6 +47,8 @@ import AdminEventRegistrationsPage from '@/pages/admin/AdminEventRegistrationsPa
 import AdminProgramsPage from '@/pages/admin/AdminProgramsPage';
 import AdminProgramFormPage from '@/pages/admin/AdminProgramFormPage';
 import AdminProgramParticipantsPage from '@/pages/admin/AdminProgramParticipantsPage';
+import AdminGalleryPage from '@/pages/admin/AdminGalleryPage';
+import AdminAlbumDetailsPage from '@/pages/admin/AdminAlbumDetailsPage';
 import { AdminRoute } from '@/components/admin/AdminRoute';
 
 const queryClient = new QueryClient();
@@ -155,6 +157,18 @@ function Router() {
       <Route path="/admin/programs/:id/participants">
         <AdminRoute
           component={AdminProgramParticipantsPage}
+          roles={['admin', 'moderator']}
+        />
+      </Route>
+      <Route path="/admin/gallery">
+        <AdminRoute
+          component={AdminGalleryPage}
+          roles={['admin', 'moderator']}
+        />
+      </Route>
+      <Route path="/admin/gallery/:id">
+        <AdminRoute
+          component={AdminAlbumDetailsPage}
           roles={['admin', 'moderator']}
         />
       </Route>
