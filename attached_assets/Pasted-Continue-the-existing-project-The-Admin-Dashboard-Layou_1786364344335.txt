@@ -1,0 +1,231 @@
+Continue the existing project.
+
+The Admin Dashboard Layout, Dashboard Overview, Users, News, Events, Programs, and Gallery Management are complete.
+
+================================================
+
+TASK
+
+Build the complete Partners Management module for the Admin Dashboard.
+
+Route:
+
+/admin/partners
+
+================================================
+
+PARTNERS LIST
+
+Display partners in a professional responsive table/grid containing:
+
+- Partner Logo
+- Partner Name
+- Partner Type
+- Website
+- Display Order
+- Status
+- Created Date
+- Actions
+
+Statuses:
+
+- Active
+- Inactive
+
+================================================
+
+CREATE PARTNER
+
+Create an "Add Partner" form.
+
+Fields:
+
+- Partner Name Arabic
+- Partner Name English
+- Partner Logo
+- Partner Type
+- Website URL
+- Short Description Arabic
+- Short Description English
+- Display Order
+- Status
+
+Requirements:
+
+- Arabic and English support.
+- Partner Name is required.
+- Logo is required.
+- Website URL must be valid when provided.
+- Display Order must be a positive number.
+- Preview logo before saving.
+- Save as Active or Inactive.
+
+================================================
+
+PARTNER LOGO
+
+Requirements:
+
+- JPG
+- PNG
+- WEBP
+- SVG
+- Maximum 5MB
+- Preview before upload
+- Replace logo
+- Remove logo
+
+The logo should maintain its aspect ratio and display professionally without distortion.
+
+================================================
+
+DISPLAY ORDER
+
+Allow Admin to control the order in which partners appear on the public website.
+
+Provide:
+
+- Display Order field.
+- Drag & Drop reordering if practical.
+- Save ordering.
+
+The structure must support the existing public Partners slider.
+
+================================================
+
+EDIT PARTNER
+
+Allow Admin to edit:
+
+- Name
+- Logo
+- Type
+- Website
+- Description
+- Display Order
+- Status
+
+Use the same reusable form for Create and Edit.
+
+================================================
+
+PARTNER PREVIEW
+
+Provide a preview showing how the partner will appear on the public website.
+
+The preview should match the existing Partners slider/card design.
+
+================================================
+
+ACTIONS
+
+Provide:
+
+- View
+- Edit
+- Activate
+- Deactivate
+- Delete
+
+Dangerous actions require confirmation.
+
+================================================
+
+SEARCH & FILTERS
+
+Add:
+
+- Search by partner name
+- Filter by type
+- Filter by status
+- Clear filters
+
+================================================
+
+PAGINATION
+
+Implement:
+
+- Pagination
+- Items per page
+- Current page
+- Previous / Next
+- Total results
+
+Keep it ready for Laravel server-side pagination.
+
+================================================
+
+LOADING & ERROR STATES
+
+Add:
+
+- Skeleton loading
+- Empty state
+- API error state
+- Retry button
+- Upload loading
+- Form submission loading
+
+Display backend validation errors under the relevant fields.
+
+================================================
+
+API READY
+
+Create a dedicated Partners service.
+
+Prepare endpoints:
+
+GET    /partners
+GET    /partners/{id}
+POST   /partners
+PUT    /partners/{id}
+PATCH  /partners/{id}/status
+PATCH  /partners/reorder
+DELETE /partners/{id}
+
+Do not place API calls directly inside UI components.
+
+================================================
+
+ACCESS CONTROL
+
+Only Admin and authorized Moderator users can manage Partners.
+
+Keep the structure ready for Laravel Policies and Permissions.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Professional table or grid.
+
+Tablet:
+- Adaptive layout.
+
+Mobile:
+- Clean cards/list.
+
+Do not cause horizontal scrolling on the entire page.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website.
+
+Do NOT modify Authentication.
+
+Do NOT modify Users, News, Events, Programs, or Gallery.
+
+Do NOT create database migrations.
+
+Do NOT connect the API yet.
+
+Use temporary mock data only where necessary.
+
+Keep everything ready for Laravel API integration.
+
+Build the complete Partners Management module.
