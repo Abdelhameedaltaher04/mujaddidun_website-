@@ -21,6 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // This API uses Sanctum personal access tokens in the Authorization
         // header. Cookie-based SPA statefulness would incorrectly require a
         // CSRF token for public JSON endpoints such as registration.
+        $middleware->alias([
+            'active' => \App\Http\Middleware\EnsureUserIsActive::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(function (Request $request, \Throwable $e): bool {

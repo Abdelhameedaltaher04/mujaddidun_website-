@@ -1,0 +1,93 @@
+Continue the existing project.
+
+We previously fixed the Laravel SQLite "cache" table issue.
+
+Now perform a complete end-to-end Authentication verification.
+
+================================================
+
+TEST THE REAL AUTHENTICATION FLOW
+
+1. Registration
+
+Test creating a real user with:
+
+- First Name
+- Last Name
+- Email
+- Country Code
+- Phone Number
+- Password
+- Confirm Password
+
+Verify that the user is actually stored in the Laravel database.
+
+2. Email Verification
+
+Verify that Laravel generates a real verification link.
+
+Verify that the verification link:
+
+- Is signed correctly.
+- Is not a frontend placeholder.
+- Correctly marks the user's email as verified.
+
+3. Login
+
+Test login using the newly created account.
+
+Verify:
+
+- Correct credentials → successful login.
+- Wrong password → correct error.
+- Non-existing email → correct error.
+- Unverified email → blocked with the correct message.
+- Disabled account → blocked correctly.
+
+4. Remember Me
+
+Verify that the Remember Me option actually persists authentication according to the current Sanctum token implementation.
+
+5. Logout
+
+Verify:
+
+- Token is revoked/removed.
+- User becomes unauthenticated.
+- Protected pages cannot be accessed afterward.
+
+6. Protected Routes
+
+Verify that unauthenticated users cannot access protected pages.
+
+Verify that authenticated users can access them.
+
+7. Session Expiration
+
+Verify that expired authentication is handled correctly and redirects the user to Login.
+
+8. Rate Limiting
+
+Verify Laravel rate limiting for repeated failed login attempts.
+
+================================================
+
+IMPORTANT
+
+Do not redesign any UI.
+
+Do not add new features.
+
+Do not use mock authentication.
+
+Use the real Laravel backend, database, and Sanctum authentication.
+
+If anything fails, identify the exact root cause and fix it.
+
+After fixing, run the complete authentication flow again.
+
+At the end, provide a clear checklist showing:
+
+PASS / FAIL
+
+for each authentication feature.

@@ -35,3 +35,18 @@ frontend's Sanctum token flow.
 **How to apply:** Preserve the `email_verified_at` check in login, use signed
 verification URLs with the configured expiry, and keep resend requests
 throttled.
+
+Disabling an account must invalidate access immediately: login returns 403
+`account_disabled` when the password is correct but status isn't active, and an
+`active` middleware after `auth:sanctum` rejects and revokes pre-existing tokens.
+
+**Why:** A code-review round caught that suspended users' previously issued
+bearer tokens kept working on all protected endpoints — a serious authorization
+gap. The 403 only fires after a correct password, so it isn't an
+account-existence oracle.
+
+**How to apply:** Keep `['auth:sanctum', 'active']` on every protected group.
+Rate-limited auth routes (`throttle:` middleware) require the `cache`/`cache_locks`
+tables when the cache store is `database` — the migration must exist or throttled
+routes 500. In feature tests, flush guards (`$this->app['auth']->forgetGuards()`)
+before re-asserting auth state within one test.

@@ -52,8 +52,12 @@ class AuthService
     {
         $user = User::query()->with('role')->where('email', $email)->first();
 
-        if (! $user || $user->status !== 'active' || ! Hash::check($password, $user->password)) {
+        if (! $user || ! Hash::check($password, $user->password)) {
             return null;
+        }
+
+        if ($user->status !== 'active') {
+            return ['account_disabled' => true];
         }
 
         if (! $user->hasVerifiedEmail()) {

@@ -130,6 +130,38 @@ class AuthApiTest extends TestCase
             ->assertUnauthorized();
     }
 
+    public function test_a_suspended_users_existing_token_is_rejected_and_revoked(): void
+    {
+        $user = User::factory()->create([
+            'role_id' => Role::where('slug', 'user')->value('id'),
+            'email' => 'suspended-token@example.com',
+            'password' => Hash::make('StrongPassword1!'),
+            'status' => 'active',
+        ]);
+
+        $token = $this->postJson('/api/v1/auth/login', [
+            'email' => 'suspended-token@example.com',
+            'password' => 'StrongPassword1!',
+        ])->json('data.token');
+
+        $user->forceFill(['status' => 'suspended'])->save();
+
+        $this->withHeader('Authorization', "Bearer {$token}")
+            ->getJson('/api/v1/auth/me')
+            ->assertForbidden()
+            ->assertJsonPath('errors.code.0', 'account_disabled');
+
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+
+        // The revoked token stays dead even after re-activation.
+        $user->forceFill(['status' => 'active'])->save();
+        $this->app['auth']->forgetGuards();
+
+        $this->withHeader('Authorization', "Bearer {$token}")
+            ->getJson('/api/v1/auth/me')
+            ->assertUnauthorized();
+    }
+
     public function test_inactive_users_cannot_login(): void
     {
         User::factory()->create([
@@ -143,8 +175,9 @@ class AuthApiTest extends TestCase
             'email' => 'inactive@example.com',
             'password' => 'StrongPassword1!',
         ])
-            ->assertUnauthorized()
-            ->assertJsonPath('success', false);
+            ->assertForbidden()
+            ->assertJsonPath('success', false)
+            ->assertJsonPath('errors.code.0', 'account_disabled');
     }
 
     public function test_unverified_users_cannot_login(): void

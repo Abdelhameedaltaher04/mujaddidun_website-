@@ -52,6 +52,14 @@ class AuthController extends BaseController
             );
         }
 
+        if ($result['account_disabled'] ?? false) {
+            return $this->error(
+                'This account has been disabled.',
+                ['code' => ['account_disabled']],
+                403,
+            );
+        }
+
         if ($result['email_not_verified'] ?? false) {
             return $this->error(
                 'Email address is not verified.',
