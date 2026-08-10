@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Users\ProfileController;
+use App\Http\Controllers\Api\V1\Users\UserAdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,4 +50,12 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::post('/profile', [ProfileController::class, 'update']);
     Route::delete('/profile/avatar', [ProfileController::class, 'removeAvatar']);
     Route::post('/profile/password', [ProfileController::class, 'changePassword']);
+
+    // Admin users management (authorization enforced by UserPolicy).
+    Route::get('/users', [UserAdminController::class, 'index']);
+    Route::get('/users/{user}', [UserAdminController::class, 'show'])->whereNumber('user');
+    Route::put('/users/{user}', [UserAdminController::class, 'update'])->whereNumber('user');
+    Route::patch('/users/{user}/status', [UserAdminController::class, 'updateStatus'])->whereNumber('user');
+    Route::patch('/users/{user}/role', [UserAdminController::class, 'updateRole'])->whereNumber('user');
+    Route::delete('/users/{user}', [UserAdminController::class, 'destroy'])->whereNumber('user');
 });

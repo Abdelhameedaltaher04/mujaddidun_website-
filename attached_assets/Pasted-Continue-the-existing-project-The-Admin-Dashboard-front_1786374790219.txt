@@ -1,0 +1,205 @@
+Continue the existing project.
+
+The Admin Dashboard frontend modules are now complete.
+
+We are now starting the REAL Laravel API integration.
+
+================================================
+
+TASK
+
+Connect the Admin Dashboard to the existing Laravel backend.
+
+Start with the Users Management module ONLY.
+
+Do not connect the other modules yet.
+
+================================================
+
+BACKEND
+
+Use the existing Laravel backend.
+
+Authentication is already implemented using:
+
+- Laravel Sanctum API Bearer Tokens
+
+Do NOT create a second authentication system.
+
+================================================
+
+USERS API
+
+Implement the real Laravel API endpoints for Users Management:
+
+GET    /api/v1/users
+GET    /api/v1/users/{id}
+PUT    /api/v1/users/{id}
+PATCH  /api/v1/users/{id}/status
+PATCH  /api/v1/users/{id}/role
+DELETE /api/v1/users/{id}
+
+================================================
+
+DATABASE
+
+Use the existing users table and existing database.
+
+Do NOT create a duplicate users table.
+
+If a required column is missing, identify it first and create the appropriate Laravel migration.
+
+Do NOT delete existing user data.
+
+================================================
+
+LARAVEL
+
+Implement:
+
+- Controllers
+- Form Requests
+- API Resources
+- Policies
+- Routes
+- Validation
+- Proper HTTP status codes
+
+Use Laravel best practices.
+
+================================================
+
+AUTHORIZATION
+
+Only Admin users can:
+
+- Edit users
+- Change roles
+- Activate/deactivate users
+- Delete users
+
+Moderators should not have destructive user-management permissions.
+
+Unauthorized requests must return:
+
+403 Forbidden
+
+================================================
+
+PAGINATION
+
+Implement server-side pagination.
+
+Support:
+
+- page
+- per_page
+
+Return pagination metadata.
+
+================================================
+
+SEARCH & FILTERS
+
+Implement server-side:
+
+- Search by name
+- Search by email
+- Search by phone
+- Filter by role
+- Filter by status
+- Filter by email verification status
+- Date filtering
+
+Do not filter only on the frontend.
+
+================================================
+
+API RESPONSE
+
+Use a consistent JSON response structure.
+
+Example:
+
+{
+  "success": true,
+  "message": "Users retrieved successfully.",
+  "data": [],
+  "meta": {}
+}
+
+Validation errors:
+
+{
+  "success": false,
+  "message": "Validation failed.",
+  "errors": {}
+}
+
+================================================
+
+FRONTEND
+
+Connect the existing Users Management page to the real API.
+
+Replace mock data completely.
+
+Use the existing centralized Axios/API client.
+
+Do NOT put API requests directly inside UI components.
+
+Create/use:
+
+services/users.ts
+
+================================================
+
+LOADING & ERROR STATES
+
+Keep the existing:
+
+- Skeleton loading
+- Empty state
+- Error state
+- Retry
+- Confirmation dialogs
+
+Display real Laravel validation/API errors.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the existing UI design.
+
+Do NOT modify Authentication.
+
+Do NOT connect News, Events, Programs, Gallery, Partners, FAQs, Donations, Volunteers, or Messages yet.
+
+Do NOT create duplicate backend functionality.
+
+Do NOT use mock data.
+
+Use the real Laravel backend and database.
+
+================================================
+
+TESTING
+
+After implementation, test:
+
+1. Admin can retrieve users.
+2. Admin can search users.
+3. Admin can filter users.
+4. Pagination works.
+5. Admin can view a user.
+6. Admin can edit a user.
+7. Admin can change role.
+8. Admin can activate/deactivate a user.
+9. Admin can delete a user.
+10. Non-admin users receive 403.
+11. Unauthenticated users receive 401.
+
+Fix any issues found.
+
+At the end, provide a clear PASS/FAIL checklist.

@@ -1,21 +1,15 @@
 /**
- * Admin users management service.
+ * Admin users management service — connected to the real Laravel API.
  *
- * Every function mirrors the future Laravel endpoint noted alongside it and
- * already accepts/returns the exact payload shapes (including Laravel-style
- * pagination meta), so the API swap only replaces the mock calls with
- * `apiClient` requests — no component changes.
- *
- * Future endpoints:
- *   GET    /users            (list; server-side filters + pagination)
+ * Laravel endpoints (all under /api/v1, Sanctum bearer auth, admin policy):
+ *   GET    /users            (server-side filters + pagination)
  *   GET    /users/{id}
- *   POST   /users
  *   PUT    /users/{id}
  *   PATCH  /users/{id}/status
  *   PATCH  /users/{id}/role
  *   DELETE /users/{id}
  */
-import { mockUsersDb } from './mocks/adminUsersMock';
+import { apiClient, type ApiEnvelope } from './api';
 
 export type UserRoleSlug = 'admin' | 'moderator' | 'volunteer' | 'user';
 export type UserStatus = 'active' | 'suspended';
@@ -83,36 +77,56 @@ export const ROLE_SLUGS: UserRoleSlug[] = [
   'user',
 ];
 
+type ListEnvelope = ApiEnvelope<AdminUser[]> & {
+  meta: PaginatedResponse<AdminUser>['meta'];
+};
+
 export const adminUsersApi = {
   /** GET /users */
   async listUsers(
     params: UsersListParams,
   ): Promise<PaginatedResponse<AdminUser>> {
-    return mockUsersDb.list(params);
+    const response = await apiClient.get<ListEnvelope>('/users', { params });
+    return { data: response.data.data, meta: response.data.meta };
   },
 
   /** GET /users/{id} */
   async getUser(id: number): Promise<AdminUser> {
-    return mockUsersDb.get(id);
+    const response = await apiClient.get<ApiEnvelope<AdminUser>>(
+      `/users/${id}`,
+    );
+    return response.data.data;
   },
 
   /** PUT /users/{id} */
   async updateUser(id: number, input: UpdateUserInput): Promise<AdminUser> {
-    return mockUsersDb.update(id, input);
+    const response = await apiClient.put<ApiEnvelope<AdminUser>>(
+      `/users/${id}`,
+      input,
+    );
+    return response.data.data;
   },
 
-  /** PATCH /users/{id}/status — backend must also revoke tokens on suspend. */
+  /** PATCH /users/{id}/status — the backend revokes tokens on suspend. */
   async updateUserStatus(id: number, status: UserStatus): Promise<AdminUser> {
-    return mockUsersDb.update(id, { status });
+    const response = await apiClient.patch<ApiEnvelope<AdminUser>>(
+      `/users/${id}/status`,
+      { status },
+    );
+    return response.data.data;
   },
 
   /** PATCH /users/{id}/role */
   async updateUserRole(id: number, role: UserRoleSlug): Promise<AdminUser> {
-    return mockUsersDb.update(id, { role });
+    const response = await apiClient.patch<ApiEnvelope<AdminUser>>(
+      `/users/${id}/role`,
+      { role },
+    );
+    return response.data.data;
   },
 
   /** DELETE /users/{id} */
   async deleteUser(id: number): Promise<void> {
-    return mockUsersDb.remove(id);
+    await apiClient.delete(`/users/${id}`);
   },
 };

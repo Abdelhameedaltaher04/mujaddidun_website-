@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Support\ApiResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 
 abstract class BaseController extends Controller
 {
+    use AuthorizesRequests;
+
     protected function success(
         mixed $data = null,
         string $message = 'Request completed successfully.',

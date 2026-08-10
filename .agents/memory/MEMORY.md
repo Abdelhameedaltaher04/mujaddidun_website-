@@ -10,4 +10,5 @@
 - [Tiptap v3 editor](tiptap-editor.md) — StarterKit bundles Link (no separate extension) and setContent takes an options object, not a boolean.
 - [Authentication UI validation](authentication-ui-validation.md) — auth failures render inline field/form feedback; success states remain dialogs and shared controls own loading/disabled behavior.
 - [Gallery cover invariant](gallery-cover-invariant.md) — album cover is custom file OR one is_cover image, never both; every cover mutation must preserve this.
+- [Laravel feature test gotchas](laravel-feature-tests.md) — guard caching between in-test requests, SQLite LIKE needs explicit ESCAPE, timestamps aren't fillable.
 - [Responsive duplicate test ids](responsive-testids.md) — desktop table and mobile card action buttons need distinct data-testids (suffix mobile with `-mobile`) or UI tests stall.
