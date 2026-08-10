@@ -1,0 +1,233 @@
+Continue the existing project.
+
+The Users Management module is now successfully connected to the real Laravel API.
+
+================================================
+
+TASK
+
+Connect the News Management module to the real Laravel backend.
+
+Do NOT modify the existing UI design.
+
+Do NOT modify Authentication or Users Management.
+
+================================================
+
+BACKEND
+
+Use the existing Laravel backend, database, Sanctum authentication, API versioning, authorization, and response structure.
+
+Do NOT create duplicate systems.
+
+================================================
+
+NEWS API
+
+Implement:
+
+GET    /api/v1/news
+GET    /api/v1/news/{id}
+POST   /api/v1/news
+PUT    /api/v1/news/{id}
+PATCH  /api/v1/news/{id}/publish
+PATCH  /api/v1/news/{id}/unpublish
+PATCH  /api/v1/news/{id}/archive
+DELETE /api/v1/news/{id}
+
+================================================
+
+DATABASE
+
+Use the existing database architecture.
+
+If the required News tables or Category tables do not exist yet:
+
+- Create proper Laravel migrations.
+- Create Models.
+- Create relationships.
+- Add appropriate indexes and foreign keys.
+
+Do NOT delete existing data.
+
+================================================
+
+NEWS MODEL
+
+Support:
+
+- Arabic title
+- English title
+- Arabic short description
+- English short description
+- Arabic content
+- English content
+- Featured image
+- Category
+- Author
+- Status
+- Publication date
+
+Statuses:
+
+- Draft
+- Published
+- Archived
+
+================================================
+
+VALIDATION
+
+Use Laravel Form Requests.
+
+Validate:
+
+- Required titles
+- Required content
+- Valid category
+- Valid publication date
+- Valid image type
+- Maximum image size
+
+Return validation errors using the existing API response format.
+
+================================================
+
+IMAGE STORAGE
+
+Use Laravel Storage for the featured image.
+
+Support:
+
+- JPG
+- PNG
+- WEBP
+
+Maximum 5MB.
+
+Do not store unnecessary image binaries directly in the database.
+
+Return the correct public image URL to the frontend.
+
+================================================
+
+AUTHORIZATION
+
+Use Laravel Policies.
+
+Only authorized Admin/Moderator users can:
+
+- Create news
+- Edit news
+- Publish
+- Unpublish
+- Archive
+- Delete
+
+Unauthorized requests must return:
+
+403 Forbidden
+
+================================================
+
+SEARCH & FILTERING
+
+Implement server-side:
+
+- Search by title
+- Category filter
+- Status filter
+- Date filter
+
+================================================
+
+PAGINATION
+
+Implement server-side pagination.
+
+Support:
+
+- page
+- per_page
+
+Return pagination metadata.
+
+================================================
+
+API RESOURCES
+
+Use Laravel API Resources for News responses.
+
+Return consistent JSON.
+
+Example:
+
+{
+  "success": true,
+  "message": "News retrieved successfully.",
+  "data": {},
+  "meta": {}
+}
+
+================================================
+
+FRONTEND
+
+Connect the existing News Management page to the real API.
+
+Replace all mock data.
+
+Create/use:
+
+services/news.ts
+
+Do not put API requests directly inside UI components.
+
+================================================
+
+LOADING & ERRORS
+
+Keep the existing:
+
+- Skeleton loading
+- Empty state
+- Error state
+- Retry
+- Form loading
+- Upload progress
+- Confirmation dialogs
+
+Display real Laravel validation errors.
+
+================================================
+
+PUBLIC WEBSITE
+
+Do NOT connect or modify the public News section yet.
+
+The Admin News module should be fully functional first.
+
+================================================
+
+TESTING
+
+Test the complete flow:
+
+1. Admin retrieves news.
+2. Admin searches news.
+3. Admin filters news.
+4. Pagination works.
+5. Admin opens news details.
+6. Admin creates Draft news.
+7. Admin edits news.
+8. Admin uploads featured image.
+9. Admin publishes news.
+10. Admin unpublishes news.
+11. Admin archives news.
+12. Admin deletes news.
+13. Unauthorized users receive 403.
+14. Unauthenticated users receive 401.
+
+Fix any issues found.
+
+At the end, provide a PASS/FAIL checklist.

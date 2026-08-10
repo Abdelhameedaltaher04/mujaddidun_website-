@@ -36,6 +36,16 @@ import type {
 
 type DialogKind = 'view' | 'publish' | 'archive' | 'delete' | null;
 
+/**
+ * Native date inputs emit transient values while typing the year
+ * (e.g. 0002-08-10); only forward plausible, complete dates to the API.
+ */
+function completeDate(value: string): string | undefined {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value) && value >= '1900-01-01'
+    ? value
+    : undefined;
+}
+
 /** News management list: search/filter, paginate, preview, act. */
 export default function AdminNewsPage() {
   const { t } = useLocale();
@@ -57,8 +67,8 @@ export default function AdminNewsPage() {
           : undefined,
       status:
         filters.status !== 'all' ? (filters.status as NewsStatus) : undefined,
-      published_from: filters.publishedFrom || undefined,
-      published_to: filters.publishedTo || undefined,
+      published_from: completeDate(filters.publishedFrom),
+      published_to: completeDate(filters.publishedTo),
       page,
       per_page: perPage,
     }),

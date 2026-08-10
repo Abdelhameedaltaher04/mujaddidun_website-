@@ -1,23 +1,21 @@
 /**
- * Admin news management service.
+ * Admin news management service — connected to the real Laravel API.
  *
- * Functions mirror the future Laravel endpoints noted alongside them and
- * use the exact payload shapes (Laravel paginator envelope, multipart-ready
- * create/update inputs), so the API swap replaces only the mock calls with
- * `apiClient` requests.
- *
- * Future endpoints:
- *   GET    /news            (list; server-side filters + pagination)
+ * Laravel endpoints (all under /api/v1, Sanctum bearer auth, NewsPolicy —
+ * admins and moderators):
+ *   GET    /news              (server-side filters + pagination)
  *   GET    /news/{id}
- *   POST   /news            (multipart when featured_image present)
- *   PUT    /news/{id}
- *   PATCH  /news/{id}/publish    { publish: boolean }
+ *   POST   /news              (multipart when an image is attached)
+ *   PUT    /news/{id}         (sent as POST + _method=PUT for multipart)
+ *   PATCH  /news/{id}/publish
+ *   PATCH  /news/{id}/unpublish
  *   PATCH  /news/{id}/archive
  *   DELETE /news/{id}
  */
-import { mockNewsDb } from './mocks/adminNewsMock';
+import { apiClient, type ApiEnvelope } from './api';
 
 export type NewsStatus = 'draft' | 'published' | 'archived';
+
 export type NewsCategorySlug =
   | 'announcements'
   | 'activities'
@@ -33,7 +31,6 @@ export const NEWS_CATEGORIES: NewsCategorySlug[] = [
 
 export const NEWS_TITLE_MAX = 150;
 export const NEWS_EXCERPT_MAX = 300;
-/** JPG / PNG / WEBP up to 5MB. */
 export const NEWS_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 export const NEWS_IMAGE_MAX_BYTES = 5 * 1024 * 1024;
 
@@ -43,14 +40,12 @@ export interface NewsArticle {
   title_en: string;
   excerpt_ar: string;
   excerpt_en: string;
-  /** Sanitized HTML from the rich text editor. */
   content_ar: string;
   content_en: string;
   category: NewsCategorySlug;
   author: string;
   status: NewsStatus;
   featured_image_url: string | null;
-  /** ISO date; set when publishing (scheduled or actual). */
   published_at: string | null;
   created_at: string;
   updated_at: string;
@@ -78,10 +73,6 @@ export interface PaginatedResponse<T> {
   };
 }
 
-/**
- * Create/update payload. `featured_image` becomes a multipart file upload
- * against Laravel; `remove_featured_image` clears an existing image.
- */
 export interface NewsInput {
   title_ar: string;
   title_en: string;
@@ -97,41 +88,86 @@ export interface NewsInput {
   remove_featured_image: boolean;
 }
 
+type ListEnvelope = ApiEnvelope<NewsArticle[]> & {
+  meta: PaginatedResponse<NewsArticle>['meta'];
+};
+
+/** Laravel multipart body for create/update. */
+function buildFormData(input: NewsInput, method?: 'PUT'): FormData {
+  const form = new FormData();
+  if (method) form.append('_method', method);
+  form.append('title_ar', input.title_ar);
+  form.append('title_en', input.title_en);
+  form.append('excerpt_ar', input.excerpt_ar);
+  form.append('excerpt_en', input.excerpt_en);
+  form.append('content_ar', input.content_ar);
+  form.append('content_en', input.content_en);
+  form.append('category', input.category);
+  form.append('author', input.author);
+  form.append('status', input.status);
+  // Always sent: Laravel converts '' to null, so an explicit empty value
+  // clears the date while an omitted field would keep the stored one.
+  form.append('published_at', input.published_at ?? '');
+  if (input.featured_image) {
+    form.append('featured_image', input.featured_image);
+  }
+  form.append('remove_featured_image', input.remove_featured_image ? '1' : '0');
+  return form;
+}
+
 export const adminNewsApi = {
   /** GET /news */
   async listNews(
     params: NewsListParams,
   ): Promise<PaginatedResponse<NewsArticle>> {
-    return mockNewsDb.list(params);
+    const response = await apiClient.get<ListEnvelope>('/news', { params });
+    return { data: response.data.data, meta: response.data.meta };
   },
 
   /** GET /news/{id} */
   async getNews(id: number): Promise<NewsArticle> {
-    return mockNewsDb.get(id);
+    const response = await apiClient.get<ApiEnvelope<NewsArticle>>(
+      `/news/${id}`,
+    );
+    return response.data.data;
   },
 
   /** POST /news */
   async createNews(input: NewsInput): Promise<NewsArticle> {
-    return mockNewsDb.create(input);
+    const response = await apiClient.post<ApiEnvelope<NewsArticle>>(
+      '/news',
+      buildFormData(input),
+    );
+    return response.data.data;
   },
 
-  /** PUT /news/{id} */
+  /** PUT /news/{id} — POST + _method=PUT so PHP parses multipart bodies. */
   async updateNews(id: number, input: NewsInput): Promise<NewsArticle> {
-    return mockNewsDb.update(id, input);
+    const response = await apiClient.post<ApiEnvelope<NewsArticle>>(
+      `/news/${id}`,
+      buildFormData(input, 'PUT'),
+    );
+    return response.data.data;
   },
 
-  /** PATCH /news/{id}/publish */
+  /** PATCH /news/{id}/publish | /news/{id}/unpublish */
   async setPublished(id: number, publish: boolean): Promise<NewsArticle> {
-    return mockNewsDb.setStatus(id, publish ? 'published' : 'draft');
+    const response = await apiClient.patch<ApiEnvelope<NewsArticle>>(
+      `/news/${id}/${publish ? 'publish' : 'unpublish'}`,
+    );
+    return response.data.data;
   },
 
   /** PATCH /news/{id}/archive */
   async archiveNews(id: number): Promise<NewsArticle> {
-    return mockNewsDb.setStatus(id, 'archived');
+    const response = await apiClient.patch<ApiEnvelope<NewsArticle>>(
+      `/news/${id}/archive`,
+    );
+    return response.data.data;
   },
 
   /** DELETE /news/{id} */
   async deleteNews(id: number): Promise<void> {
-    return mockNewsDb.remove(id);
+    await apiClient.delete(`/news/${id}`);
   },
 };

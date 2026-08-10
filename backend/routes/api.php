@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Files\PublicFileController;
+use App\Http\Controllers\Api\V1\News\NewsAdminController;
 use App\Http\Controllers\Api\V1\Users\ProfileController;
 use App\Http\Controllers\Api\V1\Users\UserAdminController;
 use Illuminate\Support\Facades\Route;
@@ -58,4 +60,19 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::patch('/users/{user}/status', [UserAdminController::class, 'updateStatus'])->whereNumber('user');
     Route::patch('/users/{user}/role', [UserAdminController::class, 'updateRole'])->whereNumber('user');
     Route::delete('/users/{user}', [UserAdminController::class, 'destroy'])->whereNumber('user');
+
+    // Admin news management (authorization enforced by NewsPolicy).
+    Route::get('/news', [NewsAdminController::class, 'index']);
+    Route::post('/news', [NewsAdminController::class, 'store']);
+    Route::get('/news/{news}', [NewsAdminController::class, 'show'])->whereNumber('news');
+    Route::put('/news/{news}', [NewsAdminController::class, 'update'])->whereNumber('news');
+    Route::patch('/news/{news}/publish', [NewsAdminController::class, 'publish'])->whereNumber('news');
+    Route::patch('/news/{news}/unpublish', [NewsAdminController::class, 'unpublish'])->whereNumber('news');
+    Route::patch('/news/{news}/archive', [NewsAdminController::class, 'archive'])->whereNumber('news');
+    Route::delete('/news/{news}', [NewsAdminController::class, 'destroy'])->whereNumber('news');
 });
+
+// Public file serving from the public storage disk (images are public
+// site content; no auth required).
+Route::get('/files/{path}', [PublicFileController::class, 'show'])
+    ->where('path', '.*');
