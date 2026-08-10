@@ -52,6 +52,8 @@ import AdminAlbumDetailsPage from '@/pages/admin/AdminAlbumDetailsPage';
 import AdminPartnersPage from '@/pages/admin/AdminPartnersPage';
 import AdminFaqsPage from '@/pages/admin/AdminFaqsPage';
 import AdminDonationsPage from '@/pages/admin/AdminDonationsPage';
+import AdminVolunteersPage from '@/pages/admin/AdminVolunteersPage';
+import AdminVolunteerDetailsPage from '@/pages/admin/AdminVolunteerDetailsPage';
 import { AdminRoute } from '@/components/admin/AdminRoute';
 
 const queryClient = new QueryClient();
@@ -187,6 +189,18 @@ function Router() {
       <Route path="/admin/donations">
         <AdminRoute
           component={AdminDonationsPage}
+          roles={['admin', 'moderator']}
+        />
+      </Route>
+      <Route path="/admin/volunteers/:id">
+        <AdminRoute
+          component={AdminVolunteerDetailsPage}
+          roles={['admin', 'moderator']}
+        />
+      </Route>
+      <Route path="/admin/volunteers">
+        <AdminRoute
+          component={AdminVolunteersPage}
           roles={['admin', 'moderator']}
         />
       </Route>

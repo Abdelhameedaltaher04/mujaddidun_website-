@@ -44,7 +44,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { key: 'donations', href: '/admin/donations', icon: HandCoins },
   {
     key: 'volunteerApplications',
-    href: '/admin/volunteer-applications',
+    href: '/admin/volunteers',
     icon: ClipboardList,
   },
   { key: 'contactMessages', href: '/admin/contact-messages', icon: Mail },

@@ -1,0 +1,231 @@
+Continue the existing project.
+
+The Admin Dashboard Layout, Dashboard Overview, Users, News, Events, Programs, Gallery, Partners, FAQs, and Donations Management are complete.
+
+================================================
+
+TASK
+
+Build the complete Volunteer Applications Management module.
+
+Route:
+
+/admin/volunteers
+
+================================================
+
+APPLICATIONS LIST
+
+Create a professional applications table containing:
+
+- Applicant Name
+- Email
+- Phone
+- Application Date
+- Preferred Program
+- Skills
+- Experience
+- Application Status
+- Actions
+
+Application statuses:
+
+- Pending
+- Under Review
+- Approved
+- Rejected
+- Withdrawn
+
+================================================
+
+SEARCH & FILTERS
+
+Add:
+
+- Search by applicant name
+- Search by email
+- Search by phone
+- Filter by status
+- Filter by program
+- Filter by application date
+- Clear filters
+
+Filters must work together.
+
+================================================
+
+APPLICATION DETAILS
+
+When Admin opens an application, display:
+
+- Applicant Profile Picture
+- Full Name
+- Email
+- Phone
+- Country
+- Date of Birth if available
+- Skills
+- Previous Experience
+- Education
+- Preferred Volunteer Area
+- Preferred Program
+- Availability
+- Motivation / Why they want to volunteer
+- Application Date
+- Current Status
+
+Display the information in a clean organized layout.
+
+================================================
+
+APPLICATION REVIEW
+
+Admin should be able to:
+
+- Mark as Under Review
+- Approve
+- Reject
+- Withdraw
+
+When rejecting an application:
+
+- Require a rejection reason.
+
+When approving:
+
+- Show a confirmation dialog.
+- Display a success message.
+
+================================================
+
+NOTES
+
+Allow authorized Admin users to add internal notes to an application.
+
+Notes must be:
+
+- Visible only to authorized Admin/Moderator users.
+- Timestamped.
+- Associated with the admin who created the note.
+
+================================================
+
+DOCUMENTS
+
+If the application contains uploaded documents:
+
+Display:
+
+- Document name
+- File type
+- Upload date
+- Preview where supported
+- Download button
+
+Do not expose private documents publicly.
+
+================================================
+
+STATISTICS
+
+Add summary cards:
+
+- Total Applications
+- Pending
+- Under Review
+- Approved
+- Rejected
+
+Keep them ready for Laravel API data.
+
+================================================
+
+PAGINATION
+
+Implement:
+
+- Pagination
+- Items per page
+- Current page
+- Previous / Next
+- Total results
+
+Keep it ready for Laravel server-side pagination.
+
+================================================
+
+LOADING & ERROR STATES
+
+Add:
+
+- Skeleton loading
+- Empty state
+- API error state
+- Retry button
+- Action loading
+- Confirmation dialogs
+
+Display backend validation/errors clearly.
+
+================================================
+
+API READY
+
+Create a dedicated Volunteer Applications service.
+
+Prepare endpoints:
+
+GET    /volunteer-applications
+GET    /volunteer-applications/{id}
+PATCH  /volunteer-applications/{id}/status
+POST   /volunteer-applications/{id}/notes
+GET    /volunteer-applications/{id}/notes
+GET    /volunteer-applications/{id}/documents
+
+Do not put API calls directly inside UI components.
+
+================================================
+
+ACCESS CONTROL
+
+Only Admin and authorized Moderators can review volunteer applications.
+
+Internal notes and private documents must be protected.
+
+Keep the structure ready for Laravel Policies and Permissions.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Full table and detailed application panel.
+
+Tablet:
+- Adaptive layout.
+
+Mobile:
+- Convert applications into clean cards.
+- Application details should stack vertically.
+
+Do not cause horizontal scrolling on the entire page.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website.
+
+Do NOT modify Authentication.
+
+Do NOT modify Users, News, Events, Programs, Gallery, Partners, FAQs, or Donations.
+
+Do NOT create database migrations.
+
+Do NOT connect the API yet.
+
+Use temporary mock data only where necessary.
+
+Keep everything ready for Laravel API integration.
+
+Build the complete Volunteer Applications Management module.
