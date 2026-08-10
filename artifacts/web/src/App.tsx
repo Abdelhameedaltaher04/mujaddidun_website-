@@ -53,6 +53,7 @@ import AdminPartnersPage from '@/pages/admin/AdminPartnersPage';
 import AdminFaqsPage from '@/pages/admin/AdminFaqsPage';
 import AdminDonationsPage from '@/pages/admin/AdminDonationsPage';
 import AdminVolunteersPage from '@/pages/admin/AdminVolunteersPage';
+import AdminMessagesPage from '@/pages/admin/AdminMessagesPage';
 import AdminVolunteerDetailsPage from '@/pages/admin/AdminVolunteerDetailsPage';
 import { AdminRoute } from '@/components/admin/AdminRoute';
 
@@ -201,6 +202,12 @@ function Router() {
       <Route path="/admin/volunteers">
         <AdminRoute
           component={AdminVolunteersPage}
+          roles={['admin', 'moderator']}
+        />
+      </Route>
+      <Route path="/admin/messages">
+        <AdminRoute
+          component={AdminMessagesPage}
           roles={['admin', 'moderator']}
         />
       </Route>

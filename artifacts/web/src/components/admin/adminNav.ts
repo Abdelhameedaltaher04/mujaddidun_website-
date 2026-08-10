@@ -47,7 +47,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     href: '/admin/volunteers',
     icon: ClipboardList,
   },
-  { key: 'contactMessages', href: '/admin/contact-messages', icon: Mail },
+  { key: 'contactMessages', href: '/admin/messages', icon: Mail },
   { key: 'settings', href: '/admin/settings', icon: Settings },
 ];
 

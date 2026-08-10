@@ -1,0 +1,216 @@
+Continue the existing project.
+
+The Admin Dashboard Layout, Dashboard Overview, Users, News, Events, Programs, Gallery, Partners, FAQs, Donations, and Volunteer Applications Management are complete.
+
+================================================
+
+TASK
+
+Build the complete Contact Messages Management module.
+
+Route:
+
+/admin/messages
+
+================================================
+
+MESSAGES LIST
+
+Create a professional inbox-style interface containing:
+
+- Sender Name
+- Email
+- Phone
+- Subject
+- Message Preview
+- Received Date
+- Read / Unread Status
+- Message Status
+- Actions
+
+Statuses:
+
+- New
+- In Progress
+- Resolved
+- Archived
+
+================================================
+
+INBOX EXPERIENCE
+
+Create a professional message inbox.
+
+Unread messages should be visually distinguished.
+
+Allow Admin to:
+
+- Open message
+- Mark as Read
+- Mark as Unread
+- Mark as In Progress
+- Mark as Resolved
+- Archive
+
+When opening an unread message, automatically mark it as read.
+
+================================================
+
+SEARCH & FILTERS
+
+Add:
+
+- Search by sender name
+- Search by email
+- Search by subject
+- Filter by Read / Unread
+- Filter by status
+- Filter by date range
+- Clear filters
+
+Filters must work together.
+
+================================================
+
+MESSAGE DETAILS
+
+When Admin opens a message, display:
+
+- Sender Name
+- Email
+- Phone
+- Subject
+- Full Message
+- Received Date
+- Read Date
+- Current Status
+
+Provide actions:
+
+- Mark as Read / Unread
+- Change Status
+- Archive
+- Delete
+
+================================================
+
+REPLY
+
+Add a "Reply" action.
+
+For now:
+
+- Create the reply UI.
+- Include recipient email.
+- Subject.
+- Rich text message editor.
+- Send button.
+
+Prepare the structure for Laravel email/API integration.
+
+Do NOT implement actual email sending yet.
+
+================================================
+
+STATISTICS
+
+Add summary cards:
+
+- Total Messages
+- Unread
+- In Progress
+- Resolved
+
+================================================
+
+PAGINATION
+
+Implement:
+
+- Pagination
+- Items per page
+- Current page
+- Previous / Next
+- Total results
+
+Keep it ready for Laravel server-side pagination.
+
+================================================
+
+LOADING & ERROR STATES
+
+Add:
+
+- Skeleton loading
+- Empty inbox state
+- API error state
+- Retry button
+- Action loading
+- Delete confirmation
+- Archive confirmation
+
+Display backend errors clearly.
+
+================================================
+
+API READY
+
+Create a dedicated Contact Messages service.
+
+Prepare endpoints:
+
+GET    /contact-messages
+GET    /contact-messages/{id}
+PATCH  /contact-messages/{id}/read
+PATCH  /contact-messages/{id}/status
+PATCH  /contact-messages/{id}/archive
+DELETE /contact-messages/{id}
+POST   /contact-messages/{id}/reply
+
+Do not put API calls directly inside UI components.
+
+================================================
+
+ACCESS CONTROL
+
+Only Admin and authorized Moderators can access contact messages.
+
+Only authorized users can send replies.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Inbox/sidebar + message details layout.
+
+Tablet:
+- Adaptive inbox layout.
+
+Mobile:
+- Messages list first.
+- Open message details as a separate view.
+
+Do not cause horizontal scrolling on the entire page.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website.
+
+Do NOT modify Authentication.
+
+Do NOT modify any existing Admin modules.
+
+Do NOT create database migrations.
+
+Do NOT connect the API yet.
+
+Do NOT implement real email sending yet.
+
+Use temporary mock data only where necessary.
+
+Keep everything ready for Laravel API integration.
+
+Build the complete Contact Messages Management module.
