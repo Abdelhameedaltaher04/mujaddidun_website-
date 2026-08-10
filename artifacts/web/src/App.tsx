@@ -44,6 +44,9 @@ import AdminNewsFormPage from '@/pages/admin/AdminNewsFormPage';
 import AdminEventsPage from '@/pages/admin/AdminEventsPage';
 import AdminEventFormPage from '@/pages/admin/AdminEventFormPage';
 import AdminEventRegistrationsPage from '@/pages/admin/AdminEventRegistrationsPage';
+import AdminProgramsPage from '@/pages/admin/AdminProgramsPage';
+import AdminProgramFormPage from '@/pages/admin/AdminProgramFormPage';
+import AdminProgramParticipantsPage from '@/pages/admin/AdminProgramParticipantsPage';
 import { AdminRoute } from '@/components/admin/AdminRoute';
 
 const queryClient = new QueryClient();
@@ -128,6 +131,30 @@ function Router() {
       <Route path="/admin/events/:id/registrations">
         <AdminRoute
           component={AdminEventRegistrationsPage}
+          roles={['admin', 'moderator']}
+        />
+      </Route>
+      <Route path="/admin/programs">
+        <AdminRoute
+          component={AdminProgramsPage}
+          roles={['admin', 'moderator']}
+        />
+      </Route>
+      <Route path="/admin/programs/new">
+        <AdminRoute
+          component={AdminProgramFormPage}
+          roles={['admin', 'moderator']}
+        />
+      </Route>
+      <Route path="/admin/programs/:id/edit">
+        <AdminRoute
+          component={AdminProgramFormPage}
+          roles={['admin', 'moderator']}
+        />
+      </Route>
+      <Route path="/admin/programs/:id/participants">
+        <AdminRoute
+          component={AdminProgramParticipantsPage}
           roles={['admin', 'moderator']}
         />
       </Route>

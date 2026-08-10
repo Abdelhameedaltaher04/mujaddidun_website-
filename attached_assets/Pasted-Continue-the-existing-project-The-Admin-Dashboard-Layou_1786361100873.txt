@@ -1,0 +1,262 @@
+Continue the existing project.
+
+The Admin Dashboard Layout, Dashboard Overview, Users Management, News Management, and Events Management are complete.
+
+================================================
+
+TASK
+
+Build the complete Programs Management module for the Admin Dashboard.
+
+Route:
+
+/admin/programs
+
+================================================
+
+PROGRAMS LIST
+
+Create a professional programs management table/list containing:
+
+- Program Image
+- Program Title
+- Category
+- Short Description
+- Status
+- Start Date
+- End Date
+- Number of Participants
+- Created Date
+- Actions
+
+Statuses:
+
+- Draft
+- Active
+- Completed
+- Archived
+
+================================================
+
+SEARCH & FILTERS
+
+Add:
+
+- Search by program title
+- Filter by category
+- Filter by status
+- Filter by date
+- Clear filters
+
+Filters must work together.
+
+================================================
+
+CREATE PROGRAM
+
+Create an "Add Program" page/form.
+
+Fields:
+
+- Program Title Arabic
+- Program Title English
+- Short Description Arabic
+- Short Description English
+- Full Description Arabic
+- Full Description English
+- Program Image
+- Category
+- Target Audience
+- Location
+- Start Date
+- End Date
+- Program Status
+- Maximum Participants
+- Objectives
+- Program Requirements
+
+Requirements:
+
+- Arabic and English support.
+- Required field validation.
+- Image preview before upload.
+- Start date cannot be after End date.
+- Maximum participants must be a positive number.
+- Support Save as Draft.
+- Support Publish/Activate.
+
+================================================
+
+PROGRAM IMAGE
+
+Requirements:
+
+- JPG
+- PNG
+- WEBP
+- Maximum 5MB
+- Image preview
+- Replace image
+- Remove image
+
+Prepare for Laravel Storage/API integration.
+
+================================================
+
+PROGRAM DETAILS
+
+Create a preview/details view showing:
+
+- Program image
+- Title
+- Description
+- Objectives
+- Target audience
+- Location
+- Dates
+- Requirements
+- Status
+- Participants information
+
+The preview should be visually consistent with the public website.
+
+================================================
+
+PARTICIPANTS
+
+Add a "Participants" action for each program.
+
+Display:
+
+- Participant Name
+- Email
+- Phone
+- Registration Date
+- Status
+
+Statuses:
+
+- Pending
+- Approved
+- Rejected
+- Completed
+
+Show:
+
+- Total participants
+- Available seats
+- Remaining seats
+
+================================================
+
+ACTIONS
+
+Provide:
+
+- View
+- Edit
+- Preview
+- Activate
+- Deactivate
+- Archive
+- Manage Participants
+- Delete
+
+Dangerous actions require confirmation.
+
+================================================
+
+PAGINATION
+
+Implement:
+
+- Pagination
+- Items per page
+- Current page
+- Previous / Next
+- Total results
+
+Keep the structure ready for Laravel server-side pagination.
+
+================================================
+
+LOADING & ERROR STATES
+
+Add:
+
+- Skeleton loading
+- Empty state
+- API error state
+- Retry button
+- Form submission loading
+- Image upload loading
+
+Display backend validation errors under the relevant fields.
+
+================================================
+
+API READY
+
+Create a dedicated Programs service.
+
+Prepare endpoints:
+
+GET    /programs
+GET    /programs/{id}
+POST   /programs
+PUT    /programs/{id}
+PATCH  /programs/{id}/activate
+PATCH  /programs/{id}/deactivate
+PATCH  /programs/{id}/archive
+DELETE /programs/{id}
+
+Participants:
+
+GET    /programs/{id}/participants
+PATCH  /participants/{id}/approve
+PATCH  /participants/{id}/reject
+
+Do not put API calls directly inside UI components.
+
+================================================
+
+ACCESS CONTROL
+
+Only Admin and authorized Moderator users can manage programs.
+
+Keep the structure ready for Laravel Policies and Permissions.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Full management table.
+
+Tablet:
+- Responsive table.
+
+Mobile:
+- Use clean cards where appropriate.
+
+Do not cause horizontal scrolling on the entire page.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website.
+
+Do NOT modify Authentication.
+
+Do NOT modify Users, News, or Events modules.
+
+Do NOT create database migrations.
+
+Do NOT connect the API yet.
+
+Use temporary mock data only where necessary.
+
+Keep everything ready for Laravel API integration.
+
+Build the complete Programs Management module.
