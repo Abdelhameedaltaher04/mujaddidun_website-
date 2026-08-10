@@ -1,0 +1,286 @@
+Continue the existing project.
+
+The Admin Dashboard Layout, Dashboard Overview, Users Management, and News Management are complete.
+
+================================================
+
+TASK
+
+Build the complete Events Management module for the Admin Dashboard.
+
+Route:
+
+/admin/events
+
+================================================
+
+EVENTS LIST
+
+Create a professional events management table/list containing:
+
+- Event Image
+- Event Title
+- Location
+- Event Date
+- Start Time
+- End Time
+- Registration Status
+- Event Status
+- Number of Registrations
+- Created Date
+- Actions
+
+Event statuses:
+
+- Draft
+- Upcoming
+- Ongoing
+- Completed
+- Cancelled
+
+================================================
+
+SEARCH & FILTERS
+
+Add:
+
+- Search by event title
+- Filter by status
+- Filter by registration status
+- Filter by date
+- Filter by location
+- Clear filters
+
+Filters must work together.
+
+================================================
+
+CREATE EVENT
+
+Create an "Add Event" page/form.
+
+Fields:
+
+- Event Title Arabic
+- Event Title English
+- Short Description Arabic
+- Short Description English
+- Full Description Arabic
+- Full Description English
+- Event Image
+- Location Arabic
+- Location English
+- Event Date
+- Start Time
+- End Time
+- Maximum Participants
+- Registration Start Date
+- Registration End Date
+- Registration Status
+- Event Status
+
+Requirements:
+
+- Arabic and English support.
+- Image preview before upload.
+- Required field validation.
+- Start time must be before End time.
+- Registration end date cannot be after the event date.
+- Maximum participants must be a positive number.
+- Save as Draft.
+- Publish Event.
+
+================================================
+
+EVENT IMAGE
+
+Requirements:
+
+- JPG
+- PNG
+- WEBP
+- Maximum 5MB
+- Image preview
+- Replace image
+- Remove image
+
+Prepare for Laravel Storage/API integration.
+
+================================================
+
+REGISTRATION MANAGEMENT
+
+Each event must have a "Registrations" action.
+
+Create an Event Registrations page showing:
+
+- Participant Name
+- Email
+- Phone
+- Registration Date
+- Registration Status
+- Actions
+
+Registration statuses:
+
+- Pending
+- Confirmed
+- Cancelled
+- Attended
+
+Admin should be able to:
+
+- View participant
+- Confirm registration
+- Cancel registration
+- Mark participant as attended
+
+Show:
+
+- Total registrations
+- Available seats
+- Remaining seats
+
+Prevent new registrations when:
+
+- Registration is closed.
+- Event is cancelled.
+- Maximum participants has been reached.
+
+================================================
+
+EVENT DETAILS / PREVIEW
+
+Allow Admin to preview the complete event before publishing.
+
+Preview should match the public website's event presentation.
+
+Support:
+
+- Arabic
+- English
+- Event image
+- Date and time
+- Location
+- Registration information
+
+================================================
+
+ACTIONS
+
+Provide:
+
+- View
+- Edit
+- Preview
+- Publish
+- Unpublish
+- Cancel
+- Manage Registrations
+- Delete
+
+Dangerous actions must require confirmation.
+
+================================================
+
+PAGINATION
+
+Implement:
+
+- Pagination
+- Items per page
+- Current page
+- Previous / Next
+- Total results
+
+Keep it ready for Laravel server-side pagination.
+
+================================================
+
+LOADING & ERROR STATES
+
+Add:
+
+- Skeleton loading
+- Empty state
+- API error state
+- Retry button
+- Form loading
+- Image upload loading
+
+Display backend validation errors under the relevant fields.
+
+================================================
+
+API READY
+
+Create dedicated services for:
+
+- Events
+- Event Registrations
+
+Prepare endpoints:
+
+GET    /events
+GET    /events/{id}
+POST   /events
+PUT    /events/{id}
+PATCH  /events/{id}/publish
+PATCH  /events/{id}/cancel
+DELETE /events/{id}
+
+Registrations:
+
+GET    /events/{id}/registrations
+PATCH  /registrations/{id}/confirm
+PATCH  /registrations/{id}/cancel
+PATCH  /registrations/{id}/attended
+
+Do not put API calls directly inside UI components.
+
+================================================
+
+ACCESS CONTROL
+
+Only Admin and authorized Moderator users can manage events.
+
+Only authorized users can manage event registrations.
+
+Keep the structure ready for Laravel Policies and Permissions.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Full management table.
+
+Tablet:
+- Responsive table.
+
+Mobile:
+- Use clean cards where appropriate.
+
+Do not cause horizontal scrolling on the entire page.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website.
+
+Do NOT modify Authentication.
+
+Do NOT modify Users Management.
+
+Do NOT modify News Management.
+
+Do NOT create database migrations.
+
+Do NOT connect the API yet.
+
+Use temporary mock data only where necessary.
+
+Keep everything ready for Laravel API integration.
+
+Build the complete Events Management module.

@@ -7,4 +7,5 @@
 - [Laravel backend environment](laravel-backend-environment.md) — keep deployable defaults in `.env.example`; protected local `.env` files must not be edited or exposed.
 - [Laravel Sanctum auth](sanctum-auth.md) — validated confirmation fields and bearer-token revocation need explicit handling in API auth flows.
 - [Laravel API workflow](laravel-api-workflow.md) — the routed API artifact must serve Laravel; bearer-token APIs must not enable stateful CSRF middleware.
+- [Tiptap v3 editor](tiptap-editor.md) — StarterKit bundles Link (no separate extension) and setContent takes an options object, not a boolean.
 - [Authentication UI validation](authentication-ui-validation.md) — auth failures render inline field/form feedback; success states remain dialogs and shared controls own loading/disabled behavior.

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { EditorContent, useEditor, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
 import {
   AlignCenter,
@@ -193,8 +192,10 @@ export function RichTextEditor({
 }: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ heading: { levels: [2, 3] } }),
-      Link.configure({ openOnClick: false }),
+      StarterKit.configure({
+        heading: { levels: [2, 3] },
+        link: { openOnClick: false },
+      }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
     content: value,
