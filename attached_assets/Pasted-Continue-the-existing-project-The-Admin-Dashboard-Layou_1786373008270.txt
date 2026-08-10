@@ -1,0 +1,242 @@
+Continue the existing project.
+
+The Admin Dashboard Layout, Dashboard Overview, Users, News, Events, Programs, Gallery, Partners, FAQs, Donations, Volunteer Applications, and Contact Messages Management are complete.
+
+================================================
+
+TASK
+
+Build the complete Website Settings module for the Admin Dashboard.
+
+Route:
+
+/admin/settings
+
+================================================
+
+SETTINGS STRUCTURE
+
+Create a professional settings page with organized sections/tabs:
+
+1. General Settings
+2. Contact Information
+3. Social Media
+4. Website Branding
+5. SEO Settings
+6. Email Settings
+7. Website Controls
+
+================================================
+
+1. GENERAL SETTINGS
+
+Fields:
+
+- Website Name Arabic
+- Website Name English
+- Website Description Arabic
+- Website Description English
+- Website Logo
+- Favicon
+
+Allow:
+
+- Image preview
+- Upload
+- Replace
+- Remove
+
+Supported:
+
+- JPG
+- PNG
+- WEBP
+- SVG
+
+================================================
+
+2. CONTACT INFORMATION
+
+Fields:
+
+- Phone Number
+- WhatsApp Number
+- Email
+- Address Arabic
+- Address English
+- Google Maps URL
+
+Use proper validation.
+
+Phone numbers should use the existing international country selector and validation system.
+
+================================================
+
+3. SOCIAL MEDIA
+
+Allow Admin to manage:
+
+- Facebook
+- Instagram
+- LinkedIn
+- YouTube
+- WhatsApp
+
+Do NOT include Twitter/X.
+
+Each social platform should have:
+
+- Icon
+- URL/number field
+- Enable/Disable toggle
+
+Validate URLs where applicable.
+
+================================================
+
+4. WEBSITE BRANDING
+
+Allow Admin to configure:
+
+- Primary Logo
+- Footer Logo
+- Favicon
+- Website title
+- Default language
+
+Keep the current branding as the default values.
+
+Do not allow settings to break the existing design.
+
+================================================
+
+5. SEO SETTINGS
+
+Fields:
+
+- Meta Title Arabic
+- Meta Title English
+- Meta Description Arabic
+- Meta Description English
+- Keywords
+- Open Graph Image
+
+Add character counters for title and description fields.
+
+================================================
+
+6. EMAIL SETTINGS
+
+Create an email configuration section.
+
+Fields:
+
+- Sender Name
+- Sender Email
+- Reply-To Email
+
+Do NOT expose sensitive SMTP credentials in the frontend.
+
+Prepare the UI for secure Laravel backend configuration.
+
+================================================
+
+7. WEBSITE CONTROLS
+
+Add controls for:
+
+- Maintenance Mode
+- Allow New Registrations
+- Allow Event Registrations
+- Allow Volunteer Applications
+- Show Donations
+- Show Partners
+- Show FAQs
+
+Each should use a professional toggle.
+
+Maintenance Mode must include a confirmation dialog before activation.
+
+================================================
+
+8. SAVE SETTINGS
+
+Provide:
+
+- Save Changes
+- Reset Changes
+
+Show:
+
+- Loading state
+- Success message
+- Validation errors
+- API error state
+
+Prevent accidental loss of unsaved changes.
+
+If the user attempts to leave with unsaved changes, show a confirmation dialog.
+
+================================================
+
+9. API READY
+
+Create a dedicated Settings service.
+
+Prepare endpoints:
+
+GET    /settings
+PUT    /settings/general
+PUT    /settings/contact
+PUT    /settings/social
+PUT    /settings/branding
+PUT    /settings/seo
+PUT    /settings/email
+PUT    /settings/controls
+
+Do not put API calls directly inside UI components.
+
+================================================
+
+10. ACCESS CONTROL
+
+Only Admin users can modify website settings.
+
+Moderators must not be allowed to modify settings.
+
+Keep the structure ready for Laravel Policies and Permissions.
+
+================================================
+
+RESPONSIVE DESIGN
+
+Desktop:
+- Sidebar settings navigation + content panel.
+
+Tablet:
+- Adaptive layout.
+
+Mobile:
+- Settings sections become stacked cards or tabs.
+
+Do not cause horizontal scrolling.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify the public website directly.
+
+Do NOT modify Authentication.
+
+Do NOT create database migrations.
+
+Do NOT connect the API yet.
+
+Do NOT expose secrets or SMTP credentials in frontend code.
+
+Use temporary values only where necessary.
+
+Keep everything ready for Laravel API integration.
+
+Build the complete Website Settings module.
