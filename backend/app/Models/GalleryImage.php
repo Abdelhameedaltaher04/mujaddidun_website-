@@ -26,12 +26,16 @@ class GalleryImage extends Model
         'alt_text_en',
         'sort_order',
         'is_featured',
+        'caption_ar',
+        'caption_en',
+        'is_cover',
     ];
 
     protected function casts(): array
     {
         return [
             'is_featured' => 'boolean',
+            'is_cover' => 'boolean',
         ];
     }
 

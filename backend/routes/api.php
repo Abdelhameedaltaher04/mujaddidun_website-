@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\V1\Events\EventAdminController;
 use App\Http\Controllers\Api\V1\Events\EventRegistrationController;
 use App\Http\Controllers\Api\V1\Files\PublicFileController;
 use App\Http\Controllers\Api\V1\News\NewsAdminController;
+use App\Http\Controllers\Api\V1\Gallery\GalleryAlbumController;
+use App\Http\Controllers\Api\V1\Gallery\GalleryImageController;
 use App\Http\Controllers\Api\V1\Programs\ProgramAdminController;
 use App\Http\Controllers\Api\V1\Programs\ProgramParticipantController;
 use App\Http\Controllers\Api\V1\Users\ProfileController;
@@ -106,6 +108,23 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::post('/programs/{program}/participate', [ProgramParticipantController::class, 'participate'])->whereNumber('program');
     Route::patch('/participants/{participant}/approve', [ProgramParticipantController::class, 'approve'])->whereNumber('participant');
     Route::patch('/participants/{participant}/reject', [ProgramParticipantController::class, 'reject'])->whereNumber('participant');
+
+    // Admin gallery management (authorization enforced by GalleryAlbumPolicy).
+    Route::get('/gallery/albums', [GalleryAlbumController::class, 'index']);
+    Route::post('/gallery/albums', [GalleryAlbumController::class, 'store']);
+    Route::patch('/gallery/albums/reorder', [GalleryAlbumController::class, 'reorder']);
+    Route::get('/gallery/albums/{album}', [GalleryAlbumController::class, 'show'])->whereNumber('album');
+    Route::put('/gallery/albums/{album}', [GalleryAlbumController::class, 'update'])->whereNumber('album');
+    Route::patch('/gallery/albums/{album}/status', [GalleryAlbumController::class, 'setStatus'])->whereNumber('album');
+    Route::delete('/gallery/albums/{album}', [GalleryAlbumController::class, 'destroy'])->whereNumber('album');
+
+    // Gallery images.
+    Route::get('/gallery/albums/{album}/images', [GalleryImageController::class, 'index'])->whereNumber('album');
+    Route::post('/gallery/albums/{album}/images', [GalleryImageController::class, 'store'])->whereNumber('album');
+    Route::patch('/gallery/albums/{album}/images/reorder', [GalleryImageController::class, 'reorder'])->whereNumber('album');
+    Route::put('/gallery/images/{image}', [GalleryImageController::class, 'update'])->whereNumber('image');
+    Route::patch('/gallery/images/{image}/cover', [GalleryImageController::class, 'setAsCover'])->whereNumber('image');
+    Route::delete('/gallery/images/{image}', [GalleryImageController::class, 'destroy'])->whereNumber('image');
 });
 
 // Public file serving from the public storage disk (images are public
