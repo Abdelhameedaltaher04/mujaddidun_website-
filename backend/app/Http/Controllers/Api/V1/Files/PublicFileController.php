@@ -71,6 +71,13 @@ class PublicFileController extends BaseController
             }
         }
 
+        if (str_starts_with($path, 'partner-logos/')) {
+            if (! $this->partnerLogoIsPublic($path)) {
+                abort_unless($this->isStaff(), 404);
+                $staffOnly = true;
+            }
+        }
+
         if (str_starts_with($path, 'gallery-covers/')) {
             if (! $this->galleryCoverIsPublic($path)) {
                 abort_unless($this->isStaff(), 404);
@@ -93,8 +100,14 @@ class PublicFileController extends BaseController
             abort(404);
         }
 
+        // Partner logos use a short public TTL so deactivating a partner
+        // revokes public access within minutes instead of a full day.
+        $publicCache = str_starts_with($path, 'partner-logos/')
+            ? 'public, max-age=300'
+            : 'public, max-age=86400';
+
         $headers = [
-            'Cache-Control' => $staffOnly ? 'private, no-store' : 'public, max-age=86400',
+            'Cache-Control' => $staffOnly ? 'private, no-store' : $publicCache,
         ];
 
         // SVGs can embed scripts; neutralize them when rendered directly.
@@ -127,6 +140,14 @@ class PublicFileController extends BaseController
         return \App\Models\Program::query()
             ->where('cover_image_path', $path)
             ->whereIn('status', ['active', 'completed'])
+            ->exists();
+    }
+
+    private function partnerLogoIsPublic(string $path): bool
+    {
+        return \App\Models\Partner::query()
+            ->where('logo_path', $path)
+            ->where('status', 'active')
             ->exists();
     }
 

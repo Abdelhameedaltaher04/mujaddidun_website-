@@ -1,0 +1,157 @@
+Continue the existing project.
+
+Public News, Events, Programs, and Gallery are now connected to the real Laravel backend and verified.
+
+================================================
+TASK — PUBLIC PARTNERS
+================================================
+
+Connect the PUBLIC WEBSITE Partners section to the real Laravel API.
+
+The Admin Partners module already manages the partner data.
+
+Do NOT redesign the existing Partners UI.
+Do NOT modify Authentication or completed modules.
+
+================================================
+PUBLIC API
+================================================
+
+Create/use:
+
+GET /api/v1/public/partners
+
+Only return publicly active/published partners.
+
+Do NOT expose:
+
+- Draft partners
+- Archived/inactive partners
+- Internal/admin fields
+- Private information
+
+================================================
+PUBLIC PARTNERS
+================================================
+
+Replace all decorative/mock partner logos and data.
+
+Load partners from Laravel.
+
+Display:
+
+- Partner logo
+- Arabic name
+- English name
+- Website URL when available
+- Optional short description if already supported
+
+Use the existing Partners section design.
+
+If there are no published partners:
+
+Show a clean empty state or hide the section according to the existing website behavior.
+
+================================================
+HOMEPAGE
+================================================
+
+This is important:
+
+The Homepage Partners section MUST consume the real Public Partners API.
+
+Do NOT leave decorative placeholder logos.
+
+When an Admin:
+
+- Adds a partner
+- Updates a partner
+- Activates/deactivates a partner
+- Changes the logo
+
+the public website should reflect the change after refreshing/reloading.
+
+================================================
+LANGUAGE
+================================================
+
+Use the existing Arabic/English system.
+
+Arabic → Arabic partner names.
+
+English → English partner names.
+
+Do not duplicate components.
+
+================================================
+LINKS
+================================================
+
+If a partner has a website URL:
+
+Make the partner logo/name clickable.
+
+Open external websites safely.
+
+Do not create fake URLs.
+
+================================================
+IMAGES
+================================================
+
+Use Laravel Storage URLs returned by the API.
+
+Do not hardcode partner logos.
+
+Handle missing/broken logos gracefully.
+
+================================================
+API ARCHITECTURE
+================================================
+
+Create/use:
+
+services/publicPartners.ts
+
+Use the existing centralized API client.
+
+Do not put API calls directly inside UI components.
+
+================================================
+SECURITY
+================================================
+
+Verify:
+
+1. Public API returns only active/published partners.
+2. Inactive partners are hidden.
+3. Draft partners are hidden.
+4. Internal fields are not exposed.
+5. Private storage files are not exposed.
+
+================================================
+TESTING
+================================================
+
+Test:
+
+1. Published partner appears on Homepage.
+2. Partner logo loads correctly.
+3. Arabic works.
+4. English works.
+5. Website link works when available.
+6. Inactive partner disappears from public website.
+7. Updated partner data appears after refresh.
+8. No mock/decorative partner data remains.
+9. Empty state works when there are no published partners.
+10. API errors are handled gracefully.
+
+At the end provide:
+
+- PASS/FAIL checklist
+- API endpoint used/created
+- Backend files changed
+- Frontend files changed
+- Any remaining limitations
+
+Do NOT modify unrelated modules.

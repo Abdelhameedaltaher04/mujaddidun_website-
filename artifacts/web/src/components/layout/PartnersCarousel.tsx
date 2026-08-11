@@ -5,22 +5,59 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLocale } from '@/contexts/LocaleContext';
 import { usePublicSettings } from '@/hooks/usePublicSettings';
+import { usePublicPartners } from '@/hooks/usePublicPartners';
+import { partnerName, type PublicPartner } from '@/services/publicPartners';
 
-const PARTNERS = [
-  { id: '1', logo: undefined },
-  { id: '2', logo: undefined },
-  { id: '3', logo: undefined },
-  { id: '4', logo: undefined },
-  { id: '5', logo: undefined },
-  { id: '6', logo: undefined },
-  { id: '7', logo: undefined },
-  { id: '8', logo: undefined },
-];
+function PartnerCard({ partner, lang }: { partner: PublicPartner; lang: 'ar' | 'en' }) {
+  const name = partnerName(partner, lang);
+  const initial = name.charAt(0);
+
+  const card = (
+    <div className="h-36 bg-card rounded-2xl border border-transparent flex flex-col items-center justify-center p-4 grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-300 shadow-sm hover:shadow-lg hover:border-secondary hover:scale-105 hover:shadow-secondary/20 relative overflow-hidden group/card cursor-pointer">
+      {partner.logo_url ? (
+        <img
+          src={partner.logo_url}
+          alt={name}
+          loading="lazy"
+          className="h-20 w-auto max-w-full object-contain mb-2"
+          onError={(e) => {
+            // Broken logo: fall back to the initial badge.
+            e.currentTarget.style.display = 'none';
+            e.currentTarget.nextElementSibling?.classList.remove('hidden');
+          }}
+        />
+      ) : null}
+      <div className={`w-20 h-20 rounded-full bg-primary/5 text-primary items-center justify-center mb-2 group-hover/card:bg-primary/10 transition-colors ${partner.logo_url ? 'hidden' : 'flex'}`}>
+        <span className="font-display text-4xl font-bold">{initial}</span>
+      </div>
+      <span className="text-xs font-bold text-center text-muted-foreground group-hover/card:text-foreground line-clamp-1 w-full px-2">{name}</span>
+    </div>
+  );
+
+  if (partner.website_url) {
+    return (
+      <a
+        href={partner.website_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={name}
+        className="block focus-ring-standard rounded-2xl"
+        data-testid={`link-partner-${partner.id}`}
+      >
+        {card}
+      </a>
+    );
+  }
+  return card;
+}
 
 export function PartnersCarousel() {
-  const { t, dir } = useLocale();
+  const { t, dir, locale } = useLocale();
+  const lang = locale as 'ar' | 'en';
   const settings = usePublicSettings();
-  
+  const partnersQuery = usePublicPartners();
+  const partners = partnersQuery.data ?? [];
+
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { 
       loop: true, 
@@ -49,14 +86,30 @@ export function PartnersCarousel() {
   }, [emblaApi]);
 
   // Duplicate items slightly so loop feels seamless on very wide screens
-  const items = [...PARTNERS, ...PARTNERS];
+  const items = partners.length > 0 ? [...partners, ...partners] : [];
 
   // Admin-controlled visibility (hidden when show_partners is off).
   if (settings && !settings.controls.show_partners) return null;
 
+  // No published partners (or the list failed to load): hide the carousel cleanly.
+  if (!partnersQuery.isPending && items.length === 0) return null;
+
+  if (partnersQuery.isPending) {
+    return (
+      <div className="flex gap-6 py-8 overflow-hidden" data-testid="partners-carousel-loading">
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div key={i} className="flex-[0_0_50%] sm:flex-[0_0_33.333%] md:flex-[0_0_25%] lg:flex-[0_0_20%] min-w-0">
+            <div className="h-36 bg-muted/50 rounded-2xl animate-pulse" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div 
       className="relative w-full group"
+      data-testid="partners-carousel"
       onMouseEnter={() => emblaApi?.plugins().autoScroll?.stop()}
       onMouseLeave={() => {
         const isReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -70,25 +123,11 @@ export function PartnersCarousel() {
     >
       <div className="overflow-hidden py-8" ref={emblaRef}>
         <div className="flex touch-pan-y -ms-6" style={{ backfaceVisibility: 'hidden' }}>
-          {items.map((partner, index) => {
-            const partnerName = t(`partners.items.${partner.id}`);
-            const initial = partnerName.charAt(0);
-            
-            return (
-              <div key={`${partner.id}-${index}`} className="flex-[0_0_50%] sm:flex-[0_0_33.333%] md:flex-[0_0_25%] lg:flex-[0_0_20%] min-w-0 ps-6">
-                <div className="h-36 bg-card rounded-2xl border border-transparent flex flex-col items-center justify-center p-4 grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-300 shadow-sm hover:shadow-lg hover:border-secondary hover:scale-105 hover:shadow-secondary/20 relative overflow-hidden group/card cursor-pointer">
-                  {partner.logo ? (
-                    <img src={partner.logo} alt={partnerName} className="h-20 w-auto max-w-full object-contain mb-2" />
-                  ) : (
-                    <div className="w-20 h-20 rounded-full bg-primary/5 text-primary flex items-center justify-center mb-2 group-hover/card:bg-primary/10 transition-colors">
-                      <span className="font-display text-4xl font-bold">{initial}</span>
-                    </div>
-                  )}
-                  <span className="text-xs font-bold text-center text-muted-foreground group-hover/card:text-foreground line-clamp-1 w-full px-2">{partnerName}</span>
-                </div>
-              </div>
-            );
-          })}
+          {items.map((partner, index) => (
+            <div key={`${partner.id}-${index}`} className="flex-[0_0_50%] sm:flex-[0_0_33.333%] md:flex-[0_0_25%] lg:flex-[0_0_20%] min-w-0 ps-6" data-testid={index < partners.length ? `partner-slide-${partner.id}` : undefined}>
+              <PartnerCard partner={partner} lang={lang} />
+            </div>
+          ))}
         </div>
       </div>
       <Button 

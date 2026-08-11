@@ -251,16 +251,8 @@
     "title": "Our Partners",
     "subtitle": "We are proud of our strategic partnerships that help expand our impact and serve the community.",
     "partnerLabel": "Partner {item}",
-    "items": {
-      "1": "Ministry of Social Development",
-      "2": "Jordan Food Bank",
-      "3": "Vocational Training Corporation",
-      "4": "Greater Amman Municipality",
-      "5": "Hashemite Charity Organization",
-      "6": "National Aid Fund",
-      "7": "King Hussein Cancer Foundation",
-      "8": "Tkiyet Um Ali"
-    }
+    "empty": "No partners available at the moment.",
+    "loadError": "Failed to load partners."
   },
   "faq": {
     "title": "FAQ",
