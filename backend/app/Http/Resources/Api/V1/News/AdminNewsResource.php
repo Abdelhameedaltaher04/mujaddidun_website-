@@ -18,6 +18,10 @@ class AdminNewsResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'gallery_images' => $this->whenLoaded(
+                'images',
+                fn () => NewsImageResource::collection($this->images)->resolve(),
+            ),
             'title_ar' => $this->title_ar,
             'title_en' => $this->title_en,
             'excerpt_ar' => $this->excerpt_ar ?? '',

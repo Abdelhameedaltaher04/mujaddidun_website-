@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PublicFileController extends BaseController
 {
     /** Directories on the public disk that may be served publicly. */
-    private const ALLOWED_PREFIXES = ['news-covers/', 'event-covers/', 'program-covers/', 'gallery-covers/', 'gallery-images/', 'partner-logos/', 'site-branding/'];
+    private const ALLOWED_PREFIXES = ['news-covers/', 'news-images/', 'event-covers/', 'program-covers/', 'gallery-covers/', 'gallery-images/', 'partner-logos/', 'site-branding/'];
 
     public function show(string $path): Response
     {
@@ -37,11 +37,24 @@ class PublicFileController extends BaseController
             abort(404);
         }
 
-        // News covers belong to a specific article: only serve them while
-        // that article is published, unless the caller is a staff member
-        // (admins/moderators preview draft covers in the dashboard).
-        if (str_starts_with($path, 'news-covers/') && ! $this->newsCoverIsVisible($path)) {
-            abort(404);
+        // News covers and gallery images belong to a specific article:
+        // only serve them while that article is published, unless the
+        // caller is a staff member (dashboard previews of drafts). Staff-
+        // only responses must never be cacheable by shared proxies.
+        $staffOnly = false;
+
+        if (str_starts_with($path, 'news-covers/')) {
+            if (! $this->newsCoverIsPublic($path)) {
+                abort_unless($this->isStaff(), 404);
+                $staffOnly = true;
+            }
+        }
+
+        if (str_starts_with($path, 'news-images/')) {
+            if (! $this->newsGalleryImageIsPublic($path)) {
+                abort_unless($this->isStaff(), 404);
+                $staffOnly = true;
+            }
         }
 
         // Containment check: the canonical path must stay inside the disk
@@ -52,7 +65,9 @@ class PublicFileController extends BaseController
             abort(404);
         }
 
-        $headers = ['Cache-Control' => 'public, max-age=86400'];
+        $headers = [
+            'Cache-Control' => $staffOnly ? 'private, no-store' : 'public, max-age=86400',
+        ];
 
         // SVGs can embed scripts; neutralize them when rendered directly.
         if (str_ends_with(strtolower($path), '.svg')) {
@@ -63,19 +78,28 @@ class PublicFileController extends BaseController
         return $disk->response($path, null, $headers);
     }
 
-    private function newsCoverIsVisible(string $path): bool
+    private function newsCoverIsPublic(string $path): bool
     {
-        $publishedOwner = \App\Models\News::query()
+        return \App\Models\News::query()
             ->where('cover_image_path', $path)
             ->where('status', 'published')
             ->exists();
+    }
 
-        if ($publishedOwner) {
-            return true;
-        }
+    private function newsGalleryImageIsPublic(string $path): bool
+    {
+        return \App\Models\NewsImage::query()
+            ->where('image', $path)
+            ->whereHas('news', fn ($query) => $query->where('status', 'published'))
+            ->exists();
+    }
 
-        // Orphaned files (no owning article) stay hidden from the public
-        // too; staff with a valid bearer token may still access them.
+    /**
+     * Orphaned or unpublished files stay hidden from the public; staff
+     * with a valid bearer token may still access them (dashboard previews).
+     */
+    private function isStaff(): bool
+    {
         $user = auth('sanctum')->user();
 
         return $user !== null

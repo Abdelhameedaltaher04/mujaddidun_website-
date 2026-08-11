@@ -34,6 +34,12 @@ class PublicNewsDetailResource extends JsonResource
                 ? '/api/v1/files/'.$this->cover_image_path
                 : null,
             'published_at' => $this->published_at?->toISOString(),
+            'gallery_images' => $this->images->map(fn ($image) => [
+                'id' => $image->id,
+                'image' => '/api/v1/files/'.$image->image,
+                'alt_text_ar' => $image->alt_text_ar ?? '',
+                'alt_text_en' => $image->alt_text_en ?? '',
+            ])->values(),
             'related' => PublicNewsListResource::collection($this->related),
         ];
     }

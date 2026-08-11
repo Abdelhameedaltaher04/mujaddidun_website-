@@ -1,0 +1,258 @@
+Continue the existing project.
+
+The Admin Dashboard integration is complete, and the remaining mock limitations in Contact, Settings, and Dashboard have been removed.
+
+Public News integration is also complete.
+
+================================================
+
+TASK
+
+Connect the PUBLIC WEBSITE Events section to the real Laravel API.
+
+Do NOT modify the existing Events UI/design.
+
+Do NOT modify Admin Events Management.
+
+================================================
+
+PUBLIC API
+
+Create/use:
+
+GET /api/v1/public/events
+
+GET /api/v1/public/events/{id}
+
+Only expose public events.
+
+Do NOT expose:
+
+- Draft events
+- Cancelled events
+- Internal/admin information
+- Private registration information
+
+================================================
+
+PUBLIC EVENTS LIST
+
+Replace all mock/hardcoded event data.
+
+Load events from Laravel.
+
+Display:
+
+- Event image
+- Arabic title
+- English title
+- Short description
+- Location
+- Event date
+- Start time
+- End time
+- Registration status
+- Available capacity when appropriate
+
+================================================
+
+LANGUAGE
+
+Use the existing Arabic/English language system.
+
+Arabic:
+
+Display Arabic content.
+
+English:
+
+Display English content.
+
+Do not duplicate components.
+
+================================================
+
+EVENT DETAILS
+
+Connect the existing Event Details page.
+
+Display:
+
+- Title
+- Image
+- Full description
+- Location
+- Date
+- Start/end time
+- Registration information
+- Capacity information where appropriate
+
+================================================
+
+EVENT REGISTRATION
+
+If the existing public UI contains an event registration button:
+
+Connect it to the real Laravel backend.
+
+Use the existing authenticated user system.
+
+Create/use:
+
+POST /api/v1/public/events/{id}/register
+
+The backend must verify:
+
+- User is authenticated.
+- Event exists.
+- Event is published/upcoming.
+- Registration is still open.
+- User is not already registered.
+- Capacity has not been reached.
+
+Do NOT trust frontend validation.
+
+Return clear Laravel validation/business errors.
+
+================================================
+
+REGISTRATION UX
+
+While submitting:
+
+- Disable button.
+- Show spinner.
+- Prevent duplicate submissions.
+
+Success:
+
+"تم التسجيل في الفعالية بنجاح."
+
+Already registered:
+
+"أنت مسجل بالفعل في هذه الفعالية."
+
+Registration closed:
+
+"التسجيل في هذه الفعالية مغلق."
+
+Event full:
+
+"اكتمل العدد المسموح به للتسجيل."
+
+================================================
+
+PAGINATION
+
+Use server-side pagination for the public events list.
+
+Support:
+
+- page
+- per_page
+
+Keep the existing pagination UI.
+
+================================================
+
+FILTERING
+
+If the existing UI contains filters, connect them to the API:
+
+- Upcoming
+- Ongoing
+- Completed
+
+Do not perform filtering only on the frontend.
+
+================================================
+
+IMAGE HANDLING
+
+Use Laravel Storage URLs returned by the API.
+
+Handle missing images gracefully.
+
+================================================
+
+SEO
+
+For Event Details dynamically update:
+
+- Page title
+- Meta description
+- Open Graph title
+- Open Graph description
+- Open Graph image
+
+================================================
+
+LOADING & ERRORS
+
+Implement:
+
+- Skeleton loading
+- Empty state
+- Error state
+- Retry
+- 404 handling
+
+Use professional Arabic error messages.
+
+================================================
+
+API ARCHITECTURE
+
+Create/use:
+
+services/publicEvents.ts
+
+Do not put API calls directly inside UI components.
+
+Use the existing centralized API client.
+
+================================================
+
+SECURITY
+
+Verify:
+
+- Draft events cannot be accessed publicly.
+- Cancelled events cannot be accessed publicly.
+- Private registrations are never returned through public endpoints.
+- Registration always requires backend authorization.
+- Users cannot register for another user.
+- Duplicate registration is prevented server-side.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Published events appear publicly.
+2. Draft events do not appear.
+3. Cancelled events do not appear.
+4. Event details work.
+5. Arabic works.
+6. English works.
+7. Images load correctly.
+8. Pagination works.
+9. Authenticated user can register.
+10. Unauthenticated user is handled correctly.
+11. Duplicate registration is rejected.
+12. Full event rejects registration.
+13. Closed registration rejects registration.
+14. API errors display correctly.
+15. Refresh still loads real data.
+16. No mock event data remains.
+
+At the end provide:
+
+- PASS/FAIL checklist
+- API endpoints created/updated
+- Backend files changed
+- Frontend files changed
+- Any remaining limitations
+
+Do NOT modify unrelated modules.

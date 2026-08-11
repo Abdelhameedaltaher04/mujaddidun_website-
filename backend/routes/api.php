@@ -84,6 +84,12 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::patch('/news/{news}/archive', [NewsAdminController::class, 'archive'])->whereNumber('news');
     Route::delete('/news/{news}', [NewsAdminController::class, 'destroy'])->whereNumber('news');
 
+    // Article gallery images (same policy as the article itself).
+    Route::get('/news/{news}/images', [\App\Http\Controllers\Api\V1\News\NewsImageController::class, 'index'])->whereNumber('news');
+    Route::post('/news/{news}/images', [\App\Http\Controllers\Api\V1\News\NewsImageController::class, 'store'])->whereNumber('news');
+    Route::patch('/news/{news}/images/reorder', [\App\Http\Controllers\Api\V1\News\NewsImageController::class, 'reorder'])->whereNumber('news');
+    Route::delete('/news/images/{image}', [\App\Http\Controllers\Api\V1\News\NewsImageController::class, 'destroy'])->whereNumber('image');
+
     // Admin events management (authorization enforced by EventPolicy).
     Route::get('/events', [EventAdminController::class, 'index']);
     Route::post('/events', [EventAdminController::class, 'store']);

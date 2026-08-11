@@ -78,7 +78,7 @@ class NewsAdminController extends BaseController
         $this->authorize('view', $news);
 
         return $this->success(
-            new AdminNewsResource($news->load(['category', 'author'])),
+            new AdminNewsResource($news->load(['category', 'author', 'images'])),
             'News article retrieved successfully.',
         );
     }
@@ -192,6 +192,17 @@ class NewsAdminController extends BaseController
         $this->deleteCover($news);
         $news->cover_image_path = null;
         $news->save();
+
+        // Free gallery files too (only when no other row references them),
+        // then remove the rows so nothing is orphaned by the soft delete.
+        foreach ($news->images()->get() as $image) {
+            $path = $image->image;
+            $image->delete();
+            if (! \App\Models\NewsImage::where('image', $path)->exists()) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
+            }
+        }
+
         $news->delete();
 
         return $this->success(null, 'News article deleted successfully.');

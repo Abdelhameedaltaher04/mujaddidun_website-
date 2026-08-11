@@ -49,7 +49,7 @@ class PublicNewsController extends BaseController
             return $this->error('News article not found.', null, 404);
         }
 
-        $news->load('category');
+        $news->load(['category', 'images']);
 
         $related = News::query()
             ->with('category')

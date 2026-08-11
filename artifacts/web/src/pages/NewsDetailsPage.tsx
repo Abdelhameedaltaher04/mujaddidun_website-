@@ -27,7 +27,8 @@ export default function NewsDetailsPage() {
   const { t, dir, locale } = useLocale();
   const params = useParams<{ id: string }>();
   const id = params.id;
-  const [lightboxOpen, setLightboxOpen] = useState(false);
+  // Lightbox index over [featured image?, ...gallery images]; null = closed.
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const validId = !!id && /^\d+$/.test(id);
   const { data: article, isPending, isError, error, refetch } =
@@ -129,6 +130,16 @@ export default function NewsDetailsPage() {
     );
   }
 
+  // Lightbox items: featured image first (if any), then gallery images.
+  const lightboxItems: { src: string; alt: string }[] = [
+    ...(article.featured_image_url ? [{ src: article.featured_image_url, alt: title }] : []),
+    ...article.gallery_images.map((image) => ({
+      src: image.image,
+      alt: (lang === 'ar' ? image.alt_text_ar : image.alt_text_en) || title,
+    })),
+  ];
+  const galleryOffset = article.featured_image_url ? 1 : 0;
+
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
   const encodedUrl = encodeURIComponent(shareUrl);
   const categoryKey = newsCategoryKey(article.category);
@@ -177,7 +188,7 @@ export default function NewsDetailsPage() {
             {article.featured_image_url ? (
               <button
                 type="button"
-                onClick={() => setLightboxOpen(true)}
+                onClick={() => setLightboxIndex(0)}
                 aria-label={title}
                 className="w-full aspect-[2/1] rounded-3xl bg-muted border border-border flex items-center justify-center mb-12 shadow-sm overflow-hidden cursor-pointer transition-all hover:shadow-md hover:border-primary/40 focus-ring-standard relative"
                 data-testid="button-article-featured-image"
@@ -200,6 +211,41 @@ export default function NewsDetailsPage() {
                 <p key={index}>{paragraph}</p>
               ))}
             </div>
+
+            {/* Gallery images (hidden entirely when the article has none) */}
+            {article.gallery_images.length > 0 ? (
+              <div className="mb-12" data-testid="article-gallery">
+                <h2 className="text-2xl font-display font-bold text-foreground mb-6">
+                  {t('news.galleryHeading')}
+                </h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {article.gallery_images.map((image, index) => {
+                    const alt = (lang === 'ar' ? image.alt_text_ar : image.alt_text_en) || title;
+                    return (
+                      <button
+                        key={image.id}
+                        type="button"
+                        onClick={() => setLightboxIndex(galleryOffset + index)}
+                        aria-label={alt}
+                        className="aspect-[4/3] rounded-2xl bg-muted border border-border flex items-center justify-center overflow-hidden cursor-pointer transition-all hover:shadow-md hover:border-primary/40 focus-ring-standard relative"
+                        data-testid={`button-gallery-image-${image.id}`}
+                      >
+                        <ImageIcon className="w-10 h-10 text-muted-foreground/40 opacity-50" />
+                        <img
+                          src={image.image}
+                          alt={alt}
+                          loading="lazy"
+                          className="absolute inset-0 h-full w-full object-cover"
+                          onError={(event) => {
+                            event.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
 
             {/* Share & Back */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-6 py-8 border-t border-b border-border">
@@ -280,17 +326,17 @@ export default function NewsDetailsPage() {
       <ContactCtaSection />
       <Footer />
 
-      {article.featured_image_url ? (
+      {lightboxItems.length > 0 ? (
         <GalleryLightbox
-          openIndex={lightboxOpen ? 0 : null}
-          count={1}
-          onNavigate={() => setLightboxOpen(true)}
-          onClose={() => setLightboxOpen(false)}
-          getLabel={() => title}
-          renderItem={() => (
+          openIndex={lightboxIndex}
+          count={lightboxItems.length}
+          onNavigate={(index) => setLightboxIndex(index)}
+          onClose={() => setLightboxIndex(null)}
+          getLabel={(index) => lightboxItems[index]?.alt ?? title}
+          renderItem={(index) => (
             <img
-              src={article.featured_image_url ?? undefined}
-              alt={title}
+              src={lightboxItems[index]?.src}
+              alt={lightboxItems[index]?.alt ?? title}
               className="max-h-[80vh] w-auto rounded-2xl shadow-2xl object-contain"
             />
           )}

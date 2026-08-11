@@ -18,6 +18,7 @@ import {
   useUpdateNews,
 } from '@/hooks/useAdminNews';
 import type { NewsInput } from '@/services/adminNews';
+import { NewsGalleryManager } from '@/components/admin/news/NewsGalleryManager';
 
 /**
  * Create (/admin/news/new) and edit (/admin/news/:id/edit) page — both
@@ -104,14 +105,17 @@ export default function AdminNewsFormPage() {
             </CardContent>
           </Card>
         ) : (
-          <NewsForm
-            key={isEdit ? editId : 'new'}
-            article={isEdit ? article.data ?? null : null}
-            isSaving={isSaving}
-            serverErrors={serverErrors}
-            onSubmit={handleSubmit}
-            onCancel={() => navigate('/admin/news')}
-          />
+          <>
+            <NewsForm
+              key={isEdit ? editId : 'new'}
+              article={isEdit ? article.data ?? null : null}
+              isSaving={isSaving}
+              serverErrors={serverErrors}
+              onSubmit={handleSubmit}
+              onCancel={() => navigate('/admin/news')}
+            />
+            {isEdit && editId ? <NewsGalleryManager newsId={editId} /> : null}
+          </>
         )}
       </div>
     </AdminLayout>

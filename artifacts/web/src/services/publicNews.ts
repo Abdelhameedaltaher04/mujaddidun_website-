@@ -18,10 +18,19 @@ export interface PublicNewsItem {
   published_at: string | null;
 }
 
+export interface PublicNewsGalleryImage {
+  id: number;
+  /** Public URL served through /api/v1/files. */
+  image: string;
+  alt_text_ar: string;
+  alt_text_en: string;
+}
+
 export interface PublicNewsArticle extends PublicNewsItem {
   content_ar: string;
   content_en: string;
   author: string | null;
+  gallery_images: PublicNewsGalleryImage[];
   related: PublicNewsItem[];
 }
 
