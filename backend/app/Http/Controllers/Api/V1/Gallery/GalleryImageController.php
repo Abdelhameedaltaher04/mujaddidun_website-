@@ -40,7 +40,7 @@ class GalleryImageController extends BaseController
         $files = $input['images'];
 
         if (count($input['alt_ar']) !== count($files) || count($input['alt_en']) !== count($files)) {
-            return $this->error('Each image requires Arabic and English alt text.', 422);
+            return $this->error('Each image requires Arabic and English alt text.', null, 422);
         }
 
         // Store files before the transaction so a DB rollback never commits
@@ -219,7 +219,7 @@ class GalleryImageController extends BaseController
         $existing = $album->images()->pluck('id')->all();
 
         if (count($order) !== count($existing) || array_diff($order, $existing) !== []) {
-            return $this->error("The order must list every image in this album exactly once.", 422);
+            return $this->error('The order must list every image in this album exactly once.', null, 422);
         }
 
         DB::transaction(function () use ($album, $order): void {

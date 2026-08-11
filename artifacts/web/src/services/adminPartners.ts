@@ -1,6 +1,5 @@
 import { apiClient, type ApiEnvelope } from '@/services/api';
 import type { PaginatedResponse } from '@/services/adminNews';
-import { mockPartnersDb } from '@/services/mocks/adminPartnersMock';
 
 /**
  * Partners Management service.
@@ -15,9 +14,8 @@ import { mockPartnersDb } from '@/services/mocks/adminPartnersMock';
  * - DELETE /partners/{id}
  *
  * All responses use the ApiEnvelope + Laravel paginator (`data` + `meta`)
- * shapes. Swap USE_MOCK to false once the Laravel API is connected.
+ * shapes.
  */
-const USE_MOCK = true;
 
 export type PartnerStatus = 'active' | 'inactive';
 
@@ -79,16 +77,14 @@ export interface PartnersListParams {
 export const adminPartnersApi = {
   /** GET /partners */
   async list(params: PartnersListParams): Promise<PaginatedResponse<Partner>> {
-    if (USE_MOCK) return mockPartnersDb.list(params);
     const response = await apiClient.get<
-      ApiEnvelope<PaginatedResponse<Partner>>
+      ApiEnvelope<Partner[]> & { meta: PaginatedResponse<Partner>['meta'] }
     >('/partners', { params });
-    return response.data.data;
+    return { data: response.data.data, meta: response.data.meta };
   },
 
   /** GET /partners/{id} */
   async get(id: number): Promise<Partner> {
-    if (USE_MOCK) return mockPartnersDb.get(id);
     const response = await apiClient.get<ApiEnvelope<Partner>>(
       `/partners/${id}`,
     );
@@ -97,7 +93,6 @@ export const adminPartnersApi = {
 
   /** POST /partners (multipart with `logo` file) */
   async create(input: PartnerInput): Promise<Partner> {
-    if (USE_MOCK) return mockPartnersDb.create(input);
     const response = await apiClient.post<ApiEnvelope<Partner>>(
       '/partners',
       buildPartnerFormData(input),
@@ -108,7 +103,6 @@ export const adminPartnersApi = {
 
   /** PUT /partners/{id} (multipart + `_method=PUT` when logo present) */
   async update(id: number, input: PartnerInput): Promise<Partner> {
-    if (USE_MOCK) return mockPartnersDb.update(id, input);
     const formData = buildPartnerFormData(input);
     formData.append('_method', 'PUT');
     const response = await apiClient.post<ApiEnvelope<Partner>>(
@@ -121,7 +115,6 @@ export const adminPartnersApi = {
 
   /** PATCH /partners/{id}/status */
   async setStatus(id: number, status: PartnerStatus): Promise<Partner> {
-    if (USE_MOCK) return mockPartnersDb.setStatus(id, status);
     const response = await apiClient.patch<ApiEnvelope<Partner>>(
       `/partners/${id}/status`,
       { status },
@@ -134,7 +127,6 @@ export const adminPartnersApi = {
    * the server assigns display_order = index + 1.
    */
   async reorder(ids: number[]): Promise<Partner[]> {
-    if (USE_MOCK) return mockPartnersDb.reorder(ids);
     const response = await apiClient.patch<ApiEnvelope<Partner[]>>(
       '/partners/reorder',
       { ids },
@@ -144,7 +136,6 @@ export const adminPartnersApi = {
 
   /** DELETE /partners/{id} */
   async remove(id: number): Promise<void> {
-    if (USE_MOCK) return mockPartnersDb.remove(id);
     await apiClient.delete(`/partners/${id}`);
   },
 };

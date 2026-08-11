@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Files\PublicFileController;
 use App\Http\Controllers\Api\V1\News\NewsAdminController;
 use App\Http\Controllers\Api\V1\Gallery\GalleryAlbumController;
 use App\Http\Controllers\Api\V1\Gallery\GalleryImageController;
+use App\Http\Controllers\Api\V1\Partners\PartnerController;
 use App\Http\Controllers\Api\V1\Programs\ProgramAdminController;
 use App\Http\Controllers\Api\V1\Programs\ProgramParticipantController;
 use App\Http\Controllers\Api\V1\Users\ProfileController;
@@ -125,6 +126,15 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::put('/gallery/images/{image}', [GalleryImageController::class, 'update'])->whereNumber('image');
     Route::patch('/gallery/images/{image}/cover', [GalleryImageController::class, 'setAsCover'])->whereNumber('image');
     Route::delete('/gallery/images/{image}', [GalleryImageController::class, 'destroy'])->whereNumber('image');
+
+    // Admin partners management (authorization enforced by PartnerPolicy).
+    Route::get('/partners', [PartnerController::class, 'index']);
+    Route::post('/partners', [PartnerController::class, 'store']);
+    Route::patch('/partners/reorder', [PartnerController::class, 'reorder']);
+    Route::get('/partners/{partner}', [PartnerController::class, 'show'])->whereNumber('partner');
+    Route::put('/partners/{partner}', [PartnerController::class, 'update'])->whereNumber('partner');
+    Route::patch('/partners/{partner}/status', [PartnerController::class, 'setStatus'])->whereNumber('partner');
+    Route::delete('/partners/{partner}', [PartnerController::class, 'destroy'])->whereNumber('partner');
 });
 
 // Public file serving from the public storage disk (images are public

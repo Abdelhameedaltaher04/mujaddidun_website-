@@ -1,0 +1,235 @@
+Continue the existing project.
+
+The Users, News, Events, Programs, and Gallery modules are now successfully connected to the real Laravel API.
+
+================================================
+
+TASK
+
+Connect the Partners Management module to the real Laravel backend.
+
+Do NOT modify the existing UI design.
+
+Do NOT modify Authentication, Users, News, Events, Programs, or Gallery.
+
+================================================
+
+BACKEND
+
+Use the existing:
+
+- Laravel backend
+- Existing database
+- Laravel Sanctum
+- API versioning
+- Existing authorization system
+- Existing standardized API response structure
+
+Do NOT create duplicate systems.
+
+================================================
+
+PARTNERS API
+
+Implement:
+
+GET    /api/v1/partners
+GET    /api/v1/partners/{id}
+POST   /api/v1/partners
+PUT    /api/v1/partners/{id}
+PATCH  /api/v1/partners/{id}/status
+PATCH  /api/v1/partners/reorder
+DELETE /api/v1/partners/{id}
+
+================================================
+
+DATABASE
+
+Use the existing database architecture.
+
+If the Partners table does not exist:
+
+- Create a Laravel migration.
+- Create the Partner model.
+- Add appropriate indexes.
+- Add necessary constraints.
+
+Do NOT delete existing data.
+
+================================================
+
+PARTNER DATA
+
+Support:
+
+- Arabic name
+- English name
+- Partner logo
+- Partner type
+- Website URL
+- Arabic short description
+- English short description
+- Display order
+- Status
+
+Statuses:
+
+- Active
+- Inactive
+
+================================================
+
+VALIDATION
+
+Use Laravel Form Requests.
+
+Validate:
+
+- Required Arabic/English names
+- Valid website URL when provided
+- Valid partner type
+- Positive display order
+- Valid logo format
+- Maximum logo size
+
+Return validation errors using the existing API response structure.
+
+================================================
+
+LOGO STORAGE
+
+Use Laravel Storage.
+
+Support:
+
+- JPG
+- PNG
+- WEBP
+- SVG
+
+Maximum 5MB.
+
+Return the correct public logo URL.
+
+Do not store image binaries directly in the database.
+
+================================================
+
+DISPLAY ORDER
+
+Implement server-side partner reordering.
+
+Endpoint:
+
+PATCH /api/v1/partners/reorder
+
+The order must be persisted in the database.
+
+================================================
+
+AUTHORIZATION
+
+Use Laravel Policies.
+
+Only authorized Admin/Moderator users can manage Partners.
+
+Unauthorized requests must return:
+
+403 Forbidden
+
+================================================
+
+SEARCH & FILTERING
+
+Implement server-side:
+
+- Search by Arabic/English partner name
+- Filter by partner type
+- Filter by status
+
+================================================
+
+PAGINATION
+
+Implement server-side pagination.
+
+Support:
+
+- page
+- per_page
+
+Return pagination metadata.
+
+================================================
+
+API RESOURCES
+
+Use Laravel API Resources.
+
+Maintain the existing standardized response structure.
+
+================================================
+
+FRONTEND
+
+Connect the existing Partners Management page to the real Laravel API.
+
+Replace all mock data.
+
+Create/use:
+
+services/partners.ts
+
+Do not put API requests directly inside UI components.
+
+================================================
+
+LOADING & ERRORS
+
+Keep the existing:
+
+- Skeleton loading
+- Empty state
+- Error state
+- Retry
+- Upload progress
+- Form loading
+- Confirmation dialogs
+
+Display real Laravel validation errors.
+
+================================================
+
+PUBLIC WEBSITE
+
+Do NOT connect the public Partners section yet.
+
+Complete and test the Admin Partners module first.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Admin retrieves partners.
+2. Admin searches partners.
+3. Admin filters partners.
+4. Pagination works.
+5. Admin creates a partner.
+6. Admin edits a partner.
+7. Admin uploads a logo.
+8. Admin replaces a logo.
+9. Admin activates/deactivates a partner.
+10. Admin reorders partners.
+11. New order persists after refresh.
+12. Admin deletes a partner.
+13. Invalid website URLs are rejected.
+14. Invalid logo files are rejected.
+15. Files larger than 5MB are rejected.
+16. Unauthorized users receive 403.
+17. Unauthenticated users receive 401.
+
+Fix any issues found.
+
+At the end, provide a clear PASS/FAIL checklist.

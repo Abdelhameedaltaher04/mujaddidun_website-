@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PublicFileController extends BaseController
 {
     /** Directories on the public disk that may be served publicly. */
-    private const ALLOWED_PREFIXES = ['news-covers/', 'event-covers/', 'program-covers/', 'gallery-covers/', 'gallery-images/'];
+    private const ALLOWED_PREFIXES = ['news-covers/', 'event-covers/', 'program-covers/', 'gallery-covers/', 'gallery-images/', 'partner-logos/'];
 
     public function show(string $path): Response
     {
@@ -45,8 +45,14 @@ class PublicFileController extends BaseController
             abort(404);
         }
 
-        return $disk->response($path, null, [
-            'Cache-Control' => 'public, max-age=86400',
-        ]);
+        $headers = ['Cache-Control' => 'public, max-age=86400'];
+
+        // SVGs can embed scripts; neutralize them when rendered directly.
+        if (str_ends_with(strtolower($path), '.svg')) {
+            $headers['Content-Security-Policy'] = "default-src 'none'; style-src 'unsafe-inline'";
+            $headers['X-Content-Type-Options'] = 'nosniff';
+        }
+
+        return $disk->response($path, null, $headers);
     }
 }

@@ -213,7 +213,7 @@ class GalleryAlbumController extends BaseController
         $existing = GalleryAlbum::pluck('id')->all();
 
         if (count($order) !== count($existing) || array_diff($order, $existing) !== []) {
-            return $this->error('The order must list every album exactly once.', 422);
+            return $this->error('The order must list every album exactly once.', null, 422);
         }
 
         DB::transaction(function () use ($order): void {

@@ -14,6 +14,7 @@ class Partner extends Model
         'name_ar',
         'name_en',
         'slug',
+        'type',
         'description_ar',
         'description_en',
         'logo_path',
