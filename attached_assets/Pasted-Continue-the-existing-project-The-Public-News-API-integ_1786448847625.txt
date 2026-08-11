@@ -1,0 +1,218 @@
+Continue the existing project.
+
+The Public News API integration is complete.
+
+The current remaining limitation is:
+
+The old mock news articles contained multiple gallery images, while the real News backend currently exposes only one featured image.
+
+Fix this limitation properly.
+
+================================================
+
+TASK
+
+Add support for multiple gallery images for News articles.
+
+Do NOT modify the existing overall UI design.
+
+Do NOT break the existing News Admin or Public News functionality.
+
+================================================
+
+BACKEND
+
+Extend the existing Laravel News architecture to support article gallery images.
+
+Create/use a proper relationship:
+
+News
+  hasMany
+    NewsImage
+
+NewsImage
+  belongsTo
+    News
+
+================================================
+
+DATABASE
+
+If the table does not exist, create a Laravel migration:
+
+news_images
+
+Fields should include at minimum:
+
+- id
+- news_id
+- image
+- alt_text_ar
+- alt_text_en
+- display_order
+- created_at
+- updated_at
+
+Add:
+
+- Foreign key to news.id
+- ON DELETE CASCADE
+- Indexes where appropriate
+
+Do NOT delete existing News data.
+
+================================================
+
+IMAGE STORAGE
+
+Use Laravel Storage.
+
+Support:
+
+- JPG
+- PNG
+- WEBP
+
+Maximum 5MB per image.
+
+Do not store image binaries directly in the database.
+
+Return proper public image URLs.
+
+================================================
+
+ADMIN NEWS
+
+Extend the existing Admin News Management module to support:
+
+- Upload multiple gallery images
+- View gallery images
+- Delete gallery image
+- Reorder gallery images
+- Set featured image if appropriate
+
+Do not redesign the existing News Management UI.
+
+Use the existing upload components where possible.
+
+================================================
+
+API
+
+Add:
+
+GET    /api/v1/news/{id}/images
+POST   /api/v1/news/{id}/images
+DELETE /api/v1/news/images/{imageId}
+PATCH  /api/v1/news/{id}/images/reorder
+
+If the existing News API Resource already supports images, include the gallery images there as well.
+
+================================================
+
+PUBLIC API
+
+Update:
+
+GET /api/v1/public/news/{id}
+
+The response should include:
+
+- featured_image
+- gallery_images
+
+Example:
+
+{
+  "featured_image": "...",
+  "gallery_images": [
+    {
+      "id": 1,
+      "image": "...",
+      "alt_text": "..."
+    }
+  ]
+}
+
+Only expose images belonging to published News articles.
+
+Do NOT expose gallery images for Draft or Archived articles through public endpoints.
+
+================================================
+
+PUBLIC NEWS DETAILS
+
+Update the existing News Details page.
+
+If gallery_images contains multiple images:
+
+- Display the existing featured image.
+- Display the gallery images using the existing visual design.
+- Allow the user to view the images.
+- Keep the layout responsive.
+- Do not create a completely new design.
+
+If there are no gallery images:
+
+- Show only the featured image.
+- Do not show an empty gallery container.
+
+================================================
+
+SECURITY
+
+Verify that:
+
+- Draft news images cannot be accessed through public APIs.
+- Archived news images cannot be accessed through public APIs.
+- Unauthorized Admin gallery actions return 403.
+- Unauthenticated requests return 401 where authentication is required.
+
+================================================
+
+FRONTEND
+
+Keep API requests inside the existing service architecture.
+
+Update:
+
+services/news.ts
+
+or create:
+
+services/newsImages.ts
+
+Do not put API requests directly inside UI components.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Admin creates News.
+2. Admin uploads multiple gallery images.
+3. Gallery images are stored correctly.
+4. Gallery images can be reordered.
+5. Gallery images can be deleted.
+6. Featured image still works.
+7. Public published News returns gallery images.
+8. Public News Details displays gallery images.
+9. Draft News gallery images are not publicly accessible.
+10. Archived News gallery images are not publicly accessible.
+11. Existing News without gallery images still works.
+12. Existing News with only a featured image still works.
+13. Image validation works.
+14. Files larger than 5MB are rejected.
+15. Unauthorized actions return 403.
+
+Fix all issues found.
+
+At the end provide:
+
+- PASS/FAIL checklist
+- Backend files changed
+- Frontend files changed
+- Database migrations created
+- API endpoints added
+- Any remaining limitations

@@ -34,9 +34,11 @@ const STAT_ICONS: Record<StatKey, LucideIcon> = {
   users: Users,
   news: Newspaper,
   events: CalendarDays,
+  programs: ClipboardList,
   volunteerApplications: ClipboardList,
   donations: HandCoins,
   contactMessages: Mail,
+  unreadMessages: Mail,
 };
 
 /** Admin dashboard overview: statistics, charts, activity, quick actions. */

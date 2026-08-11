@@ -1,30 +1,26 @@
 /**
- * Admin dashboard data service.
- *
- * Each function mirrors a future Laravel endpoint (noted alongside) and
- * already returns typed payloads, so switching from mock data to the real
- * API only means replacing the mock import with `apiClient` calls —
- * no component changes required.
+ * Admin dashboard data service — real Laravel endpoints (admin only):
+ *   GET /admin/dashboard/statistics
+ *   GET /admin/dashboard/charts
+ *   GET /admin/dashboard/activities
  */
-import {
-  mockActivities,
-  mockChartData,
-  mockStats,
-} from './mocks/adminDashboardMock';
+import { apiClient, type ApiEnvelope } from './api';
 
 export type StatKey =
   | 'users'
   | 'news'
   | 'events'
+  | 'programs'
   | 'volunteerApplications'
   | 'donations'
-  | 'contactMessages';
+  | 'contactMessages'
+  | 'unreadMessages';
 
 export interface DashboardStat {
   key: StatKey;
-  /** Current total. Donations are in JOD. */
+  /** Current total. */
   value: number;
-  /** Percentage change vs. the previous period (negative = down). */
+  /** Percentage change vs. the previous 30-day period (negative = down). */
   trend: number;
 }
 
@@ -60,27 +56,28 @@ export interface DashboardChartData {
   };
 }
 
-const MOCK_DELAY_MS = 250;
-
-function mockResponse<T>(data: T): Promise<T> {
-  return new Promise((resolve) =>
-    setTimeout(() => resolve(data), MOCK_DELAY_MS),
-  );
-}
-
 export const adminDashboardApi = {
-  /** Future endpoint: GET /admin/dashboard/stats */
+  /** GET /admin/dashboard/statistics */
   async getStats(): Promise<DashboardStat[]> {
-    return mockResponse(mockStats);
+    const response = await apiClient.get<ApiEnvelope<DashboardStat[]>>(
+      '/admin/dashboard/statistics',
+    );
+    return response.data.data;
   },
 
-  /** Future endpoint: GET /admin/dashboard/charts */
+  /** GET /admin/dashboard/charts */
   async getChartData(): Promise<DashboardChartData> {
-    return mockResponse(mockChartData);
+    const response = await apiClient.get<ApiEnvelope<DashboardChartData>>(
+      '/admin/dashboard/charts',
+    );
+    return response.data.data;
   },
 
-  /** Future endpoint: GET /admin/dashboard/activities */
+  /** GET /admin/dashboard/activities */
   async getRecentActivities(): Promise<ActivityItem[]> {
-    return mockResponse(mockActivities);
+    const response = await apiClient.get<ApiEnvelope<ActivityItem[]>>(
+      '/admin/dashboard/activities',
+    );
+    return response.data.data;
   },
 };

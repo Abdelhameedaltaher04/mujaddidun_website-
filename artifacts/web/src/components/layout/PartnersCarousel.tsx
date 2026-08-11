@@ -4,6 +4,7 @@ import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLocale } from '@/contexts/LocaleContext';
+import { usePublicSettings } from '@/hooks/usePublicSettings';
 
 const PARTNERS = [
   { id: '1', logo: undefined },
@@ -18,6 +19,7 @@ const PARTNERS = [
 
 export function PartnersCarousel() {
   const { t, dir } = useLocale();
+  const settings = usePublicSettings();
   
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { 
@@ -48,6 +50,9 @@ export function PartnersCarousel() {
 
   // Duplicate items slightly so loop feels seamless on very wide screens
   const items = [...PARTNERS, ...PARTNERS];
+
+  // Admin-controlled visibility (hidden when show_partners is off).
+  if (settings && !settings.controls.show_partners) return null;
 
   return (
     <div 

@@ -2,14 +2,20 @@ import { useEffect, useState } from 'react';
 import { ArrowUp } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa6';
 import { useLocale } from '@/contexts/LocaleContext';
+import { usePublicSettings, toWhatsAppNumber } from '@/hooks/usePublicSettings';
 import { cn } from '@/lib/utils';
 
-// Existing public contact number, normalized for wa.me.
-const WHATSAPP_NUMBER = '96261234567';
+// Fallback contact number while settings load, normalized for wa.me.
+const DEFAULT_WHATSAPP_NUMBER = '96261234567';
 
 export function FloatingActions() {
   const { t } = useLocale();
+  const settings = usePublicSettings();
   const [showBackToTop, setShowBackToTop] = useState(false);
+
+  const whatsappNumber = settings
+    ? toWhatsAppNumber(settings.contact.whatsapp || settings.contact.phone)
+    : DEFAULT_WHATSAPP_NUMBER;
 
   useEffect(() => {
     const updateVisibility = () => setShowBackToTop(window.scrollY > 360);
@@ -46,8 +52,9 @@ export function FloatingActions() {
         <ArrowUp className="h-5 w-5" aria-hidden="true" />
       </button>
 
+      {whatsappNumber && (
       <a
-        href={`https://wa.me/${WHATSAPP_NUMBER}`}
+        href={`https://wa.me/${whatsappNumber}`}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={t('common.whatsapp')}
@@ -56,6 +63,7 @@ export function FloatingActions() {
       >
         <FaWhatsapp className="h-6 w-6" aria-hidden="true" />
       </a>
+      )}
     </>
   );
 }

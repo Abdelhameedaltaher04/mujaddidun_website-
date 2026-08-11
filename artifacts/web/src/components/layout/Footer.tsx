@@ -4,9 +4,10 @@ import {
   MapPin,
   Phone,
 } from 'lucide-react';
-import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa6';
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaWhatsapp, FaYoutube } from 'react-icons/fa6';
 import { MainContainer } from '@/components/layout/MainContainer';
 import { useLocale } from '@/contexts/LocaleContext';
+import { usePublicSettings, toWhatsAppNumber, safeExternalUrl } from '@/hooks/usePublicSettings';
 import logoUrl from '@/assets/mujaddidun-logo.png';
 
 const QUICK_LINKS = [
@@ -18,19 +19,42 @@ const QUICK_LINKS = [
   { key: 'nav.volunteer', href: '/volunteer' },
 ] as const;
 
-const SOCIAL_LINKS = [
-  { name: 'Facebook', icon: FaFacebookF },
-  { name: 'Instagram', icon: FaInstagram },
-  { name: 'WhatsApp', icon: FaWhatsapp },
-] as const;
+const SOCIAL_ICONS = {
+  facebook: { name: 'Facebook', icon: FaFacebookF },
+  instagram: { name: 'Instagram', icon: FaInstagram },
+  linkedin: { name: 'LinkedIn', icon: FaLinkedinIn },
+  youtube: { name: 'YouTube', icon: FaYoutube },
+  whatsapp: { name: 'WhatsApp', icon: FaWhatsapp },
+} as const;
+
+/** Fallback while settings load (matches the previous static footer). */
+const DEFAULT_SOCIAL = ['facebook', 'instagram', 'whatsapp'] as const;
 
 /**
  * Public site footer: logo, quick links, contact info,
  * social media placeholders, and copyright line.
  */
 export function Footer() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const settings = usePublicSettings();
   const year = new Date().getFullYear();
+
+  const siteName =
+    (locale === 'ar' ? settings?.general.site_name_ar : settings?.general.site_name_en) ||
+    t('app.name');
+  const footerLogo = settings?.branding.footer_logo_url || settings?.general.logo_url || logoUrl;
+
+  const socialEntries = settings
+    ? (Object.keys(SOCIAL_ICONS) as (keyof typeof SOCIAL_ICONS)[])
+        .filter((key) => settings.social[key]?.enabled && settings.social[key]?.value)
+        .map((key) => {
+          const raw = settings.social[key].value as string;
+          const number = key === 'whatsapp' ? toWhatsAppNumber(raw) : null;
+          const href = number ? `https://wa.me/${number}` : safeExternalUrl(raw);
+          return href ? { key, href, external: true } : null;
+        })
+        .filter((entry): entry is { key: keyof typeof SOCIAL_ICONS; href: string; external: boolean } => entry !== null)
+    : DEFAULT_SOCIAL.map((key) => ({ key, href: `#${key}`, external: false }));
 
   return (
     <footer className="border-t border-border bg-muted" data-testid="footer">
@@ -39,16 +63,18 @@ export function Footer() {
           {/* Logo + brief */}
           <div>
             <img
-              src={logoUrl}
-              alt={t('app.name')}
+              src={footerLogo}
+              alt={siteName}
               className="h-16 w-auto"
               data-testid="img-footer-logo"
             />
             <p className="mt-4 text-sm font-semibold text-foreground">
-              {t('app.name')}
+              {siteName}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              {t('footer.aboutBrief')}
+              {(locale === 'ar'
+                ? settings?.general.description_ar
+                : settings?.general.description_en) || t('footer.aboutBrief')}
             </p>
           </div>
 
@@ -80,15 +106,19 @@ export function Footer() {
             <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />
-                <span>{t('footer.address')}</span>
+                <span>
+                  {(locale === 'ar'
+                    ? settings?.contact.address_ar
+                    : settings?.contact.address_en) || t('footer.address')}
+                </span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 shrink-0" aria-hidden="true" />
-                <span dir="ltr">{t('footer.phone')}</span>
+                <span dir="ltr">{settings?.contact.phone || t('footer.phone')}</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 shrink-0" aria-hidden="true" />
-                <span>{t('footer.email')}</span>
+                <span>{settings?.contact.email || t('footer.email')}</span>
               </li>
             </ul>
           </div>
@@ -99,17 +129,22 @@ export function Footer() {
               {t('footer.followUs')}
             </h2>
             <div className="mt-4 flex items-center gap-3">
-              {SOCIAL_LINKS.map(({ name, icon: Icon }) => (
-                <a
-                  key={name}
-                  href={`#${name.toLowerCase()}`}
-                  aria-label={name}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-card border border-border text-muted-foreground transition-all duration-300 cursor-pointer hover:scale-110 hover:text-primary hover:border-primary/50 hover:shadow-lg hover:shadow-primary/20 focus-ring-standard"
-                  data-testid={`social-${name.toLowerCase()}`}
-                >
-                  <Icon className="h-4 w-4" aria-hidden="true" />
-                </a>
-              ))}
+              {socialEntries.map(({ key, href, external }) => {
+                const { name, icon: Icon } = SOCIAL_ICONS[key];
+                return (
+                  <a
+                    key={key}
+                    href={href}
+                    target={external ? '_blank' : undefined}
+                    rel={external ? 'noopener noreferrer' : undefined}
+                    aria-label={name}
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-card border border-border text-muted-foreground transition-all duration-300 cursor-pointer hover:scale-110 hover:text-primary hover:border-primary/50 hover:shadow-lg hover:shadow-primary/20 focus-ring-standard"
+                    data-testid={`social-${key}`}
+                  >
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                );
+              })}
             </div>
           </div>
         </div>

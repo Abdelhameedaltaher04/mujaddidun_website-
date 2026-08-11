@@ -181,15 +181,26 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::post('/contact-messages/{message}/reply', [ContactMessageController::class, 'reply'])->whereNumber('message');
     Route::delete('/contact-messages/{message}', [ContactMessageController::class, 'destroy'])->whereNumber('message');
 
+    // Admin dashboard statistics (admin only; enforced in controller).
+    Route::get('/admin/dashboard/statistics', [\App\Http\Controllers\Api\V1\Dashboard\DashboardController::class, 'statistics']);
+    Route::get('/admin/dashboard/charts', [\App\Http\Controllers\Api\V1\Dashboard\DashboardController::class, 'charts']);
+    Route::get('/admin/dashboard/activities', [\App\Http\Controllers\Api\V1\Dashboard\DashboardController::class, 'activities']);
+
     // Website settings (admin only; enforced by WebsiteSettingPolicy).
     Route::get('/settings', [SettingsController::class, 'index']);
     Route::put('/settings/{section}', [SettingsController::class, 'update'])
         ->whereIn('section', ['general', 'contact', 'social', 'branding', 'seo', 'email', 'controls']);
 });
 
-// Sanitized public settings for the future public website (no auth; the
-// email section and any server configuration are never included).
+// Sanitized public settings for the public website (no auth; the email
+// section and any server configuration are never included).
 Route::get('/settings/public', [SettingsController::class, 'publicIndex']);
+Route::get('/public/settings', [SettingsController::class, 'publicIndex']);
+
+// Public contact form (no auth). Rate limited per IP; a honeypot field in
+// the request rejects naive bots.
+Route::post('/public/contact-messages', [\App\Http\Controllers\Api\V1\Contact\PublicContactMessageController::class, 'store'])
+    ->middleware('throttle:5,1');
 
 // Public read-only news (no auth). Only published articles are exposed;
 // drafts and archived articles 404 / are absent from lists.

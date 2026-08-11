@@ -310,6 +310,9 @@
       "phoneRequired": "Phone number is required.",
       "phoneInvalid": "Please enter a valid phone number.",
       "subjectRequired": "Subject is required.",
+      "messageRequired": "Message is required.",
+      "sendError": "We couldn't send your message. Please try again later.",
+      "tooMany": "Too many attempts. Please wait a minute and try again.",
       "successTitle": "Your message was sent successfully ✅",
       "successMsg": "Thank you for contacting us. We will get back to you as soon as possible.",
       "okBtn": "OK",
@@ -719,7 +722,9 @@
         "events": "Total Events",
         "volunteerApplications": "Volunteer Applications",
         "donations": "Total Donations",
-        "contactMessages": "Contact Messages"
+        "programs": "Total Programs",
+        "contactMessages": "Contact Messages",
+        "unreadMessages": "Unread Messages"
       },
       "charts": {
         "usersGrowth": "Users Growth",

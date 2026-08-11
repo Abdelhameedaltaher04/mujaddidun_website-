@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { FloatingActions } from '@/components/layout/FloatingActions';
+import { SiteSeoDefaults } from '@/components/layout/SiteSeoDefaults';
 import { SessionExpiredDialog } from '@/components/auth/AuthLayout';
 import { LocaleProvider } from '@/contexts/LocaleContext';
 import {
@@ -254,6 +255,7 @@ function App() {
         <TooltipProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
             <ScrollToTop />
+            <SiteSeoDefaults />
             <Router />
             <PublicChrome />
             <SessionExpiredDialog />

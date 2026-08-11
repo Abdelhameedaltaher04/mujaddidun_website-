@@ -21,6 +21,10 @@ import {
 import { FormEvent, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { isValidPhoneNumber, type CountryCode } from 'libphonenumber-js';
+import { useMutation } from '@tanstack/react-query';
+import { publicContactApi } from '@/services/publicContact';
+import { getApiError } from '@/services/api';
+import { usePublicSettings, toWhatsAppNumber, safeExternalUrl } from '@/hooks/usePublicSettings';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 interface FormValues {
@@ -36,12 +40,43 @@ type FormErrors = Partial<Record<keyof FormValues, string>>;
 const EMPTY_VALUES: FormValues = { name: '', email: '', phone: '', subject: '', message: '' };
 
 export default function ContactPage() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const settings = usePublicSettings();
   const [values, setValues] = useState<FormValues>(EMPTY_VALUES);
+  // Honeypot: humans never see or fill this; bots autofilling every input do.
+  const [honeypot, setHoneypot] = useState('');
   const [phoneCountry, setPhoneCountry] = useState<CountryCode>('JO');
   const [errors, setErrors] = useState<FormErrors>({});
+  const [formError, setFormError] = useState<string | null>(null);
   const [successOpen, setSuccessOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const submitMutation = useMutation({
+    mutationFn: publicContactApi.send,
+    onSuccess: () => {
+      setSuccessOpen(true);
+      setValues(EMPTY_VALUES);
+      setErrors({});
+      setFormError(null);
+    },
+    onError: (error: unknown) => {
+      const { fields, status } = getApiError(error);
+      const fieldErrors: FormErrors = {};
+      (['name', 'email', 'phone', 'subject', 'message'] as const).forEach((field) => {
+        if (fields?.[field]?.length) fieldErrors[field] = fields[field][0];
+      });
+      setErrors(fieldErrors);
+      if (Object.keys(fieldErrors).length > 0) {
+        setFormError(null);
+      } else if (status === 429) {
+        setFormError(t('contact.form.tooMany'));
+      } else if (status === undefined) {
+        setFormError(t('news.networkError'));
+      } else {
+        setFormError(t('contact.form.sendError'));
+      }
+    },
+  });
+  const isSubmitting = submitMutation.isPending;
 
   const validateField = (field: keyof FormValues, value: string): string | undefined => {
     const trimmed = value.trim();
@@ -56,8 +91,10 @@ export default function ContactPage() {
         return isValidPhoneNumber(trimmed, phoneCountry) ? undefined : t('contact.form.phoneInvalid');
       case 'subject':
         return trimmed ? undefined : t('contact.form.subjectRequired');
+      case 'message':
+        return trimmed ? undefined : t('contact.form.messageRequired');
       default:
-        return undefined; // message is optional
+        return undefined;
     }
   };
 
@@ -72,8 +109,9 @@ export default function ContactPage() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return; // prevent duplicate submissions
     const nextErrors: FormErrors = {};
-    (['name', 'email', 'phone', 'subject'] as const).forEach((field) => {
+    (['name', 'email', 'phone', 'subject', 'message'] as const).forEach((field) => {
       const error = validateField(field, values[field]);
       if (error) nextErrors[field] = error;
     });
@@ -83,8 +121,8 @@ export default function ContactPage() {
       Object.entries(values).map(([key, value]) => [key, value.trim()]),
     ) as FormValues;
     setValues(trimmedValues);
-    setIsSubmitting(true);
-    setSuccessOpen(true);
+    setFormError(null);
+    submitMutation.mutate({ ...trimmedValues, website: honeypot });
   };
 
   const fieldError = (field: keyof FormValues) =>
@@ -149,7 +187,9 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-foreground text-sm uppercase tracking-wide mb-0.5">{t('footer.address')}</h3>
-                      <p className="text-muted-foreground">{t('contact.addressValue')}</p>
+                      <p className="text-muted-foreground">
+                        {(locale === 'ar' ? settings?.contact.address_ar : settings?.contact.address_en) || t('contact.addressValue')}
+                      </p>
                     </div>
                   </div>
 
@@ -159,7 +199,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-foreground text-sm uppercase tracking-wide mb-0.5">{t('footer.phone')}</h3>
-                      <p className="text-muted-foreground ltr-safe block" dir="ltr">+962 6 123 4567</p>
+                      <p className="text-muted-foreground ltr-safe block" dir="ltr">{settings?.contact.phone || '+962 6 123 4567'}</p>
                     </div>
                   </div>
 
@@ -169,7 +209,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-foreground text-sm uppercase tracking-wide mb-0.5">{t('footer.email')}</h3>
-                      <p className="text-muted-foreground ltr-safe block" dir="ltr">info@mujaddidun.org</p>
+                      <p className="text-muted-foreground ltr-safe block" dir="ltr">{settings?.contact.email || 'info@mujaddidun.org'}</p>
                     </div>
                   </div>
                 </div>
@@ -197,13 +237,25 @@ export default function ContactPage() {
                     <span className="font-bold text-foreground">{t('footer.followUs')}</span>
                     <div className="flex items-center gap-2.5">
                       {[
-                        { icon: Facebook, label: 'Facebook' },
-                        { icon: Instagram, label: 'Instagram' },
-                        { icon: FaWhatsapp, label: 'WhatsApp' },
-                      ].map(({ icon: Icon, label }) => (
+                        { icon: Facebook, label: 'Facebook', link: settings?.social.facebook },
+                        { icon: Instagram, label: 'Instagram', link: settings?.social.instagram },
+                        { icon: FaWhatsapp, label: 'WhatsApp', link: settings?.social.whatsapp },
+                      ]
+                        .map(({ icon, label, link }) => {
+                          // Before settings load, keep the static placeholders.
+                          if (!settings) return { icon, label, href: '#', external: false };
+                          if (!link?.enabled || !link.value) return null;
+                          const number = label === 'WhatsApp' ? toWhatsAppNumber(link.value) : null;
+                          const href = number ? `https://wa.me/${number}` : safeExternalUrl(link.value);
+                          return href ? { icon, label, href, external: true } : null;
+                        })
+                        .filter((entry): entry is { icon: typeof Facebook; label: string; href: string; external: boolean } => entry !== null)
+                        .map(({ icon: Icon, label, href, external }) => (
                         <a
                           key={label}
-                          href="#"
+                          href={href}
+                          target={external ? '_blank' : undefined}
+                          rel={external ? 'noopener noreferrer' : undefined}
                           aria-label={label}
                           className="flex h-10 w-10 items-center justify-center rounded-full bg-card border border-border/70 text-muted-foreground transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:border-primary motion-safe:hover:scale-105"
                           data-testid={`link-contact-social-${label.toLowerCase()}`}
@@ -225,6 +277,19 @@ export default function ContactPage() {
                 aria-hidden="true"
               ></div>
               <form onSubmit={handleSubmit} noValidate className="relative space-y-6">
+                {/* Honeypot field — visually hidden, ignored by humans. */}
+                <div className="sr-only" aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    id="website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="name">{t('contact.fullName')}</Label>
                   <IconInput
@@ -288,19 +353,28 @@ export default function ContactPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="message">
-                    {t('common.message')}{' '}
-                    <span className="text-muted-foreground font-normal">{t('contact.form.optional')}</span>
-                  </Label>
+                  <Label htmlFor="message">{t('common.message')}</Label>
                   <Textarea
                     id="message"
                     rows={5}
                     value={values.message}
                     onChange={(e) => handleChange('message', e.target.value)}
-                    className={cn("rounded-[13px] bg-background resize-none border-border/80 transition-shadow duration-300 focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:border-primary")}
+                    aria-invalid={!!errors.message}
+                    aria-describedby={errors.message ? 'error-message' : undefined}
+                    className={cn(
+                      'rounded-[13px] bg-background resize-none border-border/80 transition-shadow duration-300 focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:border-primary',
+                      invalidClass('message'),
+                    )}
                     data-testid="input-contact-message"
                   />
+                  {fieldError('message')}
                 </div>
+
+                {formError && (
+                  <p className="text-sm text-destructive" role="alert" data-testid="error-contact-form">
+                    {formError}
+                  </p>
+                )}
 
                 <Button
                   type="submit"
@@ -309,7 +383,17 @@ export default function ContactPage() {
                   className="w-full h-14 rounded-[14px] text-lg font-bold text-white bg-gradient-to-br from-primary via-primary to-[#005a80] shadow-[0_8px_24px_rgba(0,113,160,0.3)] transition-all duration-300 motion-safe:hover:scale-[1.02] hover:shadow-[0_12px_30px_rgba(0,113,160,0.4)]"
                   data-testid="button-contact-submit"
                 >
-                  {isSubmitting ? t('common.loading') : t('common.send')}
+                  {isSubmitting ? (
+                    <span className="inline-flex items-center gap-2">
+                      <span
+                        className="h-5 w-5 animate-spin rounded-full border-2 border-white/40 border-t-white"
+                        aria-hidden="true"
+                      ></span>
+                      {t('common.loading')}
+                    </span>
+                  ) : (
+                    t('common.send')
+                  )}
                 </Button>
               </form>
             </div>
@@ -319,16 +403,7 @@ export default function ContactPage() {
       <Footer />
 
       {/* Success dialog */}
-      <Dialog
-        open={successOpen}
-        onOpenChange={(open) => {
-          setSuccessOpen(open);
-          if (!open) {
-            setIsSubmitting(false);
-            setValues(EMPTY_VALUES);
-          }
-        }}
-      >
+      <Dialog open={successOpen} onOpenChange={setSuccessOpen}>
         <DialogContent className="max-w-md rounded-2xl" data-testid="dialog-contact-success">
           <DialogHeader>
             <DialogTitle className="font-display text-xl">
@@ -340,11 +415,7 @@ export default function ContactPage() {
           </DialogHeader>
           <DialogFooter className="pt-2">
             <Button
-              onClick={() => {
-                setSuccessOpen(false);
-                setIsSubmitting(false);
-                setValues(EMPTY_VALUES);
-              }}
+              onClick={() => setSuccessOpen(false)}
               data-testid="button-contact-success-ok"
             >
               {t('contact.form.okBtn')}
