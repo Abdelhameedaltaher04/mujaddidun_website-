@@ -217,15 +217,14 @@
   "gallery": {
     "title": "Gallery",
     "subtitle": "Moments of giving and hope from our projects and events.",
-    "items": {
-      "1": "Food Parcels Distribution in Amman",
-      "2": "Restoration of Dilapidated Homes in Zarqa",
-      "3": "Vocational Empowerment Courses for Youth",
-      "4": "Youth Volunteer Work",
-      "5": "Free Medical Campaigns",
-      "6": "Orphans Recreational Activities",
-      "7": "Warm Winter Campaign",
-      "8": "Feeding and Iftar Projects"
+    "empty": "No albums available at the moment.",
+    "noImages": "No images available at the moment.",
+    "loadError": "Failed to load the gallery.",
+    "notFound": "Album not found.",
+    "backToGallery": "Back to Gallery",
+    "aria": {
+      "prevPage": "Previous page",
+      "nextPage": "Next page"
     }
   },
   "successStories": {

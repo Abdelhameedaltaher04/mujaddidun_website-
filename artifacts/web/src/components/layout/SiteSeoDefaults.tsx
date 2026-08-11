@@ -17,7 +17,7 @@ export function SiteSeoDefaults() {
   const [location] = useLocation();
 
   const ownsOwnSeo =
-    /^\/(news|events|programs)\/\d+/.test(location) || location.startsWith('/admin');
+    /^\/(news|events|programs|gallery)\/\d+/.test(location) || location.startsWith('/admin');
 
   useEffect(() => {
     if (!settings || ownsOwnSeo) return;

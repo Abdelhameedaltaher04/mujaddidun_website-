@@ -21,6 +21,7 @@ import NewsPage from '@/pages/NewsPage';
 import EventsPage from '@/pages/EventsPage';
 import EventDetailsPage from '@/pages/EventDetailsPage';
 import ProgramDetailsPage from '@/pages/ProgramDetailsPage';
+import GalleryAlbumPage from '@/pages/GalleryAlbumPage';
 import GalleryPage from '@/pages/GalleryPage';
 import SuccessStoriesPage from '@/pages/SuccessStoriesPage';
 import PartnersPage from '@/pages/PartnersPage';
@@ -229,6 +230,7 @@ function Router() {
       <Route path="/events" component={EventsPage} />
       <Route path="/events/:id" component={EventDetailsPage} />
       <Route path="/gallery" component={GalleryPage} />
+      <Route path="/gallery/:id" component={GalleryAlbumPage} />
       <Route path="/success-stories" component={SuccessStoriesPage} />
       <Route path="/partners" component={PartnersPage} />
       <Route path="/faq" component={FaqPage} />

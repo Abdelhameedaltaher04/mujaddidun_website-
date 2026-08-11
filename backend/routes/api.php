@@ -219,6 +219,13 @@ Route::get('/public/events', [\App\Http\Controllers\Api\V1\Events\PublicEventCon
 Route::get('/public/events/{event}', [\App\Http\Controllers\Api\V1\Events\PublicEventController::class, 'show'])
     ->whereNumber('event');
 
+// Public read-only gallery (no auth). Only published albums are exposed.
+Route::get('/public/gallery/albums', [\App\Http\Controllers\Api\V1\Gallery\PublicGalleryController::class, 'index']);
+Route::get('/public/gallery/albums/{album}', [\App\Http\Controllers\Api\V1\Gallery\PublicGalleryController::class, 'show'])
+    ->whereNumber('album');
+Route::get('/public/gallery/albums/{album}/images', [\App\Http\Controllers\Api\V1\Gallery\PublicGalleryController::class, 'images'])
+    ->whereNumber('album');
+
 // Public read-only programs (no auth). Draft and archived programs are never exposed.
 Route::get('/public/programs', [\App\Http\Controllers\Api\V1\Programs\PublicProgramController::class, 'index']);
 Route::get('/public/programs/{program}', [\App\Http\Controllers\Api\V1\Programs\PublicProgramController::class, 'show'])

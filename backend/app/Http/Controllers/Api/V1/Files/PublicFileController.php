@@ -71,6 +71,20 @@ class PublicFileController extends BaseController
             }
         }
 
+        if (str_starts_with($path, 'gallery-covers/')) {
+            if (! $this->galleryCoverIsPublic($path)) {
+                abort_unless($this->isStaff(), 404);
+                $staffOnly = true;
+            }
+        }
+
+        if (str_starts_with($path, 'gallery-images/')) {
+            if (! $this->galleryImageIsPublic($path)) {
+                abort_unless($this->isStaff(), 404);
+                $staffOnly = true;
+            }
+        }
+
         // Containment check: the canonical path must stay inside the disk
         // root (defends against encoded traversal and symlinked entries).
         $root = realpath($disk->path(''));
@@ -113,6 +127,22 @@ class PublicFileController extends BaseController
         return \App\Models\Program::query()
             ->where('cover_image_path', $path)
             ->whereIn('status', ['active', 'completed'])
+            ->exists();
+    }
+
+    private function galleryCoverIsPublic(string $path): bool
+    {
+        return \App\Models\GalleryAlbum::query()
+            ->where('cover_image_path', $path)
+            ->where('status', 'published')
+            ->exists();
+    }
+
+    private function galleryImageIsPublic(string $path): bool
+    {
+        return \App\Models\GalleryImage::query()
+            ->where('file_path', $path)
+            ->whereHas('album', fn ($query) => $query->where('status', 'published'))
             ->exists();
     }
 

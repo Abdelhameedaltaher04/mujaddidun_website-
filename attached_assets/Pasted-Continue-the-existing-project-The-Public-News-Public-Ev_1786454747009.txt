@@ -1,0 +1,241 @@
+Continue the existing project.
+
+The Public News, Public Events, and Public Programs integrations are complete and verified.
+
+================================================
+
+TASK
+
+Connect the PUBLIC WEBSITE Gallery section to the real Laravel API.
+
+Do NOT modify the existing Admin Gallery Management UI.
+
+Do NOT modify Authentication, News, Events, Programs, or any completed module.
+
+================================================
+
+PUBLIC API
+
+Create/use:
+
+GET /api/v1/public/gallery/albums
+
+GET /api/v1/public/gallery/albums/{id}
+
+GET /api/v1/public/gallery/albums/{id}/images
+
+Only return publicly published albums and their public images.
+
+Do NOT expose:
+
+- Draft albums
+- Archived albums
+- Private/admin information
+- Internal database information
+- Unauthorized files
+
+================================================
+
+PUBLIC GALLERY LIST
+
+Replace all mock/hardcoded gallery data.
+
+Load albums from Laravel.
+
+Display:
+
+- Album cover
+- Arabic title
+- English title
+- Arabic description
+- English description
+- Number of images
+- Publication/status information where appropriate
+
+Only published albums should appear.
+
+================================================
+
+GALLERY DETAILS
+
+Connect the existing Gallery Details page.
+
+If it does not exist, create:
+
+/gallery/{id}
+
+Follow the existing News/Event/Program details design language.
+
+Display:
+
+- Album title
+- Album description
+- Cover image
+- All published images
+- Arabic/English captions where available
+- Accessible alt text
+
+================================================
+
+IMAGE GALLERY
+
+Implement a professional responsive gallery using the existing design system.
+
+Support:
+
+- Grid layout
+- Image preview/lightbox
+- Next/previous navigation
+- Keyboard navigation where applicable
+- Mobile-friendly viewing
+
+Do NOT redesign the entire website.
+
+================================================
+
+LANGUAGE
+
+Use the existing Arabic/English language system.
+
+Arabic:
+
+Display Arabic titles, descriptions and captions.
+
+English:
+
+Display English titles, descriptions and captions.
+
+Do not duplicate components.
+
+================================================
+
+IMAGE HANDLING
+
+Use Laravel Storage URLs returned by the API.
+
+Do NOT hardcode image paths.
+
+Handle:
+
+- Missing image
+- Broken image
+- Loading state
+
+gracefully.
+
+================================================
+
+PUBLIC SECURITY
+
+Verify:
+
+- Draft albums are not publicly accessible.
+- Archived albums are not publicly accessible.
+- Images belonging to unpublished albums are not publicly accessible through public endpoints.
+- Private storage files are never exposed.
+- Public endpoints return only intentionally public gallery data.
+
+================================================
+
+PAGINATION
+
+If an album contains many images:
+
+Use server-side pagination where appropriate.
+
+Support:
+
+- page
+- per_page
+
+Do not load thousands of images at once.
+
+================================================
+
+LOADING & ERRORS
+
+Implement:
+
+- Skeleton loading
+- Empty state
+- Error state
+- Retry
+- 404 handling
+
+Professional Arabic messages:
+
+"لا توجد صور متاحة حاليًا."
+
+"تعذر تحميل المعرض."
+
+"المعرض غير موجود."
+
+================================================
+
+API ARCHITECTURE
+
+Create/use:
+
+services/publicGallery.ts
+
+Do not put API calls directly inside UI components.
+
+Use the existing centralized API client.
+
+================================================
+
+SEO
+
+For Gallery Details dynamically update:
+
+- Page title
+- Meta description
+- Open Graph title
+- Open Graph description
+- Open Graph image
+
+Use the actual album data.
+
+================================================
+
+PERFORMANCE
+
+- Lazy-load gallery images.
+- Avoid downloading full-size images until needed where possible.
+- Do not fetch unnecessary albums/images.
+- Keep existing responsive behavior.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Published albums appear publicly.
+2. Draft albums do not appear.
+3. Archived albums do not appear.
+4. Album details work.
+5. Images load correctly.
+6. Multiple images are displayed.
+7. Lightbox works.
+8. Next/previous navigation works.
+9. Arabic works.
+10. English works.
+11. Missing images are handled gracefully.
+12. Pagination works when needed.
+13. Refresh still loads real data.
+14. No mock gallery data remains.
+15. Private/unpublished images cannot be accessed through public APIs.
+16. 404 handling works.
+17. API errors display correctly.
+
+At the end provide:
+
+- PASS/FAIL checklist
+- API endpoints created/updated
+- Backend files changed
+- Frontend files changed
+- Database changes, if any
+- Any remaining limitations
+
+Do NOT modify unrelated modules.
