@@ -1,6 +1,5 @@
 import { apiClient, type ApiEnvelope } from '@/services/api';
 import type { PaginatedResponse } from '@/services/adminNews';
-import { mockDonationsDb } from '@/services/mocks/adminDonationsMock';
 
 /**
  * Donations Management service.
@@ -20,9 +19,8 @@ import { mockDonationsDb } from '@/services/mocks/adminDonationsMock';
  * generated PDF. No real payment processing happens here.
  *
  * All responses use the ApiEnvelope + Laravel paginator (`data` + `meta`)
- * shapes. Swap USE_MOCK to false once the Laravel API is connected.
+ * shapes.
  */
-const USE_MOCK = true;
 
 export const DONATION_STATUSES = [
   'pending',
@@ -89,16 +87,14 @@ export const adminDonationsApi = {
   async list(
     params: DonationsListParams,
   ): Promise<PaginatedResponse<Donation>> {
-    if (USE_MOCK) return mockDonationsDb.list(params);
     const response = await apiClient.get<
-      ApiEnvelope<PaginatedResponse<Donation>>
+      ApiEnvelope<Donation[]> & { meta: PaginatedResponse<Donation>['meta'] }
     >('/donations', { params });
-    return response.data.data;
+    return { data: response.data.data, meta: response.data.meta };
   },
 
   /** GET /donations/statistics */
   async statistics(): Promise<DonationStatistics> {
-    if (USE_MOCK) return mockDonationsDb.statistics();
     const response =
       await apiClient.get<ApiEnvelope<DonationStatistics>>(
         '/donations/statistics',
@@ -108,7 +104,6 @@ export const adminDonationsApi = {
 
   /** GET /donations/{id} */
   async get(id: number): Promise<Donation> {
-    if (USE_MOCK) return mockDonationsDb.get(id);
     const response = await apiClient.get<ApiEnvelope<Donation>>(
       `/donations/${id}`,
     );
@@ -120,7 +115,6 @@ export const adminDonationsApi = {
     id: number,
     status: Extract<DonationStatus, 'completed' | 'failed'>,
   ): Promise<Donation> {
-    if (USE_MOCK) return mockDonationsDb.setStatus(id, status);
     const response = await apiClient.patch<ApiEnvelope<Donation>>(
       `/donations/${id}/status`,
       { status },
@@ -130,7 +124,6 @@ export const adminDonationsApi = {
 
   /** PATCH /donations/{id}/refund */
   async refund(id: number): Promise<Donation> {
-    if (USE_MOCK) return mockDonationsDb.refund(id);
     const response = await apiClient.patch<ApiEnvelope<Donation>>(
       `/donations/${id}/refund`,
     );
@@ -139,7 +132,6 @@ export const adminDonationsApi = {
 
   /** PATCH /donations/{id}/cancel */
   async cancel(id: number): Promise<Donation> {
-    if (USE_MOCK) return mockDonationsDb.cancel(id);
     const response = await apiClient.patch<ApiEnvelope<Donation>>(
       `/donations/${id}/cancel`,
     );

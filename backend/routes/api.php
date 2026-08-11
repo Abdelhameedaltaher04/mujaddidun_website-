@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Events\EventRegistrationController;
 use App\Http\Controllers\Api\V1\Files\PublicFileController;
 use App\Http\Controllers\Api\V1\News\NewsAdminController;
 use App\Http\Controllers\Api\V1\Gallery\GalleryAlbumController;
+use App\Http\Controllers\Api\V1\Donations\DonationController;
 use App\Http\Controllers\Api\V1\Faqs\FaqController;
 use App\Http\Controllers\Api\V1\Gallery\GalleryImageController;
 use App\Http\Controllers\Api\V1\Partners\PartnerController;
@@ -145,6 +146,15 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::put('/faqs/{faq}', [FaqController::class, 'update'])->whereNumber('faq');
     Route::patch('/faqs/{faq}/status', [FaqController::class, 'setStatus'])->whereNumber('faq');
     Route::delete('/faqs/{faq}', [FaqController::class, 'destroy'])->whereNumber('faq');
+
+    // Admin donations management (authorization enforced by DonationPolicy;
+    // read-only for moderators, state changes admin-only).
+    Route::get('/donations', [DonationController::class, 'index']);
+    Route::get('/donations/statistics', [DonationController::class, 'statistics']);
+    Route::get('/donations/{donation}', [DonationController::class, 'show'])->whereNumber('donation');
+    Route::patch('/donations/{donation}/status', [DonationController::class, 'setStatus'])->whereNumber('donation');
+    Route::patch('/donations/{donation}/refund', [DonationController::class, 'refund'])->whereNumber('donation');
+    Route::patch('/donations/{donation}/cancel', [DonationController::class, 'cancel'])->whereNumber('donation');
 });
 
 // Public file serving from the public storage disk (images are public

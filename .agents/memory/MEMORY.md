@@ -12,4 +12,5 @@
 - [Authentication UI validation](authentication-ui-validation.md) — auth failures render inline field/form feedback; success states remain dialogs and shared controls own loading/disabled behavior.
 - [Gallery cover invariant](gallery-cover-invariant.md) — album cover is custom file OR one is_cover image, never both; every cover mutation must preserve this.
 - [Laravel feature test gotchas](laravel-feature-tests.md) — guard caching between in-test requests, SQLite LIKE needs explicit ESCAPE, timestamps aren't fillable.
+- [Lenient list filters](lenient-list-filters.md) — date filters must ignore mid-typing/inverted values from native date inputs, never 422; keep enums strict.
 - [Responsive duplicate test ids](responsive-testids.md) — desktop table and mobile card action buttons need distinct data-testids (suffix mobile with `-mobile`) or UI tests stall.

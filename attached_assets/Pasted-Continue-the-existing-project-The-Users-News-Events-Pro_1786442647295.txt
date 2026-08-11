@@ -1,0 +1,245 @@
+Continue the existing project.
+
+The Users, News, Events, Programs, Gallery, Partners, and FAQs modules are now successfully connected to the real Laravel API.
+
+================================================
+
+TASK
+
+Connect the Donations Management module to the real Laravel backend.
+
+Do NOT modify the existing UI design.
+
+Do NOT modify Authentication or any previously completed module.
+
+================================================
+
+BACKEND
+
+Use the existing:
+
+- Laravel backend
+- Existing database
+- Laravel Sanctum
+- API versioning
+- Existing authorization system
+- Existing standardized API response structure
+
+Do NOT create duplicate authentication or authorization systems.
+
+================================================
+
+DONATIONS API
+
+Implement:
+
+GET    /api/v1/donations
+GET    /api/v1/donations/{id}
+PATCH  /api/v1/donations/{id}/status
+PATCH  /api/v1/donations/{id}/refund
+PATCH  /api/v1/donations/{id}/cancel
+
+Statistics:
+
+GET    /api/v1/donations/statistics
+
+================================================
+
+DATABASE
+
+Use the existing database architecture.
+
+If the donations table does not exist:
+
+- Create a proper Laravel migration.
+- Create Donation model.
+- Add appropriate indexes.
+- Add required constraints.
+- Add relationships where needed.
+
+Do NOT delete existing data.
+
+IMPORTANT:
+
+Do NOT implement real payment processing in this task.
+
+This task is only for managing donation records that already exist or will be created by a future payment integration.
+
+================================================
+
+DONATION DATA
+
+Support:
+
+- Donor name
+- Donor email
+- Donor phone
+- Amount
+- Currency
+- Payment method
+- Transaction ID
+- Donation status
+- Donation date
+- Notes
+
+Statuses:
+
+- Pending
+- Completed
+- Failed
+- Refunded
+- Cancelled
+
+================================================
+
+SECURITY
+
+Donation information is sensitive.
+
+Make sure:
+
+- Only authorized Admin users can access donation management.
+- Moderators can only access donations if explicitly permitted.
+- Unauthorized requests return 403.
+- Unauthenticated requests return 401.
+- Never expose internal payment credentials.
+- Never expose sensitive payment data unnecessarily.
+
+Use Laravel Policies.
+
+================================================
+
+SEARCH & FILTERING
+
+Implement server-side:
+
+- Search by donor name
+- Search by email
+- Search by transaction ID
+- Filter by status
+- Filter by payment method
+- Filter by date range
+
+================================================
+
+PAGINATION
+
+Implement server-side pagination.
+
+Support:
+
+- page
+- per_page
+
+Return pagination metadata.
+
+================================================
+
+STATISTICS
+
+Implement real backend statistics:
+
+- Total donations
+- Total completed donations
+- Pending donations
+- Number of donors
+- Donations this month
+
+Do not calculate these only on the frontend.
+
+================================================
+
+DONATION ACTIONS
+
+Implement:
+
+- View
+- Mark as Completed
+- Mark as Failed
+- Refund
+- Cancel
+
+Refund and Cancel must:
+
+- Require confirmation.
+- Validate the current donation status.
+- Prevent invalid state transitions.
+
+Do not allow:
+
+- Refund of an already refunded donation.
+- Completing a cancelled donation.
+- Cancelling an already refunded donation.
+
+================================================
+
+API RESOURCES
+
+Use Laravel API Resources.
+
+Maintain the existing standardized API response structure.
+
+================================================
+
+FRONTEND
+
+Connect the existing Donations Management page to the real Laravel API.
+
+Replace all mock data.
+
+Create/use:
+
+services/donations.ts
+
+Do not place API requests directly inside UI components.
+
+================================================
+
+LOADING & ERRORS
+
+Keep the existing:
+
+- Skeleton loading
+- Empty state
+- Error state
+- Retry
+- Action loading
+- Confirmation dialogs
+
+Display real Laravel validation and business-rule errors.
+
+================================================
+
+RECEIPT
+
+Keep the existing receipt UI.
+
+Prepare it for future Laravel-generated receipts.
+
+Do NOT implement a real payment receipt system or payment gateway in this task.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Admin retrieves donations.
+2. Admin searches donations.
+3. Admin filters donations.
+4. Pagination works.
+5. Admin opens donation details.
+6. Statistics return correct values.
+7. Valid status transitions work.
+8. Invalid status transitions are rejected.
+9. Refund requires confirmation.
+10. Cancel requires confirmation.
+11. Unauthorized users receive 403.
+12. Unauthenticated users receive 401.
+13. Backend validation errors appear correctly.
+14. No sensitive payment credentials are exposed.
+15. Mock donation data is removed from the frontend.
+
+Fix any issues found.
+
+At the end, provide a clear PASS/FAIL checklist and report any remaining limitations.
