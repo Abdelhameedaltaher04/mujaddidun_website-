@@ -16,11 +16,16 @@ import logoUrl from '@/assets/mujaddidun-logo.png';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePublicNewsList } from '@/hooks/usePublicNews';
 import { newsDate, newsTitle } from '@/lib/publicNewsPresentation';
+import { usePublicEventsList } from '@/hooks/usePublicEvents';
+import { eventDayMonth, eventLocation, eventTitle } from '@/lib/publicEventsPresentation';
 
 
 export default function HomePage() {
   const { t, dir, locale } = useLocale();
+  const homeLang = locale as 'ar' | 'en';
   const latestNews = usePublicNewsList(1);
+  const upcomingEvents = usePublicEventsList(1, ['upcoming', 'ongoing']);
+  const homeEvents = (upcomingEvents.data?.data ?? []).slice(0, 2);
   const ArrowIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
   const [faqExpanded, setFaqExpanded] = useState(false);
 
@@ -242,25 +247,30 @@ export default function HomePage() {
                    }
                  />
                  <div className="space-y-4">
-                    {[1, 2].map((i) => (
-                       <div key={i} className="flex flex-col sm:flex-row gap-5 p-5 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group h-full items-start sm:items-center">
+                    {homeEvents.length > 0 ? homeEvents.map((event) => {
+                       const { day, month } = eventDayMonth(event, homeLang);
+                       return (
+                       <div key={event.id} className="flex flex-col sm:flex-row gap-5 p-5 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group h-full items-start sm:items-center" data-testid={`home-event-${event.id}`}>
                           <div className="w-24 h-24 rounded-xl bg-secondary/10 flex flex-col items-center justify-center shrink-0 text-secondary">
-                             <span className="text-2xl font-bold font-display leading-none mb-1">{t(`events.items.${i}.day`)}</span>
-                             <span className="text-sm font-medium uppercase tracking-wider">{t(`events.items.${i}.month`)}</span>
+                             <span className="text-2xl font-bold font-display leading-none mb-1">{day}</span>
+                             <span className="text-sm font-medium uppercase tracking-wider">{month}</span>
                           </div>
                           <div className="flex flex-col justify-center flex-1">
                              <div className="text-sm font-medium text-secondary mb-2 flex items-center gap-1">
-                                <MapPin className="w-4 h-4 shrink-0" /> {t(`events.items.${i}.location`)}
+                                <MapPin className="w-4 h-4 shrink-0" /> {eventLocation(event, homeLang)}
                              </div>
-                             <h4 className="font-bold text-foreground group-hover:text-secondary transition-colors line-clamp-2">{t(`events.items.${i}.title`)}</h4>
+                             <h4 className="font-bold text-foreground group-hover:text-secondary transition-colors line-clamp-2">{eventTitle(event, homeLang)}</h4>
                           </div>
                           <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
                              <Button variant="outline" size="sm" className="w-full sm:w-auto group-hover:bg-secondary group-hover:text-secondary-foreground group-hover:border-secondary transition-colors" asChild>
-                               <Link href="/events">{t('home.events.register')}</Link>
+                               <Link href={`/events/${event.id}`}>{t('home.events.register')}</Link>
                              </Button>
                           </div>
                        </div>
-                    ))}
+                       );
+                    }) : (
+                       <p className="text-muted-foreground text-sm py-4">{t('events.empty')}</p>
+                    )}
                  </div>
               </div>
            </div>

@@ -113,18 +113,20 @@ class EventRegistrationController extends BaseController
                 return $this->attemptRegistration($event, $user);
             });
         } catch (UniqueConstraintViolationException) {
-            return $this->error('You are already registered for this event.', null, 422);
+            return $this->error('You are already registered for this event.', ['code' => 'already_registered'], 422);
         }
     }
 
     private function attemptRegistration(Event $event, User $user): JsonResponse
     {
+        // Machine-readable `code` lets clients map errors to localized
+        // messages without matching on English text.
         if ($event->status === 'cancelled') {
-            return $this->error('This event has been cancelled.', null, 422);
+            return $this->error('This event has been cancelled.', ['code' => 'closed'], 422);
         }
 
         if (! in_array($event->status, ['upcoming', 'ongoing'], true)) {
-            return $this->error('Registration is not available for this event.', null, 422);
+            return $this->error('Registration is not available for this event.', ['code' => 'closed'], 422);
         }
 
         $now = now();
@@ -132,12 +134,12 @@ class EventRegistrationController extends BaseController
             || ($event->registration_ends_at && $now->gt($event->registration_ends_at));
 
         if ($event->registration_status !== 'open' || $windowClosed) {
-            return $this->error('Registration is closed for this event.', null, 422);
+            return $this->error('Registration is closed for this event.', ['code' => 'closed'], 422);
         }
 
         $activeCount = $event->registrations()->where('status', '!=', 'cancelled')->count();
         if ($event->capacity !== null && $activeCount >= $event->capacity) {
-            return $this->error('This event has reached its maximum capacity.', null, 422);
+            return $this->error('This event has reached its maximum capacity.', ['code' => 'full'], 422);
         }
 
         $alreadyRegistered = $event->registrations()
@@ -148,7 +150,7 @@ class EventRegistrationController extends BaseController
             ->exists();
 
         if ($alreadyRegistered) {
-            return $this->error('You are already registered for this event.', null, 422);
+            return $this->error('You are already registered for this event.', ['code' => 'already_registered'], 422);
         }
 
         // A unique (event_id, email) constraint means a previously

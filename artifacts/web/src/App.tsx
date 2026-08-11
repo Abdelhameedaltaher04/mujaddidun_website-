@@ -19,6 +19,7 @@ import AboutPage from '@/pages/AboutPage';
 import ProjectsPage from '@/pages/ProjectsPage';
 import NewsPage from '@/pages/NewsPage';
 import EventsPage from '@/pages/EventsPage';
+import EventDetailsPage from '@/pages/EventDetailsPage';
 import GalleryPage from '@/pages/GalleryPage';
 import SuccessStoriesPage from '@/pages/SuccessStoriesPage';
 import PartnersPage from '@/pages/PartnersPage';
@@ -225,6 +226,7 @@ function Router() {
       <Route path="/news" component={NewsPage} />
       <Route path="/news/:id" component={NewsDetailsPage} />
       <Route path="/events" component={EventsPage} />
+      <Route path="/events/:id" component={EventDetailsPage} />
       <Route path="/gallery" component={GalleryPage} />
       <Route path="/success-stories" component={SuccessStoriesPage} />
       <Route path="/partners" component={PartnersPage} />

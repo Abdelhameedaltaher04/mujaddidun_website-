@@ -102,6 +102,8 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     // Event registrations.
     Route::get('/events/{event}/registrations', [EventRegistrationController::class, 'index'])->whereNumber('event');
     Route::post('/events/{event}/register', [EventRegistrationController::class, 'register'])->whereNumber('event');
+    // Public-site alias for the same guarded self-registration action.
+    Route::post('/public/events/{event}/register', [EventRegistrationController::class, 'register'])->whereNumber('event');
     Route::patch('/registrations/{registration}/confirm', [EventRegistrationController::class, 'confirm'])->whereNumber('registration');
     Route::patch('/registrations/{registration}/cancel', [EventRegistrationController::class, 'cancel'])->whereNumber('registration');
     Route::patch('/registrations/{registration}/attended', [EventRegistrationController::class, 'attended'])->whereNumber('registration');
@@ -210,6 +212,11 @@ Route::post('/public/contact-messages', [\App\Http\Controllers\Api\V1\Contact\Pu
 
 // Public read-only news (no auth). Only published articles are exposed;
 // drafts and archived articles 404 / are absent from lists.
+// Public read-only events (no auth). Draft and cancelled events are never exposed.
+Route::get('/public/events', [\App\Http\Controllers\Api\V1\Events\PublicEventController::class, 'index']);
+Route::get('/public/events/{event}', [\App\Http\Controllers\Api\V1\Events\PublicEventController::class, 'show'])
+    ->whereNumber('event');
+
 Route::get('/public/news', [\App\Http\Controllers\Api\V1\News\PublicNewsController::class, 'index']);
 Route::get('/public/news/{news}', [\App\Http\Controllers\Api\V1\News\PublicNewsController::class, 'show'])
     ->whereNumber('news');
