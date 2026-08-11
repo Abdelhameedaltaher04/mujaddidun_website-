@@ -1,0 +1,211 @@
+Continue the existing project.
+
+The Admin Dashboard modules are now connected to the real Laravel API.
+
+================================================
+
+TASK
+
+Connect the PUBLIC WEBSITE News section to the real Laravel API.
+
+This is NOT an Admin task.
+
+Do NOT modify the existing News UI/design.
+
+================================================
+
+PUBLIC API
+
+Create/use a public read-only endpoint:
+
+GET /api/v1/public/news
+
+GET /api/v1/public/news/{id}
+
+Only return news where:
+
+status = published
+
+Do NOT expose:
+
+- Draft news
+- Archived news
+- Admin-only information
+- Internal notes
+- Internal IDs where unnecessary
+- Private data
+
+================================================
+
+PUBLIC NEWS LIST
+
+Replace all hardcoded/mock news data on the public website.
+
+Load the news from Laravel.
+
+Support:
+
+- Featured image
+- Arabic title
+- English title
+- Short description
+- Publication date
+- Category
+
+================================================
+
+LANGUAGE
+
+Use the existing Arabic/English language system.
+
+When Arabic is selected:
+
+Return/display Arabic content.
+
+When English is selected:
+
+Return/display English content.
+
+Do not duplicate UI components for each language.
+
+================================================
+
+NEWS DETAILS
+
+Connect the existing News Details page.
+
+When the visitor clicks a news item:
+
+GET:
+
+/api/v1/public/news/{id}
+
+Display:
+
+- Title
+- Featured image
+- Full content
+- Category
+- Publication date
+- Author name if public
+- Related information where available
+
+================================================
+
+IMAGE HANDLING
+
+Use the image URL returned by Laravel Storage.
+
+Do not hardcode image paths.
+
+Handle missing images gracefully.
+
+================================================
+
+RELATED NEWS
+
+If the existing design contains related news:
+
+Load related published news from the API.
+
+Do not show drafts or archived articles.
+
+================================================
+
+LOADING STATES
+
+Add:
+
+- Skeleton loading
+- Empty state
+- Error state
+- Retry button
+
+Do not show a blank page while loading.
+
+================================================
+
+SEO
+
+For News Details:
+
+Dynamically update:
+
+- Page title
+- Meta description
+- Open Graph title
+- Open Graph description
+- Open Graph image
+
+Use the actual news content.
+
+================================================
+
+ERROR HANDLING
+
+Handle:
+
+404:
+
+"الخبر غير موجود."
+
+500:
+
+"حدث خطأ أثناء تحميل الخبر."
+
+Network failure:
+
+"تعذر الاتصال بالخادم."
+
+Provide a retry option.
+
+================================================
+
+API ARCHITECTURE
+
+Create/use:
+
+services/publicNews.ts
+
+Do not put API requests directly inside UI components.
+
+Use the existing centralized Axios/API configuration.
+
+================================================
+
+PERFORMANCE
+
+- Do not fetch unnecessary data.
+- Use pagination for the news list.
+- Load full content only on the details page.
+- Optimize image loading where possible.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify:
+
+- Authentication
+- Admin Dashboard
+- Admin News Management
+- Other public sections
+
+Only connect the PUBLIC NEWS section to Laravel.
+
+Remove mock/hardcoded news data from the public News section.
+
+After implementation, test:
+
+1. Published news appears.
+2. Draft news does not appear.
+3. Archived news does not appear.
+4. News details work.
+5. Arabic works.
+6. English works.
+7. Images load correctly.
+8. 404 handling works.
+9. API errors are handled.
+10. Refreshing the page still loads real data.
+
+At the end, provide a PASS/FAIL checklist.

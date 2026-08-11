@@ -37,6 +37,13 @@ class PublicFileController extends BaseController
             abort(404);
         }
 
+        // News covers belong to a specific article: only serve them while
+        // that article is published, unless the caller is a staff member
+        // (admins/moderators preview draft covers in the dashboard).
+        if (str_starts_with($path, 'news-covers/') && ! $this->newsCoverIsVisible($path)) {
+            abort(404);
+        }
+
         // Containment check: the canonical path must stay inside the disk
         // root (defends against encoded traversal and symlinked entries).
         $root = realpath($disk->path(''));
@@ -54,5 +61,24 @@ class PublicFileController extends BaseController
         }
 
         return $disk->response($path, null, $headers);
+    }
+
+    private function newsCoverIsVisible(string $path): bool
+    {
+        $publishedOwner = \App\Models\News::query()
+            ->where('cover_image_path', $path)
+            ->where('status', 'published')
+            ->exists();
+
+        if ($publishedOwner) {
+            return true;
+        }
+
+        // Orphaned files (no owning article) stay hidden from the public
+        // too; staff with a valid bearer token may still access them.
+        $user = auth('sanctum')->user();
+
+        return $user !== null
+            && in_array($user->role?->slug, ['admin', 'moderator'], true);
     }
 }

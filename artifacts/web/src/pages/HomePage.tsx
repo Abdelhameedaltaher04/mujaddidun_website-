@@ -13,10 +13,14 @@ import { PartnersCarousel } from '@/components/layout/PartnersCarousel';
 import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { cn } from '@/lib/utils';
 import logoUrl from '@/assets/mujaddidun-logo.png';
+import { Skeleton } from '@/components/ui/skeleton';
+import { usePublicNewsList } from '@/hooks/usePublicNews';
+import { newsDate, newsTitle } from '@/lib/publicNewsPresentation';
 
 
 export default function HomePage() {
-  const { t, dir } = useLocale();
+  const { t, dir, locale } = useLocale();
+  const latestNews = usePublicNewsList(1);
   const ArrowIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
   const [faqExpanded, setFaqExpanded] = useState(false);
 
@@ -176,22 +180,52 @@ export default function HomePage() {
                    }
                  />
                  <div className="space-y-4">
-                    {[1, 2].map((i) => (
-                       <div key={i} className="flex flex-col sm:flex-row gap-5 p-5 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group h-full items-start sm:items-center">
-                          <div className="w-24 h-24 rounded-xl bg-muted shrink-0 relative overflow-hidden flex items-center justify-center">
-                             <div className="absolute inset-0 bg-primary/10"></div>
+                    {latestNews.isPending ? (
+                       [1, 2].map((i) => (
+                          <div key={i} className="flex flex-col sm:flex-row gap-5 p-5 rounded-2xl border border-border bg-card shadow-sm items-start sm:items-center">
+                             <Skeleton className="w-24 h-24 rounded-xl shrink-0" />
+                             <div className="flex flex-col justify-center flex-1 gap-2 w-full">
+                                <Skeleton className="h-4 w-24" />
+                                <Skeleton className="h-5 w-full" />
+                             </div>
                           </div>
-                          <div className="flex flex-col justify-center flex-1">
-                             <div className="text-sm font-medium text-primary mb-2">{t(`news.items.${i}.date`)}</div>
-                             <h4 className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2">{t(`news.items.${i}.title`)}</h4>
+                       ))
+                    ) : latestNews.data && latestNews.data.data.length > 0 ? (
+                       latestNews.data.data.slice(0, 2).map((item) => (
+                          <div key={item.id} className="flex flex-col sm:flex-row gap-5 p-5 rounded-2xl border border-border bg-card shadow-sm hover-elevate transition-all group h-full items-start sm:items-center">
+                             <div className="w-24 h-24 rounded-xl bg-muted shrink-0 relative overflow-hidden flex items-center justify-center">
+                                {item.featured_image_url ? (
+                                   <img
+                                      src={item.featured_image_url}
+                                      alt={newsTitle(item, locale as 'ar' | 'en')}
+                                      loading="lazy"
+                                      className="absolute inset-0 h-full w-full object-cover"
+                                      onError={(event) => { event.currentTarget.style.display = 'none'; }}
+                                   />
+                                ) : null}
+                                <div className="absolute inset-0 bg-primary/10"></div>
+                             </div>
+                             <div className="flex flex-col justify-center flex-1">
+                                <div className="text-sm font-medium text-primary mb-2">{newsDate(item, locale as 'ar' | 'en')}</div>
+                                <h4 className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2">{newsTitle(item, locale as 'ar' | 'en')}</h4>
+                             </div>
+                             <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
+                                <Button variant="outline" size="sm" className="w-full sm:w-auto group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors" asChild>
+                                  <Link href={`/news/${item.id}`}>{t('common.readMore')}</Link>
+                                </Button>
+                             </div>
                           </div>
-                          <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
-                             <Button variant="outline" size="sm" className="w-full sm:w-auto group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors" asChild>
-                               <Link href={`/news/${i}`}>{t('common.readMore')}</Link>
-                             </Button>
-                          </div>
+                       ))
+                    ) : latestNews.isError ? (
+                       <div className="py-4 flex flex-col items-start gap-3">
+                          <p className="text-muted-foreground text-sm">{t('news.loadError')}</p>
+                          <Button variant="outline" size="sm" onClick={() => latestNews.refetch()} data-testid="button-home-news-retry">
+                             {t('news.retry')}
+                          </Button>
                        </div>
-                    ))}
+                    ) : (
+                       <p className="text-muted-foreground text-sm py-4">{t('news.empty')}</p>
+                    )}
                  </div>
               </div>
               <div>

@@ -245,6 +245,13 @@ class NewsManagementApiTest extends TestCase
         Storage::disk('public')->put('news-covers/x.jpg', 'fake-image-bytes');
         Storage::disk('public')->put('profile-avatars/secret.jpg', 'avatar-bytes');
 
+        // News covers are only public while a published article owns them.
+        $this->makeArticle([
+            'cover_image_path' => 'news-covers/x.jpg',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
         $this->get('/api/v1/files/news-covers/x.jpg')->assertStatus(200);
         $this->get('/api/v1/files/news-covers/missing.jpg')->assertStatus(404);
         $this->get('/api/v1/files/..%2F..%2F.env')->assertStatus(404);

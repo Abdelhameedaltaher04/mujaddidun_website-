@@ -169,39 +169,20 @@
     "title": "News",
     "subtitle": "Latest updates and announcements from Mujaddidun Association.",
     "empty": "No news available at the moment.",
-    "items": {
-      "1": {
-        "date": "Jan 15, 2024",
-        "title": "Mujaddidun launches Warm Winter campaign across Jordanian governorates",
-        "excerpt": "The winter campaign launched to distribute heaters and blankets to underprivileged families in Amman, Zarqa, and Irbid.",
-        "category": "Campaigns",
-        "body1": "The association launched its annual Winter Warmth campaign today, aiming to reach thousands of families in need across various governorates. This campaign is part of the association's ongoing efforts to ease the burden on underprivileged families during the harsh winter season.",
-        "body2": "The campaign includes distributing heaters, blankets, and winter clothing, in addition to providing emergency cash assistance for the most urgent cases. Equipped volunteer teams have been formed to reach remote areas and camps to ensure all those eligible are covered.",
-        "body3": "We call upon all segments of society and institutions to contribute to supporting this campaign, whether through in-kind or cash donations, so that together we can provide warmth and safety to those who need it most."
-      },
-      "2": {
-        "date": "Feb 05, 2024",
-        "title": "Graduation of the 5th cohort of Youth Professional Empowerment Program",
-        "excerpt": "The association celebrated the graduation of 50 young men and women from vocational training programs in cooperation with local partners.",
-        "category": "Training & Qualification",
-        "body1": "In a joyful ceremony attended by partners and supporters, the association celebrated the graduation of a group of young men and women from specialized vocational training programs. The program aims to empower youth and equip them with practical skills demanded in the labor market.",
-        "body2": "The training programs covered various specializations such as smart device maintenance, graphic design, culinary arts, and handicrafts. The training lasted for several continuous months, including intensive theoretical and practical sessions in workshops equipped with the latest technologies.",
-        "body3": "The program organizers emphasized in their speech the importance of these initiatives in reducing unemployment and motivating youth towards entrepreneurship, noting that the association will continue to follow up with graduates and provide them with consultative support in their professional careers."
-      },
-      "3": {
-        "date": "Mar 20, 2024",
-        "title": "Distribution of 5000 food parcels in preparation for the holy month of Ramadan",
-        "excerpt": "Preparations completed to secure food parcels for families in need before the arrival of the holy month.",
-        "category": "Relief",
-        "body1": "Continuing its relief programs, the association's field teams distributed thousands of food parcels to needy families in several governorates and remote areas, as part of the rapid response plan to support less fortunate groups and provide them with food security.",
-        "body2": "The parcels contain essential food items sufficient for a family for a good period. Beneficiaries were selected based on meticulous field studies to ensure aid reaches those truly entitled to it, in accordance with the standards of transparency and fairness adopted by the association.",
-        "body3": "The beneficiaries expressed their deep gratitude to the association and its supporters for this generous gesture. For its part, the association called on philanthropists to continue their generous support to ensure the continuity of this vital relief program throughout the year."
-      }
-    },
     "share": "Share this article",
-    "notFound": "Sorry, the news article you are looking for does not exist.",
+    "notFound": "News article not found.",
     "backToNews": "Back to News",
-    "related": "Related News"
+    "related": "Related News",
+    "loadError": "An error occurred while loading the news.",
+    "networkError": "Could not connect to the server.",
+    "retry": "Retry",
+    "by": "By",
+    "categories": {
+      "announcements": "Announcements",
+      "activities": "Activities",
+      "programs": "Programs",
+      "press": "Press"
+    }
   },
   "events": {
     "title": "Events",

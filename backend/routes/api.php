@@ -191,6 +191,12 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
 // email section and any server configuration are never included).
 Route::get('/settings/public', [SettingsController::class, 'publicIndex']);
 
+// Public read-only news (no auth). Only published articles are exposed;
+// drafts and archived articles 404 / are absent from lists.
+Route::get('/public/news', [\App\Http\Controllers\Api\V1\News\PublicNewsController::class, 'index']);
+Route::get('/public/news/{news}', [\App\Http\Controllers\Api\V1\News\PublicNewsController::class, 'show'])
+    ->whereNumber('news');
+
 // Private volunteer documents: served via short-lived signed URLs
 // (relative signatures) generated only for authorized reviewers.
 Route::get('/volunteer-documents/{document}', [VolunteerDocumentController::class, 'download'])

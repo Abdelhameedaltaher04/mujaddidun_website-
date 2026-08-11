@@ -1,0 +1,297 @@
+Continue the existing project.
+
+The Public News API integration is now complete.
+
+We now need to eliminate the remaining known limitations and make the system fully connected to the real Laravel backend.
+
+================================================
+
+TASK
+
+Fix the remaining mock-only and disconnected functionality:
+
+1. Public Contact Form
+2. Public Website Settings
+3. Admin Dashboard Statistics
+
+Do NOT modify the existing UI design unless necessary for functionality.
+
+Do NOT break Authentication or any already completed module.
+
+================================================
+PART 1 — PUBLIC CONTACT FORM
+================================================
+
+The current public Contact page still simulates sending messages.
+
+Replace the simulation with a REAL Laravel API integration.
+
+Create/use:
+
+POST /api/v1/public/contact-messages
+
+The endpoint must:
+
+- Validate the sender name.
+- Validate email.
+- Validate phone when provided.
+- Validate subject.
+- Validate message.
+- Store the message in the database.
+- Set the initial status to "new".
+- Store the received timestamp.
+
+The endpoint must NOT require authentication.
+
+However, implement proper:
+
+- Rate limiting
+- Validation
+- Spam protection where appropriate
+- Request size limits
+
+Return a clear success response.
+
+Example:
+
+{
+  "success": true,
+  "message": "تم إرسال رسالتك بنجاح."
+}
+
+Validation errors must return field-level errors.
+
+Frontend:
+
+- Remove the simulated submission.
+- Submit to the real Laravel API.
+- Disable the submit button while sending.
+- Show loading spinner.
+- Prevent duplicate submissions.
+- Show success message after successful submission.
+- Reset the form after successful submission.
+- Display Laravel validation errors.
+- Display a professional error message if the request fails.
+
+Create/use:
+
+services/publicContact.ts
+
+Do not put API requests directly inside the component.
+
+================================================
+PART 2 — PUBLIC WEBSITE SETTINGS
+================================================
+
+The Admin Settings module is already connected to Laravel.
+
+Now make the PUBLIC WEBSITE consume the safe public settings from Laravel.
+
+Create/use:
+
+GET /api/v1/public/settings
+
+IMPORTANT:
+
+This endpoint must return ONLY safe public settings.
+
+NEVER expose:
+
+- SMTP credentials
+- API keys
+- Passwords
+- Internal configuration
+- Admin-only settings
+- Database information
+- Secrets
+
+Public settings may include:
+
+- Website name
+- Logo
+- Footer logo
+- Favicon
+- Contact information
+- Phone
+- WhatsApp
+- Email
+- Address
+- Social media links
+- Public SEO settings
+- Public feature toggles
+
+Frontend:
+
+Create/use:
+
+services/publicSettings.ts
+
+Load public settings from Laravel.
+
+Replace hardcoded values where appropriate.
+
+The following public website areas should consume the settings:
+
+- Header logo
+- Footer logo
+- Website name
+- Contact information
+- WhatsApp button
+- Social media links
+- Footer information
+- SEO metadata
+- Public feature visibility
+
+IMPORTANT:
+
+Do not redesign the existing website.
+
+Only replace hardcoded/static values with API-driven values.
+
+================================================
+PART 3 — REAL ADMIN DASHBOARD STATISTICS
+================================================
+
+The Admin Dashboard is currently the remaining mock-only module.
+
+Replace mock statistics with real Laravel API data.
+
+Create:
+
+GET /api/v1/admin/dashboard/statistics
+
+The endpoint must return real statistics from the database.
+
+Include:
+
+- Total users
+- Total published news
+- Total events
+- Total programs
+- Total volunteer applications
+- Total donations
+- Total contact messages
+- Unread contact messages
+
+Also provide data for the existing dashboard charts:
+
+- User growth
+- Donations over time
+- Events/activity
+- Recent activity
+
+Use real database queries.
+
+Do NOT hardcode numbers.
+
+Do NOT generate fake statistics.
+
+================================================
+
+AUTHORIZATION — DASHBOARD
+================================================
+
+The dashboard statistics endpoint must require authentication.
+
+Only Admin users can access it.
+
+Unauthenticated:
+
+401
+
+Authenticated non-admin:
+
+403
+
+Use the existing Laravel authorization system.
+
+================================================
+
+FRONTEND DASHBOARD
+================================================
+
+Replace all mock dashboard data.
+
+Connect:
+
+services/dashboard.ts
+
+Use the real API.
+
+Keep the existing dashboard UI.
+
+Keep:
+
+- Loading skeletons
+- Empty states
+- Error handling
+- Retry button
+
+Do not place API calls directly inside dashboard components.
+
+================================================
+
+CACHING & PERFORMANCE
+================================================
+
+Use sensible Laravel query optimization.
+
+Avoid unnecessary database queries.
+
+Use eager loading where appropriate.
+
+Do not introduce caching unless it is already compatible with the existing project configuration.
+
+================================================
+
+FINAL VERIFICATION
+================================================
+
+Test all three areas.
+
+CONTACT:
+
+1. Submit valid contact form.
+2. Confirm message is stored in database.
+3. Confirm it appears in Admin Contact Messages.
+4. Invalid email is rejected.
+5. Missing required fields are rejected.
+6. Duplicate rapid submissions are rate limited.
+7. Frontend shows success/error correctly.
+
+SETTINGS:
+
+8. Change a public setting from Admin.
+9. Refresh public website.
+10. Confirm the new setting appears.
+11. Confirm WhatsApp/social/contact information updates.
+12. Confirm secrets are never exposed.
+
+DASHBOARD:
+
+13. Dashboard loads real statistics.
+14. Statistics match database values.
+15. Charts use real API data.
+16. Recent activity uses real data.
+17. Non-admin receives 403.
+18. Unauthenticated request receives 401.
+
+================================================
+
+IMPORTANT
+
+After completing this task:
+
+- Remove the "Public contact page still simulates sending" limitation.
+- Remove the "Public website pages don't consume settings yet" limitation.
+- Remove the "Remaining mock-only module: Dashboard" limitation.
+
+Do NOT leave mock implementations for these three areas.
+
+At the end, provide:
+
+1. PASS/FAIL checklist
+2. List of changed backend files
+3. List of changed frontend files
+4. API endpoints created/updated
+5. Any remaining limitations
