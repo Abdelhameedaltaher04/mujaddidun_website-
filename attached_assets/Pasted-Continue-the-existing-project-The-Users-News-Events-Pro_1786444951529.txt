@@ -1,0 +1,254 @@
+Continue the existing project.
+
+The Users, News, Events, Programs, Gallery, Partners, FAQs, Donations, and Volunteer Applications modules are now successfully connected to the real Laravel API.
+
+================================================
+
+TASK
+
+Connect the Contact Messages Management module to the real Laravel backend.
+
+Do NOT modify the existing UI design.
+
+Do NOT modify Authentication or any previously completed module.
+
+================================================
+
+BACKEND
+
+Use the existing:
+
+- Laravel backend
+- Existing database
+- Laravel Sanctum
+- API versioning
+- Existing authorization system
+- Existing standardized API response structure
+
+Do NOT create duplicate systems.
+
+================================================
+
+CONTACT MESSAGES API
+
+Implement:
+
+GET    /api/v1/contact-messages
+GET    /api/v1/contact-messages/{id}
+PATCH  /api/v1/contact-messages/{id}/read
+PATCH  /api/v1/contact-messages/{id}/status
+PATCH  /api/v1/contact-messages/{id}/archive
+DELETE /api/v1/contact-messages/{id}
+
+Reply:
+
+POST   /api/v1/contact-messages/{id}/reply
+
+Statistics:
+
+GET    /api/v1/contact-messages/statistics
+
+================================================
+
+DATABASE
+
+Use the existing database architecture.
+
+If the contact messages table does not exist:
+
+- Create a proper Laravel migration.
+- Create the ContactMessage model.
+- Add appropriate indexes.
+- Add necessary constraints.
+
+If replies need to be stored, create a proper related structure rather than storing multiple replies in one field.
+
+Do NOT delete existing data.
+
+================================================
+
+MESSAGE DATA
+
+Support:
+
+- Sender name
+- Email
+- Phone
+- Subject
+- Message
+- Received date
+- Read date
+- Status
+
+Statuses:
+
+- New
+- In Progress
+- Resolved
+- Archived
+
+================================================
+
+SEARCH & FILTERING
+
+Implement server-side:
+
+- Search by sender name
+- Search by email
+- Search by subject
+- Filter by read/unread
+- Filter by status
+- Filter by date range
+
+================================================
+
+READ STATUS
+
+When an authorized Admin/Moderator opens an unread message:
+
+- Mark it as read.
+- Store the read timestamp.
+
+Also allow:
+
+- Mark as Read
+- Mark as Unread
+
+================================================
+
+MESSAGE STATUS
+
+Allow authorized users to:
+
+- Set In Progress
+- Set Resolved
+- Archive
+
+Validate status transitions on the backend.
+
+================================================
+
+REPLY
+
+Implement the reply functionality.
+
+The backend should:
+
+- Validate recipient email.
+- Validate subject.
+- Validate message.
+- Send the reply through Laravel's mail system.
+- Store a record of the reply if the database structure supports message history.
+- Return a clear success/error response.
+
+IMPORTANT:
+
+Do not expose SMTP credentials or mail secrets to the frontend.
+
+================================================
+
+SECURITY
+
+Contact messages may contain private information.
+
+Make sure:
+
+- Only authorized Admin/Moderator users can access messages.
+- Private message content is not exposed publicly.
+- Unauthorized requests return 403.
+- Unauthenticated requests return 401.
+- Do not expose sensitive information unnecessarily.
+
+Use Laravel Policies.
+
+================================================
+
+PAGINATION
+
+Implement server-side pagination.
+
+Support:
+
+- page
+- per_page
+
+Return pagination metadata.
+
+================================================
+
+STATISTICS
+
+Implement real backend statistics:
+
+- Total messages
+- Unread messages
+- In Progress
+- Resolved
+
+Do not calculate these only on the frontend.
+
+================================================
+
+API RESOURCES
+
+Use Laravel API Resources.
+
+Maintain the existing standardized API response structure.
+
+================================================
+
+FRONTEND
+
+Connect the existing Contact Messages Management page to the real Laravel API.
+
+Replace all mock data.
+
+Create/use:
+
+services/contactMessages.ts
+
+Do not put API requests directly inside UI components.
+
+================================================
+
+LOADING & ERRORS
+
+Keep the existing:
+
+- Skeleton loading
+- Empty inbox
+- Error state
+- Retry
+- Action loading
+- Reply sending state
+- Confirmation dialogs
+
+Display real Laravel validation and server errors.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Admin retrieves messages.
+2. Admin searches messages.
+3. Admin filters messages.
+4. Pagination works.
+5. Opening an unread message marks it as read.
+6. Admin can mark messages read/unread.
+7. Admin can change message status.
+8. Admin can archive a message.
+9. Admin can delete a message.
+10. Admin can reply to a message.
+11. Reply email is actually sent through Laravel.
+12. Reply errors are handled correctly.
+13. Statistics return correct values.
+14. Unauthorized users receive 403.
+15. Unauthenticated users receive 401.
+16. Private message data is not publicly accessible.
+17. Mock message data is removed from the frontend.
+
+Fix any issues found.
+
+At the end, provide a clear PASS/FAIL checklist and report any remaining limitations.

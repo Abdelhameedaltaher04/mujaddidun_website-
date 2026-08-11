@@ -1,6 +1,5 @@
 import { apiClient, type ApiEnvelope } from '@/services/api';
 import type { PaginatedResponse } from '@/services/adminNews';
-import { mockMessagesDb } from '@/services/mocks/adminMessagesMock';
 
 /**
  * Contact Messages Management service (admin inbox).
@@ -20,9 +19,8 @@ import { mockMessagesDb } from '@/services/mocks/adminMessagesMock';
  *          will send the actual email; the UI only prepares the payload.
  *
  * All responses use the ApiEnvelope + Laravel paginator (`data` + `meta`)
- * shapes. Swap USE_MOCK to false once the Laravel API is connected.
+ * shapes.
  */
-const USE_MOCK = true;
 
 export const MESSAGE_STATUSES = [
   'new',
@@ -82,16 +80,16 @@ export const adminMessagesApi = {
   async list(
     params: MessagesListParams,
   ): Promise<PaginatedResponse<ContactMessage>> {
-    if (USE_MOCK) return mockMessagesDb.list(params);
     const response = await apiClient.get<
-      ApiEnvelope<PaginatedResponse<ContactMessage>>
+      ApiEnvelope<ContactMessage[]> & {
+        meta: PaginatedResponse<ContactMessage>['meta'];
+      }
     >('/contact-messages', { params });
-    return response.data.data;
+    return { data: response.data.data, meta: response.data.meta };
   },
 
   /** GET /contact-messages/statistics */
   async statistics(): Promise<MessageStatistics> {
-    if (USE_MOCK) return mockMessagesDb.statistics();
     const response = await apiClient.get<ApiEnvelope<MessageStatistics>>(
       '/contact-messages/statistics',
     );
@@ -100,7 +98,6 @@ export const adminMessagesApi = {
 
   /** GET /contact-messages/{id} */
   async get(id: number): Promise<ContactMessage> {
-    if (USE_MOCK) return mockMessagesDb.get(id);
     const response = await apiClient.get<ApiEnvelope<ContactMessage>>(
       `/contact-messages/${id}`,
     );
@@ -109,7 +106,6 @@ export const adminMessagesApi = {
 
   /** PATCH /contact-messages/{id}/read */
   async setRead(id: number, isRead: boolean): Promise<ContactMessage> {
-    if (USE_MOCK) return mockMessagesDb.setRead(id, isRead);
     const response = await apiClient.patch<ApiEnvelope<ContactMessage>>(
       `/contact-messages/${id}/read`,
       { is_read: isRead },
@@ -119,7 +115,6 @@ export const adminMessagesApi = {
 
   /** PATCH /contact-messages/{id}/status */
   async setStatus(id: number, status: MessageStatus): Promise<ContactMessage> {
-    if (USE_MOCK) return mockMessagesDb.setStatus(id, status);
     const response = await apiClient.patch<ApiEnvelope<ContactMessage>>(
       `/contact-messages/${id}/status`,
       { status },
@@ -129,7 +124,6 @@ export const adminMessagesApi = {
 
   /** PATCH /contact-messages/{id}/archive */
   async archive(id: number): Promise<ContactMessage> {
-    if (USE_MOCK) return mockMessagesDb.archive(id);
     const response = await apiClient.patch<ApiEnvelope<ContactMessage>>(
       `/contact-messages/${id}/archive`,
     );
@@ -138,7 +132,6 @@ export const adminMessagesApi = {
 
   /** DELETE /contact-messages/{id} */
   async remove(id: number): Promise<void> {
-    if (USE_MOCK) return mockMessagesDb.remove(id);
     await apiClient.delete(`/contact-messages/${id}`);
   },
 
@@ -147,7 +140,6 @@ export const adminMessagesApi = {
    * the mock only validates and records the payload.
    */
   async reply(id: number, input: ReplyInput): Promise<void> {
-    if (USE_MOCK) return mockMessagesDb.reply(id, input);
     await apiClient.post(`/contact-messages/${id}/reply`, input);
   },
 };

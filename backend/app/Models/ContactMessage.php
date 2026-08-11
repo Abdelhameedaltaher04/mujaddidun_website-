@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ContactMessage extends Model
@@ -20,6 +21,7 @@ class ContactMessage extends Model
         'subject',
         'message',
         'status',
+        'read_at',
         'internal_notes',
         'replied_at',
     ];
@@ -27,6 +29,7 @@ class ContactMessage extends Model
     protected function casts(): array
     {
         return [
+            'read_at' => 'datetime',
             'replied_at' => 'datetime',
         ];
     }
@@ -39,5 +42,10 @@ class ContactMessage extends Model
     public function assignee(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    public function replies(): HasMany
+    {
+        return $this->hasMany(ContactMessageReply::class);
     }
 }

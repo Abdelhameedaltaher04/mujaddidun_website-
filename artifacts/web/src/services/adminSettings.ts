@@ -1,5 +1,4 @@
 import { apiClient, type ApiEnvelope } from '@/services/api';
-import { mockSettingsDb } from '@/services/mocks/adminSettingsMock';
 
 /**
  * Website Settings service (admin only — Laravel policies must reject
@@ -18,10 +17,9 @@ import { mockSettingsDb } from '@/services/mocks/adminSettingsMock';
  * - PUT /settings/controls
  *
  * Image fields are sent as multipart uploads with `remove_<field>` flags,
- * mirroring the News featured-image contract. Swap USE_MOCK to false once
+ * mirroring the News featured-image contract.
  * the Laravel API is connected.
  */
-const USE_MOCK = true;
 
 export const SETTINGS_IMAGE_TYPES = [
   'image/jpeg',
@@ -150,13 +148,15 @@ function buildFormData(
     if (value instanceof File) form.append(key, value);
     else if (typeof value === 'boolean') form.append(key, value ? '1' : '0');
   });
+  // PHP cannot parse multipart bodies on real PUT requests, so multipart
+  // sections use Laravel method spoofing (POST + _method=PUT).
+  form.append('_method', 'PUT');
   return form;
 }
 
 export const adminSettingsApi = {
   /** GET /settings */
   async get(): Promise<SiteSettings> {
-    if (USE_MOCK) return mockSettingsDb.get();
     const response =
       await apiClient.get<ApiEnvelope<SiteSettings>>('/settings');
     return response.data.data;
@@ -167,8 +167,7 @@ export const adminSettingsApi = {
     input: Omit<GeneralSettings, 'logo_url' | 'favicon_url'>,
     files: GeneralFiles,
   ): Promise<SiteSettings> {
-    if (USE_MOCK) return mockSettingsDb.updateGeneral(input, files);
-    const response = await apiClient.put<ApiEnvelope<SiteSettings>>(
+    const response = await apiClient.post<ApiEnvelope<SiteSettings>>(
       '/settings/general',
       buildFormData({ ...input }, { ...files }),
     );
@@ -177,7 +176,6 @@ export const adminSettingsApi = {
 
   /** PUT /settings/contact */
   async updateContact(input: ContactSettings): Promise<SiteSettings> {
-    if (USE_MOCK) return mockSettingsDb.updateContact(input);
     const response = await apiClient.put<ApiEnvelope<SiteSettings>>(
       '/settings/contact',
       input,
@@ -187,7 +185,6 @@ export const adminSettingsApi = {
 
   /** PUT /settings/social */
   async updateSocial(input: SocialSettings): Promise<SiteSettings> {
-    if (USE_MOCK) return mockSettingsDb.updateSocial(input);
     const response = await apiClient.put<ApiEnvelope<SiteSettings>>(
       '/settings/social',
       input,
@@ -203,8 +200,7 @@ export const adminSettingsApi = {
     >,
     files: BrandingFiles,
   ): Promise<SiteSettings> {
-    if (USE_MOCK) return mockSettingsDb.updateBranding(input, files);
-    const response = await apiClient.put<ApiEnvelope<SiteSettings>>(
+    const response = await apiClient.post<ApiEnvelope<SiteSettings>>(
       '/settings/branding',
       buildFormData({ ...input }, { ...files }),
     );
@@ -216,8 +212,7 @@ export const adminSettingsApi = {
     input: Omit<SeoSettings, 'og_image_url'>,
     files: SeoFiles,
   ): Promise<SiteSettings> {
-    if (USE_MOCK) return mockSettingsDb.updateSeo(input, files);
-    const response = await apiClient.put<ApiEnvelope<SiteSettings>>(
+    const response = await apiClient.post<ApiEnvelope<SiteSettings>>(
       '/settings/seo',
       buildFormData({ ...input }, { ...files }),
     );
@@ -226,7 +221,6 @@ export const adminSettingsApi = {
 
   /** PUT /settings/email — display config only, never SMTP credentials. */
   async updateEmail(input: EmailSettings): Promise<SiteSettings> {
-    if (USE_MOCK) return mockSettingsDb.updateEmail(input);
     const response = await apiClient.put<ApiEnvelope<SiteSettings>>(
       '/settings/email',
       input,
@@ -236,7 +230,6 @@ export const adminSettingsApi = {
 
   /** PUT /settings/controls */
   async updateControls(input: ControlsSettings): Promise<SiteSettings> {
-    if (USE_MOCK) return mockSettingsDb.updateControls(input);
     const response = await apiClient.put<ApiEnvelope<SiteSettings>>(
       '/settings/controls',
       input,

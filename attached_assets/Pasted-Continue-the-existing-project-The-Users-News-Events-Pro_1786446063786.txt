@@ -1,0 +1,287 @@
+Continue the existing project.
+
+The Users, News, Events, Programs, Gallery, Partners, FAQs, Donations, Volunteer Applications, and Contact Messages modules are now successfully connected to the real Laravel API.
+
+================================================
+
+TASK
+
+Connect the Website Settings module to the real Laravel backend.
+
+Do NOT modify the existing UI design.
+
+Do NOT modify Authentication or any previously completed module.
+
+================================================
+
+BACKEND
+
+Use the existing:
+
+- Laravel backend
+- Existing database
+- Laravel Sanctum
+- API versioning
+- Existing authorization system
+- Existing standardized API response structure
+
+Do NOT create duplicate systems.
+
+================================================
+
+SETTINGS API
+
+Implement:
+
+GET    /api/v1/settings
+
+PUT    /api/v1/settings/general
+PUT    /api/v1/settings/contact
+PUT    /api/v1/settings/social
+PUT    /api/v1/settings/branding
+PUT    /api/v1/settings/seo
+PUT    /api/v1/settings/email
+PUT    /api/v1/settings/controls
+
+================================================
+
+DATABASE
+
+Create a proper centralized website settings structure if it does not already exist.
+
+Use Laravel migrations and models.
+
+Settings must be stored persistently in the database.
+
+Do NOT store settings only in frontend state.
+
+Do NOT delete existing data.
+
+================================================
+
+GENERAL SETTINGS
+
+Support:
+
+- Website Name Arabic
+- Website Name English
+- Website Description Arabic
+- Website Description English
+- Default Language
+
+================================================
+
+CONTACT SETTINGS
+
+Support:
+
+- Phone Number
+- WhatsApp Number
+- Email
+- Address Arabic
+- Address English
+- Google Maps URL
+
+Validate phone numbers and URLs properly.
+
+================================================
+
+SOCIAL MEDIA
+
+Support:
+
+- Facebook
+- Instagram
+- LinkedIn
+- YouTube
+- WhatsApp
+
+Each platform must support:
+
+- URL/number
+- Enabled/Disabled
+
+Do NOT include Twitter/X.
+
+================================================
+
+BRANDING
+
+Support:
+
+- Website Logo
+- Footer Logo
+- Favicon
+
+Use Laravel Storage for uploaded files.
+
+Support:
+
+- JPG
+- PNG
+- WEBP
+- SVG
+
+Maximum 5MB.
+
+Return public URLs correctly.
+
+================================================
+
+SEO
+
+Support:
+
+- Meta Title Arabic
+- Meta Title English
+- Meta Description Arabic
+- Meta Description English
+- Keywords
+- Open Graph Image
+
+================================================
+
+EMAIL SETTINGS
+
+Support:
+
+- Sender Name
+- Sender Email
+- Reply-To Email
+
+IMPORTANT:
+
+Never expose SMTP credentials, passwords, API keys, or mail secrets to React.
+
+Sensitive mail configuration must remain on the Laravel server/environment.
+
+================================================
+
+WEBSITE CONTROLS
+
+Support:
+
+- Maintenance Mode
+- Allow New Registrations
+- Allow Event Registrations
+- Allow Volunteer Applications
+- Show Donations
+- Show Partners
+- Show FAQs
+
+Validate these settings on the backend.
+
+Maintenance Mode changes require Admin authorization.
+
+================================================
+
+AUTHORIZATION
+
+Only Admin users can modify Website Settings.
+
+Moderators must receive:
+
+403 Forbidden
+
+Unauthenticated users must receive:
+
+401 Unauthorized
+
+Use Laravel Policies or equivalent authorization middleware.
+
+================================================
+
+FRONTEND
+
+Connect the existing Website Settings page to the real Laravel API.
+
+Replace all mock data.
+
+Create/use:
+
+services/settings.ts
+
+Do not put API requests directly inside UI components.
+
+================================================
+
+UNSAVED CHANGES
+
+Keep the existing unsaved-changes protection.
+
+If the user modifies settings and tries to leave without saving:
+
+Show a confirmation dialog.
+
+================================================
+
+LOADING & ERRORS
+
+Keep:
+
+- Skeleton/loading states
+- Save loading state
+- Upload progress
+- Success messages
+- Validation errors
+- API error handling
+- Retry where appropriate
+
+Display real Laravel errors.
+
+================================================
+
+PUBLIC WEBSITE PREPARATION
+
+Create a clean public settings endpoint/response that exposes ONLY safe public settings.
+
+Never expose:
+
+- SMTP credentials
+- API keys
+- Internal configuration
+- Admin-only settings
+- Database information
+- Secrets
+
+Example public data:
+
+- Website name
+- Logo URLs
+- Contact information
+- Social media links
+- Public SEO settings
+- Public feature toggles
+
+================================================
+
+TESTING
+
+Test:
+
+1. Admin retrieves settings.
+2. Admin updates general settings.
+3. Admin updates contact information.
+4. Admin updates social media.
+5. Admin uploads/replaces branding images.
+6. Admin updates SEO settings.
+7. Admin updates public website controls.
+8. Settings persist after page refresh.
+9. Admin-only settings are protected.
+10. Moderator receives 403 when modifying settings.
+11. Unauthenticated users receive 401.
+12. Secrets are never returned to the frontend.
+13. Invalid values are rejected correctly.
+14. Mock settings are removed from the frontend.
+
+Fix any issues found.
+
+At the end, provide a clear PASS/FAIL checklist and report any remaining limitations.
+
+================================================
+
+IMPORTANT
+
+Do NOT connect the public website pages yet.
+
+Complete and verify the Admin Settings module first.

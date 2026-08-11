@@ -6,7 +6,9 @@ use App\Http\Controllers\Api\V1\Events\EventRegistrationController;
 use App\Http\Controllers\Api\V1\Files\PublicFileController;
 use App\Http\Controllers\Api\V1\News\NewsAdminController;
 use App\Http\Controllers\Api\V1\Gallery\GalleryAlbumController;
+use App\Http\Controllers\Api\V1\Contact\ContactMessageController;
 use App\Http\Controllers\Api\V1\Donations\DonationController;
+use App\Http\Controllers\Api\V1\Settings\SettingsController;
 use App\Http\Controllers\Api\V1\Faqs\FaqController;
 use App\Http\Controllers\Api\V1\Gallery\GalleryImageController;
 use App\Http\Controllers\Api\V1\Partners\PartnerController;
@@ -167,7 +169,27 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::get('/volunteer-applications/{application}/notes', [VolunteerApplicationController::class, 'notes'])->whereNumber('application');
     Route::post('/volunteer-applications/{application}/notes', [VolunteerApplicationController::class, 'storeNote'])->whereNumber('application');
     Route::get('/volunteer-applications/{application}/documents', [VolunteerApplicationController::class, 'documents'])->whereNumber('application');
+
+    // Contact messages management (authorization enforced by
+    // ContactMessagePolicy; admin/moderator only).
+    Route::get('/contact-messages', [ContactMessageController::class, 'index']);
+    Route::get('/contact-messages/statistics', [ContactMessageController::class, 'statistics']);
+    Route::get('/contact-messages/{message}', [ContactMessageController::class, 'show'])->whereNumber('message');
+    Route::patch('/contact-messages/{message}/read', [ContactMessageController::class, 'setRead'])->whereNumber('message');
+    Route::patch('/contact-messages/{message}/status', [ContactMessageController::class, 'setStatus'])->whereNumber('message');
+    Route::patch('/contact-messages/{message}/archive', [ContactMessageController::class, 'archive'])->whereNumber('message');
+    Route::post('/contact-messages/{message}/reply', [ContactMessageController::class, 'reply'])->whereNumber('message');
+    Route::delete('/contact-messages/{message}', [ContactMessageController::class, 'destroy'])->whereNumber('message');
+
+    // Website settings (admin only; enforced by WebsiteSettingPolicy).
+    Route::get('/settings', [SettingsController::class, 'index']);
+    Route::put('/settings/{section}', [SettingsController::class, 'update'])
+        ->whereIn('section', ['general', 'contact', 'social', 'branding', 'seo', 'email', 'controls']);
 });
+
+// Sanitized public settings for the future public website (no auth; the
+// email section and any server configuration are never included).
+Route::get('/settings/public', [SettingsController::class, 'publicIndex']);
 
 // Private volunteer documents: served via short-lived signed URLs
 // (relative signatures) generated only for authorized reviewers.
