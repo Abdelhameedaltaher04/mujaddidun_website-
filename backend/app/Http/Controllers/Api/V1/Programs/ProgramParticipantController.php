@@ -105,23 +105,23 @@ class ProgramParticipantController extends BaseController
                 return $this->attemptParticipation($program, $user);
             });
         } catch (UniqueConstraintViolationException) {
-            return $this->error('You are already registered for this program.', null, 422);
+            return $this->error('You are already registered for this program.', ['code' => 'already_registered'], 422);
         }
     }
 
     private function attemptParticipation(Program $program, User $user): JsonResponse
     {
         if ($program->status === 'archived') {
-            return $this->error('This program has been archived.', null, 422);
+            return $this->error('This program has been archived.', ['code' => 'closed'], 422);
         }
 
         if ($program->status !== 'active') {
-            return $this->error('This program is not accepting participants.', null, 422);
+            return $this->error('This program is not accepting participants.', ['code' => 'closed'], 422);
         }
 
         $activeCount = $program->participants()->where('status', '!=', 'rejected')->count();
         if ($program->capacity !== null && $activeCount >= $program->capacity) {
-            return $this->error('This program has reached its maximum participants.', null, 422);
+            return $this->error('This program has reached its maximum participants.', ['code' => 'full'], 422);
         }
 
         $alreadyRegistered = $program->participants()
@@ -132,7 +132,7 @@ class ProgramParticipantController extends BaseController
             ->exists();
 
         if ($alreadyRegistered) {
-            return $this->error('You are already registered for this program.', null, 422);
+            return $this->error('You are already registered for this program.', ['code' => 'already_registered'], 422);
         }
 
         // A unique (program_id, email) constraint means a previously

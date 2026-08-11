@@ -20,6 +20,7 @@ import ProjectsPage from '@/pages/ProjectsPage';
 import NewsPage from '@/pages/NewsPage';
 import EventsPage from '@/pages/EventsPage';
 import EventDetailsPage from '@/pages/EventDetailsPage';
+import ProgramDetailsPage from '@/pages/ProgramDetailsPage';
 import GalleryPage from '@/pages/GalleryPage';
 import SuccessStoriesPage from '@/pages/SuccessStoriesPage';
 import PartnersPage from '@/pages/PartnersPage';
@@ -234,6 +235,7 @@ function Router() {
       <Route path="/contact" component={ContactPage} />
       <Route path="/volunteer" component={VolunteerPage} />
       <Route path="/programs" component={ProgramsPage} />
+      <Route path="/programs/:id" component={ProgramDetailsPage} />
       <Route path="/donate" component={DonatePage} />
       <Route component={NotFound} />
     </Switch>

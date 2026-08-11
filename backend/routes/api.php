@@ -121,6 +121,8 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     // Program participants.
     Route::get('/programs/{program}/participants', [ProgramParticipantController::class, 'index'])->whereNumber('program');
     Route::post('/programs/{program}/participate', [ProgramParticipantController::class, 'participate'])->whereNumber('program');
+    // Public-site alias for the same guarded self-participation action.
+    Route::post('/public/programs/{program}/participate', [ProgramParticipantController::class, 'participate'])->whereNumber('program');
     Route::patch('/participants/{participant}/approve', [ProgramParticipantController::class, 'approve'])->whereNumber('participant');
     Route::patch('/participants/{participant}/reject', [ProgramParticipantController::class, 'reject'])->whereNumber('participant');
 
@@ -216,6 +218,11 @@ Route::post('/public/contact-messages', [\App\Http\Controllers\Api\V1\Contact\Pu
 Route::get('/public/events', [\App\Http\Controllers\Api\V1\Events\PublicEventController::class, 'index']);
 Route::get('/public/events/{event}', [\App\Http\Controllers\Api\V1\Events\PublicEventController::class, 'show'])
     ->whereNumber('event');
+
+// Public read-only programs (no auth). Draft and archived programs are never exposed.
+Route::get('/public/programs', [\App\Http\Controllers\Api\V1\Programs\PublicProgramController::class, 'index']);
+Route::get('/public/programs/{program}', [\App\Http\Controllers\Api\V1\Programs\PublicProgramController::class, 'show'])
+    ->whereNumber('program');
 
 Route::get('/public/news', [\App\Http\Controllers\Api\V1\News\PublicNewsController::class, 'index']);
 Route::get('/public/news/{news}', [\App\Http\Controllers\Api\V1\News\PublicNewsController::class, 'show'])

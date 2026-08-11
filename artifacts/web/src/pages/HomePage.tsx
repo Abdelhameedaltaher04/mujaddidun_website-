@@ -18,6 +18,8 @@ import { usePublicNewsList } from '@/hooks/usePublicNews';
 import { newsDate, newsTitle } from '@/lib/publicNewsPresentation';
 import { usePublicEventsList } from '@/hooks/usePublicEvents';
 import { eventDayMonth, eventLocation, eventTitle } from '@/lib/publicEventsPresentation';
+import { usePublicProgramsList } from '@/hooks/usePublicPrograms';
+import { programExcerpt, programTitle } from '@/lib/publicProgramsPresentation';
 
 
 export default function HomePage() {
@@ -26,6 +28,8 @@ export default function HomePage() {
   const latestNews = usePublicNewsList(1);
   const upcomingEvents = usePublicEventsList(1, ['upcoming', 'ongoing']);
   const homeEvents = (upcomingEvents.data?.data ?? []).slice(0, 2);
+  const activePrograms = usePublicProgramsList({ status: 'active', per_page: 3 });
+  const homePrograms = (activePrograms.data?.data ?? []).slice(0, 3);
   const ArrowIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
   const [faqExpanded, setFaqExpanded] = useState(false);
 
@@ -147,24 +151,26 @@ export default function HomePage() {
             }
           />
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-            {['feeding', 'housing', 'empowerment'].map(id => (
-              <div key={id} className="flex flex-col bg-card rounded-2xl border border-border shadow-sm hover-elevate transition-all overflow-hidden group">
+            {homePrograms.length > 0 ? homePrograms.map((program, index) => (
+              <Link key={program.id} href={`/programs/${program.id}`} className="flex flex-col bg-card rounded-2xl border border-border shadow-sm hover-elevate transition-all overflow-hidden group" data-testid={`home-program-${program.id}`}>
                 <div className="p-6 md:p-8 flex-1 flex flex-col">
-                  <div className={cn("w-16 h-16 rounded-xl flex items-center justify-center mb-6", 
-                    id === 'feeding' ? 'text-primary bg-primary/10' : 
-                    id === 'housing' ? 'text-secondary bg-secondary/10' : 'text-info bg-info/10')}>
-                    {id === 'feeding' ? <Heart className="w-8 h-8" /> : 
-                     id === 'housing' ? <Home className="w-8 h-8" /> : <GraduationCap className="w-8 h-8" />}
+                  <div className={cn("w-16 h-16 rounded-xl flex items-center justify-center mb-6",
+                    index === 0 ? 'text-primary bg-primary/10' :
+                    index === 1 ? 'text-secondary bg-secondary/10' : 'text-info bg-info/10')}>
+                    {index === 0 ? <Heart className="w-8 h-8" /> :
+                     index === 1 ? <Home className="w-8 h-8" /> : <GraduationCap className="w-8 h-8" />}
                   </div>
                   <h3 className="text-2xl font-bold font-display mb-3 text-foreground group-hover:text-primary transition-colors">
-                    {t(`programs.items.${id}.title`)}
+                    {programTitle(program, homeLang)}
                   </h3>
                   <p className="text-muted-foreground mb-6 leading-relaxed line-clamp-3">
-                    {t(`programs.items.${id}.desc`)}
+                    {programExcerpt(program, homeLang)}
                   </p>
                 </div>
-              </div>
-            ))}
+              </Link>
+            )) : (
+              <p className="text-muted-foreground text-sm py-4 md:col-span-3">{t('programs.empty')}</p>
+            )}
           </div>
         </SectionWrapper>
 

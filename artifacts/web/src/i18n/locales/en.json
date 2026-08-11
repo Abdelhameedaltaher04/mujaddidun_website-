@@ -366,44 +366,43 @@
       "humanitarian": "Humanitarian",
       "seasonal": "Seasonal"
     },
-    "items": {
-      "feeding": {
-        "title": "Feeding Programs",
-        "desc": "Providing food security for underprivileged families to meet their basic nutritional needs.",
-        "activities": "Food parcels distribution, hot meals, food bank.",
-        "stats": "50,000+ annual beneficiaries"
-      },
-      "housing": {
-        "title": "Housing Rehabilitation",
-        "desc": "Restoring and equipping homes of poor families to ensure a safe and dignified living environment.",
-        "activities": "Roof maintenance, plumbing & electrical, basic furnishing.",
-        "stats": "200+ homes restored"
-      },
-      "empowerment": {
-        "title": "Youth Empowerment & Training",
-        "desc": "Equipping youth with the skills needed to enter the labor market and achieve financial independence.",
-        "activities": "Vocational courses, computer & language skills, career guidance.",
-        "stats": "1,500+ graduates"
-      },
-      "volunteerism": {
-        "title": "Volunteerism & Community Initiatives",
-        "desc": "Spreading the culture of volunteering and engaging youth in creating positive community change.",
-        "activities": "Cleanup campaigns, tree planting, university initiatives.",
-        "stats": "5,000+ volunteers"
-      },
-      "seasonal": {
-        "title": "Seasonal Campaigns",
-        "desc": "Meeting urgent and seasonal needs of families during holidays and different seasons.",
-        "activities": "Ramadan campaign, Adahi, Back to School, Warm Winter.",
-        "stats": "4 main seasons"
-      }
-    },
     "labels": {
       "activities": "Key Activities:",
-      "impact": "Impact:"
+      "impact": "Impact:",
+      "objectives": "Program Objectives",
+      "requirements": "Participation Requirements"
     },
     "aria": {
       "filterGroup": "Filter programs"
+    },
+    "loadError": "Failed to load programs. Please try again.",
+    "notFound": "Program not found.",
+    "backToPrograms": "Back to Programs",
+    "spotsLeft": "Spots left: {count}",
+    "empty": "No programs available at the moment.",
+    "categories": {
+      "education": "Education",
+      "health": "Health",
+      "community": "Community",
+      "environment": "Environment",
+      "youth": "Youth",
+      "relief": "Relief"
+    },
+    "status": {
+      "completed": "Completed"
+    },
+    "participate": {
+      "button": "Join the Program",
+      "registered": "Registered ✓",
+      "successMsg": "You have been registered for the program successfully.",
+      "alreadyRegistered": "You are already registered in this program.",
+      "closed": "Registration for this program is currently unavailable.",
+      "full": "The program has reached its participant limit.",
+      "error": "Registration could not be completed. Please try again later.",
+      "closedBadge": "Registration unavailable",
+      "fullBadge": "Fully booked",
+      "boxTitle": "Register your participation in this program",
+      "loginRequiredMsg": "You must log in first before you can register for this program."
     }
   },
   "auth": {

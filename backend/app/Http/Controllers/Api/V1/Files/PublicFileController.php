@@ -64,6 +64,13 @@ class PublicFileController extends BaseController
             }
         }
 
+        if (str_starts_with($path, 'program-covers/')) {
+            if (! $this->programCoverIsPublic($path)) {
+                abort_unless($this->isStaff(), 404);
+                $staffOnly = true;
+            }
+        }
+
         // Containment check: the canonical path must stay inside the disk
         // root (defends against encoded traversal and symlinked entries).
         $root = realpath($disk->path(''));
@@ -98,6 +105,14 @@ class PublicFileController extends BaseController
         return \App\Models\Event::query()
             ->where('cover_image_path', $path)
             ->whereIn('status', ['upcoming', 'ongoing', 'completed'])
+            ->exists();
+    }
+
+    private function programCoverIsPublic(string $path): bool
+    {
+        return \App\Models\Program::query()
+            ->where('cover_image_path', $path)
+            ->whereIn('status', ['active', 'completed'])
             ->exists();
     }
 

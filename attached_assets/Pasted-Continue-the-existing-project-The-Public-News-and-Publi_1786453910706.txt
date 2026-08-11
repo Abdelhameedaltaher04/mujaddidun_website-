@@ -1,0 +1,273 @@
+Continue the existing project.
+
+The Public News and Public Events integrations are complete and verified.
+
+================================================
+
+TASK
+
+Connect the PUBLIC WEBSITE Programs section to the real Laravel API.
+
+Do NOT modify the existing Programs Admin Management UI.
+
+Do NOT modify Authentication, News, Events, or any completed module.
+
+================================================
+
+PUBLIC API
+
+Create/use:
+
+GET /api/v1/public/programs
+
+GET /api/v1/public/programs/{id}
+
+Only return programs that are publicly active.
+
+Do NOT expose:
+
+- Draft programs
+- Archived programs
+- Internal/admin information
+- Private participant information
+- Internal notes
+
+================================================
+
+PUBLIC PROGRAMS LIST
+
+Replace all mock/hardcoded program data.
+
+Load programs from Laravel.
+
+Display:
+
+- Program image
+- Arabic title
+- English title
+- Short description
+- Category
+- Target audience
+- Location
+- Start date
+- End date
+- Status
+- Available capacity where applicable
+
+================================================
+
+LANGUAGE
+
+Use the existing Arabic/English language system.
+
+Arabic:
+
+Display Arabic content.
+
+English:
+
+Display English content.
+
+Do not duplicate components.
+
+================================================
+
+PROGRAM DETAILS
+
+Connect the existing Program Details page.
+
+If a details page does not exist, create:
+
+/programs/{id}
+
+Follow the existing News/Event details design system.
+
+Display:
+
+- Title
+- Program image
+- Full description
+- Objectives
+- Requirements
+- Target audience
+- Category
+- Location
+- Start date
+- End date
+- Participant information
+- Registration information where applicable
+
+================================================
+
+PROGRAM PARTICIPATION
+
+If the existing public UI contains a participation/registration button:
+
+Connect it to the real Laravel backend.
+
+Create/use:
+
+POST /api/v1/public/programs/{id}/participate
+
+The backend must verify:
+
+- User is authenticated.
+- Program exists.
+- Program is active.
+- Registration/participation is open.
+- User is not already participating.
+- Maximum capacity has not been reached.
+
+Do NOT rely only on frontend validation.
+
+================================================
+
+PARTICIPATION UX
+
+While submitting:
+
+- Disable button.
+- Show spinner.
+- Prevent duplicate submissions.
+
+Success:
+
+"تم التسجيل في البرنامج بنجاح."
+
+Already registered:
+
+"أنت مسجل بالفعل في هذا البرنامج."
+
+Registration unavailable:
+
+"التسجيل في هذا البرنامج غير متاح حاليًا."
+
+Program full:
+
+"اكتمل العدد المسموح به."
+
+================================================
+
+PAGINATION
+
+Use server-side pagination.
+
+Support:
+
+- page
+- per_page
+
+Keep the existing pagination UI.
+
+================================================
+
+FILTERING
+
+If the existing Programs page contains filters, connect them to the API.
+
+Support where applicable:
+
+- Category
+- Active/Completed
+- Date
+
+Do not perform filtering only on the frontend.
+
+================================================
+
+IMAGE HANDLING
+
+Use Laravel Storage URLs returned by the API.
+
+Handle missing images gracefully.
+
+Do not hardcode image paths.
+
+================================================
+
+SEO
+
+For Program Details dynamically update:
+
+- Page title
+- Meta description
+- Open Graph title
+- Open Graph description
+- Open Graph image
+
+Use the actual program data.
+
+================================================
+
+LOADING & ERRORS
+
+Implement:
+
+- Skeleton loading
+- Empty state
+- Error state
+- Retry
+- 404 handling
+
+Use professional Arabic error messages.
+
+================================================
+
+API ARCHITECTURE
+
+Create/use:
+
+services/publicPrograms.ts
+
+Do not put API requests directly inside UI components.
+
+Use the existing centralized API client.
+
+================================================
+
+SECURITY
+
+Verify:
+
+- Draft programs cannot be accessed publicly.
+- Archived programs cannot be accessed publicly.
+- Private participant information is never returned publicly.
+- Participation requires authentication.
+- Users cannot participate on behalf of another user.
+- Duplicate participation is prevented server-side.
+- Capacity is enforced server-side.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Active programs appear publicly.
+2. Draft programs do not appear.
+3. Archived programs do not appear.
+4. Program details work.
+5. Arabic works.
+6. English works.
+7. Images load correctly.
+8. Pagination works.
+9. Authenticated user can participate.
+10. Unauthenticated user is handled correctly.
+11. Duplicate participation is rejected.
+12. Full program rejects participation.
+13. Inactive program rejects participation.
+14. API errors display correctly.
+15. Refresh still loads real data.
+16. No mock program data remains.
+17. Private participant information is never exposed.
+
+At the end provide:
+
+- PASS/FAIL checklist
+- API endpoints created/updated
+- Backend files changed
+- Frontend files changed
+- Database changes, if any
+- Any remaining limitations
+
+Do NOT modify unrelated modules.
