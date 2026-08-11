@@ -35,6 +35,16 @@ import type {
 
 type DialogKind = 'view' | 'status' | 'delete' | null;
 
+/**
+ * Native date inputs emit transient values while typing the year
+ * (e.g. 0002-08-10); only forward plausible, complete dates to the API.
+ */
+function completeDate(value: string): string | undefined {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value) && value >= '1900-01-01'
+    ? value
+    : undefined;
+}
+
 /** Programs management list: search/filter, paginate, preview, act. */
 export default function AdminProgramsPage() {
   const { t } = useLocale();
@@ -62,8 +72,8 @@ export default function AdminProgramsPage() {
         filters.status !== 'all'
           ? (filters.status as ProgramStatus)
           : undefined,
-      date_from: filters.dateFrom || undefined,
-      date_to: filters.dateTo || undefined,
+      date_from: completeDate(filters.dateFrom),
+      date_to: completeDate(filters.dateTo),
       page,
       per_page: perPage,
     }),

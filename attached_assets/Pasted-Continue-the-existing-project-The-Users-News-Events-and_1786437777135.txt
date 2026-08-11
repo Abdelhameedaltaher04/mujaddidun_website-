@@ -1,0 +1,277 @@
+Continue the existing project.
+
+The Users, News, Events, and Programs modules are now successfully connected to the real Laravel API.
+
+================================================
+
+TASK
+
+Connect the Gallery Management module to the real Laravel backend.
+
+Do NOT modify the existing UI design.
+
+Do NOT modify Authentication, Users, News, Events, or Programs.
+
+================================================
+
+BACKEND
+
+Use the existing:
+
+- Laravel backend
+- Existing database
+- Laravel Sanctum
+- API versioning
+- Authorization system
+- Standardized API responses
+
+Do NOT create duplicate systems.
+
+================================================
+
+GALLERY API
+
+Albums:
+
+GET    /api/v1/gallery/albums
+GET    /api/v1/gallery/albums/{id}
+POST   /api/v1/gallery/albums
+PUT    /api/v1/gallery/albums/{id}
+PATCH  /api/v1/gallery/albums/{id}/status
+DELETE /api/v1/gallery/albums/{id}
+
+Images:
+
+GET    /api/v1/gallery/albums/{id}/images
+POST   /api/v1/gallery/albums/{id}/images
+PUT    /api/v1/gallery/images/{id}
+DELETE /api/v1/gallery/images/{id}
+PATCH  /api/v1/gallery/images/{id}/cover
+
+================================================
+
+DATABASE
+
+Use the existing database architecture.
+
+If Gallery Albums or Gallery Images tables do not exist:
+
+- Create Laravel migrations.
+- Create Models.
+- Create relationships.
+- Add foreign keys.
+- Add appropriate indexes.
+
+Do NOT delete existing data.
+
+Relationships:
+
+Album:
+- hasMany Images
+
+Image:
+- belongsTo Album
+
+================================================
+
+ALBUM DATA
+
+Support:
+
+- Arabic title
+- English title
+- Arabic description
+- English description
+- Cover image
+- Status
+- Display order
+
+Statuses:
+
+- Draft
+- Published
+- Archived
+
+================================================
+
+IMAGE DATA
+
+Support:
+
+- Album
+- Image file
+- Arabic title
+- English title
+- Arabic caption
+- English caption
+- Arabic alt text
+- English alt text
+- Display order
+- Cover status
+
+Alt text must be required for accessibility.
+
+================================================
+
+IMAGE STORAGE
+
+Use Laravel Storage.
+
+Support:
+
+- JPG
+- PNG
+- WEBP
+
+Maximum 5MB per image.
+
+Support multiple image uploads.
+
+Return valid public image URLs.
+
+Do NOT store image binaries directly in the database.
+
+================================================
+
+UPLOAD
+
+Implement:
+
+- Multiple image upload
+- Validation
+- Upload progress where applicable
+- Error handling
+- Image replacement
+- Image deletion
+
+================================================
+
+ALBUM ORDER
+
+Allow authorized Admin users to reorder albums.
+
+Implement:
+
+PATCH /api/v1/gallery/albums/reorder
+
+================================================
+
+IMAGE ORDER
+
+Allow authorized Admin users to reorder images inside an album.
+
+Implement:
+
+PATCH /api/v1/gallery/albums/{id}/images/reorder
+
+================================================
+
+COVER IMAGE
+
+Only one image can be the album cover.
+
+When setting a new cover:
+
+- Remove cover status from the previous cover.
+- Set the selected image as the new cover.
+
+================================================
+
+AUTHORIZATION
+
+Use Laravel Policies.
+
+Only authorized Admin/Moderator users can manage the gallery.
+
+Unauthorized requests must return:
+
+403 Forbidden
+
+================================================
+
+PAGINATION
+
+Implement server-side pagination where appropriate.
+
+Support:
+
+- page
+- per_page
+
+Return pagination metadata.
+
+================================================
+
+API RESOURCES
+
+Use Laravel API Resources.
+
+Maintain the existing standardized API response structure.
+
+================================================
+
+FRONTEND
+
+Connect the existing Gallery Management page to the real API.
+
+Replace all mock data.
+
+Create/use:
+
+services/galleryAlbums.ts
+services/galleryImages.ts
+
+Do not put API requests directly inside UI components.
+
+================================================
+
+LOADING & ERRORS
+
+Keep the existing:
+
+- Skeleton loading
+- Empty states
+- Error states
+- Retry
+- Upload progress
+- Delete confirmations
+- Form loading
+
+Display real Laravel validation errors.
+
+================================================
+
+PUBLIC WEBSITE
+
+Do NOT connect the public Gallery section yet.
+
+Complete and test the Admin Gallery module first.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Admin retrieves albums.
+2. Admin creates an album.
+3. Admin edits an album.
+4. Admin uploads a cover image.
+5. Admin uploads multiple images.
+6. Images are stored correctly.
+7. Images can be edited.
+8. Images can be deleted.
+9. Admin can set an image as album cover.
+10. Previous cover is automatically replaced.
+11. Album ordering works.
+12. Image ordering works.
+13. Pagination works.
+14. Unauthorized users receive 403.
+15. Unauthenticated users receive 401.
+16. Invalid image uploads are rejected.
+17. Files larger than 5MB are rejected.
+18. API returns correct public image URLs.
+
+Fix any issues found.
+
+At the end, provide a clear PASS/FAIL checklist.

@@ -9,3 +9,5 @@ description: The live SQLite DB was wiped during a test session; guards now prev
 
 **Why:** real user accounts were lost and had to be recreated with temporary passwords.
 **How to apply:** before any test-suite or migration work on the backend, confirm the fuse is intact; never run `migrate:fresh`/`db:wipe` outside tests.
+
+Update 2026-08-11: a second wipe was proven to happen BETWEEN sessions, not from tests (controlled canary run showed tests never touch the file). Root cause: the sqlite file was gitignored (`backend/database/.gitignore` had `*.sqlite*`), and untracked files don't survive environment checkpoint/reprovisioning. Fix: the ignore line was removed and `database.sqlite` is now git-tracked — keep it tracked. Uploaded files under `backend/storage/app/public` remain gitignored and are still vulnerable. At session start, sanity-check `User::count()` before trusting the DB; recreate via RoleSeeder+NewsCategorySeeder+db:seed and the four accounts (admin/moderator known passwords, gmail accounts get ChangeMe!2026).

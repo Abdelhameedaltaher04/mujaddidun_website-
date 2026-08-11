@@ -26,6 +26,16 @@ class Program extends Model
         'starts_on',
         'ends_on',
         'is_featured',
+        'category',
+        'target_audience_ar',
+        'target_audience_en',
+        'location_ar',
+        'location_en',
+        'capacity',
+        'objectives_ar',
+        'objectives_en',
+        'requirements_ar',
+        'requirements_en',
     ];
 
     protected function casts(): array
@@ -45,5 +55,10 @@ class Program extends Model
     public function volunteerApplications(): HasMany
     {
         return $this->hasMany(VolunteerApplication::class);
+    }
+
+    public function participants(): HasMany
+    {
+        return $this->hasMany(ProgramParticipant::class);
     }
 }

@@ -1,12 +1,12 @@
 /**
- * Admin program participants service.
+ * Admin program participants service — connected to the real Laravel API.
  *
- * Future endpoints:
+ * Endpoints (under /api/v1, Sanctum bearer auth, ProgramPolicy):
  *   GET   /programs/{id}/participants   (server-side filters + pagination)
  *   PATCH /participants/{id}/approve
  *   PATCH /participants/{id}/reject
  */
-import { mockProgramsDb } from './mocks/adminProgramsMock';
+import { apiClient, type ApiEnvelope } from './api';
 import type { PaginatedResponse } from './adminNews';
 
 export type ParticipantStatus =
@@ -39,22 +39,36 @@ export interface ParticipantsListParams {
   per_page?: number;
 }
 
+type ListEnvelope = ApiEnvelope<ProgramParticipant[]> & {
+  meta: PaginatedResponse<ProgramParticipant>['meta'];
+};
+
 export const adminProgramParticipantsApi = {
   /** GET /programs/{id}/participants */
   async listParticipants(
     programId: number,
     params: ParticipantsListParams,
   ): Promise<PaginatedResponse<ProgramParticipant>> {
-    return mockProgramsDb.listParticipants(programId, params);
+    const response = await apiClient.get<ListEnvelope>(
+      `/programs/${programId}/participants`,
+      { params },
+    );
+    return { data: response.data.data, meta: response.data.meta };
   },
 
   /** PATCH /participants/{id}/approve */
   async approveParticipant(id: number): Promise<ProgramParticipant> {
-    return mockProgramsDb.setParticipantStatus(id, 'approved');
+    const response = await apiClient.patch<ApiEnvelope<ProgramParticipant>>(
+      `/participants/${id}/approve`,
+    );
+    return response.data.data;
   },
 
   /** PATCH /participants/{id}/reject */
   async rejectParticipant(id: number): Promise<ProgramParticipant> {
-    return mockProgramsDb.setParticipantStatus(id, 'rejected');
+    const response = await apiClient.patch<ApiEnvelope<ProgramParticipant>>(
+      `/participants/${id}/reject`,
+    );
+    return response.data.data;
   },
 };

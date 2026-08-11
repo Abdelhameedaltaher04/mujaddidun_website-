@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\V1\Events\EventAdminController;
 use App\Http\Controllers\Api\V1\Events\EventRegistrationController;
 use App\Http\Controllers\Api\V1\Files\PublicFileController;
 use App\Http\Controllers\Api\V1\News\NewsAdminController;
+use App\Http\Controllers\Api\V1\Programs\ProgramAdminController;
+use App\Http\Controllers\Api\V1\Programs\ProgramParticipantController;
 use App\Http\Controllers\Api\V1\Users\ProfileController;
 use App\Http\Controllers\Api\V1\Users\UserAdminController;
 use Illuminate\Support\Facades\Route;
@@ -88,6 +90,22 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::patch('/registrations/{registration}/confirm', [EventRegistrationController::class, 'confirm'])->whereNumber('registration');
     Route::patch('/registrations/{registration}/cancel', [EventRegistrationController::class, 'cancel'])->whereNumber('registration');
     Route::patch('/registrations/{registration}/attended', [EventRegistrationController::class, 'attended'])->whereNumber('registration');
+
+    // Admin programs management (authorization enforced by ProgramPolicy).
+    Route::get('/programs', [ProgramAdminController::class, 'index']);
+    Route::post('/programs', [ProgramAdminController::class, 'store']);
+    Route::get('/programs/{program}', [ProgramAdminController::class, 'show'])->whereNumber('program');
+    Route::put('/programs/{program}', [ProgramAdminController::class, 'update'])->whereNumber('program');
+    Route::patch('/programs/{program}/activate', [ProgramAdminController::class, 'activate'])->whereNumber('program');
+    Route::patch('/programs/{program}/deactivate', [ProgramAdminController::class, 'deactivate'])->whereNumber('program');
+    Route::patch('/programs/{program}/archive', [ProgramAdminController::class, 'archive'])->whereNumber('program');
+    Route::delete('/programs/{program}', [ProgramAdminController::class, 'destroy'])->whereNumber('program');
+
+    // Program participants.
+    Route::get('/programs/{program}/participants', [ProgramParticipantController::class, 'index'])->whereNumber('program');
+    Route::post('/programs/{program}/participate', [ProgramParticipantController::class, 'participate'])->whereNumber('program');
+    Route::patch('/participants/{participant}/approve', [ProgramParticipantController::class, 'approve'])->whereNumber('participant');
+    Route::patch('/participants/{participant}/reject', [ProgramParticipantController::class, 'reject'])->whereNumber('participant');
 });
 
 // Public file serving from the public storage disk (images are public

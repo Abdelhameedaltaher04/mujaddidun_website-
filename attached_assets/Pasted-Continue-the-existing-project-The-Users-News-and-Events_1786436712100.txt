@@ -1,0 +1,267 @@
+Continue the existing project.
+
+The Users, News, and Events modules are now successfully connected to the real Laravel API.
+
+================================================
+
+TASK
+
+Connect the Programs Management module to the real Laravel backend.
+
+Do NOT modify the existing UI design.
+
+Do NOT modify Authentication, Users, News, or Events.
+
+================================================
+
+BACKEND
+
+Use the existing:
+
+- Laravel backend
+- Existing database
+- Laravel Sanctum
+- API versioning
+- Authorization system
+- Standardized API responses
+
+Do NOT create duplicate systems.
+
+================================================
+
+PROGRAMS API
+
+Implement:
+
+GET    /api/v1/programs
+GET    /api/v1/programs/{id}
+POST   /api/v1/programs
+PUT    /api/v1/programs/{id}
+PATCH  /api/v1/programs/{id}/activate
+PATCH  /api/v1/programs/{id}/deactivate
+PATCH  /api/v1/programs/{id}/archive
+DELETE /api/v1/programs/{id}
+
+================================================
+
+PROGRAM PARTICIPANTS
+
+Implement:
+
+GET    /api/v1/programs/{id}/participants
+PATCH  /api/v1/participants/{id}/approve
+PATCH  /api/v1/participants/{id}/reject
+
+================================================
+
+DATABASE
+
+Use the existing database architecture.
+
+If Programs or Participants tables do not exist:
+
+- Create Laravel migrations.
+- Create Models.
+- Create relationships.
+- Add foreign keys.
+- Add appropriate indexes.
+
+Do NOT delete existing data.
+
+================================================
+
+PROGRAM DATA
+
+Support:
+
+- Arabic title
+- English title
+- Arabic short description
+- English short description
+- Arabic full description
+- English full description
+- Program image
+- Category
+- Target audience
+- Location
+- Start date
+- End date
+- Maximum participants
+- Objectives
+- Requirements
+- Status
+
+Statuses:
+
+- Draft
+- Active
+- Completed
+- Archived
+
+================================================
+
+VALIDATION
+
+Use Laravel Form Requests.
+
+Validate:
+
+- Required titles
+- Required descriptions
+- Valid dates
+- Start date before end date
+- Maximum participants must be positive
+- Valid image
+- Maximum image size
+
+Return validation errors using the existing API response format.
+
+================================================
+
+IMAGE STORAGE
+
+Use Laravel Storage.
+
+Support:
+
+- JPG
+- PNG
+- WEBP
+
+Maximum 5MB.
+
+Return the correct public image URL.
+
+================================================
+
+PARTICIPANT LOGIC
+
+Implement server-side validation.
+
+Prevent participation when:
+
+- Program is inactive.
+- Program is archived.
+- Maximum participants has been reached.
+- User is already registered.
+
+Support participant statuses:
+
+- Pending
+- Approved
+- Rejected
+- Completed
+
+================================================
+
+AUTHORIZATION
+
+Use Laravel Policies.
+
+Only authorized Admin/Moderator users can manage programs.
+
+Only authorized users can manage participants.
+
+Unauthorized requests must return:
+
+403 Forbidden
+
+================================================
+
+SEARCH & FILTERING
+
+Implement server-side:
+
+- Search by program title.
+- Filter by category.
+- Filter by status.
+- Filter by date.
+
+================================================
+
+PAGINATION
+
+Implement server-side pagination.
+
+Support:
+
+- page
+- per_page
+
+Return pagination metadata.
+
+================================================
+
+API RESOURCES
+
+Use Laravel API Resources.
+
+Maintain the existing standardized API response structure.
+
+================================================
+
+FRONTEND
+
+Connect the existing Programs Management page to the real API.
+
+Replace all mock data.
+
+Create/use:
+
+services/programs.ts
+services/programParticipants.ts
+
+Do not put API requests directly inside UI components.
+
+================================================
+
+LOADING & ERRORS
+
+Keep the existing:
+
+- Skeleton loading
+- Empty states
+- Error states
+- Retry
+- Form loading
+- Image upload progress
+- Confirmation dialogs
+
+Display real Laravel validation errors.
+
+================================================
+
+PUBLIC WEBSITE
+
+Do NOT connect the public Programs section yet.
+
+Complete and test the Admin Programs module first.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Admin retrieves programs.
+2. Admin searches programs.
+3. Admin filters programs.
+4. Pagination works.
+5. Admin creates a program.
+6. Admin edits a program.
+7. Admin uploads program image.
+8. Admin activates a program.
+9. Admin deactivates a program.
+10. Admin archives a program.
+11. Admin views participants.
+12. Authorized admin approves a participant.
+13. Authorized admin rejects a participant.
+14. Full program prevents new participation.
+15. Inactive program prevents participation.
+16. Duplicate participation is prevented.
+17. Unauthorized users receive 403.
+18. Unauthenticated users receive 401.
+
+Fix any issues found.
+
+At the end, provide a clear PASS/FAIL checklist.
