@@ -15,6 +15,7 @@ class Faq extends Model
         'question_en',
         'answer_ar',
         'answer_en',
+        'category',
         'status',
         'sort_order',
         'published_at',

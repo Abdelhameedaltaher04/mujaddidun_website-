@@ -1,6 +1,5 @@
 import { apiClient, type ApiEnvelope } from '@/services/api';
 import type { PaginatedResponse } from '@/services/adminNews';
-import { mockFaqsDb } from '@/services/mocks/adminFaqsMock';
 
 /**
  * FAQ Management service.
@@ -15,9 +14,8 @@ import { mockFaqsDb } from '@/services/mocks/adminFaqsMock';
  * - DELETE /faqs/{id}
  *
  * All responses use the ApiEnvelope + Laravel paginator (`data` + `meta`)
- * shapes. Swap USE_MOCK to false once the Laravel API is connected.
+ * shapes.
  */
-const USE_MOCK = true;
 
 export const FAQ_STATUSES = ['published', 'draft', 'archived'] as const;
 export type FaqStatus = (typeof FAQ_STATUSES)[number];
@@ -69,31 +67,26 @@ export interface FaqsListParams {
 export const adminFaqsApi = {
   /** GET /faqs */
   async list(params: FaqsListParams): Promise<PaginatedResponse<Faq>> {
-    if (USE_MOCK) return mockFaqsDb.list(params);
-    const response = await apiClient.get<ApiEnvelope<PaginatedResponse<Faq>>>(
-      '/faqs',
-      { params },
-    );
-    return response.data.data;
+    const response = await apiClient.get<
+      ApiEnvelope<Faq[]> & { meta: PaginatedResponse<Faq>['meta'] }
+    >('/faqs', { params });
+    return { data: response.data.data, meta: response.data.meta };
   },
 
   /** GET /faqs/{id} */
   async get(id: number): Promise<Faq> {
-    if (USE_MOCK) return mockFaqsDb.get(id);
     const response = await apiClient.get<ApiEnvelope<Faq>>(`/faqs/${id}`);
     return response.data.data;
   },
 
   /** POST /faqs */
   async create(input: FaqInput): Promise<Faq> {
-    if (USE_MOCK) return mockFaqsDb.create(input);
     const response = await apiClient.post<ApiEnvelope<Faq>>('/faqs', input);
     return response.data.data;
   },
 
   /** PUT /faqs/{id} */
   async update(id: number, input: FaqInput): Promise<Faq> {
-    if (USE_MOCK) return mockFaqsDb.update(id, input);
     const response = await apiClient.put<ApiEnvelope<Faq>>(
       `/faqs/${id}`,
       input,
@@ -103,7 +96,6 @@ export const adminFaqsApi = {
 
   /** PATCH /faqs/{id}/status */
   async setStatus(id: number, status: FaqStatus): Promise<Faq> {
-    if (USE_MOCK) return mockFaqsDb.setStatus(id, status);
     const response = await apiClient.patch<ApiEnvelope<Faq>>(
       `/faqs/${id}/status`,
       { status },
@@ -116,7 +108,6 @@ export const adminFaqsApi = {
    * the server assigns display_order = index + 1.
    */
   async reorder(ids: number[]): Promise<Faq[]> {
-    if (USE_MOCK) return mockFaqsDb.reorder(ids);
     const response = await apiClient.patch<ApiEnvelope<Faq[]>>(
       '/faqs/reorder',
       { ids },
@@ -126,7 +117,6 @@ export const adminFaqsApi = {
 
   /** DELETE /faqs/{id} */
   async remove(id: number): Promise<void> {
-    if (USE_MOCK) return mockFaqsDb.remove(id);
     await apiClient.delete(`/faqs/${id}`);
   },
 };

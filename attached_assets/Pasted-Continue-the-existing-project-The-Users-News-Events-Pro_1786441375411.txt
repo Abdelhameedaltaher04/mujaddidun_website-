@@ -1,0 +1,214 @@
+Continue the existing project.
+
+The Users, News, Events, Programs, Gallery, and Partners modules are now successfully connected to the real Laravel API.
+
+================================================
+
+TASK
+
+Connect the FAQ Management module to the real Laravel backend.
+
+Do NOT modify the existing UI design.
+
+Do NOT modify Authentication, Users, News, Events, Programs, Gallery, or Partners.
+
+================================================
+
+BACKEND
+
+Use the existing:
+
+- Laravel backend
+- Existing database
+- Laravel Sanctum
+- API versioning
+- Existing authorization system
+- Existing standardized API response structure
+
+Do NOT create duplicate systems.
+
+================================================
+
+FAQ API
+
+Implement:
+
+GET    /api/v1/faqs
+GET    /api/v1/faqs/{id}
+POST   /api/v1/faqs
+PUT    /api/v1/faqs/{id}
+PATCH  /api/v1/faqs/{id}/status
+PATCH  /api/v1/faqs/reorder
+DELETE /api/v1/faqs/{id}
+
+================================================
+
+DATABASE
+
+Use the existing database architecture.
+
+If the FAQs table does not exist:
+
+- Create a Laravel migration.
+- Create the FAQ model.
+- Add appropriate indexes.
+- Add necessary constraints.
+
+Do NOT delete existing data.
+
+================================================
+
+FAQ DATA
+
+Support:
+
+- Arabic question
+- English question
+- Arabic answer
+- English answer
+- Category
+- Display order
+- Status
+
+Statuses:
+
+- Draft
+- Published
+- Archived
+
+================================================
+
+VALIDATION
+
+Use Laravel Form Requests.
+
+Validate:
+
+- Arabic question required
+- English question required
+- Arabic answer required
+- English answer required
+- Valid category when provided
+- Positive display order
+- Valid status
+
+Return validation errors using the existing API response structure.
+
+================================================
+
+DISPLAY ORDER
+
+Implement server-side FAQ reordering.
+
+Endpoint:
+
+PATCH /api/v1/faqs/reorder
+
+The order must persist in the database.
+
+================================================
+
+AUTHORIZATION
+
+Use Laravel Policies.
+
+Only authorized Admin/Moderator users can manage FAQs.
+
+Unauthorized requests must return:
+
+403 Forbidden
+
+================================================
+
+SEARCH & FILTERING
+
+Implement server-side:
+
+- Search Arabic question
+- Search English question
+- Filter by category
+- Filter by status
+
+================================================
+
+PAGINATION
+
+Implement server-side pagination.
+
+Support:
+
+- page
+- per_page
+
+Return pagination metadata.
+
+================================================
+
+API RESOURCES
+
+Use Laravel API Resources.
+
+Maintain the existing standardized API response structure.
+
+================================================
+
+FRONTEND
+
+Connect the existing FAQ Management page to the real Laravel API.
+
+Replace all mock data.
+
+Create/use:
+
+services/faqs.ts
+
+Do not put API requests directly inside UI components.
+
+================================================
+
+LOADING & ERRORS
+
+Keep the existing:
+
+- Skeleton loading
+- Empty state
+- Error state
+- Retry
+- Form loading
+- Confirmation dialogs
+
+Display real Laravel validation errors.
+
+================================================
+
+PUBLIC WEBSITE
+
+Do NOT connect the public FAQ section yet.
+
+Complete and test the Admin FAQ module first.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Admin retrieves FAQs.
+2. Admin searches FAQs.
+3. Admin filters FAQs.
+4. Pagination works.
+5. Admin creates an FAQ.
+6. Admin edits an FAQ.
+7. Admin publishes an FAQ.
+8. Admin unpublishes an FAQ.
+9. Admin archives an FAQ.
+10. Admin reorders FAQs.
+11. New order persists after refresh.
+12. Admin deletes an FAQ.
+13. Validation errors are displayed correctly.
+14. Unauthorized users receive 403.
+15. Unauthenticated users receive 401.
+
+Fix any issues found.
+
+At the end, provide a clear PASS/FAIL checklist.

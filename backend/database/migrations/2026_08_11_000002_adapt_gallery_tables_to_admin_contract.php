@@ -22,6 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('gallery_images', function (Blueprint $table): void {
+            $table->dropIndex(['is_cover']);
             $table->dropColumn(['caption_ar', 'caption_en', 'is_cover']);
         });
     }

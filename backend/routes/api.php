@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Events\EventRegistrationController;
 use App\Http\Controllers\Api\V1\Files\PublicFileController;
 use App\Http\Controllers\Api\V1\News\NewsAdminController;
 use App\Http\Controllers\Api\V1\Gallery\GalleryAlbumController;
+use App\Http\Controllers\Api\V1\Faqs\FaqController;
 use App\Http\Controllers\Api\V1\Gallery\GalleryImageController;
 use App\Http\Controllers\Api\V1\Partners\PartnerController;
 use App\Http\Controllers\Api\V1\Programs\ProgramAdminController;
@@ -135,6 +136,15 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::put('/partners/{partner}', [PartnerController::class, 'update'])->whereNumber('partner');
     Route::patch('/partners/{partner}/status', [PartnerController::class, 'setStatus'])->whereNumber('partner');
     Route::delete('/partners/{partner}', [PartnerController::class, 'destroy'])->whereNumber('partner');
+
+    // Admin FAQ management (authorization enforced by FaqPolicy).
+    Route::get('/faqs', [FaqController::class, 'index']);
+    Route::post('/faqs', [FaqController::class, 'store']);
+    Route::patch('/faqs/reorder', [FaqController::class, 'reorder']);
+    Route::get('/faqs/{faq}', [FaqController::class, 'show'])->whereNumber('faq');
+    Route::put('/faqs/{faq}', [FaqController::class, 'update'])->whereNumber('faq');
+    Route::patch('/faqs/{faq}/status', [FaqController::class, 'setStatus'])->whereNumber('faq');
+    Route::delete('/faqs/{faq}', [FaqController::class, 'destroy'])->whereNumber('faq');
 });
 
 // Public file serving from the public storage disk (images are public
