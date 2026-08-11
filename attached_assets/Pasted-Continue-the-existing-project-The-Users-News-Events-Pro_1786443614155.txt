@@ -1,0 +1,247 @@
+Continue the existing project.
+
+The Users, News, Events, Programs, Gallery, Partners, FAQs, and Donations modules are now successfully connected to the real Laravel API.
+
+================================================
+
+TASK
+
+Connect the Volunteer Applications Management module to the real Laravel backend.
+
+Do NOT modify the existing UI design.
+
+Do NOT modify Authentication or any previously completed module.
+
+================================================
+
+BACKEND
+
+Use the existing:
+
+- Laravel backend
+- Existing database
+- Laravel Sanctum
+- API versioning
+- Existing authorization system
+- Existing standardized API response structure
+
+Do NOT create duplicate systems.
+
+================================================
+
+VOLUNTEER APPLICATIONS API
+
+Implement:
+
+GET    /api/v1/volunteer-applications
+GET    /api/v1/volunteer-applications/{id}
+PATCH  /api/v1/volunteer-applications/{id}/status
+
+Notes:
+
+GET    /api/v1/volunteer-applications/{id}/notes
+POST   /api/v1/volunteer-applications/{id}/notes
+
+Documents:
+
+GET    /api/v1/volunteer-applications/{id}/documents
+
+================================================
+
+DATABASE
+
+Use the existing database architecture.
+
+If the required volunteer application tables do not exist:
+
+- Create proper Laravel migrations.
+- Create Models.
+- Create relationships.
+- Add foreign keys.
+- Add appropriate indexes.
+
+Do NOT delete existing data.
+
+================================================
+
+APPLICATION DATA
+
+Support:
+
+- Applicant/user
+- Full name
+- Email
+- Phone
+- Country
+- Skills
+- Experience
+- Education
+- Preferred volunteer area
+- Preferred program
+- Availability
+- Motivation
+- Application date
+- Status
+
+Statuses:
+
+- Pending
+- Under Review
+- Approved
+- Rejected
+- Withdrawn
+
+================================================
+
+SEARCH & FILTERING
+
+Implement server-side:
+
+- Search by applicant name
+- Search by email
+- Search by phone
+- Filter by status
+- Filter by program
+- Filter by application date
+
+================================================
+
+PAGINATION
+
+Implement server-side pagination.
+
+Support:
+
+- page
+- per_page
+
+Return pagination metadata.
+
+================================================
+
+APPLICATION STATUS
+
+Implement valid status transitions.
+
+Admin/authorized moderators can:
+
+- Mark as Under Review
+- Approve
+- Reject
+- Withdraw
+
+When rejecting:
+
+- Require a rejection reason.
+
+Validate all status changes on the backend.
+
+================================================
+
+INTERNAL NOTES
+
+Implement internal Admin/Moderator notes.
+
+Each note must contain:
+
+- Note content
+- Author
+- Created date
+
+Notes must NEVER be exposed through public APIs.
+
+Only authorized Admin/Moderator users can access them.
+
+================================================
+
+DOCUMENTS
+
+If applications contain uploaded documents:
+
+- Store them securely.
+- Do not expose public URLs.
+- Authorize every document access.
+- Allow authorized Admin/Moderator users to view/download them.
+
+Never expose private documents to unauthenticated users.
+
+================================================
+
+AUTHORIZATION
+
+Use Laravel Policies.
+
+Only authorized Admin/Moderator users can review applications.
+
+Unauthorized requests return:
+
+403 Forbidden
+
+Unauthenticated requests return:
+
+401 Unauthorized
+
+================================================
+
+API RESOURCES
+
+Use Laravel API Resources.
+
+Maintain the existing standardized API response structure.
+
+================================================
+
+FRONTEND
+
+Connect the existing Volunteer Applications Management page to the real Laravel API.
+
+Replace all mock data.
+
+Create/use:
+
+services/volunteerApplications.ts
+
+Do not place API requests directly inside UI components.
+
+================================================
+
+LOADING & ERRORS
+
+Keep the existing:
+
+- Skeleton loading
+- Empty state
+- Error state
+- Retry
+- Action loading
+- Confirmation dialogs
+
+Display real Laravel validation and business-rule errors.
+
+================================================
+
+TESTING
+
+Test:
+
+1. Admin retrieves applications.
+2. Admin searches applications.
+3. Admin filters applications.
+4. Pagination works.
+5. Admin opens application details.
+6. Admin changes status to Under Review.
+7. Admin approves an application.
+8. Admin rejects an application.
+9. Rejection requires a reason.
+10. Admin can add an internal note.
+11. Internal notes are protected.
+12. Authorized users can access private documents.
+13. Unauthorized users cannot access private documents.
+14. Invalid status transitions are rejected.
+15. Unauthorized users receive 403.
+16. Unauthenticated users receive 401.
+17. Mock application data is removed from the frontend.
+
+Fix any issues found.
+
+At the end, provide a clear PASS/FAIL checklist and report any remaining limitations.

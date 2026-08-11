@@ -1,6 +1,5 @@
 import { apiClient, type ApiEnvelope } from '@/services/api';
 import type { PaginatedResponse } from '@/services/adminNews';
-import { mockVolunteersDb } from '@/services/mocks/adminVolunteersMock';
 
 /**
  * Volunteer Applications Management service.
@@ -18,9 +17,8 @@ import { mockVolunteersDb } from '@/services/mocks/adminVolunteersMock';
  * - GET    /volunteer-applications/{id}/documents private uploads
  *
  * All responses use the ApiEnvelope + Laravel paginator (`data` + `meta`)
- * shapes. Swap USE_MOCK to false once the Laravel API is connected.
+ * shapes.
  */
-const USE_MOCK = true;
 
 export const APPLICATION_STATUSES = [
   'pending',
@@ -138,16 +136,16 @@ export const adminVolunteersApi = {
   async list(
     params: ApplicationsListParams,
   ): Promise<PaginatedResponse<VolunteerApplication>> {
-    if (USE_MOCK) return mockVolunteersDb.list(params);
     const response = await apiClient.get<
-      ApiEnvelope<PaginatedResponse<VolunteerApplication>>
+      ApiEnvelope<VolunteerApplication[]> & {
+        meta: PaginatedResponse<VolunteerApplication>['meta'];
+      }
     >('/volunteer-applications', { params });
-    return response.data.data;
+    return { data: response.data.data, meta: response.data.meta };
   },
 
   /** GET /volunteer-applications/statistics */
   async statistics(): Promise<ApplicationStatistics> {
-    if (USE_MOCK) return mockVolunteersDb.statistics();
     const response = await apiClient.get<ApiEnvelope<ApplicationStatistics>>(
       '/volunteer-applications/statistics',
     );
@@ -156,7 +154,6 @@ export const adminVolunteersApi = {
 
   /** Program options for the filter (backed by GET /programs). */
   async programs(): Promise<VolunteerProgram[]> {
-    if (USE_MOCK) return mockVolunteersDb.programs();
     const response = await apiClient.get<ApiEnvelope<VolunteerProgram[]>>(
       '/programs',
       { params: { per_page: 100 } },
@@ -166,7 +163,6 @@ export const adminVolunteersApi = {
 
   /** GET /volunteer-applications/{id} */
   async get(id: number): Promise<VolunteerApplication> {
-    if (USE_MOCK) return mockVolunteersDb.get(id);
     const response = await apiClient.get<ApiEnvelope<VolunteerApplication>>(
       `/volunteer-applications/${id}`,
     );
@@ -178,7 +174,6 @@ export const adminVolunteersApi = {
     id: number,
     input: StatusChangeInput,
   ): Promise<VolunteerApplication> {
-    if (USE_MOCK) return mockVolunteersDb.setStatus(id, input);
     const response = await apiClient.patch<ApiEnvelope<VolunteerApplication>>(
       `/volunteer-applications/${id}/status`,
       input,
@@ -188,7 +183,6 @@ export const adminVolunteersApi = {
 
   /** GET /volunteer-applications/{id}/notes */
   async notes(id: number): Promise<ApplicationNote[]> {
-    if (USE_MOCK) return mockVolunteersDb.notes(id);
     const response = await apiClient.get<ApiEnvelope<ApplicationNote[]>>(
       `/volunteer-applications/${id}/notes`,
     );
@@ -197,7 +191,6 @@ export const adminVolunteersApi = {
 
   /** POST /volunteer-applications/{id}/notes */
   async addNote(id: number, body: string): Promise<ApplicationNote> {
-    if (USE_MOCK) return mockVolunteersDb.addNote(id, body);
     const response = await apiClient.post<ApiEnvelope<ApplicationNote>>(
       `/volunteer-applications/${id}/notes`,
       { body },
@@ -207,7 +200,6 @@ export const adminVolunteersApi = {
 
   /** GET /volunteer-applications/{id}/documents */
   async documents(id: number): Promise<ApplicationDocument[]> {
-    if (USE_MOCK) return mockVolunteersDb.documents(id);
     const response = await apiClient.get<ApiEnvelope<ApplicationDocument[]>>(
       `/volunteer-applications/${id}/documents`,
     );

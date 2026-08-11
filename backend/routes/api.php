@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\V1\Partners\PartnerController;
 use App\Http\Controllers\Api\V1\Programs\ProgramAdminController;
 use App\Http\Controllers\Api\V1\Programs\ProgramParticipantController;
 use App\Http\Controllers\Api\V1\Users\ProfileController;
+use App\Http\Controllers\Api\V1\Volunteers\VolunteerApplicationController;
+use App\Http\Controllers\Api\V1\Volunteers\VolunteerDocumentController;
 use App\Http\Controllers\Api\V1\Users\UserAdminController;
 use Illuminate\Support\Facades\Route;
 
@@ -155,7 +157,24 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::patch('/donations/{donation}/status', [DonationController::class, 'setStatus'])->whereNumber('donation');
     Route::patch('/donations/{donation}/refund', [DonationController::class, 'refund'])->whereNumber('donation');
     Route::patch('/donations/{donation}/cancel', [DonationController::class, 'cancel'])->whereNumber('donation');
+
+    // Volunteer applications management (authorization enforced by
+    // VolunteerApplicationPolicy; admin/moderator only).
+    Route::get('/volunteer-applications', [VolunteerApplicationController::class, 'index']);
+    Route::get('/volunteer-applications/statistics', [VolunteerApplicationController::class, 'statistics']);
+    Route::get('/volunteer-applications/{application}', [VolunteerApplicationController::class, 'show'])->whereNumber('application');
+    Route::patch('/volunteer-applications/{application}/status', [VolunteerApplicationController::class, 'setStatus'])->whereNumber('application');
+    Route::get('/volunteer-applications/{application}/notes', [VolunteerApplicationController::class, 'notes'])->whereNumber('application');
+    Route::post('/volunteer-applications/{application}/notes', [VolunteerApplicationController::class, 'storeNote'])->whereNumber('application');
+    Route::get('/volunteer-applications/{application}/documents', [VolunteerApplicationController::class, 'documents'])->whereNumber('application');
 });
+
+// Private volunteer documents: served via short-lived signed URLs
+// (relative signatures) generated only for authorized reviewers.
+Route::get('/volunteer-documents/{document}', [VolunteerDocumentController::class, 'download'])
+    ->whereNumber('document')
+    ->name('volunteer-documents.download')
+    ->middleware('signed:relative');
 
 // Public file serving from the public storage disk (images are public
 // site content; no auth required).
