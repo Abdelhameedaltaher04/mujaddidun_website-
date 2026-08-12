@@ -21,6 +21,8 @@ import { eventDayMonth, eventLocation, eventTitle } from '@/lib/publicEventsPres
 import { usePublicProgramsList } from '@/hooks/usePublicPrograms';
 import { programExcerpt, programTitle } from '@/lib/publicProgramsPresentation';
 import { usePublicContent } from '@/hooks/usePublicContent';
+import { usePublicFaqs } from '@/hooks/usePublicFaqs';
+import { faqQuestion, faqAnswer } from '@/services/publicFaqs';
 import { safeExternalUrl } from '@/hooks/usePublicSettings';
 import type { HomepageSectionKey } from '@/services/adminContent';
 
@@ -70,6 +72,8 @@ export default function HomePage() {
   const homePrograms = (activePrograms.data?.data ?? []).slice(0, 3);
   const ArrowIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
   const [faqExpanded, setFaqExpanded] = useState(false);
+  const faqsQuery = usePublicFaqs();
+  const publicFaqs = faqsQuery.data ?? [];
 
   // Admin-managed website content; every consumer below must fall back to
   // the bundled translations while it loads (or if the API is unreachable)
@@ -536,63 +540,87 @@ export default function HomePage() {
     </section>
   );
 
-  const renderFaq = () => (
-    <SectionWrapper id="faq" variant="default">
-      <div className="max-w-3xl mx-auto">
-        <SectionHeading
-          title={t('home.sections.faq')}
-          description={t('faq.subtitle')}
-          accent="secondary"
-        />
-        <div className="space-y-4" id="home-faq-items">
-          {[1, 2, 3, 4, 5, 6].map(i => (
-            <div
-              key={i}
-              className={cn(
-                'grid transition-[grid-template-rows,opacity] duration-500 ease-in-out',
-                i > 2 && !faqExpanded
-                  ? 'grid-rows-[0fr] opacity-0 pointer-events-none'
-                  : 'grid-rows-[1fr] opacity-100',
-              )}
-            >
-              <div className="min-h-0 overflow-hidden">
-                <details className="group bg-card border border-border rounded-2xl overflow-hidden [&_summary::-webkit-details-marker]:hidden shadow-sm">
-                  <summary className="flex items-center justify-between p-6 font-bold cursor-pointer hover:bg-muted/50 transition-colors focus-ring-standard text-foreground">
-                    <span className="pe-4">{t(`faq.items.${i}.q`)}</span>
-                    <span className="w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center shrink-0 group-open:rotate-180 transition-transform">
-                      <ChevronLeft className="w-5 h-5 -rotate-90" />
-                    </span>
-                  </summary>
-                  <div className="p-6 pt-0 text-muted-foreground leading-relaxed">
-                    {t(`faq.items.${i}.a`)}
-                  </div>
-                </details>
-              </div>
+  const renderFaq = () => {
+    // Hide the section entirely when FAQs failed to load or none are published;
+    // the dedicated /faq page surfaces explicit error/empty states.
+    if (!faqsQuery.isLoading && publicFaqs.length === 0) return null;
+    return (
+      <SectionWrapper id="faq" variant="default">
+        <div className="max-w-3xl mx-auto">
+          <SectionHeading
+            title={t('home.sections.faq')}
+            description={t('faq.subtitle')}
+            accent="secondary"
+          />
+          {faqsQuery.isLoading ? (
+            <div className="space-y-4" data-testid="home-faq-loading">
+              {[1, 2, 3].map((i) => (
+                <Skeleton key={i} className="h-[76px] w-full rounded-2xl" />
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="text-center mt-8">
-          <Button
-            type="button"
-            variant="link"
-            className="font-bold text-primary text-lg"
-            onClick={() => setFaqExpanded((expanded) => !expanded)}
-            aria-expanded={faqExpanded}
-            aria-controls="home-faq-items"
-            data-testid="button-faq-toggle"
-          >
-            {faqExpanded ? t('common.readLess') : t('common.readMore')}
-            <ArrowIcon
-              className={cn(
-                'w-5 h-5 ms-2 transition-transform duration-300',
-                faqExpanded && 'rotate-180',
+          ) : (
+            <>
+              <div className="space-y-4" id="home-faq-items">
+                {publicFaqs.map((faq, i) => (
+                  <div
+                    key={faq.id}
+                    className={cn(
+                      'grid transition-[grid-template-rows,opacity] duration-500 ease-in-out',
+                      i > 1 && !faqExpanded
+                        ? 'grid-rows-[0fr] opacity-0 pointer-events-none'
+                        : 'grid-rows-[1fr] opacity-100',
+                    )}
+                  >
+                    <div className="min-h-0 overflow-hidden">
+                      <details className="group bg-card border border-border rounded-2xl overflow-hidden [&_summary::-webkit-details-marker]:hidden shadow-sm">
+                        <summary className="flex items-center justify-between p-6 font-bold cursor-pointer hover:bg-muted/50 transition-colors focus-ring-standard text-foreground">
+                          <span className="pe-4 flex flex-col gap-1">
+                            {faq.category && (
+                              <span className="text-xs font-semibold text-secondary">
+                                {t(`faq.categories.${faq.category}`)}
+                              </span>
+                            )}
+                            <span>{faqQuestion(faq, homeLang)}</span>
+                          </span>
+                          <span className="w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center shrink-0 group-open:rotate-180 transition-transform">
+                            <ChevronLeft className="w-5 h-5 -rotate-90" />
+                          </span>
+                        </summary>
+                        <div className="p-6 pt-0 text-muted-foreground leading-relaxed">
+                          {faqAnswer(faq, homeLang)}
+                        </div>
+                      </details>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {publicFaqs.length > 2 && (
+                <div className="text-center mt-8">
+                  <Button
+                    type="button"
+                    variant="link"
+                    className="font-bold text-primary text-lg"
+                    onClick={() => setFaqExpanded((expanded) => !expanded)}
+                    aria-expanded={faqExpanded}
+                    aria-controls="home-faq-items"
+                    data-testid="button-faq-toggle"
+                  >
+                    {faqExpanded ? t('common.readLess') : t('common.readMore')}
+                    <ArrowIcon
+                      className={cn(
+                        'w-5 h-5 ms-2 transition-transform duration-300',
+                        faqExpanded && 'rotate-180',
+                      )}
+                    />
+                  </Button>
+                </div>
               )}
-            />
-          </Button>
+            </>
+          )}
         </div>
-      </div>
-    </SectionWrapper>
-  );
+      </SectionWrapper>
+    );
+  };
 
   const SECTION_RENDERERS: Record<HomepageSectionKey, () => React.ReactNode> = {
     hero: renderHero,

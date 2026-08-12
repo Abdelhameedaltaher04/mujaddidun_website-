@@ -241,6 +241,9 @@ Route::get('/public/events/{event}', [\App\Http\Controllers\Api\V1\Events\Public
 // Public read-only partners (no auth). Only active partners are exposed.
 Route::get('/public/partners', [\App\Http\Controllers\Api\V1\Partners\PublicPartnerController::class, 'index']);
 
+// Public read-only FAQs (no auth). Only published FAQs are exposed.
+Route::get('/public/faqs', [\App\Http\Controllers\Api\V1\Faqs\PublicFaqController::class, 'index']);
+
 // Public read-only gallery (no auth). Only published albums are exposed.
 Route::get('/public/gallery/albums', [\App\Http\Controllers\Api\V1\Gallery\PublicGalleryController::class, 'index']);
 Route::get('/public/gallery/albums/{album}', [\App\Http\Controllers\Api\V1\Gallery\PublicGalleryController::class, 'show'])

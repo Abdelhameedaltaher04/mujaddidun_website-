@@ -1,0 +1,194 @@
+Continue the existing project.
+
+Public News, Public Events, Public Programs, Public Gallery, and Public Partners integrations are complete and verified.
+
+================================================
+TASK — PUBLIC FAQs
+================================================
+
+Connect the PUBLIC WEBSITE FAQ section to the real Laravel backend/API.
+
+IMPORTANT:
+- Do NOT redesign the existing FAQ UI.
+- Do NOT modify the existing Admin FAQ Management UI.
+- Do NOT modify Authentication.
+- Do NOT modify completed modules.
+- Do NOT introduce mock or hardcoded FAQ data.
+- Reuse the existing API architecture and frontend service patterns.
+
+================================================
+PUBLIC API
+================================================
+
+Create/use:
+
+GET /api/v1/public/faqs
+
+Only return FAQs that are publicly published.
+
+Do NOT expose:
+
+- Draft FAQs
+- Archived FAQs
+- Admin-only fields
+- Internal notes
+- Private information
+
+================================================
+PUBLIC FAQ SECTION
+================================================
+
+Replace all mock/hardcoded FAQ data.
+
+Load FAQs from the real Laravel API.
+
+Display:
+
+- Arabic question
+- English question
+- Arabic answer
+- English answer
+- Category when available
+- Display order
+
+Use the existing FAQ accordion/design.
+
+Do NOT create a new visual design.
+
+================================================
+LANGUAGE
+================================================
+
+Use the existing Arabic/English language system.
+
+Arabic:
+- Show Arabic questions and answers.
+
+English:
+- Show English questions and answers.
+
+Do not duplicate components.
+
+Make sure RTL/LTR behavior remains correct.
+
+================================================
+CATEGORIES & FILTERING
+================================================
+
+If the existing public FAQ UI contains categories or filters:
+
+Connect them to the real API.
+
+Do not filter only hardcoded frontend data.
+
+If the existing UI does not contain category filtering:
+
+Do not add a new UI feature.
+
+================================================
+DISPLAY ORDER
+================================================
+
+Use the display order stored in Laravel.
+
+The order configured from:
+
+Admin → FAQs → Reorder
+
+must be reflected on the public website.
+
+================================================
+HOMEPAGE / PUBLIC FAQ INTEGRATION
+================================================
+
+If FAQs are displayed on the Homepage:
+
+The Homepage FAQ section must use the same real Public FAQ API.
+
+Verify:
+
+Admin creates/edits/publishes/reorders FAQ
+        ↓
+Laravel API
+        ↓
+Database
+        ↓
+Public FAQ API
+        ↓
+Homepage / FAQ page
+        ↓
+Updated FAQ appears after refresh
+
+================================================
+LOADING & ERRORS
+================================================
+
+Implement:
+
+- Skeleton loading
+- Empty state
+- Error state
+- Retry
+- Graceful API failure handling
+
+Use professional Arabic messages.
+
+Examples:
+
+"لا توجد أسئلة شائعة متاحة حاليًا."
+
+"تعذر تحميل الأسئلة الشائعة."
+
+================================================
+API ARCHITECTURE
+================================================
+
+Create/use:
+
+services/publicFaqs.ts
+
+Use the existing centralized API client.
+
+Do not place API requests directly inside UI components.
+
+================================================
+SECURITY
+
+Verify:
+
+- Only Published FAQs are publicly returned.
+- Draft FAQs are never exposed.
+- Archived FAQs are never exposed.
+- Admin-only fields are not returned.
+- Internal notes are never returned.
+
+================================================
+TESTING
+
+Test:
+
+1. Published FAQ appears publicly.
+2. Draft FAQ does not appear.
+3. Archived FAQ does not appear.
+4. Arabic works.
+5. English works.
+6. RTL/LTR works correctly.
+7. Display order matches Admin configuration.
+8. FAQ changes made in Admin appear publicly after refresh.
+9. Homepage FAQ section uses real data if applicable.
+10. Empty state works.
+11. API errors are handled correctly.
+12. No mock/hardcoded FAQ data remains.
+13. Existing Admin FAQ functionality still works.
+14. Existing public modules remain unaffected.
+
+At the end provide:
+
+- PASS/FAIL checklist
+- API endpoint created/used
+- Backend files changed
+- Frontend files changed
+- Database changes, if any
+- Any remaining limitations
+
+Do NOT modify unrelated modules.

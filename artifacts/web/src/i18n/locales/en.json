@@ -259,33 +259,14 @@
   "faq": {
     "title": "FAQ",
     "subtitle": "Answers to the most common questions about Mujaddidun Association and its projects.",
-    "q1": "What are the goals of Mujaddidun Association?",
-    "a1": "Mujaddidun Association seeks to provide support and care for those in need through sustainable projects that contribute to building a solidary and empowered community, focusing on feeding, housing, and empowerment projects.",
-    "items": {
-      "1": {
-        "q": "What are the goals of Mujaddidun Association?",
-        "a": "Mujaddidun Association seeks to provide support and care for those in need through sustainable projects that contribute to building a solidary and empowered community, focusing on feeding, housing, and empowerment projects."
-      },
-      "2": {
-        "q": "How can I volunteer with the association?",
-        "a": "You can join our volunteer team by filling out the volunteer form on our volunteer page, and our team will contact you."
-      },
-      "3": {
-        "q": "Do my donations reach the beneficiaries directly?",
-        "a": "Yes, the association follows the highest transparency standards, and every donation is directed to the project you choose after a careful field study of the families in need."
-      },
-      "4": {
-        "q": "What donation methods are available?",
-        "a": "You can donate via direct bank transfer to the association's authorized accounts, or by visiting our headquarters."
-      },
-      "5": {
-        "q": "Does the association offer training programs?",
-        "a": "Yes. The association offers vocational and skills training to help young people grow and improve their employment opportunities."
-      },
-      "6": {
-        "q": "How can I contact the association team?",
-        "a": "You can contact us through the website contact form or the contact details provided on the Contact Us page."
-      }
+    "empty": "No frequently asked questions are available at the moment.",
+    "loadError": "Failed to load FAQs. Please try again.",
+    "categories": {
+      "general": "General",
+      "membership": "Membership",
+      "programs": "Programs",
+      "events": "Events",
+      "donations": "Donations"
     }
   },
   "contact": {
