@@ -43,8 +43,14 @@ export function Footer() {
     (locale === 'ar' ? settings?.general.site_name_ar : settings?.general.site_name_en) ||
     t('app.name');
   const footerLogo = settings?.branding.footer_logo_url || settings?.general.logo_url || logoUrl;
+  // If the settings-provided logo URL is broken (file removed), fall back to
+  // the bundled logo once (handler removes itself to avoid error loops).
+  const handleLogoError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src = logoUrl;
+  };
 
-  const socialEntries = settings
+  const enabledEntries = settings
     ? (Object.keys(SOCIAL_ICONS) as (keyof typeof SOCIAL_ICONS)[])
         .filter((key) => settings.social[key]?.enabled && settings.social[key]?.value)
         .map((key) => {
@@ -54,7 +60,14 @@ export function Footer() {
           return href ? { key, href, external: true } : null;
         })
         .filter((entry): entry is { key: keyof typeof SOCIAL_ICONS; href: string; external: boolean } => entry !== null)
-    : DEFAULT_SOCIAL.map((key) => ({ key, href: `#${key}`, external: false }));
+    : null;
+
+  // Show the default icon set while settings load AND when no links are
+  // configured yet, so the "follow us" section never renders empty.
+  const socialEntries =
+    enabledEntries && enabledEntries.length > 0
+      ? enabledEntries
+      : DEFAULT_SOCIAL.map((key) => ({ key, href: `#${key}`, external: false }));
 
   return (
     <footer className="border-t border-border bg-muted" data-testid="footer">
@@ -65,6 +78,7 @@ export function Footer() {
             <img
               src={footerLogo}
               alt={siteName}
+              onError={handleLogoError}
               className="h-16 w-auto"
               data-testid="img-footer-logo"
             />

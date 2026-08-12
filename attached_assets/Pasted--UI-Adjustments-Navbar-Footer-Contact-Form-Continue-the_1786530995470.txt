@@ -1,0 +1,143 @@
+# UI Adjustments — Navbar, Footer & Contact Form
+
+Continue the existing project.
+
+This task is UI-only.
+
+IMPORTANT:
+
+* Do NOT modify Laravel.
+* Do NOT modify APIs.
+* Do NOT modify Database.
+* Do NOT modify Authentication.
+* Do NOT modify existing functionality.
+* Do NOT change the current branding/colors/typography unless required for these specific changes.
+* Do NOT remove any existing responsive behavior.
+
+================================================
+
+1. RESTORE LOGO IN NAVBAR
+   ================================================
+
+Restore the existing Majaddidun logo in the main Navbar.
+
+Requirements:
+
+* Use the existing project logo asset.
+* Place it in its original/appropriate position in the Navbar.
+* Keep the current Navbar layout and spacing.
+* Make sure the logo is properly sized and does not make the Navbar unnecessarily tall.
+* On mobile, keep the logo responsive and properly aligned.
+
+================================================
+
+2. RESTORE LOGO IN FOOTER
+   ================================================
+
+Restore the Majaddidun logo inside the Footer.
+
+Requirements:
+
+* Use the existing logo asset.
+* Place it in the appropriate Footer branding area.
+* Keep the existing Footer layout.
+* Make sure the logo is properly sized and aligned.
+* Do not create a new Footer design.
+
+================================================
+
+3. RESTORE SOCIAL ICON AT THE BOTTOM OF THE PAGE
+   ================================================
+
+Restore the social media icon/element that previously appeared at the bottom of the page under:
+
+"تابعونا"
+
+Requirements:
+
+* Restore the existing icon/element that was previously there.
+* Keep it positioned under the "تابعونا" section.
+* Preserve the existing social links/functionality.
+* Use the existing icons/assets already available in the project.
+* Do not replace it with a completely different design.
+
+================================================
+
+4. CONTACT FORM LAYOUT
+   ================================================
+
+Modify the Contact Us form on the relevant page.
+
+The Email field and Phone Number field must NOT appear side-by-side.
+
+Change the layout so:
+
+Email:
+
+* Occupies its own full row.
+
+Phone Number:
+
+* Occupies its own full row directly below Email.
+
+Example structure:
+
+Email
+[ Email input ]
+
+Phone Number
+[ Phone input ]
+
+Keep the rest of the Contact Form unchanged.
+
+Do NOT change:
+
+* Form validation.
+* API integration.
+* Submission logic.
+* Error handling.
+* Authentication.
+* Backend functionality.
+
+Only change the visual layout.
+
+================================================
+
+5. RESPONSIVE CHECK
+   ================================================
+
+After making these changes, verify:
+
+Desktop:
+
+* Navbar logo is correctly aligned.
+* Footer logo is correctly aligned.
+* "تابعونا" social icon is visible.
+* Email occupies a full row.
+* Phone occupies a full row.
+
+Tablet:
+
+* No layout breaking.
+
+Mobile:
+
+* Logo remains properly sized.
+* Footer remains responsive.
+* Social icon remains visible.
+* Email and phone remain separate rows.
+* No horizontal scrolling.
+
+================================================
+
+IMPORTANT
+
+These are ONLY UI changes.
+
+Do not modify any backend/API/database code.
+
+Do not change any existing routes.
+
+Do not remove any existing functionality.
+
+After completing the changes, verify that all existing pages and features continue working exactly as before.

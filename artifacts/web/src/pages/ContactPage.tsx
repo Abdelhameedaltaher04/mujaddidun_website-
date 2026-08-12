@@ -236,21 +236,29 @@ export default function ContactPage() {
                   <div className="flex items-center justify-between gap-4 rounded-2xl border border-border/60 bg-muted/40 px-5 py-4">
                     <span className="font-bold text-foreground">{t('footer.followUs')}</span>
                     <div className="flex items-center gap-2.5">
-                      {[
-                        { icon: Facebook, label: 'Facebook', link: settings?.social.facebook },
-                        { icon: Instagram, label: 'Instagram', link: settings?.social.instagram },
-                        { icon: FaWhatsapp, label: 'WhatsApp', link: settings?.social.whatsapp },
-                      ]
-                        .map(({ icon, label, link }) => {
-                          // Before settings load, keep the static placeholders.
-                          if (!settings) return { icon, label, href: '#', external: false };
-                          if (!link?.enabled || !link.value) return null;
-                          const number = label === 'WhatsApp' ? toWhatsAppNumber(link.value) : null;
-                          const href = number ? `https://wa.me/${number}` : safeExternalUrl(link.value);
-                          return href ? { icon, label, href, external: true } : null;
-                        })
-                        .filter((entry): entry is { icon: typeof Facebook; label: string; href: string; external: boolean } => entry !== null)
-                        .map(({ icon: Icon, label, href, external }) => (
+                      {(() => {
+                        const providers = [
+                          { icon: Facebook, label: 'Facebook', link: settings?.social.facebook },
+                          { icon: Instagram, label: 'Instagram', link: settings?.social.instagram },
+                          { icon: FaWhatsapp, label: 'WhatsApp', link: settings?.social.whatsapp },
+                        ];
+                        // Valid configured links first; if none exist (or
+                        // settings are still loading), fall back to the full
+                        // static placeholder set so the box is never empty.
+                        const configured = settings
+                          ? providers
+                              .map(({ icon, label, link }) => {
+                                if (!link?.enabled || !link.value) return null;
+                                const number = label === 'WhatsApp' ? toWhatsAppNumber(link.value) : null;
+                                const href = number ? `https://wa.me/${number}` : safeExternalUrl(link.value);
+                                return href ? { icon, label, href, external: true } : null;
+                              })
+                              .filter((entry): entry is { icon: typeof Facebook; label: string; href: string; external: boolean } => entry !== null)
+                          : [];
+                        return configured.length > 0
+                          ? configured
+                          : providers.map(({ icon, label }) => ({ icon, label, href: '#', external: false }));
+                      })().map(({ icon: Icon, label, href, external }) => (
                         <a
                           key={label}
                           href={href}
@@ -305,7 +313,7 @@ export default function ContactPage() {
                   {fieldError('name')}
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">{t('common.email')}</Label>
                     <IconInput

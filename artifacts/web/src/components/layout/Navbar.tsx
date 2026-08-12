@@ -60,6 +60,12 @@ export function Navbar() {
   const { t } = useLocale();
   const settings = usePublicSettings();
   const navLogo = settings?.branding.primary_logo_url || settings?.general.logo_url || logoUrl;
+  // If the settings-provided logo URL is broken (file removed), fall back to
+  // the bundled logo once (handler removes itself to avoid error loops).
+  const handleLogoError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src = logoUrl;
+  };
   const { user, isAuthenticated, logout } = useAuth();
   const [location] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -130,6 +136,7 @@ export function Navbar() {
             <img
               src={navLogo}
               alt=""
+              onError={handleLogoError}
               className="h-10 w-auto shrink-0"
               data-testid="img-navbar-logo"
             />
@@ -284,7 +291,7 @@ export function Navbar() {
           {/* Overlay header */}
           <div className="relative flex h-16 items-center justify-between px-4 sm:px-6 border-b border-border/60">
             <Link href="/" onClick={closeMobile} className="focus-ring-standard rounded-md">
-              <img src={navLogo} alt="" className="h-10 w-auto" />
+              <img src={navLogo} alt="" onError={handleLogoError} className="h-10 w-auto" />
               <span className="sr-only">{t('app.name')}</span>
             </Link>
             <Button
