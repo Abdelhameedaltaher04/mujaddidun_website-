@@ -68,7 +68,7 @@ export function CountryPhoneField({
       <PhoneInput
         defaultCountry="jo"
         preferredCountries={['jo', 'sa', 'ae', 'eg']}
-        value={value}
+        value={value ?? ''}
         forceDialCode
         disableDialCodeAndPrefix={false}
         onChange={(phone, meta) => {

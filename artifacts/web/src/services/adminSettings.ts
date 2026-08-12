@@ -154,12 +154,45 @@ function buildFormData(
   return form;
 }
 
+/**
+ * The API stores unset text settings as NULL, but the form components
+ * (inputs, phone fields) require strings. Normalize every nullable text
+ * field to '' so a fresh/partial settings row can never crash the UI.
+ */
+function normalizeSiteSettings(settings: SiteSettings): SiteSettings {
+  const s = (value: unknown): string => (typeof value === 'string' ? value : '');
+  const contact = settings.contact ?? ({} as ContactSettings);
+  const social = settings.social ?? ({} as SocialSettings);
+  return {
+    ...settings,
+    contact: {
+      phone: s(contact.phone),
+      whatsapp: s(contact.whatsapp),
+      email: s(contact.email),
+      address_ar: s(contact.address_ar),
+      address_en: s(contact.address_en),
+      maps_url: s(contact.maps_url),
+    },
+    social: Object.fromEntries(
+      SOCIAL_PLATFORMS.map((platform) => {
+        const entry = social[platform];
+        return [platform, { value: s(entry?.value), enabled: Boolean(entry?.enabled) }];
+      }),
+    ) as SocialSettings,
+    email: {
+      sender_name: s(settings.email?.sender_name),
+      sender_email: s(settings.email?.sender_email),
+      reply_to_email: s(settings.email?.reply_to_email),
+    },
+  };
+}
+
 export const adminSettingsApi = {
   /** GET /settings */
   async get(): Promise<SiteSettings> {
     const response =
       await apiClient.get<ApiEnvelope<SiteSettings>>('/settings');
-    return response.data.data;
+    return normalizeSiteSettings(response.data.data);
   },
 
   /** PUT /settings/general (multipart) */
@@ -171,7 +204,7 @@ export const adminSettingsApi = {
       '/settings/general',
       buildFormData({ ...input }, { ...files }),
     );
-    return response.data.data;
+    return normalizeSiteSettings(response.data.data);
   },
 
   /** PUT /settings/contact */
@@ -180,7 +213,7 @@ export const adminSettingsApi = {
       '/settings/contact',
       input,
     );
-    return response.data.data;
+    return normalizeSiteSettings(response.data.data);
   },
 
   /** PUT /settings/social */
@@ -189,7 +222,7 @@ export const adminSettingsApi = {
       '/settings/social',
       input,
     );
-    return response.data.data;
+    return normalizeSiteSettings(response.data.data);
   },
 
   /** PUT /settings/branding (multipart) */
@@ -204,7 +237,7 @@ export const adminSettingsApi = {
       '/settings/branding',
       buildFormData({ ...input }, { ...files }),
     );
-    return response.data.data;
+    return normalizeSiteSettings(response.data.data);
   },
 
   /** PUT /settings/seo (multipart) */
@@ -216,7 +249,7 @@ export const adminSettingsApi = {
       '/settings/seo',
       buildFormData({ ...input }, { ...files }),
     );
-    return response.data.data;
+    return normalizeSiteSettings(response.data.data);
   },
 
   /** PUT /settings/email — display config only, never SMTP credentials. */
@@ -225,7 +258,7 @@ export const adminSettingsApi = {
       '/settings/email',
       input,
     );
-    return response.data.data;
+    return normalizeSiteSettings(response.data.data);
   },
 
   /** PUT /settings/controls */
@@ -234,6 +267,6 @@ export const adminSettingsApi = {
       '/settings/controls',
       input,
     );
-    return response.data.data;
+    return normalizeSiteSettings(response.data.data);
   },
 };
