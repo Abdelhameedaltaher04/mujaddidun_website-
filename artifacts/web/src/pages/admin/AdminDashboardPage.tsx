@@ -5,9 +5,12 @@ import {
   HandCoins,
   Mail,
   Newspaper,
+  RefreshCw,
   Users,
   type LucideIcon,
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { useLocale } from '@/contexts/LocaleContext';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import {
@@ -62,6 +65,13 @@ export default function AdminDashboardPage() {
     [locale],
   );
 
+  const hasError = stats.isError || charts.isError || activities.isError;
+  const retryFailed = () => {
+    if (stats.isError) void stats.refetch();
+    if (charts.isError) void charts.refetch();
+    if (activities.isError) void activities.refetch();
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -76,6 +86,24 @@ export default function AdminDashboardPage() {
             {t('admin.dashboard.subtitle')}
           </p>
         </div>
+
+        {hasError && (
+          <Card data-testid="dashboard-error">
+            <CardContent className="flex flex-col items-center gap-3 py-8 text-center">
+              <p className="text-sm text-destructive">
+                {t('admin.dashboard.loadError')}
+              </p>
+              <Button
+                variant="outline"
+                onClick={retryFailed}
+                data-testid="button-retry-dashboard"
+              >
+                <RefreshCw className="me-2 h-4 w-4" />
+                {t('common.retry')}
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Statistics */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">

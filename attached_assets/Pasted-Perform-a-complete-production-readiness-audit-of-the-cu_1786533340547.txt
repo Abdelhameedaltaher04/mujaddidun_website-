@@ -1,0 +1,219 @@
+Perform a complete production-readiness audit of the current Al Mujaddidun Platform Admin Dashboard and its backend/API integration.
+
+IMPORTANT:
+- Do NOT redesign the UI.
+- Do NOT change the existing visual design, layout, colors, typography, navigation, or responsive behavior.
+- Do NOT remove any existing functionality.
+- Do NOT create duplicate pages or APIs.
+- Do NOT replace working backend functionality with mock data.
+- Preserve all existing authentication and authorization behavior.
+- Before changing anything, inspect the existing project architecture, database schema, API/services, authentication, admin routes, and frontend hooks.
+
+PROJECT ARCHITECTURE:
+- Frontend: Next.js / React / TypeScript
+- Backend/API: existing backend implementation in this project
+- Database: existing project database
+- Admin Dashboard: dynamic and role-protected
+- Arabic + English support
+
+AUDIT ALL ADMIN MODULES:
+
+1. Dashboard
+2. Users
+3. News
+4. Events
+5. Programs
+6. Gallery
+7. Partners
+8. FAQs
+9. Donations
+10. Volunteer Requests
+11. Contact Messages
+12. Website Settings
+
+FOR EACH MODULE, VERIFY:
+
+A. DATA SOURCE
+- Confirm whether the page uses the real backend/API/database.
+- Identify any mock, hardcoded, seeded, or placeholder data.
+- Do not remove useful seed data yet; only report it unless it is clearly test-only and safe to remove.
+
+B. CRUD
+Verify that applicable operations actually work:
+- Create
+- Read
+- Update
+- Delete
+- Archive/Restore where applicable
+- Publish/Unpublish where applicable
+- Activate/Deactivate where applicable
+
+C. API INTEGRATION
+- Verify every frontend API/service call.
+- Verify HTTP methods.
+- Verify request payloads.
+- Verify response handling.
+- Verify loading states.
+- Verify empty states.
+- Verify error handling.
+- Verify authentication headers/session handling.
+- Verify that frontend data matches backend response types.
+
+D. AUTHORIZATION
+- Verify that only authenticated admins can access /admin/* routes.
+- Verify that normal users cannot access admin pages by manually entering URLs.
+- Verify that admin-only API endpoints are protected on the backend, not only hidden in the frontend.
+- Verify role checks and authorization middleware.
+- Prevent privilege escalation.
+- Do not weaken the existing authentication system.
+
+E. VALIDATION
+Verify frontend and backend validation for:
+- Required fields
+- Email
+- Phone number
+- Dates
+- Numeric values
+- File uploads
+- URLs
+- Text length
+- Invalid values
+
+F. SECURITY
+Audit for:
+- Authentication bypass
+- Authorization bypass
+- Exposed secrets
+- Unsafe API endpoints
+- Missing server-side authorization
+- Insecure file uploads
+- XSS risks
+- SQL injection risks
+- CORS issues
+- Sensitive data exposure
+- Improper error messages
+- Missing rate limiting where appropriate
+
+G. INTERNATIONALIZATION
+Verify Arabic and English:
+- No raw translation keys are visible to users.
+- No missing translation strings.
+- No mixed Arabic/English labels caused by implementation bugs.
+- RTL/LTR behavior remains correct.
+- Dates and numbers remain readable in both languages.
+
+H. UI/API CONSISTENCY
+Verify that status values displayed in the UI correctly correspond to backend values.
+
+Examples:
+- Published
+- Draft
+- Archived
+- Active
+- Inactive
+- Cancelled
+- Completed
+- Pending
+- Approved
+- Rejected
+
+Do not change status semantics without evidence from the existing backend/database.
+
+I. SEARCH / FILTERS / PAGINATION
+Verify that:
+- Search actually filters backend data when appropriate.
+- Filters actually work.
+- Date ranges work.
+- Pagination works.
+- Page size works.
+- Empty search results are handled correctly.
+
+J. FILES / IMAGES
+Especially verify:
+- Website logo
+- Favicon
+- News images
+- Gallery images
+- Partner logos
+- Program images
+- Event images
+
+Check whether image URLs are valid and whether uploaded files are stored and served correctly.
+
+KNOWN ISSUE TO CHECK:
+The Website Settings page currently shows a broken/missing website logo image in the logo section.
+
+Investigate the actual cause:
+- stored URL/path
+- upload handling
+- storage configuration
+- public URL generation
+- authentication
+- frontend rendering
+
+Fix the root cause if it is safe and does not require changing the UI.
+
+Also check whether the same image/storage problem affects other modules.
+
+K. REAL-WORLD FLOW TESTING
+
+Test realistic flows such as:
+
+USER:
+Register → Email verification → Login → Access public website → Donate / Register for event / Apply as volunteer / Contact organization
+
+ADMIN:
+Login → Admin Dashboard → View data → Create → Edit → Publish → Verify public website → Archive/Delete where supported
+
+For every flow, verify that the database and frontend remain synchronized.
+
+IMPORTANT:
+Do not blindly modify the project.
+
+First inspect and audit the existing implementation.
+
+Then fix only clear issues that are confirmed by the code, API, database schema, or runtime behavior.
+
+After completing the audit, provide a structured report with:
+
+1. VERIFIED WORKING
+2. REAL BACKEND/API INTEGRATION
+3. MOCK / SEEDED / PLACEHOLDER DATA
+4. BROKEN FUNCTIONALITY
+5. SECURITY ISSUES
+6. AUTHORIZATION ISSUES
+7. VALIDATION ISSUES
+8. IMAGE/UPLOAD ISSUES
+9. TRANSLATION/i18n ISSUES
+10. REMAINING PRODUCTION BLOCKERS
+
+For every issue, include:
+- Module
+- File/path
+- Problem
+- Severity: Critical / High / Medium / Low
+- Recommended fix
+- Whether you fixed it or only reported it
+
+At the end, provide a final checklist:
+
+[ ] Admin authentication
+[ ] Admin authorization
+[ ] Backend/API integration
+[ ] Database integration
+[ ] CRUD
+[ ] Search
+[ ] Filters
+[ ] Pagination
+[ ] File uploads
+[ ] Image URLs
+[ ] Arabic
+[ ] English
+[ ] RTL/LTR
+[ ] Validation
+[ ] Error handling
+[ ] Security
+[ ] Public website synchronization
+[ ] Production readiness
+
+Do not declare the project production-ready unless the evidence from the actual code and runtime supports it.

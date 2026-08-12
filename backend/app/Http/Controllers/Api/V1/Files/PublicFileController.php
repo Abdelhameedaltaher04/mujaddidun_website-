@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PublicFileController extends BaseController
 {
     /** Directories on the public disk that may be served publicly. */
-    private const ALLOWED_PREFIXES = ['news-covers/', 'news-images/', 'event-covers/', 'program-covers/', 'gallery-covers/', 'gallery-images/', 'partner-logos/', 'site-branding/'];
+    private const ALLOWED_PREFIXES = ['news-covers/', 'news-images/', 'event-covers/', 'program-covers/', 'gallery-covers/', 'gallery-images/', 'partner-logos/', 'site-branding/', 'profile-avatars/'];
 
     public function show(string $path): Response
     {
@@ -92,6 +92,14 @@ class PublicFileController extends BaseController
             }
         }
 
+        // Avatars are only served while a user actually owns them; orphaned
+        // files in the directory remain hidden. Filenames are unguessable
+        // random hashes, which is the standard exposure model for avatars
+        // rendered through plain <img> tags (no bearer header available).
+        if (str_starts_with($path, 'profile-avatars/')) {
+            abort_unless($this->avatarIsInUse($path), 404);
+        }
+
         // Containment check: the canonical path must stay inside the disk
         // root (defends against encoded traversal and symlinked entries).
         $root = realpath($disk->path(''));
@@ -164,6 +172,13 @@ class PublicFileController extends BaseController
         return \App\Models\GalleryImage::query()
             ->where('file_path', $path)
             ->whereHas('album', fn ($query) => $query->where('status', 'published'))
+            ->exists();
+    }
+
+    private function avatarIsInUse(string $path): bool
+    {
+        return \App\Models\User::query()
+            ->where('avatar_path', $path)
             ->exists();
     }
 

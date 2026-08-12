@@ -702,6 +702,7 @@
     "dashboard": {
       "title": "لوحة التحكم",
       "subtitle": "نظرة عامة على منصة مجددون",
+      "loadError": "تعذّر تحميل بيانات لوحة التحكم.",
       "vsLastMonth": "مقارنة بالشهر الماضي",
       "recentActivity": "آخر النشاطات",
       "quickActions": "إجراءات سريعة",

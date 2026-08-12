@@ -306,6 +306,19 @@ class AuthApiTest extends TestCase
         $this->assertSame('Updated', $updated->first_name);
         $this->assertSame('SA', $updated->country_code);
         Storage::disk('public')->assertExists($updated->avatar_path);
+
+        // avatar_url must be the routed API form (absolute /storage URLs are
+        // unreachable behind the preview proxy), and an owned avatar must be
+        // served by the public file route while orphans stay hidden.
+        $this->withHeader('Authorization', "Bearer {$token}")
+            ->getJson('/api/v1/auth/me')
+            ->assertOk()
+            ->assertJsonPath('data.user.avatar_url', '/api/v1/files/'.$updated->avatar_path);
+
+        $this->get('/api/v1/files/'.$updated->avatar_path)->assertStatus(200);
+
+        Storage::disk('public')->put('profile-avatars/orphan.jpg', 'bytes');
+        $this->get('/api/v1/files/profile-avatars/orphan.jpg')->assertStatus(404);
     }
 
     public function test_an_authenticated_user_must_provide_the_current_password_to_change_it(): void

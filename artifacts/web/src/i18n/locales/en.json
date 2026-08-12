@@ -702,6 +702,7 @@
     "dashboard": {
       "title": "Dashboard",
       "subtitle": "Overview of the Mujaddidun platform",
+      "loadError": "Failed to load dashboard data.",
       "vsLastMonth": "vs. last month",
       "recentActivity": "Recent Activity",
       "quickActions": "Quick Actions",

@@ -4,7 +4,6 @@ namespace App\Http\Resources\Api\V1\Users;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Shape consumed by the admin Users Management frontend module.
@@ -27,7 +26,7 @@ class AdminUserResource extends JsonResource
             'phone' => $this->phone,
             'country_code' => $this->country_code,
             'avatar_url' => $this->avatar_path
-                ? Storage::disk('public')->url($this->avatar_path)
+                ? '/api/v1/files/'.$this->avatar_path
                 : null,
             'status' => $this->status,
             'email_verified_at' => $this->email_verified_at?->toISOString(),

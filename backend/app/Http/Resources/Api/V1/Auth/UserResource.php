@@ -4,7 +4,6 @@ namespace App\Http\Resources\Api\V1\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class UserResource extends JsonResource
 {
@@ -24,7 +23,7 @@ class UserResource extends JsonResource
             'country_code' => $this->country_code,
             'avatar_path' => $this->avatar_path,
             'avatar_url' => $this->avatar_path
-                ? Storage::disk('public')->url($this->avatar_path)
+                ? '/api/v1/files/'.$this->avatar_path
                 : null,
             'bio' => $this->bio,
             'locale' => $this->locale,

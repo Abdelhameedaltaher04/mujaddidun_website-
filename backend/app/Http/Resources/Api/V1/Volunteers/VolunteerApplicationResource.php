@@ -4,7 +4,6 @@ namespace App\Http\Resources\Api\V1\Volunteers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Maps a VolunteerApplication (plus its Volunteer profile) to the admin
@@ -29,7 +28,7 @@ class VolunteerApplicationResource extends JsonResource
             'email' => $volunteer?->email ?? '',
             'phone' => $volunteer?->phone,
             'avatar_url' => $user?->avatar_path
-                ? Storage::disk('public')->url($user->avatar_path)
+                ? '/api/v1/files/'.$user->avatar_path
                 : null,
             'country' => $volunteer?->country_code,
             'date_of_birth' => $volunteer?->date_of_birth?->format('Y-m-d'),

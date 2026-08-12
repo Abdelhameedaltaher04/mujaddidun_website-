@@ -13,4 +13,5 @@
 - [Gallery cover invariant](gallery-cover-invariant.md) — album cover is custom file OR one is_cover image, never both; every cover mutation must preserve this.
 - [Laravel feature test gotchas](laravel-feature-tests.md) — guard caching between in-test requests, SQLite LIKE needs explicit ESCAPE, timestamps aren't fillable.
 - [Lenient list filters](lenient-list-filters.md) — date filters must ignore mid-typing/inverted values from native date inputs, never 422; keep enums strict.
+- [Storage seed files not in git](storage-seed-files.md) — public storage dir is gitignored while DB (tracked) references files there; broken images = check disk vs DB path; always use routed /api/v1/files URLs.
 - [Responsive duplicate test ids](responsive-testids.md) — desktop table and mobile card action buttons need distinct data-testids (suffix mobile with `-mobile`) or UI tests stall.
