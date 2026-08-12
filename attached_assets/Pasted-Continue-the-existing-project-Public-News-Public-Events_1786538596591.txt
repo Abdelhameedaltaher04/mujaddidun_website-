@@ -1,0 +1,176 @@
+Continue the existing project.
+
+Public News, Public Events, Public Programs, and Public Gallery integrations are complete and verified.
+
+================================================
+TASK — PUBLIC PARTNERS
+================================================
+
+Connect the PUBLIC WEBSITE Partners section to the real Laravel backend/API.
+
+IMPORTANT:
+- Do NOT redesign the UI.
+- Do NOT modify the existing Partners Admin Management page.
+- Do NOT modify Authentication.
+- Do NOT modify News, Events, Programs, or Gallery.
+- Do NOT introduce mock data.
+- Reuse the existing API architecture, authentication, storage, and frontend service patterns.
+
+================================================
+PUBLIC API
+================================================
+
+Create/use:
+
+GET /api/v1/public/partners
+
+Only return partners that are publicly active.
+
+Do NOT expose:
+
+- Inactive partners
+- Draft/internal records
+- Admin-only fields
+- Private information
+
+================================================
+PUBLIC PARTNERS SECTION
+================================================
+
+Replace all hardcoded/decorative partner data on the public website.
+
+Load partners from the real Laravel API.
+
+Display:
+
+- Partner logo
+- Arabic name
+- English name
+- Website URL when available
+- Description when available
+
+Use the existing Partners UI exactly as it is.
+
+================================================
+HOMEPAGE INTEGRATION
+================================================
+
+The Partners section on the public Homepage must use the real API.
+
+Verify this complete flow:
+
+Admin:
+Create/Edit/Activate/Deactivate Partner
+        ↓
+Laravel API
+        ↓
+Database
+        ↓
+Public Partners API
+        ↓
+Homepage
+        ↓
+Updated partner appears after refresh
+
+Do not leave decorative placeholder logos.
+
+================================================
+LANGUAGE
+================================================
+
+Use the existing language system.
+
+Arabic:
+- Arabic partner name
+- Arabic description when available
+
+English:
+- English partner name
+- English description when available
+
+Do not duplicate components.
+
+================================================
+PARTNER WEBSITE LINKS
+================================================
+
+If a partner has a valid website URL:
+
+- Make the partner logo/name clickable.
+- Open external links safely.
+- Do not invent URLs.
+
+If no URL exists:
+
+- Keep the partner non-clickable.
+
+================================================
+IMAGE STORAGE
+================================================
+
+Use the existing Laravel Storage system.
+
+Use the image URL returned by the API.
+
+Do not hardcode image paths.
+
+Handle:
+
+- Missing logo
+- Broken logo
+- Loading state
+
+gracefully.
+
+================================================
+API ARCHITECTURE
+================================================
+
+Create/use:
+
+services/publicPartners.ts
+
+Use the existing centralized API client.
+
+Do not put API requests directly inside UI components.
+
+================================================
+SECURITY
+================================================
+
+Verify:
+
+- Public endpoint exposes only public partner data.
+- Inactive partners are not returned.
+- Admin-only fields are not returned.
+- Private storage files are not exposed.
+
+================================================
+TESTING
+================================================
+
+Test:
+
+1. Active partner appears on the public website.
+2. Inactive partner does not appear.
+3. Partner logo loads correctly.
+4. Arabic works.
+5. English works.
+6. Website URL works when provided.
+7. Partner changes made in Admin appear publicly after refresh.
+8. No mock/decorative partner data remains.
+9. Empty state works when there are no active partners.
+10. API errors are handled gracefully.
+11. Existing Admin Partners functionality still works.
+12. Existing public modules remain unaffected.
+
+At the end provide:
+
+- PASS/FAIL checklist
+- API endpoint created/used
+- Backend files changed
+- Frontend files changed
+- Any database changes
+- Any remaining limitations
+
+Do NOT modify unrelated modules.
