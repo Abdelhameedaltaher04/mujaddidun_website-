@@ -24,4 +24,17 @@ class PublicFaqController extends BaseController
             'FAQs retrieved successfully.',
         );
     }
+
+    /** GET /api/v1/public/faqs/{faq} — published only; drafts/archived 404. */
+    public function show(int $faq): JsonResponse
+    {
+        $record = Faq::query()
+            ->where('status', 'published')
+            ->findOrFail($faq);
+
+        return $this->success(
+            new PublicFaqResource($record),
+            'FAQ retrieved successfully.',
+        );
+    }
 }

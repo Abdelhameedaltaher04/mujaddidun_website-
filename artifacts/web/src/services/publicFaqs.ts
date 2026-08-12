@@ -20,6 +20,12 @@ export const publicFaqsApi = {
     const response = await apiClient.get<ApiEnvelope<PublicFaq[]>>('/public/faqs');
     return response.data.data;
   },
+
+  /** GET /public/faqs/{id} — published only; drafts/archived 404 */
+  async get(id: number | string): Promise<PublicFaq> {
+    const response = await apiClient.get<ApiEnvelope<PublicFaq>>(`/public/faqs/${id}`);
+    return response.data.data;
+  },
 };
 
 export function faqQuestion(faq: PublicFaq, lang: 'ar' | 'en'): string {

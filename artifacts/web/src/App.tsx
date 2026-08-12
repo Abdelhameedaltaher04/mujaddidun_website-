@@ -26,6 +26,7 @@ import GalleryPage from '@/pages/GalleryPage';
 import SuccessStoriesPage from '@/pages/SuccessStoriesPage';
 import PartnersPage from '@/pages/PartnersPage';
 import FaqPage from '@/pages/FaqPage';
+import FaqDetailsPage from '@/pages/FaqDetailsPage';
 import ContactPage from '@/pages/ContactPage';
 import VolunteerPage from '@/pages/VolunteerPage';
 import ProgramsPage from '@/pages/ProgramsPage';
@@ -238,6 +239,7 @@ function Router() {
       <Route path="/success-stories" component={SuccessStoriesPage} />
       <Route path="/partners" component={PartnersPage} />
       <Route path="/faq" component={FaqPage} />
+      <Route path="/faqs/:id" component={FaqDetailsPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/volunteer" component={VolunteerPage} />
       <Route path="/programs" component={ProgramsPage} />

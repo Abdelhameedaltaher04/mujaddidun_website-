@@ -1,0 +1,154 @@
+Update the public FAQ functionality.
+
+IMPORTANT:
+- UI/UX change only where necessary.
+- Do NOT modify the existing Admin FAQ Management UI.
+- Do NOT change the existing FAQ backend/API architecture unless the existing API is missing the required detail endpoint.
+- Do NOT introduce mock data.
+- Reuse the existing FAQ data and API.
+
+================================================
+FAQ DETAILS PAGE
+================================================
+
+When the user clicks:
+
+"اقرأ المزيد"
+
+on any FAQ card/section on the public website, navigate the user to a dedicated FAQ details page.
+
+Route:
+
+/faqs/{id}
+
+The ID must come from the real FAQ record.
+
+================================================
+FAQ DETAILS
+================================================
+
+The details page must load the FAQ from the real Laravel API.
+
+Create/use:
+
+GET /api/v1/public/faqs/{id}
+
+Only return published/public FAQ records.
+
+Display:
+
+- Question
+- Full answer
+- Category if available
+- Any other existing public FAQ information
+
+================================================
+LANGUAGE
+================================================
+
+Use the existing Arabic/English language system.
+
+Arabic:
+- Display Arabic question and answer.
+
+English:
+- Display English question and answer.
+
+Make sure RTL/LTR works correctly.
+
+================================================
+NAVIGATION
+================================================
+
+Clicking:
+
+"اقرأ المزيد"
+
+must navigate to:
+
+/faqs/{id}
+
+Do NOT use hardcoded IDs.
+
+Do NOT reload the entire application unnecessarily.
+
+Use the existing Next.js routing/navigation architecture.
+
+================================================
+FAQ DETAILS UX
+
+The page should follow the existing website design system.
+
+Include:
+
+- Page title
+- FAQ question
+- Full answer
+- Category if available
+- Back to FAQs button/link
+
+Arabic:
+
+"العودة إلى الأسئلة الشائعة"
+
+English:
+
+"Back to FAQs"
+
+Do NOT create a completely new visual design.
+
+================================================
+404 / ERROR HANDLING
+
+If the FAQ does not exist:
+
+Show the existing 404 page or appropriate not-found state.
+
+If the FAQ exists but is not published:
+
+Do NOT expose its content publicly.
+
+If the API fails:
+
+Show a professional error state and retry option.
+
+================================================
+SEO
+
+For the FAQ details page dynamically set:
+
+- Page title
+- Meta description
+- Open Graph title
+- Open Graph description
+
+Use the actual FAQ question/answer.
+
+================================================
+TESTING
+
+Test:
+
+1. Clicking "اقرأ المزيد" opens /faqs/{id}.
+2. Correct FAQ data is displayed.
+3. Arabic works.
+4. English works.
+5. RTL/LTR works.
+6. Published FAQ works.
+7. Draft FAQ cannot be accessed publicly.
+8. Archived FAQ cannot be accessed publicly.
+9. Invalid FAQ ID returns 404.
+10. Back to FAQs works.
+11. No mock data is used.
+12. Existing FAQ listing remains unchanged.
+13. Existing Admin FAQ functionality remains unchanged.
+
+At the end provide:
+
+- PASS/FAIL checklist
+- Route created
+- API endpoint used
+- Files changed
+- Any remaining limitations
+
+Do NOT modify unrelated modules.

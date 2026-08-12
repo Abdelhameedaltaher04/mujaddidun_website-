@@ -64,4 +64,28 @@ class PublicFaqsApiTest extends TestCase
 
         $this->getJson('/api/v1/public/faqs')->assertOk()->assertJsonCount(1, 'data');
     }
+
+    public function test_show_returns_published_faq_with_public_fields(): void
+    {
+        $faq = $this->makeFaq(['sort_order' => 3]);
+
+        $row = $this->getJson("/api/v1/public/faqs/{$faq->id}")->assertOk()->json('data');
+        $this->assertSame($faq->id, $row['id']);
+        $this->assertSame('Question', $row['question_en']);
+        $this->assertSame(3, $row['display_order']);
+        foreach (['status', 'sort_order', 'published_at', 'created_at', 'updated_at'] as $hidden) {
+            $this->assertArrayNotHasKey($hidden, $row);
+        }
+    }
+
+    public function test_show_hides_draft_archived_and_missing_faqs(): void
+    {
+        $draft = $this->makeFaq(['status' => 'draft']);
+        $archived = $this->makeFaq(['status' => 'archived']);
+
+        $this->getJson("/api/v1/public/faqs/{$draft->id}")->assertNotFound();
+        $this->getJson("/api/v1/public/faqs/{$archived->id}")->assertNotFound();
+        $this->getJson('/api/v1/public/faqs/999999')->assertNotFound();
+        $this->getJson('/api/v1/public/faqs/not-a-number')->assertNotFound();
+    }
 }

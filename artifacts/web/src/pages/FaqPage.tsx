@@ -5,6 +5,7 @@ import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { useLocale } from '@/contexts/LocaleContext';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePublicFaqs } from '@/hooks/usePublicFaqs';
@@ -62,6 +63,15 @@ export default function FaqPage() {
                     </AccordionTrigger>
                     <AccordionContent className="text-muted-foreground leading-relaxed text-base pt-2">
                       {faqAnswer(faq, locale)}
+                      <div className="mt-3">
+                        <Link
+                          href={`/faqs/${faq.id}`}
+                          className="font-bold text-primary underline-offset-4 hover:underline focus-ring-standard rounded-md"
+                          data-testid={`link-faq-details-${faq.id}`}
+                        >
+                          {t('common.readMore')}
+                        </Link>
+                      </div>
                     </AccordionContent>
                   </AccordionItem>
                 ))}

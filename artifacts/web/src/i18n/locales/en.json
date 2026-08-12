@@ -267,7 +267,9 @@
       "programs": "Programs",
       "events": "Events",
       "donations": "Donations"
-    }
+    },
+    "notFound": "FAQ not found.",
+    "backToFaqs": "Back to FAQs"
   },
   "contact": {
     "title": "Contact Us",

@@ -588,6 +588,15 @@ export default function HomePage() {
                         </summary>
                         <div className="p-6 pt-0 text-muted-foreground leading-relaxed">
                           {faqAnswer(faq, homeLang)}
+                          <div className="mt-3">
+                            <Link
+                              href={`/faqs/${faq.id}`}
+                              className="font-bold text-primary underline-offset-4 hover:underline focus-ring-standard rounded-md"
+                              data-testid={`link-home-faq-details-${faq.id}`}
+                            >
+                              {t('common.readMore')}
+                            </Link>
+                          </div>
                         </div>
                       </details>
                     </div>

@@ -243,6 +243,8 @@ Route::get('/public/partners', [\App\Http\Controllers\Api\V1\Partners\PublicPart
 
 // Public read-only FAQs (no auth). Only published FAQs are exposed.
 Route::get('/public/faqs', [\App\Http\Controllers\Api\V1\Faqs\PublicFaqController::class, 'index']);
+Route::get('/public/faqs/{faq}', [\App\Http\Controllers\Api\V1\Faqs\PublicFaqController::class, 'show'])
+    ->whereNumber('faq');
 
 // Public read-only gallery (no auth). Only published albums are exposed.
 Route::get('/public/gallery/albums', [\App\Http\Controllers\Api\V1\Gallery\PublicGalleryController::class, 'index']);
