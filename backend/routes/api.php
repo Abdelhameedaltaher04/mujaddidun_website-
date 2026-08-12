@@ -241,6 +241,12 @@ Route::get('/public/events/{event}', [\App\Http\Controllers\Api\V1\Events\Public
 // Public read-only partners (no auth). Only active partners are exposed.
 Route::get('/public/partners', [\App\Http\Controllers\Api\V1\Partners\PublicPartnerController::class, 'index']);
 
+// Public donation intent (no auth). Recorded as pending — no online payment
+// gateway is integrated; admins confirm payments (e.g. bank transfers).
+// Rate limited per IP; a honeypot field in the request rejects naive bots.
+Route::post('/public/donations', [\App\Http\Controllers\Api\V1\Donations\PublicDonationController::class, 'store'])
+    ->middleware('throttle:5,1');
+
 // Public read-only FAQs (no auth). Only published FAQs are exposed.
 Route::get('/public/faqs', [\App\Http\Controllers\Api\V1\Faqs\PublicFaqController::class, 'index']);
 Route::get('/public/faqs/{faq}', [\App\Http\Controllers\Api\V1\Faqs\PublicFaqController::class, 'show'])

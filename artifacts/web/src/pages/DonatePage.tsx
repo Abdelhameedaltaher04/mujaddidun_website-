@@ -1,4 +1,7 @@
 import { useState, FormEvent } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { publicDonationsApi } from '@/services/publicDonations';
+import { getApiError } from '@/services/api';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -39,8 +42,42 @@ export default function DonatePage() {
   const [phoneCountry, setPhoneCountry] = useState<CountryCode>('JO');
   const [donorEmail, setDonorEmail] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [honeypot, setHoneypot] = useState('');
   const [successOpen, setSuccessOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const submitMutation = useMutation({
+    mutationFn: publicDonationsApi.create,
+    onSuccess: () => {
+      setSuccessOpen(true);
+      setFormError(null);
+      setErrors({});
+    },
+    onError: (error: unknown) => {
+      const { fields, status } = getApiError(error);
+      const fieldErrors: Record<string, string> = {};
+      const fieldMap: Record<string, string> = {
+        donor_name: 'donorName',
+        donor_email: 'donorEmail',
+        donor_phone: 'donorPhone',
+        amount: 'amount',
+      };
+      Object.entries(fieldMap).forEach(([apiField, formField]) => {
+        if (fields?.[apiField]) fieldErrors[formField] = fields[apiField];
+      });
+      setErrors(fieldErrors);
+      if (Object.keys(fieldErrors).length > 0) {
+        setFormError(null);
+      } else if (status === 429) {
+        setFormError(t('donate.form.tooMany'));
+      } else if (status === undefined) {
+        setFormError(t('news.networkError'));
+      } else {
+        setFormError(t('donate.form.sendError'));
+      }
+    },
+  });
+  const isSubmitting = submitMutation.isPending;
 
   const types = [
     { id: 'general', label: t('donate.types.general') },
@@ -77,8 +114,16 @@ export default function DonatePage() {
     setDonorName(donorName.trim());
     setDonorPhone(trimmedPhone);
     setDonorEmail(trimmedEmail);
-    setIsSubmitting(true);
-    setSuccessOpen(true);
+    setFormError(null);
+    submitMutation.mutate({
+      donor_name: donorName.trim(),
+      donor_email: trimmedEmail,
+      donor_phone: trimmedPhone,
+      amount: numericAmount,
+      donation_type: donationType,
+      frequency,
+      website: honeypot,
+    });
   };
 
   const updateDonorField = (field: 'donorName' | 'donorPhone' | 'donorEmail', value: string) => {
@@ -138,6 +183,19 @@ export default function DonatePage() {
             {/* Form Section */}
             <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
               <form onSubmit={handleSubmit} noValidate className="space-y-10">
+                {/* Honeypot field — visually hidden, ignored by humans. */}
+                <div className="sr-only" aria-hidden="true">
+                  <label htmlFor="donate-website">Website</label>
+                  <input
+                    id="donate-website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
                 
                 {/* 1. Donation Type */}
                 <div className="space-y-4">
@@ -274,6 +332,12 @@ export default function DonatePage() {
                   </div>
                 </div>
 
+                {formError && (
+                  <p className="text-sm text-destructive" role="alert" data-testid="error-donate-form">
+                    {formError}
+                  </p>
+                )}
+
                 <Button
                   type="submit"
                   size="lg"
@@ -328,7 +392,6 @@ export default function DonatePage() {
         onOpenChange={(open) => {
           setSuccessOpen(open);
           if (!open) {
-            setIsSubmitting(false);
             setDonorName('');
             setDonorPhone('');
             setDonorEmail('');
@@ -346,7 +409,6 @@ export default function DonatePage() {
             <Button
               onClick={() => {
                 setSuccessOpen(false);
-                setIsSubmitting(false);
                 setDonorName('');
                 setDonorPhone('');
                 setDonorEmail('');

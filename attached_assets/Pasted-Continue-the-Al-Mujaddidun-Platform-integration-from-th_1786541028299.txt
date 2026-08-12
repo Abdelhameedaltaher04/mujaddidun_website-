@@ -1,0 +1,306 @@
+Continue the Al Mujaddidun Platform integration from the current progress.
+
+The Public FAQ integration is currently being finalized.
+
+NEXT TASK:
+Integrate the PUBLIC DONATIONS functionality with the real Laravel backend/API.
+
+IMPORTANT:
+- Do NOT redesign the existing donation UI.
+- Do NOT change the existing visual identity, colors, typography, navbar, footer, or responsive behavior.
+- Do NOT modify the Admin Donations UI unless required for API compatibility.
+- Do NOT use mock/hardcoded donation data.
+- Reuse the existing backend, database, authentication, validation, and payment/donation architecture.
+- Inspect the existing implementation before making changes.
+- Do not create duplicate APIs or services.
+
+================================================
+1. INSPECT EXISTING DONATION SYSTEM
+================================================
+
+Before changing anything, inspect:
+
+- Existing Admin Donations module
+- Donation database table/schema
+- Donation API endpoints
+- Donation service/controller
+- Existing public donation page/form
+- Authentication/session handling
+- Existing payment methods
+- Donation statuses
+- Existing validation
+- Existing receipt/invoice handling if available
+
+Use the existing architecture and naming conventions.
+
+================================================
+2. PUBLIC DONATION FORM
+================================================
+
+Connect the existing public donation form to the real backend.
+
+The form should submit real donation data to Laravel.
+
+Do NOT keep fake successful submissions.
+
+Verify:
+
+- Donor name
+- Email
+- Phone
+- Amount
+- Payment method
+- Donation/program/campaign reference if the existing system supports it
+- Any other existing required fields
+
+Do not invent new required fields.
+
+================================================
+3. VALIDATION
+================================================
+
+Validate on BOTH frontend and backend:
+
+- Required fields
+- Valid email
+- Valid Jordanian phone format according to the existing project rules
+- Positive donation amount
+- Numeric amount
+- Maximum/minimum amount if already defined
+- Valid payment method
+- Valid referenced program/campaign
+
+Never rely only on frontend validation.
+
+================================================
+4. PAYMENT FLOW
+================================================
+
+Inspect the existing payment implementation.
+
+If a real payment gateway is already integrated:
+
+Use the existing gateway.
+
+Verify:
+
+Donation Form
+    ↓
+Backend
+    ↓
+Payment Gateway
+    ↓
+Payment Result
+    ↓
+Donation Status
+    ↓
+Database
+    ↓
+Admin Donations
+
+Do NOT replace a working payment integration.
+
+If payment is currently only simulated/test-mode:
+DO NOT pretend it is a production payment gateway.
+
+Clearly report the limitation.
+
+================================================
+5. DONATION STATUS
+================================================
+
+Verify the existing backend status values.
+
+Examples may include:
+
+- Pending
+- Completed
+- Failed
+- Refunded
+
+Do NOT change status semantics without evidence from the existing backend/database.
+
+The public frontend must display appropriate success/failure states based on the real backend response.
+
+================================================
+6. DATABASE SYNCHRONIZATION
+================================================
+
+Every successful donation must create/update the correct database record.
+
+Verify that the record appears automatically in:
+
+Admin → Donations
+
+Verify:
+
+- Donor
+- Email
+- Amount
+- Payment method
+- Transaction ID
+- Donation date
+- Status
+
+match the actual submitted donation.
+
+================================================
+7. ADMIN ↔ PUBLIC FLOW
+================================================
+
+Test this complete flow:
+
+PUBLIC:
+
+Open donation page
+→ Enter valid information
+→ Submit donation
+→ Backend processes request
+→ Database updated
+→ Appropriate success/failure response
+
+ADMIN:
+
+Open Admin → Donations
+→ Verify the new donation appears
+→ Verify amount/status/transaction data
+→ Verify filters/search still work
+
+================================================
+8. SECURITY
+================================================
+
+Audit the donation API for:
+
+- Unauthorized access
+- Mass assignment
+- Amount manipulation
+- Payment status manipulation
+- Transaction ID manipulation
+- Sensitive donor information exposure
+- SQL injection
+- XSS
+- Improper error messages
+
+Never trust:
+
+- donation amount
+- payment status
+- transaction status
+- transaction ID
+
+from the client.
+
+Payment confirmation must be verified server-side where applicable.
+
+================================================
+9. PUBLIC API
+================================================
+
+If there is a public donation endpoint, make sure it exposes only the minimum required information.
+
+Never expose:
+
+- Internal admin fields
+- Payment secrets
+- Gateway credentials
+- Private donor information
+- Internal notes
+
+================================================
+10. ARABIC / ENGLISH
+================================================
+
+Verify:
+
+Arabic:
+- Donation labels
+- Validation messages
+- Success messages
+- Error messages
+- Payment status messages
+
+English:
+- Same functionality in English.
+
+Ensure RTL/LTR remains correct.
+
+Do not expose raw translation keys.
+
+================================================
+11. ERROR HANDLING
+================================================
+
+Handle:
+
+- Network errors
+- Backend validation errors
+- Payment failure
+- Duplicate submission
+- Invalid amount
+- Invalid payment method
+- Server errors
+
+Show professional user-friendly messages.
+
+Never expose stack traces or internal server errors.
+
+================================================
+12. REAL-TIME / REFRESH CONSISTENCY
+================================================
+
+After a donation is completed:
+
+Refresh Admin → Donations.
+
+The new donation must appear using real database data.
+
+Do not require manually editing or seeding the record.
+
+================================================
+13. TESTING
+================================================
+
+Run and verify:
+
+[ ] Public donation form loads.
+[ ] Form uses real backend/API.
+[ ] No mock donation submission remains.
+[ ] Validation works.
+[ ] Invalid amount is rejected.
+[ ] Invalid email is rejected.
+[ ] Invalid phone is rejected.
+[ ] Successful donation creates the correct DB record.
+[ ] Failed donation does not incorrectly become Completed.
+[ ] Transaction information is stored correctly where applicable.
+[ ] Admin Donations displays the real donation.
+[ ] Search works.
+[ ] Filters work.
+[ ] Arabic works.
+[ ] English works.
+[ ] RTL/LTR works.
+[ ] Unauthorized donation-management APIs are protected.
+[ ] Sensitive donor information is not publicly exposed.
+[ ] Existing Admin Donations functionality remains intact.
+[ ] Existing public modules remain unaffected.
+
+================================================
+FINAL REPORT
+================================================
+
+After implementation provide:
+
+1. Donation flow status
+2. Backend/API endpoints used
+3. Database tables involved
+4. Files modified
+5. Payment integration status
+6. Validation status
+7. Security findings
+8. Arabic/English status
+9. Tests performed
+10. Remaining production blockers
+
+Do NOT declare donations production-ready unless the actual backend/payment flow and runtime behavior support that conclusion.
+
+Do not modify unrelated modules.

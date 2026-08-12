@@ -15,4 +15,5 @@
 - [Lenient list filters](lenient-list-filters.md) — date filters must ignore mid-typing/inverted values from native date inputs, never 422; keep enums strict.
 - [Storage seed files not in git](storage-seed-files.md) — public storage dir is gitignored while DB (tracked) references files there; broken images = check disk vs DB path; always use routed /api/v1/files URLs.
 - [Public file gating](public-file-gating.md) — new upload dirs need an active-reference gate in the public file controller; inactive content must not leak via /public endpoints or file URLs.
+- [getApiError fields are strings](api-error-fields.md) — server field errors are pre-joined strings; `fields[key][0]` renders one character, assign the whole string.
 - [Responsive duplicate test ids](responsive-testids.md) — desktop table and mobile card action buttons need distinct data-testids (suffix mobile with `-mobile`) or UI tests stall.

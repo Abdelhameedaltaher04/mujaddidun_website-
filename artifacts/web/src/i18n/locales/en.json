@@ -623,7 +623,9 @@
         "phoneInvalid": "Please enter a valid phone number.",
         "emailInvalid": "Please enter a valid email address.",
         "amountInvalid": "Please enter a valid amount."
-      }
+      },
+      "tooMany": "Too many attempts. Please wait a minute and try again.",
+      "sendError": "Could not submit your donation. Please try again."
     },
     "bankTransfer": {
       "title": "Direct Bank Transfer",
