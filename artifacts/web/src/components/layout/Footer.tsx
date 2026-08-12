@@ -42,7 +42,9 @@ export function Footer() {
   const siteName =
     (locale === 'ar' ? settings?.general.site_name_ar : settings?.general.site_name_en) ||
     t('app.name');
-  const footerLogo = settings?.branding.footer_logo_url || settings?.general.logo_url || logoUrl;
+  // Use the exact same logo resolution as the Navbar so both surfaces
+  // always show the identical brand asset.
+  const footerLogo = settings?.branding.primary_logo_url || settings?.general.logo_url || logoUrl;
   // If the settings-provided logo URL is broken (file removed), fall back to
   // the bundled logo once (handler removes itself to avoid error loops).
   const handleLogoError = (e: React.SyntheticEvent<HTMLImageElement>) => {
