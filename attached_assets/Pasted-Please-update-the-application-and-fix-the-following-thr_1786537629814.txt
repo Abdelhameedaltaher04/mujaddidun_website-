@@ -1,0 +1,64 @@
+Please update the application and fix the following three issues:
+
+### 1. Make the Dashboard search bar work
+
+* The search bar on the main Dashboard currently does not work correctly.
+* Make it fully functional.
+* Search should actually filter/search the relevant dashboard data, cards, items, or records that are intended to be searchable.
+* Make sure typing in the search field updates the results correctly.
+* Support clearing the search and returning to the full list.
+* Make sure the search works correctly with both **English (LTR)** and **Arabic (RTL)**.
+* Do not break the existing dashboard layout or functionality.
+* Check whether there is already a reusable search/filter function in the project and reuse it instead of creating unnecessary duplicate logic.
+
+### 2. Fix the translation key
+
+There is an incorrect/unresolved translation key being displayed:
+
+`programs.categories.empowerment`
+
+Fix this so users see the proper translated text instead of the raw key.
+
+Requirements:
+
+* Find where `programs.categories.empowerment` is defined/used.
+* Add or correct the translation in the appropriate translation/i18n files.
+* Make sure the Arabic translation is correct.
+* Make sure the English translation is correct.
+* Check both language versions to ensure the raw translation key is never displayed to the user.
+* Follow the existing translation structure and naming conventions in the project.
+
+### 3. Fix colors on the Programs Management page in the Admin Dashboard
+
+The colors on the **Programs Management** page are not being applied/displayed correctly.
+
+Please:
+
+* Inspect the existing color configuration and styling for Programs Management.
+* Make sure program/category/status colors are actually reflected in the UI wherever they are supposed to appear.
+* Check badges, labels, cards, table rows, status indicators, filters, and any other program-related color elements.
+* Make sure the correct color is applied based on the program/category/status data.
+* Check for CSS specificity issues, hardcoded colors, incorrect class names, Tailwind configuration issues, or theme overrides.
+* Make sure colors work in both light/dark mode if the application supports both.
+* Make sure the colors remain correct in both English and Arabic/RTL layouts.
+* Preserve the existing intended color scheme rather than introducing a new design.
+
+### Important
+
+Before changing anything:
+
+1. Inspect the existing implementation and identify the root cause of each issue.
+2. Prefer fixing shared/reusable logic instead of applying page-specific hacks.
+3. Do not remove existing functionality.
+4. Keep the current UI/design consistent.
+5. Test all three fixes after implementation.
+
+### Final verification
+
+Verify:
+
+* Dashboard search returns the correct results and can be cleared.
+* `programs.categories.empowerment` is translated correctly in English and Arabic and the raw key is no longer visible.
+* Programs Management colors display correctly everywhere they are used.
+* No console errors are introduced.
+* Existing pages and functionality continue to work.
