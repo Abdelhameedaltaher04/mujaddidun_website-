@@ -1,6 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
+
+/* Make the international phone field stretch to the full form width,
+   matching sibling inputs (e.g. the email field) on every screen size. */
+.country-phone-field .react-international-phone-input-container {
+  width: 100%;
+}
+.country-phone-field .react-international-phone-input {
+  width: 100%;
+  flex: 1 1 auto;
+}
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
