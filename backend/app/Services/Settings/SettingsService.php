@@ -50,6 +50,8 @@ class SettingsService
                 'address_ar' => 'عمّان، الأردن',
                 'address_en' => 'Amman, Jordan',
                 'maps_url' => 'https://maps.google.com/?q=Amman+Jordan',
+                'working_hours_ar' => '',
+                'working_hours_en' => '',
             ],
             'social' => [
                 'facebook' => ['value' => '', 'enabled' => false],

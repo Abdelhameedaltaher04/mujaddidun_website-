@@ -8,6 +8,8 @@ import { FaFacebookF, FaInstagram, FaLinkedinIn, FaWhatsapp, FaYoutube } from 'r
 import { MainContainer } from '@/components/layout/MainContainer';
 import { useLocale } from '@/contexts/LocaleContext';
 import { usePublicSettings, toWhatsAppNumber, safeExternalUrl } from '@/hooks/usePublicSettings';
+import { usePublicContent } from '@/hooks/usePublicContent';
+import { Clock } from 'lucide-react';
 import logoUrl from '@/assets/mujaddidun-logo.png';
 
 const QUICK_LINKS = [
@@ -37,7 +39,23 @@ const DEFAULT_SOCIAL = ['facebook', 'instagram', 'whatsapp'] as const;
 export function Footer() {
   const { t, locale } = useLocale();
   const settings = usePublicSettings();
+  const content = usePublicContent();
+  const footerContent = content?.sections.footer;
   const year = new Date().getFullYear();
+
+  const footerBrief =
+    (locale === 'ar' ? footerContent?.description_ar : footerContent?.description_en) ||
+    (locale === 'ar' ? settings?.general.description_ar : settings?.general.description_en) ||
+    t('footer.aboutBrief');
+  const copyrightTemplate =
+    locale === 'ar' ? footerContent?.copyright_ar : footerContent?.copyright_en;
+  const copyright = copyrightTemplate
+    ? copyrightTemplate.replace('{year}', String(year))
+    : t('footer.copyright', { year });
+  const workingHours =
+    (locale === 'ar'
+      ? settings?.contact.working_hours_ar
+      : settings?.contact.working_hours_en) || '';
 
   const siteName =
     (locale === 'ar' ? settings?.general.site_name_ar : settings?.general.site_name_en) ||
@@ -88,9 +106,7 @@ export function Footer() {
               {siteName}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              {(locale === 'ar'
-                ? settings?.general.description_ar
-                : settings?.general.description_en) || t('footer.aboutBrief')}
+              {footerBrief}
             </p>
           </div>
 
@@ -136,6 +152,12 @@ export function Footer() {
                 <Mail className="h-4 w-4 shrink-0" aria-hidden="true" />
                 <span>{settings?.contact.email || t('footer.email')}</span>
               </li>
+              {workingHours ? (
+                <li className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  <span data-testid="text-working-hours">{workingHours}</span>
+                </li>
+              ) : null}
             </ul>
           </div>
 
@@ -171,7 +193,7 @@ export function Footer() {
             className="text-center text-sm text-muted-foreground"
             data-testid="text-copyright"
           >
-            {t('footer.copyright', { year })}
+            {copyright}
           </p>
         </div>
       </MainContainer>

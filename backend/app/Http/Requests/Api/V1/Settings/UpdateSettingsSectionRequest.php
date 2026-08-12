@@ -41,6 +41,8 @@ class UpdateSettingsSectionRequest extends ApiFormRequest
                 'address_ar' => ['present', 'nullable', 'string', 'max:500'],
                 'address_en' => ['present', 'nullable', 'string', 'max:500'],
                 'maps_url' => ['present', 'nullable', 'url:http,https', 'max:500'],
+                'working_hours_ar' => ['sometimes', 'nullable', 'string', 'max:200'],
+                'working_hours_en' => ['sometimes', 'nullable', 'string', 'max:200'],
             ],
             'social' => $this->socialRules(),
             'branding' => [

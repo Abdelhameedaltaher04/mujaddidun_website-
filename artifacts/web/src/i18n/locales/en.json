@@ -679,6 +679,7 @@
       "donations": "Donations",
       "volunteerApplications": "Volunteer Applications",
       "contactMessages": "Contact Messages",
+      "content": "Website Content",
       "settings": "Website Settings"
     },
     "notifications": {
@@ -1739,6 +1740,8 @@
       "addressAr": "Address (Arabic)",
       "addressEn": "Address (English)",
       "mapsUrl": "Google Maps URL",
+      "workingHoursAr": "Working Hours (Arabic)",
+      "workingHoursEn": "Working Hours (English)",
       "platforms": {
         "facebook": "Facebook",
         "instagram": "Instagram",
@@ -1795,6 +1798,130 @@
       "unsavedTitle": "Unsaved Changes",
       "unsavedDescription": "You have unsaved changes in this section. Leave and discard them?",
       "unsavedConfirm": "Discard changes"
+    },
+    "content": {
+      "title": "Website Content",
+      "subtitle": "Manage the homepage sections, statistics, and calls to action",
+      "tabs": {
+        "hero": "Hero Section",
+        "about": "About Section",
+        "vision_mission": "Vision & Mission",
+        "statistics": "Statistics",
+        "ctas": "CTA Sections",
+        "contact": "Contact Information",
+        "footer": "Footer",
+        "homepageSections": "Homepage Sections"
+      },
+      "isActive": "Active",
+      "isActiveHint": "Show this section on the website",
+      "inactive": "Inactive",
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "required": "Please fill in all required fields",
+      "saveSuccess": "Content saved successfully",
+      "saveError": "Could not save content. Please try again.",
+      "loadError": "Could not load content",
+      "retry": "Retry",
+      "uploadImage": "Upload image",
+      "replaceImage": "Replace",
+      "removeImage": "Remove",
+      "imageHelp": "JPG, PNG, or WEBP. Max size 5MB.",
+      "imageTypeError": "Unsupported file type. Allowed: JPG, PNG, WEBP",
+      "imageSizeError": "File size exceeds 5MB",
+      "unsavedTitle": "Unsaved Changes",
+      "unsavedDescription": "You have unsaved changes in this tab. Leave and discard them?",
+      "unsavedConfirm": "Discard changes",
+      "hero": {
+        "description": "The main banner shown at the top of the homepage",
+        "titleAr": "Title (Arabic)",
+        "titleEn": "Title (English)",
+        "descriptionAr": "Description (Arabic)",
+        "descriptionEn": "Description (English)",
+        "primaryButtonTextAr": "Primary Button Text (Arabic)",
+        "primaryButtonTextEn": "Primary Button Text (English)",
+        "primaryButtonUrl": "Primary Button URL",
+        "secondaryButtonTextAr": "Secondary Button Text (Arabic)",
+        "secondaryButtonTextEn": "Secondary Button Text (English)",
+        "secondaryButtonUrl": "Secondary Button URL",
+        "backgroundImage": "Background Image"
+      },
+      "about": {
+        "description": "Introductory section about the association",
+        "titleAr": "Title (Arabic)",
+        "titleEn": "Title (English)",
+        "descriptionAr": "Description (Arabic)",
+        "descriptionEn": "Description (English)",
+        "image": "Image"
+      },
+      "visionMission": {
+        "description": "The association's vision and mission statements",
+        "visionAr": "Vision (Arabic)",
+        "visionEn": "Vision (English)",
+        "missionAr": "Mission (Arabic)",
+        "missionEn": "Mission (English)"
+      },
+      "statistics": {
+        "description": "Key numbers displayed on the homepage",
+        "add": "Add Statistic",
+        "empty": "No statistics yet. Add your first one.",
+        "addTitle": "Add Statistic",
+        "editTitle": "Edit Statistic",
+        "formDescription": "Enter the number and label shown to visitors",
+        "number": "Number",
+        "labelAr": "Label (Arabic)",
+        "labelEn": "Label (English)",
+        "icon": "Icon",
+        "iconHint": "Optional Lucide icon name (e.g. Users, Heart)",
+        "createdSuccess": "Statistic added successfully",
+        "updatedSuccess": "Statistic updated successfully",
+        "deletedSuccess": "Statistic deleted successfully",
+        "deleteTitle": "Delete Statistic",
+        "deleteDescription": "This statistic will be permanently removed. This action cannot be undone."
+      },
+      "ctas": {
+        "description": "Call-to-action banners shown across the homepage",
+        "add": "Add CTA Section",
+        "empty": "No CTA sections yet. Add your first one.",
+        "addTitle": "Add CTA Section",
+        "editTitle": "Edit CTA Section",
+        "formDescription": "Enter the call-to-action content and link",
+        "titleAr": "Title (Arabic)",
+        "titleEn": "Title (English)",
+        "descriptionAr": "Description (Arabic)",
+        "descriptionEn": "Description (English)",
+        "buttonTextAr": "Button Text (Arabic)",
+        "buttonTextEn": "Button Text (English)",
+        "buttonUrl": "Button URL",
+        "image": "Image",
+        "createdSuccess": "CTA section added successfully",
+        "updatedSuccess": "CTA section updated successfully",
+        "deletedSuccess": "CTA section deleted successfully",
+        "deleteTitle": "Delete CTA Section",
+        "deleteDescription": "This CTA section will be permanently removed. This action cannot be undone."
+      },
+      "footer": {
+        "description": "Text shown in the website footer",
+        "descriptionAr": "Description (Arabic)",
+        "descriptionEn": "Description (English)",
+        "copyrightAr": "Copyright (Arabic)",
+        "copyrightEn": "Copyright (English)",
+        "copyrightHint": "Use {year} to insert the current year automatically."
+      },
+      "homepageSections": {
+        "description": "Toggle visibility and reorder the homepage sections",
+        "keys": {
+          "hero": "Hero",
+          "statistics": "Statistics",
+          "about": "About",
+          "programs": "Programs",
+          "news_events": "News & Events",
+          "volunteer_cta": "Volunteer CTA",
+          "partners": "Partners",
+          "faq": "FAQs",
+          "contact": "Contact"
+        }
+      }
     }
   },
   "forbidden": {

@@ -7,6 +7,7 @@ import {
   HelpCircle,
   Images,
   LayoutDashboard,
+  LayoutTemplate,
   Mail,
   Newspaper,
   Settings,
@@ -48,6 +49,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     icon: ClipboardList,
   },
   { key: 'contactMessages', href: '/admin/messages', icon: Mail },
+  { key: 'content', href: '/admin/content', icon: LayoutTemplate },
   { key: 'settings', href: '/admin/settings', icon: Settings },
 ];
 

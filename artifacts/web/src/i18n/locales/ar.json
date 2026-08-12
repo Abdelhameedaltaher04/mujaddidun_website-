@@ -679,6 +679,7 @@
       "donations": "التبرعات",
       "volunteerApplications": "طلبات التطوع",
       "contactMessages": "رسائل التواصل",
+      "content": "محتوى الموقع",
       "settings": "إعدادات الموقع"
     },
     "notifications": {
@@ -1739,6 +1740,8 @@
       "addressAr": "العنوان بالعربية",
       "addressEn": "العنوان بالإنجليزية",
       "mapsUrl": "رابط خرائط جوجل",
+      "workingHoursAr": "ساعات العمل بالعربية",
+      "workingHoursEn": "ساعات العمل بالإنجليزية",
       "platforms": {
         "facebook": "فيسبوك",
         "instagram": "إنستغرام",
@@ -1795,6 +1798,130 @@
       "unsavedTitle": "تغييرات غير محفوظة",
       "unsavedDescription": "لديك تغييرات غير محفوظة في هذا القسم. هل تريد المغادرة وتجاهل التغييرات؟",
       "unsavedConfirm": "تجاهل التغييرات"
+    },
+    "content": {
+      "title": "محتوى الموقع",
+      "subtitle": "إدارة أقسام الصفحة الرئيسية والإحصائيات ودعوات اتخاذ الإجراء",
+      "tabs": {
+        "hero": "القسم الرئيسي",
+        "about": "قسم من نحن",
+        "vision_mission": "الرؤية والرسالة",
+        "statistics": "الإحصائيات",
+        "ctas": "أقسام الدعوة لاتخاذ إجراء",
+        "contact": "معلومات التواصل",
+        "footer": "التذييل",
+        "homepageSections": "أقسام الصفحة الرئيسية"
+      },
+      "isActive": "مُفعّل",
+      "isActiveHint": "إظهار هذا القسم على الموقع",
+      "inactive": "غير مُفعّل",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "delete": "حذف",
+      "required": "يرجى تعبئة جميع الحقول المطلوبة",
+      "saveSuccess": "تم حفظ المحتوى بنجاح",
+      "saveError": "تعذر حفظ المحتوى. يرجى المحاولة مرة أخرى.",
+      "loadError": "تعذر تحميل المحتوى",
+      "retry": "إعادة المحاولة",
+      "uploadImage": "رفع صورة",
+      "replaceImage": "استبدال",
+      "removeImage": "إزالة",
+      "imageHelp": "JPG أو PNG أو WEBP. الحد الأقصى 5 ميغابايت.",
+      "imageTypeError": "نوع ملف غير مدعوم. المسموح: JPG، PNG، WEBP",
+      "imageSizeError": "حجم الملف يتجاوز 5 ميغابايت",
+      "unsavedTitle": "تغييرات غير محفوظة",
+      "unsavedDescription": "لديك تغييرات غير محفوظة في هذا التبويب. هل تريد المغادرة وتجاهل التغييرات؟",
+      "unsavedConfirm": "تجاهل التغييرات",
+      "hero": {
+        "description": "اللافتة الرئيسية المعروضة أعلى الصفحة الرئيسية",
+        "titleAr": "العنوان بالعربية",
+        "titleEn": "العنوان بالإنجليزية",
+        "descriptionAr": "الوصف بالعربية",
+        "descriptionEn": "الوصف بالإنجليزية",
+        "primaryButtonTextAr": "نص الزر الأساسي بالعربية",
+        "primaryButtonTextEn": "نص الزر الأساسي بالإنجليزية",
+        "primaryButtonUrl": "رابط الزر الأساسي",
+        "secondaryButtonTextAr": "نص الزر الثانوي بالعربية",
+        "secondaryButtonTextEn": "نص الزر الثانوي بالإنجليزية",
+        "secondaryButtonUrl": "رابط الزر الثانوي",
+        "backgroundImage": "صورة الخلفية"
+      },
+      "about": {
+        "description": "قسم تعريفي عن الجمعية",
+        "titleAr": "العنوان بالعربية",
+        "titleEn": "العنوان بالإنجليزية",
+        "descriptionAr": "الوصف بالعربية",
+        "descriptionEn": "الوصف بالإنجليزية",
+        "image": "الصورة"
+      },
+      "visionMission": {
+        "description": "رؤية ورسالة الجمعية",
+        "visionAr": "الرؤية بالعربية",
+        "visionEn": "الرؤية بالإنجليزية",
+        "missionAr": "الرسالة بالعربية",
+        "missionEn": "الرسالة بالإنجليزية"
+      },
+      "statistics": {
+        "description": "الأرقام الرئيسية المعروضة على الصفحة الرئيسية",
+        "add": "إضافة إحصائية",
+        "empty": "لا توجد إحصائيات بعد. أضف أول إحصائية.",
+        "addTitle": "إضافة إحصائية",
+        "editTitle": "تعديل الإحصائية",
+        "formDescription": "أدخل الرقم والتسمية المعروضة للزوار",
+        "number": "الرقم",
+        "labelAr": "التسمية بالعربية",
+        "labelEn": "التسمية بالإنجليزية",
+        "icon": "الأيقونة",
+        "iconHint": "اسم أيقونة Lucide اختياري (مثل Users أو Heart)",
+        "createdSuccess": "تمت إضافة الإحصائية بنجاح",
+        "updatedSuccess": "تم تحديث الإحصائية بنجاح",
+        "deletedSuccess": "تم حذف الإحصائية بنجاح",
+        "deleteTitle": "حذف الإحصائية",
+        "deleteDescription": "سيتم حذف هذه الإحصائية نهائيًا. لا يمكن التراجع عن هذا الإجراء."
+      },
+      "ctas": {
+        "description": "لافتات الدعوة لاتخاذ إجراء المعروضة عبر الصفحة الرئيسية",
+        "add": "إضافة قسم دعوة",
+        "empty": "لا توجد أقسام دعوة بعد. أضف أول قسم.",
+        "addTitle": "إضافة قسم دعوة",
+        "editTitle": "تعديل قسم الدعوة",
+        "formDescription": "أدخل محتوى الدعوة لاتخاذ إجراء والرابط",
+        "titleAr": "العنوان بالعربية",
+        "titleEn": "العنوان بالإنجليزية",
+        "descriptionAr": "الوصف بالعربية",
+        "descriptionEn": "الوصف بالإنجليزية",
+        "buttonTextAr": "نص الزر بالعربية",
+        "buttonTextEn": "نص الزر بالإنجليزية",
+        "buttonUrl": "رابط الزر",
+        "image": "الصورة",
+        "createdSuccess": "تمت إضافة قسم الدعوة بنجاح",
+        "updatedSuccess": "تم تحديث قسم الدعوة بنجاح",
+        "deletedSuccess": "تم حذف قسم الدعوة بنجاح",
+        "deleteTitle": "حذف قسم الدعوة",
+        "deleteDescription": "سيتم حذف قسم الدعوة هذا نهائيًا. لا يمكن التراجع عن هذا الإجراء."
+      },
+      "footer": {
+        "description": "النص المعروض في تذييل الموقع",
+        "descriptionAr": "الوصف بالعربية",
+        "descriptionEn": "الوصف بالإنجليزية",
+        "copyrightAr": "حقوق النشر بالعربية",
+        "copyrightEn": "حقوق النشر بالإنجليزية",
+        "copyrightHint": "استخدم {year} لإدراج السنة الحالية تلقائيًا."
+      },
+      "homepageSections": {
+        "description": "التحكم في ظهور أقسام الصفحة الرئيسية وإعادة ترتيبها",
+        "keys": {
+          "hero": "القسم الرئيسي",
+          "statistics": "الإحصائيات",
+          "about": "من نحن",
+          "programs": "البرامج",
+          "news_events": "الأخبار والفعاليات",
+          "volunteer_cta": "دعوة التطوع",
+          "partners": "الشركاء",
+          "faq": "الأسئلة الشائعة",
+          "contact": "التواصل"
+        }
+      }
     }
   },
   "forbidden": {

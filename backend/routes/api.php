@@ -200,12 +200,31 @@ Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::get('/settings', [SettingsController::class, 'index']);
     Route::put('/settings/{section}', [SettingsController::class, 'update'])
         ->whereIn('section', ['general', 'contact', 'social', 'branding', 'seo', 'email', 'controls']);
+
+    // Website content management (admin only; enforced by
+    // WebsiteSettingPolicy — same admin-only surface as settings).
+    Route::get('/content', [\App\Http\Controllers\Api\V1\Content\WebsiteContentController::class, 'index']);
+    Route::put('/content/homepage-sections', [\App\Http\Controllers\Api\V1\Content\HomepageSectionController::class, 'update']);
+    Route::post('/content/statistics', [\App\Http\Controllers\Api\V1\Content\SiteStatisticController::class, 'store']);
+    Route::patch('/content/statistics/reorder', [\App\Http\Controllers\Api\V1\Content\SiteStatisticController::class, 'reorder']);
+    Route::put('/content/statistics/{statistic}', [\App\Http\Controllers\Api\V1\Content\SiteStatisticController::class, 'update'])->whereNumber('statistic');
+    Route::delete('/content/statistics/{statistic}', [\App\Http\Controllers\Api\V1\Content\SiteStatisticController::class, 'destroy'])->whereNumber('statistic');
+    Route::post('/content/ctas', [\App\Http\Controllers\Api\V1\Content\SiteCtaSectionController::class, 'store']);
+    Route::patch('/content/ctas/reorder', [\App\Http\Controllers\Api\V1\Content\SiteCtaSectionController::class, 'reorder']);
+    Route::put('/content/ctas/{cta}', [\App\Http\Controllers\Api\V1\Content\SiteCtaSectionController::class, 'update'])->whereNumber('cta');
+    Route::delete('/content/ctas/{cta}', [\App\Http\Controllers\Api\V1\Content\SiteCtaSectionController::class, 'destroy'])->whereNumber('cta');
+    Route::put('/content/{section}', [\App\Http\Controllers\Api\V1\Content\WebsiteContentController::class, 'update'])
+        ->whereIn('section', ['hero', 'about', 'vision_mission', 'footer']);
 });
 
 // Sanitized public settings for the public website (no auth; the email
 // section and any server configuration are never included).
 Route::get('/settings/public', [SettingsController::class, 'publicIndex']);
 Route::get('/public/settings', [SettingsController::class, 'publicIndex']);
+
+// Sanitized public website content (no auth): homepage sections order and
+// visibility, active statistics/CTAs, and singleton content sections.
+Route::get('/public/content', [\App\Http\Controllers\Api\V1\Content\WebsiteContentController::class, 'publicIndex']);
 
 // Public contact form (no auth). Rate limited per IP; a honeypot field in
 // the request rejects naive bots.

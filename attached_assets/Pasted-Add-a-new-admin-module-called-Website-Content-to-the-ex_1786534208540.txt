@@ -1,0 +1,280 @@
+Add a new admin module called "Website Content" to the existing Al Mujaddidun Platform Admin Dashboard.
+
+IMPORTANT:
+- This is an ADMIN content management feature.
+- Do NOT redesign the existing website.
+- Do NOT change the existing visual identity, colors, typography, navbar, footer, or responsive behavior.
+- Reuse the existing Admin Dashboard design system and components.
+- Reuse the existing authentication and authorization system.
+- Only authenticated users with the admin role can access this page.
+- Do NOT use mock data for the final implementation.
+- Connect the content to the existing database and backend/API.
+
+ADMIN ROUTE:
+
+/admin/content
+
+Add "محتوى الموقع" / "Website Content" to the Admin Dashboard sidebar.
+
+The page should allow the administrator to manage the content displayed on the public website.
+
+CONTENT SECTIONS:
+
+1. Homepage Hero
+- Arabic title
+- English title
+- Arabic description
+- English description
+- Primary button text AR/EN
+- Primary button URL
+- Secondary button text AR/EN
+- Secondary button URL
+- Hero background image
+- Active/Inactive toggle
+
+2. About Section
+- Arabic title
+- English title
+- Arabic description
+- English description
+- Image
+- Active/Inactive toggle
+
+3. Vision & Mission
+- Arabic vision
+- English vision
+- Arabic mission
+- English mission
+- Active/Inactive toggle
+
+4. Statistics
+Allow admin to manage website statistics such as:
+- Number
+- Arabic label
+- English label
+- Icon
+- Display order
+- Active/Inactive
+
+Admin should be able to:
+- Add statistic
+- Edit statistic
+- Delete statistic
+- Reorder statistics
+
+5. Call To Action Sections
+Allow management of CTA sections:
+- Arabic title
+- English title
+- Arabic description
+- English description
+- Button text AR/EN
+- Button URL
+- Image if applicable
+- Active/Inactive
+
+6. Contact Information
+Manage:
+- Email
+- Phone
+- Address
+- Working hours
+- Google Maps URL
+- Social media links
+
+7. Footer Content
+Manage:
+- Arabic footer description
+- English footer description
+- Footer copyright text AR/EN
+- Footer social media links
+- Footer contact information
+
+8. Homepage Section Visibility
+
+Create a section allowing the admin to control whether major homepage sections are visible.
+
+Examples:
+- Hero
+- About
+- Programs
+- Events
+- News
+- Gallery
+- Partners
+- Statistics
+- CTA
+- Contact
+
+Each section should have:
+- Visible / Hidden
+- Display order
+
+IMPORTANT:
+The visibility/order settings must actually affect the public website.
+
+DATABASE:
+
+Before creating new tables, inspect the existing database schema.
+
+If an existing settings/content structure can safely support this feature, extend it instead of creating duplicate structures.
+
+If new database tables are required, create a clean normalized structure.
+
+Suggested conceptual structure:
+
+website_content
+- id
+- section_key
+- content_type
+- value_ar
+- value_en
+- image_url
+- link_url
+- is_active
+- display_order
+- created_at
+- updated_at
+
+For structured/repeatable content such as statistics, use a dedicated table rather than storing multiple records in one text field.
+
+API:
+
+Create/use proper authenticated admin API endpoints.
+
+Examples:
+
+GET    /api/admin/content
+GET    /api/admin/content/:section
+POST   /api/admin/content
+PUT    /api/admin/content/:id
+DELETE /api/admin/content/:id
+
+For visibility/order:
+
+GET    /api/admin/content-sections
+PUT    /api/admin/content-sections/:id
+
+Do NOT expose admin-only mutation endpoints publicly.
+
+PUBLIC WEBSITE:
+
+Update the public website to consume the content dynamically from the backend.
+
+The public website must:
+- Display Arabic content when Arabic is selected.
+- Display English content when English is selected.
+- Respect active/inactive status.
+- Respect section display order.
+- Gracefully handle missing optional content.
+- Never expose raw translation keys.
+- Never crash if a section has no content.
+
+IMPORTANT:
+Existing public content must not disappear during migration.
+
+If current content is hardcoded, migrate the existing values into the database so the website looks exactly the same after switching to dynamic content.
+
+UI REQUIREMENTS:
+
+Use the existing Admin Dashboard UI.
+
+The Website Content page should contain:
+
+- Page title: "محتوى الموقع"
+- Subtitle explaining that this page controls public website content.
+- Tabs or clear sections for:
+  1. الرئيسية
+  2. من نحن
+  3. الرؤية والرسالة
+  4. الإحصائيات
+  5. الدعوات للإجراء
+  6. معلومات التواصل
+  7. التذييل
+  8. ترتيب الأقسام
+
+Every editable field should support Arabic and English where applicable.
+
+Include:
+- Save Changes
+- Cancel
+- Reset/Restore where appropriate
+- Loading states
+- Success messages
+- Error messages
+- Validation
+- Empty states
+
+IMAGE UPLOADS:
+
+Reuse the existing image upload/storage mechanism.
+
+Do NOT introduce a second storage system.
+
+Validate:
+- File type
+- File size
+- Upload errors
+- Broken image URLs
+
+SECURITY:
+
+- Admin authentication required.
+- Admin authorization required.
+- Backend must enforce authorization.
+- Normal users must receive 401/403 when attempting admin content APIs.
+- Do not rely only on frontend route protection.
+
+BACKWARD COMPATIBILITY:
+
+Do not break:
+- Existing homepage
+- Navbar
+- Footer
+- Programs
+- Events
+- News
+- Gallery
+- Partners
+- Donations
+- Volunteer requests
+- Contact messages
+- Authentication
+
+Before implementation:
+1. Inspect the current homepage structure.
+2. Identify every currently hardcoded homepage content section.
+3. Inspect existing database tables.
+4. Inspect existing API architecture.
+5. Inspect existing upload/storage system.
+6. Reuse existing patterns wherever possible.
+
+Then implement the feature.
+
+After implementation, test:
+
+ADMIN:
+Login → /admin/content → Edit content → Save → Refresh → Verify persistence.
+
+PUBLIC:
+Open homepage → Verify updated content appears.
+
+LANGUAGE:
+Arabic → Verify Arabic content.
+English → Verify English content.
+
+VISIBILITY:
+Disable a section → Verify it disappears from public homepage.
+Enable it → Verify it returns.
+
+ORDER:
+Change section order → Verify homepage order changes.
+
+Finally provide a report containing:
+- Files created
+- Files modified
+- Database changes
+- API endpoints created/modified
+- Authentication/authorization changes
+- Public pages modified
+- Any remaining limitations

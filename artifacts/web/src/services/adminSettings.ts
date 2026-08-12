@@ -57,6 +57,8 @@ export interface ContactSettings {
   address_ar: string;
   address_en: string;
   maps_url: string;
+  working_hours_ar: string;
+  working_hours_en: string;
 }
 
 export interface SocialLink {
@@ -172,6 +174,8 @@ function normalizeSiteSettings(settings: SiteSettings): SiteSettings {
       address_ar: s(contact.address_ar),
       address_en: s(contact.address_en),
       maps_url: s(contact.maps_url),
+      working_hours_ar: s(contact.working_hours_ar),
+      working_hours_en: s(contact.working_hours_en),
     },
     social: Object.fromEntries(
       SOCIAL_PLATFORMS.map((platform) => {

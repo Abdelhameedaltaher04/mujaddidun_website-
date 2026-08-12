@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PublicFileController extends BaseController
 {
     /** Directories on the public disk that may be served publicly. */
-    private const ALLOWED_PREFIXES = ['news-covers/', 'news-images/', 'event-covers/', 'program-covers/', 'gallery-covers/', 'gallery-images/', 'partner-logos/', 'site-branding/', 'profile-avatars/'];
+    private const ALLOWED_PREFIXES = ['news-covers/', 'news-images/', 'event-covers/', 'program-covers/', 'gallery-covers/', 'gallery-images/', 'partner-logos/', 'site-branding/', 'profile-avatars/', 'content-images/'];
 
     public function show(string $path): Response
     {
@@ -92,6 +92,13 @@ class PublicFileController extends BaseController
             }
         }
 
+        if (str_starts_with($path, 'content-images/')) {
+            if (! $this->contentImageIsPublic($path)) {
+                abort_unless($this->isStaff(), 404);
+                $staffOnly = true;
+            }
+        }
+
         // Avatars are only served while a user actually owns them; orphaned
         // files in the directory remain hidden. Filenames are unguessable
         // random hashes, which is the standard exposure model for avatars
@@ -108,9 +115,9 @@ class PublicFileController extends BaseController
             abort(404);
         }
 
-        // Partner logos use a short public TTL so deactivating a partner
-        // revokes public access within minutes instead of a full day.
-        $publicCache = str_starts_with($path, 'partner-logos/')
+        // Partner logos and content images use a short public TTL so
+        // deactivating them revokes public access within minutes.
+        $publicCache = str_starts_with($path, 'partner-logos/') || str_starts_with($path, 'content-images/')
             ? 'public, max-age=300'
             : 'public, max-age=86400';
 
@@ -173,6 +180,30 @@ class PublicFileController extends BaseController
             ->where('file_path', $path)
             ->whereHas('album', fn ($query) => $query->where('status', 'published'))
             ->exists();
+    }
+
+    /**
+     * A content image is public only while an ACTIVE CTA or an ACTIVE
+     * singleton content section (hero/about) references it.
+     */
+    private function contentImageIsPublic(string $path): bool
+    {
+        if (\App\Models\SiteCtaSection::query()
+            ->where('image_path', $path)
+            ->where('is_active', true)
+            ->exists()) {
+            return true;
+        }
+
+        $service = app(\App\Services\Content\WebsiteContentService::class);
+        foreach (['hero' => 'background_image_path', 'about' => 'image_path'] as $section => $pathKey) {
+            $values = $service->section($section);
+            if (($values[$pathKey] ?? null) === $path && ! empty($values['is_active'])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function avatarIsInUse(string $path): bool

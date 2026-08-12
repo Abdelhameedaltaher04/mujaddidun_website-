@@ -24,6 +24,8 @@ function useApplySettings() {
   const queryClient = useQueryClient();
   return (updated: SiteSettings) => {
     queryClient.setQueryData(KEY, updated);
+    // Public pages (footer working hours, contact info) read this key.
+    queryClient.invalidateQueries({ queryKey: ['public-settings'] });
   };
 }
 

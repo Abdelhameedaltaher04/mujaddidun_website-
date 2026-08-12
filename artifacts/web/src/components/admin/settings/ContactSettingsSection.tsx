@@ -73,6 +73,8 @@ export function ContactSettingsSection({ settings, onDirtyChange }: Props) {
         address_ar: form.address_ar.trim(),
         address_en: form.address_en.trim(),
         maps_url: form.maps_url.trim(),
+        working_hours_ar: form.working_hours_ar.trim(),
+        working_hours_en: form.working_hours_en.trim(),
       },
       {
         onSuccess: () => toast({ description: t('admin.settings.saveSuccess') }),
@@ -174,6 +176,30 @@ export function ContactSettingsSection({ settings, onDirtyChange }: Props) {
             value={form.address_en}
             onChange={(event) => set('address_en', event.target.value)}
             data-testid="input-contact-address-en"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="contact-working-hours-ar">
+            {t('admin.settings.workingHoursAr')}
+          </Label>
+          <Input
+            id="contact-working-hours-ar"
+            dir="rtl"
+            value={form.working_hours_ar}
+            onChange={(event) => set('working_hours_ar', event.target.value)}
+            data-testid="input-contact-working-hours-ar"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="contact-working-hours-en">
+            {t('admin.settings.workingHoursEn')}
+          </Label>
+          <Input
+            id="contact-working-hours-en"
+            dir="ltr"
+            value={form.working_hours_en}
+            onChange={(event) => set('working_hours_en', event.target.value)}
+            data-testid="input-contact-working-hours-en"
           />
         </div>
       </div>

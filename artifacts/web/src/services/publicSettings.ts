@@ -20,6 +20,8 @@ export interface PublicContactSettings {
   address_ar: string;
   address_en: string;
   maps_url: string;
+  working_hours_ar?: string | null;
+  working_hours_en?: string | null;
 }
 
 export interface PublicSocialLink {
