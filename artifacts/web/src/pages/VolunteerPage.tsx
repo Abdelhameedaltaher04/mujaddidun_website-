@@ -5,6 +5,8 @@ import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { SectionHeading } from '@/components/layout/SectionHeading';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { isStaff } from '@/services/auth';
 import { Button } from '@/components/ui/button';
 import { IconInput } from '@/components/ui/icon-input';
 import { CountryPhoneField } from '@/components/forms/CountryPhoneField';
@@ -28,6 +30,8 @@ import { FormContactHelp } from '@/components/layout/FormContactHelp';
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 export default function VolunteerPage() {
   const { t } = useLocale();
+  const { user } = useAuth();
+  const staff = isStaff(user);
   const [values, setValues] = useState({ fullName: '', dob: '', email: '', phone: '', experience: '' });
   const [phoneCountry, setPhoneCountry] = useState<CountryCode>('JO');
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
@@ -133,6 +137,11 @@ export default function VolunteerPage() {
       />
       <main className="flex-1">
         <SectionWrapper>
+          {staff ? (
+            <div className="mx-auto max-w-2xl rounded-2xl border border-dashed border-border bg-muted/30 px-8 py-16 text-center" data-testid="volunteer-staff-notice">
+              <p className="text-muted-foreground">{t('common.staffActionNotice')}</p>
+            </div>
+          ) : (
           <div className="max-w-3xl mx-auto">
             <div className="bg-card border border-border rounded-2xl p-6 md:p-10 shadow-sm">
               <SectionHeading title={t('volunteer.formTitle')} accent="primary" className="mb-8" />
@@ -265,6 +274,7 @@ export default function VolunteerPage() {
               <FormContactHelp />
             </div>
           </div>
+          )}
         </SectionWrapper>
       </main>
       <ContactCtaSection />

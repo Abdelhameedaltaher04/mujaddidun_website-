@@ -104,6 +104,12 @@ class EventRegistrationController extends BaseController
     {
         $user = $request->user();
 
+        // Staff accounts manage events; they must not self-register as
+        // attendees. Enforced server-side (not just hidden UI).
+        if (in_array($user->role?->slug, ['admin', 'moderator'], true)) {
+            return $this->error('Staff accounts cannot register for events.', ['code' => 'staff_not_allowed'], 403);
+        }
+
         // Serialize concurrent registrations for the same event so two
         // requests cannot both take the last seat or double-register.
         try {

@@ -6,6 +6,7 @@ import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { SectionHeading } from '@/components/layout/SectionHeading';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { isStaff } from '@/services/auth';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -45,7 +46,8 @@ import {
 
 export default function ProgramDetailsPage() {
   const { t, dir, locale } = useLocale();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const staff = isStaff(user);
   const [, navigate] = useLocation();
   const params = useParams<{ id: string }>();
   const id = params.id;
@@ -158,7 +160,8 @@ export default function ProgramDetailsPage() {
   const audience = programAudience(program, lang);
   const startDate = programDate(program.start_date, lang);
   const endDate = programDate(program.end_date, lang);
-  const showParticipation = program.status === 'active';
+  // Staff manage programs from the dashboard; never show them participant CTAs.
+  const showParticipation = program.status === 'active' && !staff;
   const isSubmitting = participate.isPending;
 
   const handleParticipate = () => {

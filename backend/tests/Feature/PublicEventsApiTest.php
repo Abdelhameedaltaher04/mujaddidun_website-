@@ -42,6 +42,29 @@ class PublicEventsApiTest extends TestCase
         ], $overrides));
     }
 
+    public function test_staff_cannot_self_register_for_events(): void
+    {
+        $event = $this->makeEvent();
+
+        foreach (['admin', 'moderator'] as $slug) {
+            $staff = User::factory()->create([
+                'role_id' => Role::where('slug', $slug)->first()->id,
+            ]);
+            $this->app['auth']->forgetGuards();
+            $this->postJson("/api/v1/public/events/{$event->id}/register", [], $this->headers($staff))
+                ->assertStatus(403)
+                ->assertJsonPath('errors.code', 'staff_not_allowed');
+        }
+
+        // Volunteer and regular user roles are unaffected.
+        $regular = User::factory()->create([
+            'role_id' => Role::where('slug', 'user')->first()->id,
+        ]);
+        $this->app['auth']->forgetGuards();
+        $this->postJson("/api/v1/public/events/{$event->id}/register", [], $this->headers($regular))
+            ->assertStatus(201);
+    }
+
     public function test_list_exposes_only_public_statuses(): void
     {
         $upcoming = $this->makeEvent();

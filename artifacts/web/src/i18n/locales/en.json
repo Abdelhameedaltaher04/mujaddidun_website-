@@ -50,7 +50,8 @@
     "subject": "Subject",
     "previous": "Previous",
     "next": "Next",
-    "close": "Close"
+    "close": "Close",
+    "staffActionNotice": "This service is intended for visitors and members. You can manage the platform from the dashboard."
   },
   "nav": {
     "home": "Home",
@@ -70,7 +71,8 @@
     "programs": "Programs",
     "donate": "Donate Now",
     "activities": "Activities",
-    "media": "Media"
+    "media": "Media",
+    "dashboard": "Dashboard"
   },
   "footer": {
     "logoPlaceholder": "Association Logo",

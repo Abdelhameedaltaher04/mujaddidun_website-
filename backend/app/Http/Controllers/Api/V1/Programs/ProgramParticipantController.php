@@ -96,6 +96,12 @@ class ProgramParticipantController extends BaseController
     {
         $user = $request->user();
 
+        // Staff accounts manage programs; they must not self-enroll as
+        // participants. Enforced server-side (not just hidden UI).
+        if (in_array($user->role?->slug, ['admin', 'moderator'], true)) {
+            return $this->error('Staff accounts cannot join programs.', ['code' => 'staff_not_allowed'], 403);
+        }
+
         // Serialize concurrent enrollments for the same program so two
         // requests cannot both take the last seat or double-enroll.
         try {

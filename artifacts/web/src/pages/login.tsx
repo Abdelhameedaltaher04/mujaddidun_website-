@@ -15,18 +15,38 @@ interface LoginErrors {
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Admin-only frontend routes (see AdminRoute usage in App.tsx): dashboard,
+// user management, and settings are admin-only; other /admin sections allow
+// moderators too.
+const ADMIN_ONLY_PATHS = ['/admin/dashboard', '/admin/users', '/admin/settings'];
+
+/**
+ * A `?redirect=` target is only honored when the authenticated role may
+ * actually visit it; otherwise the role's default destination is used.
+ * This is a UX guard only — AdminRoute and Laravel still enforce access.
+ */
+function isRedirectAllowedForRole(redirect: string, roleSlug?: string): boolean {
+  if (!redirect.startsWith('/') || redirect.startsWith('//')) return false;
+  const path = redirect.split('?')[0];
+  const isAdminPath = path === '/admin' || path.startsWith('/admin/');
+  if (!isAdminPath) return true;
+  if (roleSlug === 'admin') return true;
+  if (roleSlug === 'moderator') {
+    return !ADMIN_ONLY_PATHS.some((p) => path === p || path.startsWith(`${p}/`));
+  }
+  return false;
+}
+
 function getPostLoginPath(roleSlug?: string): string {
   switch (roleSlug) {
     case 'admin':
-      // Keep this branch ready for the admin dashboard route.
-      return '/';
+      return '/admin/dashboard';
     case 'moderator':
-      // Keep this branch ready for the moderator dashboard route.
-      return '/';
-    case 'volunteer':
-      // Keep this branch ready for the volunteer dashboard route.
-      return '/';
+      // Moderators are staff but the dashboard stats page is admin-only;
+      // send them to the first admin section their role authorizes.
+      return '/admin/news';
     default:
+      // Volunteers and regular users get the normal public experience.
       return '/';
   }
 }
@@ -44,6 +64,7 @@ export default function LoginPage() {
   const [formError, setFormError] = useState('');
   const [rateLimitSeconds, setRateLimitSeconds] = useState(0);
   const [postLoginPath, setPostLoginPath] = useState('/');
+  const [loggedInRole, setLoggedInRole] = useState<string | undefined>(undefined);
   const [googleAuthRequested, setGoogleAuthRequested] = useState(false);
 
   useEffect(() => {
@@ -73,6 +94,7 @@ export default function LoginPage() {
     setFormError('');
     try {
       const authenticatedUser = await login(email.trim(), password, remember);
+      setLoggedInRole(authenticatedUser.role?.slug);
       setPostLoginPath(getPostLoginPath(authenticatedUser.role?.slug));
       setFeedback('success');
     } catch (error) {
@@ -205,7 +227,11 @@ export default function LoginPage() {
            if (current === 'success') {
              const params = new URLSearchParams(window.location.search);
              const redirect = params.get('redirect');
-              setLocation(redirect && redirect.startsWith('/') ? redirect : postLoginPath);
+             setLocation(
+               redirect && isRedirectAllowedForRole(redirect, loggedInRole)
+                 ? redirect
+                 : postLoginPath,
+             );
            }
         }}
       />

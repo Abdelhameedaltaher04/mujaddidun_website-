@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
+import { isStaff } from '@/services/auth';
 import { FormContactHelp } from '@/components/layout/FormContactHelp';
 import { usePublicEventsList, useRegisterForEvent } from '@/hooks/usePublicEvents';
 import { registrationErrorCode, type PublicEventItem, type PublicEventStatus } from '@/services/publicEvents';
@@ -47,7 +48,8 @@ const TAB_STATUSES: Record<'upcoming' | 'past', PublicEventStatus[]> = {
 
 export default function EventsPage() {
   const { t, dir, locale } = useLocale();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const staff = isStaff(user);
   const [, navigate] = useLocation();
   const lang = locale as 'ar' | 'en';
 
@@ -200,7 +202,7 @@ export default function EventsPage() {
                   </div>
                   <p className="text-muted-foreground text-sm line-clamp-2 mb-4">{eventExcerpt(event, lang)}</p>
                   <div className="mt-auto flex flex-wrap items-center gap-3">
-                    {event.registration_required && event.status !== 'completed' ? (
+                    {event.registration_required && event.status !== 'completed' && !staff ? (
                       <Button
                         variant="outline"
                         disabled={event.is_registered || !event.registration_open || isRegistering}

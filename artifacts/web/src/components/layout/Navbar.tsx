@@ -6,6 +6,7 @@ import { LanguageToggle } from '@/components/LanguageToggle';
 import { MainContainer } from '@/components/layout/MainContainer';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { isStaff } from '@/services/auth';
 import { cn } from '@/lib/utils';
 import logoUrl from '@/assets/mujaddidun-logo.png';
 import { usePublicSettings } from '@/hooks/usePublicSettings';
@@ -67,6 +68,7 @@ export function Navbar() {
     e.currentTarget.src = logoUrl;
   };
   const { user, isAuthenticated, logout } = useAuth();
+  const staff = isStaff(user);
   const [location] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -229,6 +231,13 @@ export function Navbar() {
             <LanguageToggle />
             {isAuthenticated ? (
               <div className="hidden items-center gap-2 sm:flex">
+                {staff && (
+                  <Button size="sm" asChild data-testid="link-admin-dashboard">
+                    <Link href={user?.role?.slug === 'admin' ? '/admin/dashboard' : '/admin/news'}>
+                      {t('nav.dashboard')}
+                    </Link>
+                  </Button>
+                )}
                 <Button size="sm" variant="outline" asChild data-testid="link-profile">
                   <Link href="/profile">{user?.first_name || t('profile.title')}</Link>
                 </Button>
@@ -246,15 +255,17 @@ export function Navbar() {
                 <Link href="/login">{t('nav.login')}</Link>
               </Button>
             )}
-            <Button
-              size="sm"
-              variant="secondary"
-              className="hidden sm:inline-flex"
-              data-testid="button-donate"
-              asChild
-            >
-              <Link href="/donate">{t('nav.donate')}</Link>
-            </Button>
+            {!staff && (
+              <Button
+                size="sm"
+                variant="secondary"
+                className="hidden sm:inline-flex"
+                data-testid="button-donate"
+                asChild
+              >
+                <Link href="/donate">{t('nav.donate')}</Link>
+              </Button>
+            )}
             {/* Mobile menu toggle */}
             <Button
               variant="ghost"
@@ -377,19 +388,28 @@ export function Navbar() {
 
           {/* Overlay footer actions */}
           <div className="relative px-6 pb-8 pt-2 flex flex-col gap-2 max-w-sm w-full mx-auto">
-            <Button
-              size="lg"
-              variant="secondary"
-              className="w-full"
-              data-testid="button-mobile-donate"
-              asChild
-            >
-              <Link href="/donate" onClick={closeMobile}>
-                {t('nav.donate')}
-              </Link>
-            </Button>
+            {!staff && (
+              <Button
+                size="lg"
+                variant="secondary"
+                className="w-full"
+                data-testid="button-mobile-donate"
+                asChild
+              >
+                <Link href="/donate" onClick={closeMobile}>
+                  {t('nav.donate')}
+                </Link>
+              </Button>
+            )}
             {isAuthenticated ? (
               <div className="grid gap-2">
+                {staff && (
+                  <Button size="lg" className="w-full" asChild data-testid="link-mobile-admin-dashboard">
+                    <Link href={user?.role?.slug === 'admin' ? '/admin/dashboard' : '/admin/news'} onClick={closeMobile}>
+                      {t('nav.dashboard')}
+                    </Link>
+                  </Button>
+                )}
                 <Button size="lg" variant="outline" className="w-full" asChild data-testid="link-mobile-profile">
                   <Link href="/profile" onClick={closeMobile}>{t('profile.title')}</Link>
                 </Button>

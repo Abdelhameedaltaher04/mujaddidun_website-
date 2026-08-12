@@ -6,6 +6,7 @@ import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { SectionHeading } from '@/components/layout/SectionHeading';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { isStaff } from '@/services/auth';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -43,7 +44,8 @@ import {
 
 export default function EventDetailsPage() {
   const { t, dir, locale } = useLocale();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const staff = isStaff(user);
   const [, navigate] = useLocation();
   const params = useParams<{ id: string }>();
   const id = params.id;
@@ -152,7 +154,8 @@ export default function EventDetailsPage() {
   const paragraphs = eventParagraphs(lang === 'ar' ? event.description_ar : event.description_en);
   const location = eventLocation(event, lang);
   const timeRange = eventTimeRange(event, lang);
-  const showRegistration = event.registration_required && event.status !== 'completed';
+  // Staff manage events from the dashboard; never show them attendee CTAs.
+  const showRegistration = event.registration_required && event.status !== 'completed' && !staff;
   const isRegistering = register.isPending;
 
   const handleRegister = () => {

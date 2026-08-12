@@ -87,6 +87,29 @@ class PublicProgramsApiTest extends TestCase
         $this->getJson('/api/v1/public/programs?category=bogus')->assertStatus(422);
     }
 
+    public function test_staff_cannot_self_enroll_in_programs(): void
+    {
+        $program = $this->makeProgram();
+
+        foreach (['admin', 'moderator'] as $slug) {
+            $staff = User::factory()->create([
+                'role_id' => Role::where('slug', $slug)->first()->id,
+            ]);
+            $this->app['auth']->forgetGuards();
+            $this->postJson("/api/v1/public/programs/{$program->id}/participate", [], $this->headers($staff))
+                ->assertStatus(403)
+                ->assertJsonPath('errors.code', 'staff_not_allowed');
+        }
+
+        // Volunteer and regular user roles are unaffected.
+        $regular = User::factory()->create([
+            'role_id' => Role::where('slug', 'user')->first()->id,
+        ]);
+        $this->app['auth']->forgetGuards();
+        $this->postJson("/api/v1/public/programs/{$program->id}/participate", [], $this->headers($regular))
+            ->assertStatus(201);
+    }
+
     public function test_detail_shape_and_hidden_statuses_return_404(): void
     {
         $program = $this->makeProgram(['capacity' => 20]);

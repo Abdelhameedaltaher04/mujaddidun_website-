@@ -5,6 +5,8 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { ContactCtaSection } from '@/components/layout/ContactCtaSection';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { isStaff } from '@/services/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,6 +28,8 @@ import {
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 export default function DonatePage() {
   const { t } = useLocale();
+  const { user } = useAuth();
+  const staff = isStaff(user);
   
   const [donationType, setDonationType] = useState('general');
   const [frequency, setFrequency] = useState('once');
@@ -125,6 +129,11 @@ export default function DonatePage() {
       />
       <main className="flex-1">
         <SectionWrapper>
+          {staff ? (
+            <div className="mx-auto max-w-2xl rounded-2xl border border-dashed border-border bg-muted/30 px-8 py-16 text-center" data-testid="donate-staff-notice">
+              <p className="text-muted-foreground">{t('common.staffActionNotice')}</p>
+            </div>
+          ) : (
           <div className="grid gap-12 lg:grid-cols-[1fr_400px]">
             {/* Form Section */}
             <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
@@ -309,6 +318,7 @@ export default function DonatePage() {
             </div>
             
           </div>
+          )}
         </SectionWrapper>
       </main>
       <ContactCtaSection />

@@ -1,0 +1,173 @@
+Fix the role-based behavior between Admin users and normal Users.
+
+IMPORTANT:
+Do NOT create a frontend-only role restriction.
+Laravel must remain the source of truth for authorization.
+
+================================================
+
+ROLE BEHAVIOR
+
+We have the following roles:
+
+- Admin
+- Moderator
+- Volunteer
+- User
+
+================================================
+
+ADMIN EXPERIENCE
+
+When the authenticated user role is Admin:
+
+- Redirect to /admin/dashboard after login.
+- Show the Admin Dashboard navigation.
+- Show Admin-specific functionality.
+- Do NOT show normal-user actions that are intended only for regular users.
+
+Hide/disable from the Admin public experience where appropriate:
+
+- Donate
+- Register for public events
+- Participate in public programs
+- Submit volunteer applications
+
+The Admin should still be able to browse the public website if the existing application architecture requires it, but the UI must not present normal-user actions as if the Admin were a normal User.
+
+================================================
+
+NORMAL USER EXPERIENCE
+
+When the authenticated user role is User:
+
+- Redirect to the normal public destination after login.
+- Do NOT show Admin Dashboard navigation.
+- Do NOT allow /admin/dashboard.
+- Allow normal user functionality such as:
+
+  - Donations
+  - Event registration
+  - Program participation
+  - Volunteer applications
+  - Other authenticated-user features
+
+================================================
+
+MODERATOR
+
+Moderator behavior must follow the existing permission system.
+
+Do NOT automatically treat Moderator as Admin.
+
+Moderator access must be controlled through Laravel authorization/policies.
+
+================================================
+
+BACKEND AUTHORIZATION
+
+Review all relevant Laravel Policies and authorization rules.
+
+The backend must enforce role/permission rules.
+
+Do NOT rely only on:
+
+- React conditional rendering
+- Hidden buttons
+- Frontend route guards
+
+If an Admin attempts an operation that is restricted to normal Users, Laravel must reject it appropriately.
+
+================================================
+
+FRONTEND AUTH STATE
+
+Make sure the authenticated user object contains the correct role.
+
+Example:
+
+{
+  "id": 1,
+  "name": "...",
+  "email": "...",
+  "role": "admin"
+}
+
+Use the existing authentication state/store.
+
+Do not create a second role system.
+
+================================================
+
+NAVIGATION
+
+After login:
+
+Admin:
+→ /admin/dashboard
+
+User:
+→ existing public/home destination
+
+Moderator:
+→ existing authorized destination based on permissions
+
+================================================
+
+PUBLIC WEBSITE
+
+The public website can still be accessible to Admin users if the current application architecture requires it.
+
+However:
+
+- Do not display normal-user CTAs to Admin users.
+- Do not make Admin appear as a regular User.
+- Keep the public website visually unchanged.
+
+================================================
+
+IMPORTANT
+
+Do NOT modify:
+
+- Authentication backend unnecessarily
+- Database schema unless absolutely required
+- Existing Admin Dashboard UI
+- Existing public website design
+
+Only fix role-based behavior and authorization.
+
+================================================
+
+TESTING
+
+Test all roles:
+
+1. Admin logs in.
+   → Redirects to /admin/dashboard.
+   → Admin navigation visible.
+   → Normal-user CTAs hidden.
+   → Admin API access works.
+
+2. Normal User logs in.
+   → Redirects to public/home.
+   → User functionality visible.
+   → Admin Dashboard inaccessible.
+
+3. Moderator logs in.
+   → Access follows permissions.
+   → Must not automatically receive Admin privileges.
+
+4. Unauthenticated visitor:
+   → Cannot access /admin/dashboard.
+
+5. Admin manually attempts a restricted normal-user API action.
+   → Laravel must enforce the intended authorization rule.
+
+At the end provide:
+
+- Role behavior summary
+- Backend authorization changes
+- Frontend changes
+- PASS/FAIL results
+- Any remaining limitations

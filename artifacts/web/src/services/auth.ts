@@ -24,6 +24,15 @@ export interface AuthUser {
   created_at: string;
 }
 
+/**
+ * Staff = admin or moderator. Staff manage content in the dashboard and
+ * must not be presented with normal-user actions (donate, register,
+ * participate, volunteer). Laravel enforces this server-side as well.
+ */
+export function isStaff(user: AuthUser | null | undefined): boolean {
+  return user?.role?.slug === 'admin' || user?.role?.slug === 'moderator';
+}
+
 interface AuthPayload {
   user: AuthUser;
   token: string;
