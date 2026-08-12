@@ -572,33 +572,37 @@ export default function HomePage() {
                     )}
                   >
                     <div className="min-h-0 overflow-hidden">
-                      <details className="group bg-card border border-border rounded-2xl overflow-hidden [&_summary::-webkit-details-marker]:hidden shadow-sm">
-                        <summary className="flex items-center justify-between p-6 font-bold cursor-pointer hover:bg-muted/50 transition-colors focus-ring-standard text-foreground">
-                          <span className="pe-4 flex flex-col gap-1">
-                            {faq.category && (
-                              <span className="text-xs font-semibold text-secondary">
-                                {t(`faq.categories.${faq.category}`)}
-                              </span>
-                            )}
-                            <span>{faqQuestion(faq, homeLang)}</span>
-                          </span>
-                          <span className="w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center shrink-0 group-open:rotate-180 transition-transform">
-                            <ChevronLeft className="w-5 h-5 -rotate-90" />
-                          </span>
-                        </summary>
-                        <div className="p-6 pt-0 text-muted-foreground leading-relaxed">
-                          {faqAnswer(faq, homeLang)}
-                          <div className="mt-3">
-                            <Link
-                              href={`/faqs/${faq.id}`}
-                              className="font-bold text-primary underline-offset-4 hover:underline focus-ring-standard rounded-md"
-                              data-testid={`link-home-faq-details-${faq.id}`}
-                            >
-                              {t('common.readMore')}
-                            </Link>
+                      {/* Card wrapper so the read-more link stays visible while the accordion collapses. */}
+                      <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
+                        <details className="group [&_summary::-webkit-details-marker]:hidden">
+                          <summary className="flex items-center justify-between p-6 font-bold cursor-pointer hover:bg-muted/50 transition-colors focus-ring-standard text-foreground">
+                            <span className="pe-4 flex flex-col gap-1">
+                              {faq.category && (
+                                <span className="text-xs font-semibold text-secondary">
+                                  {t(`faq.categories.${faq.category}`)}
+                                </span>
+                              )}
+                              <span>{faqQuestion(faq, homeLang)}</span>
+                            </span>
+                            <span className="w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center shrink-0 group-open:rotate-180 transition-transform">
+                              <ChevronLeft className="w-5 h-5 -rotate-90" />
+                            </span>
+                          </summary>
+                          <div className="px-6 pb-2 text-muted-foreground leading-relaxed">
+                            {faqAnswer(faq, homeLang)}
                           </div>
+                        </details>
+                        {/* Always visible regardless of accordion state. */}
+                        <div className="px-6 pb-5">
+                          <Link
+                            href={`/faqs/${faq.id}`}
+                            className="font-bold text-primary underline-offset-4 hover:underline focus-ring-standard rounded-md"
+                            data-testid={`link-home-faq-details-${faq.id}`}
+                          >
+                            {t('common.readMore')}
+                          </Link>
                         </div>
-                      </details>
+                      </div>
                     </div>
                   </div>
                 ))}

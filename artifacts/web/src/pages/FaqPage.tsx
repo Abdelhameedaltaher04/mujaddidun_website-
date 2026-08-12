@@ -63,16 +63,17 @@ export default function FaqPage() {
                     </AccordionTrigger>
                     <AccordionContent className="text-muted-foreground leading-relaxed text-base pt-2">
                       {faqAnswer(faq, locale)}
-                      <div className="mt-3">
-                        <Link
-                          href={`/faqs/${faq.id}`}
-                          className="font-bold text-primary underline-offset-4 hover:underline focus-ring-standard rounded-md"
-                          data-testid={`link-faq-details-${faq.id}`}
-                        >
-                          {t('common.readMore')}
-                        </Link>
-                      </div>
                     </AccordionContent>
+                    {/* Always visible regardless of accordion state. */}
+                    <div className="pb-4">
+                      <Link
+                        href={`/faqs/${faq.id}`}
+                        className="font-bold text-primary underline-offset-4 hover:underline focus-ring-standard rounded-md"
+                        data-testid={`link-faq-details-${faq.id}`}
+                      >
+                        {t('common.readMore')}
+                      </Link>
+                    </div>
                   </AccordionItem>
                 ))}
               </Accordion>

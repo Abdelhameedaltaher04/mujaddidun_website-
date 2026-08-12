@@ -1,0 +1,175 @@
+Fix the PUBLIC FAQ page based on the current runtime behavior.
+
+IMPORTANT:
+Do NOT redesign the FAQ page.
+Do NOT change the existing visual identity, colors, typography, navbar, footer, spacing, or responsive layout except where required to fix the functionality below.
+
+================================================
+ISSUE 1 — LANGUAGE / WRONG CONTENT
+================================================
+
+The current Arabic FAQ page is displaying English Lorem Ipsum content, for example:
+
+"Lorem aliquid consequat elit facere sed aspernatur..."
+
+This is incorrect.
+
+Investigate the actual source of the FAQ data.
+
+The public FAQ page MUST use the real Laravel backend/API data.
+
+When the current language is Arabic:
+
+- Use the FAQ Arabic question field.
+- Use the FAQ Arabic answer field.
+- Use the Arabic category/name field where applicable.
+
+When the current language is English:
+
+- Use the FAQ English question field.
+- Use the FAQ English answer field.
+- Use the English category/name field where applicable.
+
+Do NOT use Lorem Ipsum.
+Do NOT use hardcoded placeholder FAQ content.
+Do NOT silently fall back from Arabic to English when Arabic content exists.
+
+If an Arabic translation is genuinely missing from the database, use the existing project's established fallback behavior, but do not introduce fake/placeholder text.
+
+Inspect the backend response and TypeScript types to make sure the correct fields are being mapped.
+
+================================================
+ISSUE 2 — "اقرأ المزيد" MUST ALWAYS BE VISIBLE
+================================================
+
+Currently, the "اقرأ المزيد" link only appears after opening the FAQ accordion using the arrow.
+
+This is NOT desired.
+
+The "اقرأ المزيد" link must ALWAYS be visible for every FAQ item, regardless of whether the accordion is expanded or collapsed.
+
+Example:
+
+[ FAQ Question ]
+[ short answer/preview if the existing design supports it ]
+
+اقرأ المزيد
+
+The user should NOT have to click the accordion arrow first.
+
+================================================
+READ MORE NAVIGATION
+================================================
+
+When the user clicks:
+
+"اقرأ المزيد"
+
+navigate directly to:
+
+/faqs/{id}
+
+Use the actual FAQ database ID.
+
+Do NOT use a hardcoded ID.
+
+Do NOT make the user open the accordion first.
+
+The FAQ detail page must load the selected FAQ from:
+
+GET /api/v1/public/faqs/{id}
+
+================================================
+ACCORDION BEHAVIOR
+================================================
+
+Keep the existing accordion functionality if it is already part of the design.
+
+The arrow may still expand/collapse the FAQ answer.
+
+However:
+
+"اقرأ المزيد" must remain visible whether the accordion is:
+
+- Open
+- Closed
+
+Clicking "اقرأ المزيد" must navigate to the details page and must NOT simply toggle the accordion.
+
+================================================
+LANGUAGE TESTING
+================================================
+
+Test explicitly:
+
+Arabic:
+- Question is Arabic.
+- Answer is Arabic.
+- Category is Arabic.
+- "اقرأ المزيد" is Arabic.
+
+English:
+- Question is English.
+- Answer is English.
+- Category is English.
+- "Read More" is English.
+
+Make sure RTL/LTR remains correct.
+
+================================================
+NO MOCK DATA
+================================================
+
+Search the FAQ page and related services/components for:
+
+- Lorem ipsum
+- hardcoded FAQ objects
+- placeholder questions
+- placeholder answers
+- fallback demo data
+
+Remove/replace these only where they are being used by the PUBLIC FAQ implementation.
+
+Do NOT remove legitimate database seed data unless it is clearly test-only and doing so is safe.
+
+================================================
+VERIFY API RESPONSE
+================================================
+
+Inspect the actual response from:
+
+GET /api/v1/public/faqs
+
+Confirm the exact field names returned by Laravel.
+
+Then verify that the frontend maps those fields correctly.
+
+Do not guess field names.
+
+================================================
+FINAL TEST
+================================================
+
+Verify all of the following:
+
+[ ] Arabic FAQ page displays Arabic database content.
+[ ] English FAQ page displays English database content.
+[ ] No Lorem Ipsum appears.
+[ ] "اقرأ المزيد" is visible without opening the accordion.
+[ ] "اقرأ المزيد" works while accordion is closed.
+[ ] "اقرأ المزيد" works while accordion is open.
+[ ] Correct FAQ ID is passed to /faqs/{id}.
+[ ] FAQ detail page displays the correct FAQ.
+[ ] Draft/archived FAQs are not publicly exposed.
+[ ] Existing accordion behavior remains intact.
+[ ] Existing UI design remains unchanged.
+[ ] No mock FAQ data remains in the public FAQ implementation.
+
+After fixing, report:
+
+- Root cause of the English Lorem Ipsum issue.
+- Root cause of the hidden "اقرأ المزيد" issue.
+- Files modified.
+- API/service changes.
+- Tests performed.
+- Any remaining limitation.
