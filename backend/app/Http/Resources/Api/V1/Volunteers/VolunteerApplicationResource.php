@@ -42,6 +42,10 @@ class VolunteerApplicationResource extends JsonResource
                 'title_en' => $this->program->title_en,
             ] : null,
             'availability' => $volunteer?->availability,
+            // What the applicant actually typed into the public form for THIS
+            // application (the profile above is never overwritten by
+            // unauthenticated submissions). Null for admin-created records.
+            'submitted_details' => $this->applicant_snapshot,
             'motivation' => $this->motivation,
             'status' => $this->status === 'submitted' ? 'pending' : $this->status,
             'rejection_reason' => $this->rejection_reason,

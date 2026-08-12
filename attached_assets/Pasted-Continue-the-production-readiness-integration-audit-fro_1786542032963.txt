@@ -1,0 +1,315 @@
+Continue the production-readiness integration audit from the Donations module.
+
+The Donations module has already been audited and integrated successfully.
+Do NOT modify Donations unless a regression is discovered.
+
+Now focus ONLY on:
+
+VOLUNTEER REQUESTS
+
+Admin route:
+ /admin/volunteers
+
+IMPORTANT:
+- Do NOT redesign the UI.
+- Do NOT change colors, typography, layout, spacing, navbar, footer, or responsive behavior.
+- Reuse the existing Admin Dashboard design system.
+- Do NOT create duplicate pages, APIs, tables, or services.
+- Do NOT use mock data.
+- Reuse the existing authentication, authorization, database, API, and upload/storage architecture.
+- Do not modify unrelated modules.
+
+FIRST: INSPECT BEFORE CHANGING
+
+Inspect:
+
+1. Existing volunteer application public page/form.
+2. Existing /admin/volunteers page.
+3. Database schema/model for volunteer requests.
+4. Existing backend routes/controllers/services.
+5. Existing frontend API/service/hooks.
+6. Authentication and authorization middleware.
+7. Existing status values and their meanings.
+
+Do not assume the schema or status names. Use the existing implementation as the source of truth.
+
+VERIFY THE COMPLETE FLOW:
+
+PUBLIC USER:
+
+Open volunteer application
+→ Fill the form
+→ Submit
+→ Backend validation
+→ Database record created
+→ Success response
+
+ADMIN:
+
+Login
+→ /admin/volunteers
+→ See the submitted request
+→ Open/view details
+→ Review application
+→ Change status where supported
+→ Save
+→ Refresh
+→ Verify persistence
+
+1. REAL DATA
+
+Verify that /admin/volunteers uses real backend/database data.
+
+Identify:
+- API endpoint
+- Controller/service
+- Model
+- Database table
+- Frontend service/hook
+- Response/request types
+
+If anything is hardcoded/mock/placeholder, report it and replace it only if it is clearly being used instead of the real backend.
+
+Do not remove useful seed data.
+
+2. LISTING
+
+Verify that all appropriate volunteer requests are displayed.
+
+Use the actual existing fields.
+
+Check:
+- Applicant
+- Email
+- Phone
+- Preferred program
+- Skills
+- Application date
+- Status
+- Any other existing application information
+
+Do not invent fields.
+
+3. DETAILS
+
+Verify that clicking/opening a request shows its complete available information.
+
+Ensure applicant-provided text is safely rendered.
+
+4. STATUS
+
+Inspect the exact backend/database status enum or values.
+
+Verify the existing status workflow.
+
+Examples may include:
+- Pending
+- Under Review
+- Accepted
+- Rejected
+- Withdrawn
+
+Do NOT create or rename statuses unless required by the existing backend.
+
+If status updates are supported:
+
+Change status
+→ API request
+→ Backend authorization
+→ Database update
+→ Updated response
+→ UI refresh
+
+Verify persistence after page refresh.
+
+5. SEARCH
+
+Verify the existing search functionality.
+
+It should correctly search the real volunteer requests.
+
+Where supported, verify:
+- Name
+- Email
+- Phone
+
+Do not fake search results.
+
+6. FILTERS
+
+Verify all existing filters.
+
+Especially:
+- Status
+- Program
+
+If date filters exist, verify:
+- From date
+- To date
+
+Make sure filters correspond to real backend data.
+
+7. PAGINATION
+
+Verify:
+- Total count
+- Current page
+- Page size
+- Next
+- Previous
+- Empty pages
+
+Ensure pagination does not duplicate or lose records.
+
+8. VALIDATION
+
+Audit the public volunteer form on both frontend and backend.
+
+Verify:
+- Required fields
+- Email format
+- Phone format
+- Text length
+- Program selection
+- Invalid values
+- Empty values
+- Malformed requests
+
+Backend validation must exist independently of frontend validation.
+
+9. SECURITY
+
+Audit for:
+
+- Authentication bypass
+- Admin authorization bypass
+- IDOR
+- Unauthorized request updates
+- Sensitive applicant data exposure
+- SQL injection
+- XSS
+- Unsafe error messages
+
+IMPORTANT:
+
+Normal users must NOT be able to:
+- Access /admin/volunteers
+- Read admin volunteer APIs
+- Modify volunteer request status
+
+Backend must enforce authorization.
+
+Do not rely only on frontend route protection.
+
+10. API CONSISTENCY
+
+Verify:
+
+Frontend request/response types
+↔ API
+↔ Controller/service
+↔ Model
+↔ Database
+
+Make sure status values, IDs, dates, and fields match correctly.
+
+11. ERROR HANDLING
+
+Verify:
+- Loading state
+- Empty state
+- API failure
+- Validation failure
+- Status update failure
+- Network failure
+
+The page must not crash when the API fails.
+
+12. ARABIC / ENGLISH
+
+Verify both languages.
+
+Arabic:
+- Labels
+- Statuses
+- Buttons
+- Errors
+- Empty states
+
+English:
+- Labels
+- Statuses
+- Buttons
+- Errors
+- Empty states
+
+No raw translation keys.
+
+No accidental mixed Arabic/English UI.
+
+RTL/LTR must remain correct.
+
+13. PUBLIC → ADMIN SYNCHRONIZATION
+
+Perform a realistic test:
+
+Create a volunteer request through the public website.
+
+Verify:
+1. Request succeeds.
+2. Database contains the record.
+3. Admin /admin/volunteers displays it.
+4. Admin can open it.
+5. Admin can change its status if supported.
+6. Status persists after refresh.
+
+14. DO NOT CHANGE UI
+
+The current UI is already approved.
+
+Only fix functional/backend/integration/security/validation issues that are confirmed by the implementation or runtime tests.
+
+Do not redesign anything.
+
+15. TESTS
+
+Run the relevant automated/backend/frontend tests.
+
+Also perform runtime verification where possible.
+
+After completion, create a CHECKPOINT for this verified Volunteer Requests state.
+
+FINAL REPORT:
+
+Provide:
+
+1. VERIFIED WORKING
+2. REAL BACKEND/API INTEGRATION
+3. DATABASE INTEGRATION
+4. STATUS MANAGEMENT
+5. SEARCH
+6. FILTERS
+7. PAGINATION
+8. VALIDATION
+9. SECURITY
+10. AUTHORIZATION
+11. ARABIC / ENGLISH
+12. PUBLIC → ADMIN FLOW
+13. ISSUES FOUND
+14. FIXES APPLIED
+15. REMAINING LIMITATIONS
+
+For every issue include:
+- Module
+- File/path
+- Problem
+- Severity: Critical / High / Medium / Low
+- Fix
+- Fixed or reported only
+
+At the very end explicitly confirm:
+
+CHECKPOINT:
+- Created: YES/NO
+- Checkpoint state: Volunteer Requests verified
+- Tests: PASS/FAIL

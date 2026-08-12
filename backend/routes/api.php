@@ -247,6 +247,11 @@ Route::get('/public/partners', [\App\Http\Controllers\Api\V1\Partners\PublicPart
 Route::post('/public/donations', [\App\Http\Controllers\Api\V1\Donations\PublicDonationController::class, 'store'])
     ->middleware('throttle:5,1');
 
+// Public volunteer application (no auth). Files a `submitted` application
+// reviewed by admins. Rate limited per IP; honeypot rejects naive bots.
+Route::post('/public/volunteer-applications', [\App\Http\Controllers\Api\V1\Volunteers\PublicVolunteerApplicationController::class, 'store'])
+    ->middleware('throttle:5,1');
+
 // Public read-only FAQs (no auth). Only published FAQs are exposed.
 Route::get('/public/faqs', [\App\Http\Controllers\Api\V1\Faqs\PublicFaqController::class, 'index']);
 Route::get('/public/faqs/{faq}', [\App\Http\Controllers\Api\V1\Faqs\PublicFaqController::class, 'show'])

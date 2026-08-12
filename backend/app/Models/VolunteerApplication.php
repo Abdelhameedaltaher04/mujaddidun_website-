@@ -20,6 +20,7 @@ class VolunteerApplication extends Model
         'motivation',
         'preferred_area',
         'experience',
+        'applicant_snapshot',
         'education',
         'review_notes',
         'rejection_reason',
@@ -32,6 +33,7 @@ class VolunteerApplication extends Model
         return [
             'submitted_at' => 'datetime',
             'reviewed_at' => 'datetime',
+            'applicant_snapshot' => 'array',
         ];
     }
 

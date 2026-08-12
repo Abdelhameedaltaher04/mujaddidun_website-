@@ -317,7 +317,9 @@
         "successTitle": "Your application was sent successfully ✅",
         "successMsg": "Thank you for joining us. We will contact you soon.",
         "okBtn": "OK"
-      }
+      },
+      "tooMany": "Too many attempts. Please wait a minute and try again.",
+      "sendError": "Could not submit your application. Please try again."
     },
     "interestsList": {
       "feeding": "Feeding Projects",
@@ -1592,7 +1594,8 @@
         "availability": "Availability",
         "skills": "Skills",
         "experience": "Previous Experience",
-        "motivation": "Motivation"
+        "motivation": "Motivation",
+        "fullName": "Full Name"
       },
       "notesTitle": "Internal Notes",
       "notesHint": "Visible to the admin team only — never shown to the applicant",
@@ -1624,7 +1627,9 @@
       "genericError": "An unexpected error occurred. Please try again.",
       "retry": "Retry",
       "emptyState": "No volunteer applications yet",
-      "noResults": "No results match the current filters"
+      "noResults": "No results match the current filters",
+      "submittedDetailsTitle": "Details Submitted with This Application",
+      "submittedDetailsHint": "These are the details the applicant entered on the public form. The stored profile is never changed by public submissions."
     },
     "messages": {
       "title": "Contact Messages",

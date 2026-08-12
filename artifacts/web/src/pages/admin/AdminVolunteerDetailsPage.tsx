@@ -215,6 +215,49 @@ export default function AdminVolunteerDetailsPage() {
               </CardContent>
             </Card>
 
+            {(() => {
+              // The stored profile is never overwritten by public
+              // submissions; surface what THIS application actually said
+              // whenever it differs from the profile.
+              const s = data.submitted_details;
+              const differs =
+                s &&
+                (s.full_name !== data.full_name ||
+                  s.phone !== data.phone ||
+                  s.date_of_birth !== data.date_of_birth ||
+                  s.skills !== data.skills.join(', ') ||
+                  s.availability !== (data.availability ?? ''));
+              if (!differs) return null;
+              return (
+                <Card
+                  className="border-amber-500/40 bg-amber-500/5"
+                  data-testid="card-submitted-details"
+                >
+                  <CardContent className="p-4">
+                    <p className="text-sm font-medium text-foreground">
+                      {t('admin.volunteers.submittedDetailsTitle')}
+                    </p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {t('admin.volunteers.submittedDetailsHint')}
+                    </p>
+                    <div className="mt-2 grid grid-cols-1 gap-x-8 sm:grid-cols-2">
+                      <InfoRow label={t('admin.volunteers.fields.fullName')} value={s.full_name} />
+                      <InfoRow label={t('admin.volunteers.fields.phone')} value={s.phone} ltr />
+                      <InfoRow
+                        label={t('admin.volunteers.fields.dateOfBirth')}
+                        value={s.date_of_birth ? formatDate(s.date_of_birth) : null}
+                      />
+                      <InfoRow label={t('admin.volunteers.fields.skills')} value={s.skills} />
+                      <InfoRow
+                        label={t('admin.volunteers.fields.availability')}
+                        value={s.availability}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })()}
+
             {data.status === 'rejected' && data.rejection_reason ? (
               <Card
                 className="border-destructive/30 bg-destructive/5"

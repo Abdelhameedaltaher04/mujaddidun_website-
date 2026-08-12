@@ -77,6 +77,18 @@ export interface VolunteerApplication {
   preferred_area: string | null;
   program: VolunteerProgram | null;
   availability: string | null;
+  /**
+   * What the applicant actually typed into the public form for this
+   * application. The profile fields above are never overwritten by
+   * unauthenticated submissions. Null for admin-created records.
+   */
+  submitted_details: {
+    full_name: string;
+    date_of_birth: string | null;
+    phone: string;
+    skills: string;
+    availability: string;
+  } | null;
   motivation: string | null;
   status: ApplicationStatus;
   /** Reason recorded when the application was rejected. */

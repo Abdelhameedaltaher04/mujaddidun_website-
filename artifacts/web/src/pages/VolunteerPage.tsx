@@ -15,6 +15,9 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { FormEvent, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { publicVolunteersApi } from '@/services/publicVolunteers';
+import { getApiError } from '@/services/api';
 import { isValidPhoneNumber, type CountryCode } from 'libphonenumber-js';
 import {
   Dialog,
@@ -37,8 +40,48 @@ export default function VolunteerPage() {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [honeypot, setHoneypot] = useState('');
   const [successOpen, setSuccessOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const submitMutation = useMutation({
+    mutationFn: publicVolunteersApi.apply,
+    onSuccess: () => {
+      setSuccessOpen(true);
+      setFormError(null);
+      setErrors({});
+    },
+    onError: (error: unknown) => {
+      const { fields, status } = getApiError(error);
+      const fieldErrors: Record<string, string> = {};
+      const fieldMap: Record<string, string> = {
+        full_name: 'fullName',
+        date_of_birth: 'dob',
+        email: 'email',
+        phone: 'phone',
+        interests: 'interests',
+        availability: 'times',
+        experience: 'experience',
+      };
+      Object.entries(fields ?? {}).forEach(([apiField, message]) => {
+        // Array rules come back as e.g. "interests.0" — map to the group.
+        const base = apiField.split('.')[0];
+        const formField = fieldMap[base];
+        if (formField && !fieldErrors[formField]) fieldErrors[formField] = message;
+      });
+      setErrors(fieldErrors);
+      if (Object.keys(fieldErrors).length > 0) {
+        setFormError(null);
+      } else if (status === 429) {
+        setFormError(t('volunteer.form.tooMany'));
+      } else if (status === undefined) {
+        setFormError(t('news.networkError'));
+      } else {
+        setFormError(t('volunteer.form.sendError'));
+      }
+    },
+  });
+  const isSubmitting = submitMutation.isPending;
 
   const interests = [
     { id: 'feeding', label: t('volunteer.interestsList.feeding') },
@@ -110,11 +153,21 @@ export default function VolunteerPage() {
     }
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
-    setValues((prev) => Object.fromEntries(
-      Object.entries(prev).map(([key, value]) => [key, value.trim()]),
-    ) as typeof values);
-    setIsSubmitting(true);
-    setSuccessOpen(true);
+    const trimmed = Object.fromEntries(
+      Object.entries(values).map(([key, value]) => [key, value.trim()]),
+    ) as typeof values;
+    setValues(trimmed);
+    setFormError(null);
+    submitMutation.mutate({
+      full_name: trimmed.fullName,
+      date_of_birth: trimmed.dob,
+      email: trimmed.email,
+      phone: trimmed.phone,
+      interests: selectedInterests,
+      availability: selectedTimes,
+      experience: trimmed.experience,
+      website: honeypot,
+    });
   };
 
   const fieldError = (field: string) =>
@@ -147,6 +200,19 @@ export default function VolunteerPage() {
               <SectionHeading title={t('volunteer.formTitle')} accent="primary" className="mb-8" />
               
               <form onSubmit={handleSubmit} noValidate className="space-y-10">
+                {/* Honeypot field — visually hidden, ignored by humans. */}
+                <div className="sr-only" aria-hidden="true">
+                  <label htmlFor="volunteer-website">Website</label>
+                  <input
+                    id="volunteer-website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
                 <div className="space-y-6">
                   <h3 className="text-xl font-bold font-display text-primary border-b border-border pb-3">{t('volunteer.form.personalInfo')}</h3>
                   <div className="grid gap-4 md:grid-cols-2">
@@ -261,6 +327,12 @@ export default function VolunteerPage() {
                    />
                 </div>
 
+                {formError && (
+                  <p className="text-sm text-destructive" role="alert" data-testid="error-volunteer-form">
+                    {formError}
+                  </p>
+                )}
+
                 <Button
                   type="submit"
                   size="lg"
@@ -284,7 +356,6 @@ export default function VolunteerPage() {
         onOpenChange={(open) => {
           setSuccessOpen(open);
           if (!open) {
-            setIsSubmitting(false);
             setValues({ fullName: '', dob: '', email: '', phone: '', experience: '' });
             setSelectedInterests([]);
             setSelectedTimes([]);
@@ -302,7 +373,6 @@ export default function VolunteerPage() {
             <Button
               onClick={() => {
                 setSuccessOpen(false);
-                setIsSubmitting(false);
                 setValues({ fullName: '', dob: '', email: '', phone: '', experience: '' });
                 setSelectedInterests([]);
                 setSelectedTimes([]);

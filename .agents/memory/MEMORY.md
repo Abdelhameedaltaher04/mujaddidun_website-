@@ -1,5 +1,7 @@
 # Memory Index
 
+- [Public form security invariants](public-form-security.md) — never overwrite profiles from unauthenticated email matches; generic idempotent duplicate responses; race-safe unique email; driver-branched raw-SQL migrations.
+
 - [SQLite test safety fuse](sqlite-test-safety.md) — live DB was wiped once; TestCase aborts unless DB is :memory:, keep the guard and never migrate:fresh outside tests.
 - [GitHub connection](github-connection.md) — repo name ends with a hyphen; gitPush callback lacks creds, push via connector token inside "use impure".
 - [Mujaddidun brand identity](brand-identity.md) — name is "مجددون" (no "ال"); exact logo colors: teal-blue #0071A0 primary, coral #FF5810 secondary; never generic palettes.

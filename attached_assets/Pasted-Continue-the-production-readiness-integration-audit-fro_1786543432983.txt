@@ -1,0 +1,347 @@
+Continue the production-readiness integration audit from the Volunteer Requests module.
+
+Now focus ONLY on:
+
+CONTACT MESSAGES
+
+Admin route:
+ /admin/messages
+
+IMPORTANT:
+- Do NOT redesign the UI.
+- Do NOT change colors, typography, layout, spacing, navbar, footer, or responsive behavior.
+- Reuse the existing Admin Dashboard design system.
+- Do NOT create duplicate pages, APIs, tables, or services.
+- Do NOT use mock data.
+- Reuse the existing authentication, authorization, database, API, and existing contact-form architecture.
+- Do not modify unrelated modules.
+- Do not modify Donations or Volunteer Requests unless a confirmed regression is discovered.
+
+FIRST: INSPECT BEFORE CHANGING
+
+Inspect:
+
+1. Public Contact Us page/form.
+2. Existing /admin/messages page.
+3. Database schema/model for contact messages.
+4. Backend routes/controllers/services.
+5. Frontend API/services/hooks.
+6. Authentication and authorization middleware.
+7. Existing message status values.
+8. Existing email/contact handling if present.
+
+Use the existing implementation as the source of truth.
+
+1. REAL DATA
+
+Verify that /admin/messages uses real backend/database data.
+
+Identify:
+- API endpoint
+- Controller/service
+- Model
+- Database table
+- Frontend service/hook
+- Request/response types
+
+Identify any mock, hardcoded, or placeholder messages.
+
+Do not remove useful seed data unless it is clearly test-only.
+
+2. PUBLIC CONTACT FORM
+
+Test:
+
+Public website
+→ Contact Us
+→ Fill form
+→ Submit
+→ Backend validation
+→ Database record
+→ Success response
+→ Message appears in Admin → Contact Messages
+
+Verify the data remains synchronized.
+
+3. MESSAGE LIST
+
+Verify the admin can see real messages.
+
+Display the actual existing fields, such as:
+
+- Sender name
+- Email
+- Phone if available
+- Subject
+- Message
+- Date
+- Status
+
+Do not invent fields that do not exist.
+
+4. MESSAGE DETAILS
+
+Verify that an admin can open a message and view its complete available content.
+
+Ensure user-provided content is safely rendered.
+
+Check for XSS risks.
+
+5. MESSAGE STATUS
+
+Inspect the exact existing status values.
+
+Typical examples may include:
+
+- Unread
+- Pending
+- Processing
+- Replied
+- Closed
+- Archived
+
+Do NOT rename or invent statuses.
+
+If the current system supports status updates:
+
+Open message
+→ Change status
+→ Save
+→ Backend update
+→ Database persistence
+→ Refresh
+→ Verify status remains correct.
+
+6. SEARCH
+
+Verify the existing search functionality against real data.
+
+Where applicable, search:
+- Name
+- Email
+- Subject
+- Message
+
+Do not use mock filtering.
+
+7. FILTERS
+
+Verify all existing message filters.
+
+Especially:
+- Status
+- Date range if available
+
+Verify that filters actually affect the displayed results.
+
+8. PAGINATION
+
+Verify:
+- Total messages
+- Current page
+- Page size
+- Next page
+- Previous page
+- Empty page handling
+
+Ensure records are not duplicated or skipped.
+
+9. READ / UNREAD
+
+If the existing system has read/unread functionality, verify:
+
+- Opening a message marks it correctly if that is the intended existing behavior.
+- The state persists in the database.
+- Dashboard unread count updates correctly.
+- Refresh does not incorrectly reset the state.
+
+Do not introduce a new read/unread system if one does not already exist.
+
+10. DELETE / ARCHIVE
+
+Inspect whether the existing backend supports:
+- Delete
+- Archive
+- Restore
+
+If supported, verify the complete flow.
+
+If not supported, do NOT create unnecessary functionality.
+
+11. VALIDATION
+
+Audit the public contact form on both frontend and backend.
+
+Verify:
+- Required fields
+- Email format
+- Phone format if applicable
+- Subject length
+- Message length
+- Invalid input
+- Empty input
+- Malformed requests
+
+Backend validation must exist independently of frontend validation.
+
+12. SECURITY
+
+Audit:
+
+- Authentication bypass
+- Admin authorization bypass
+- IDOR
+- Unauthorized message access
+- Unauthorized message status changes
+- Sensitive data exposure
+- XSS
+- SQL injection
+- Unsafe error messages
+- Spam protection/rate limiting where appropriate
+
+IMPORTANT:
+
+Normal users must NOT be able to:
+- Access /admin/messages
+- Read admin message APIs
+- Change message status
+- Delete/archive messages
+
+Backend authorization must enforce this.
+
+13. API CONSISTENCY
+
+Verify:
+
+Frontend
+↔ API
+↔ Controller/service
+↔ Model
+↔ Database
+
+Ensure:
+- IDs match
+- Status values match
+- Dates are handled correctly
+- Response types match frontend expectations
+
+14. ERROR HANDLING
+
+Verify:
+- Loading state
+- Empty state
+- API failure
+- Validation failure
+- Status update failure
+- Network failure
+
+The page must not crash if the API fails.
+
+15. ARABIC / ENGLISH
+
+Verify both languages.
+
+Arabic:
+- Labels
+- Statuses
+- Buttons
+- Errors
+- Empty states
+
+English:
+- Labels
+- Statuses
+- Buttons
+- Errors
+- Empty states
+
+No raw translation keys.
+
+No accidental mixed Arabic/English labels.
+
+RTL/LTR must remain correct.
+
+16. DASHBOARD SYNCHRONIZATION
+
+If the Admin Dashboard displays:
+- Total messages
+- Unread messages
+- Pending messages
+
+verify that these values come from the real database and update correctly after message changes.
+
+17. REAL-WORLD TEST
+
+Perform this flow:
+
+PUBLIC:
+Submit a real test contact message.
+
+ADMIN:
+Open /admin/messages
+→ Verify the message appears
+→ Open the message
+→ Change status if supported
+→ Refresh
+→ Verify persistence.
+
+Also test unauthorized access to the admin endpoint.
+
+18. DO NOT CHANGE UI
+
+The existing UI is approved.
+
+Only fix confirmed:
+- Backend/API problems
+- Database integration problems
+- Authentication/authorization problems
+- Validation problems
+- Security problems
+- Broken functionality
+
+Do NOT redesign the page.
+
+19. TESTS
+
+Run all relevant automated tests.
+
+Perform runtime verification where possible.
+
+After completion, create a CHECKPOINT for the verified Contact Messages state.
+
+FINAL REPORT:
+
+Provide:
+
+1. VERIFIED WORKING
+2. REAL BACKEND/API INTEGRATION
+3. DATABASE INTEGRATION
+4. MESSAGE STATUS
+5. READ/UNREAD
+6. SEARCH
+7. FILTERS
+8. PAGINATION
+9. VALIDATION
+10. SECURITY
+11. AUTHORIZATION
+12. ARABIC / ENGLISH
+13. PUBLIC → ADMIN FLOW
+14. DASHBOARD SYNCHRONIZATION
+15. ISSUES FOUND
+16. FIXES APPLIED
+17. REMAINING LIMITATIONS
+
+For every issue include:
+- Module
+- File/path
+- Problem
+- Severity: Critical / High / Medium / Low
+- Fix
+- Fixed or reported only
+
+At the very end explicitly confirm:
+
+CHECKPOINT:
+- Created: YES/NO
+- Checkpoint state: Contact Messages verified
+- Tests: PASS/FAIL
