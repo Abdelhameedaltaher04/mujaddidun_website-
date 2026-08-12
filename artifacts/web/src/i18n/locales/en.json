@@ -665,6 +665,11 @@
   "admin": {
     "title": "Admin Dashboard",
     "toggleSidebar": "Toggle sidebar",
+    "search": {
+      "placeholder": "Search pages…",
+      "empty": "No results found.",
+      "navigation": "Navigation"
+    },
     "comingSoon": "This section is under construction and will be available soon.",
     "nav": {
       "label": "Admin navigation",
@@ -1096,7 +1101,8 @@
         "community": "Community Development",
         "environment": "Environment",
         "youth": "Youth & Leadership",
-        "relief": "Relief & Aid"
+        "relief": "Relief & Aid",
+        "empowerment": "Empowerment"
       },
       "participantStatuses": {
         "pending": "Pending",

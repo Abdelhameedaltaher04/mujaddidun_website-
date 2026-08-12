@@ -30,7 +30,8 @@ export type ProgramCategory =
   | 'community'
   | 'environment'
   | 'youth'
-  | 'relief';
+  | 'relief'
+  | 'empowerment';
 
 export const PROGRAM_CATEGORIES: ProgramCategory[] = [
   'education',
@@ -39,6 +40,7 @@ export const PROGRAM_CATEGORIES: ProgramCategory[] = [
   'environment',
   'youth',
   'relief',
+  'empowerment',
 ];
 
 export const PROGRAM_TITLE_MAX = 150;

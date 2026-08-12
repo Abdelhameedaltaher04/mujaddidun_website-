@@ -24,6 +24,16 @@ export function ProgramStatusBadge({ status }: { status: ProgramStatus }) {
   );
 }
 
+const PROGRAM_CATEGORY_STYLES: Record<ProgramCategory, string> = {
+  education: 'bg-blue-500/10 text-blue-600 border-blue-500/20 dark:text-blue-400',
+  health: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:text-emerald-400',
+  community: 'bg-violet-500/10 text-violet-600 border-violet-500/20 dark:text-violet-400',
+  environment: 'bg-green-500/10 text-green-600 border-green-500/20 dark:text-green-400',
+  youth: 'bg-orange-500/10 text-orange-600 border-orange-500/20 dark:text-orange-400',
+  relief: 'bg-red-500/10 text-red-600 border-red-500/20 dark:text-red-400',
+  empowerment: 'bg-teal-500/10 text-teal-600 border-teal-500/20 dark:text-teal-400',
+};
+
 export function ProgramCategoryBadge({
   category,
 }: {
@@ -31,7 +41,10 @@ export function ProgramCategoryBadge({
 }) {
   const { t } = useLocale();
   return (
-    <Badge variant="outline" className="font-medium bg-secondary/10 text-secondary-foreground border-border">
+    <Badge
+      variant="outline"
+      className={cn('font-medium', PROGRAM_CATEGORY_STYLES[category] ?? 'bg-secondary/10 text-secondary-foreground border-border')}
+    >
       {t(`admin.programs.categories.${category}`)}
     </Badge>
   );

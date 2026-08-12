@@ -40,14 +40,14 @@ export function AdminSidebar() {
       <SidebarHeader>
         <Link
           href="/admin/dashboard"
-          className="flex items-center gap-2 px-1 py-1.5"
+          className="flex items-center gap-3 px-1 py-2"
           data-testid="link-admin-logo"
           onClick={closeMobileDrawer}
         >
           <img
             src={logoUrl}
             alt={t('app.name')}
-            className="h-8 w-8 shrink-0 rounded-md object-contain"
+            className="h-12 w-12 shrink-0 rounded-md object-contain"
           />
           <span className="truncate font-semibold text-sidebar-foreground group-data-[collapsible=icon]:hidden">
             {t('admin.title')}
