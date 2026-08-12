@@ -1,7 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X, ChevronDown, LogOut } from 'lucide-react';
+import { Menu, X, ChevronDown, LogOut, LayoutDashboard, UserRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { LanguageToggle } from '@/components/LanguageToggle';
 import { MainContainer } from '@/components/layout/MainContainer';
 import { useLocale } from '@/contexts/LocaleContext';
@@ -232,19 +239,38 @@ export function Navbar() {
             <LanguageToggle />
             {isAuthenticated ? (
               <div className="hidden items-center gap-2 sm:flex">
-                {staff && (
-                  <Button size="sm" asChild data-testid="link-admin-dashboard">
-                    <Link href={user?.role?.slug === 'admin' ? '/admin/dashboard' : '/admin/news'}>
-                      {t('nav.dashboard')}
-                    </Link>
-                  </Button>
-                )}
-                <Button size="sm" variant="outline" asChild data-testid="link-profile">
-                  <Link href="/profile">{user?.first_name || t('profile.title')}</Link>
-                </Button>
-                <Button size="icon" variant="ghost" aria-label={t('common.logout')} data-testid="button-logout" onClick={() => void handleLogout()}>
-                  <LogOut className="h-4 w-4" aria-hidden="true" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="sm" data-testid="button-account-menu">
+                      {user?.first_name || t('profile.title')}
+                      <ChevronDown className="ms-1 h-4 w-4" aria-hidden="true" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="min-w-[180px]">
+                    {staff && (
+                      <DropdownMenuItem asChild data-testid="link-admin-dashboard">
+                        <Link href={user?.role?.slug === 'admin' ? '/admin/dashboard' : '/admin/news'}>
+                          <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
+                          {t('nav.dashboard')}
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem asChild data-testid="link-profile">
+                      <Link href="/profile">
+                        <UserRound className="h-4 w-4" aria-hidden="true" />
+                        {t('profile.title')}
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      data-testid="button-logout"
+                      onClick={() => void handleLogout()}
+                    >
+                      <LogOut className="h-4 w-4" aria-hidden="true" />
+                      {t('common.logout')}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             ) : (
               <Button

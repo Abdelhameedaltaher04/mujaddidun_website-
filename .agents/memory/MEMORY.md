@@ -19,3 +19,4 @@
 - [Public file gating](public-file-gating.md) — new upload dirs need an active-reference gate in the public file controller; inactive content must not leak via /public endpoints or file URLs.
 - [getApiError fields are strings](api-error-fields.md) — server field errors are pre-joined strings; `fields[key][0]` renders one character, assign the whole string.
 - [Responsive duplicate test ids](responsive-testids.md) — desktop table and mobile card action buttons need distinct data-testids (suffix mobile with `-mobile`) or UI tests stall.
+- [Unsolved dupkey warning](dupkey-warning.md) — numeric duplicate-key React warning on admin list pages; static search exhausted, capture a stack via console.error patch next time.
