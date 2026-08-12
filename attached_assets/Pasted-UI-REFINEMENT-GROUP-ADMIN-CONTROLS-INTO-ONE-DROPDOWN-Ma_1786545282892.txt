@@ -1,0 +1,124 @@
+UI REFINEMENT — GROUP ADMIN CONTROLS INTO ONE DROPDOWN
+
+Make the existing header cleaner by grouping the admin-related controls into ONE dropdown menu.
+
+IMPORTANT:
+- Do NOT redesign the navbar.
+- Do NOT change the logo.
+- Do NOT change the navbar links.
+- Do NOT change colors, typography, spacing, or overall visual identity.
+- Do NOT change responsive behavior except what is strictly necessary for the dropdown.
+- Do NOT change authentication or authorization logic.
+- Do NOT change backend/API functionality.
+- Do NOT create duplicate routes or duplicate functionality.
+- Reuse the existing components and styling patterns.
+
+CURRENT HEADER:
+
+The header currently has these controls on the left:
+
+- Logout icon/button
+- "Admin" button
+- "لوحة التحكم" button
+- "EN" language switcher
+
+CHANGE THEM TO:
+
+[ Admin ▼ ]   [ EN ]
+
+The Admin dropdown should contain:
+
+1. لوحة التحكم
+2. تسجيل الخروج
+
+So the logout action MUST be moved inside the Admin dropdown.
+
+IMPORTANT:
+The language switcher "EN" must remain OUTSIDE the dropdown and must keep its exact existing functionality.
+
+DROPDOWN:
+
+When the user clicks:
+
+[ Admin ▼ ]
+
+open a clean dropdown containing:
+
+┌─────────────────────┐
+│ 🏠 لوحة التحكم      │
+│ 🚪 تسجيل الخروج     │
+└─────────────────────┘
+
+Use the existing design system and styling. Keep it professional and visually consistent with the current navbar.
+
+FUNCTIONALITY:
+
+"لوحة التحكم":
+- Navigate to the EXISTING admin dashboard route.
+- Do not create a new route.
+- Keep existing admin authentication behavior.
+
+"تسجيل الخروج":
+- Use the EXISTING logout function.
+- Do not implement a second logout mechanism.
+- After logout, preserve the existing redirect behavior.
+
+DROPDOWN BEHAVIOR:
+
+- Click Admin → open dropdown.
+- Click outside → close dropdown.
+- Click an item → close dropdown.
+- Escape → close dropdown.
+- Do not interfere with the language switcher.
+- Work correctly in Arabic RTL and English LTR.
+- Do not break mobile responsiveness.
+
+LANGUAGE:
+
+When the website is Arabic:
+- Admin dropdown items should use Arabic:
+  - لوحة التحكم
+  - تسجيل الخروج
+
+When the website is English:
+- Admin dropdown items should use the existing English translations.
+
+Do NOT hardcode English/Arabic in a way that bypasses the existing i18n system.
+Reuse the existing translation/localization mechanism.
+
+VISUAL REQUIREMENT:
+
+The final header should be visually cleaner.
+
+Instead of:
+
+[Logout] [Admin] [لوحة التحكم] [EN]
+
+It should become:
+
+[Admin ▼] [EN]
+
+with Dashboard and Logout inside the Admin dropdown.
+
+Do not change anything else in the website.
+
+TEST:
+
+1. Open Arabic website.
+2. Click Admin.
+3. Verify dropdown opens.
+4. Verify "لوحة التحكم" works.
+5. Verify "تسجيل الخروج" works.
+6. Click outside and verify dropdown closes.
+7. Press Escape and verify dropdown closes.
+8. Switch to English.
+9. Verify dropdown labels are translated correctly.
+10. Verify EN still works exactly as before.
+11. Verify desktop layout.
+12. Verify mobile layout.
+13. Run TypeScript/build checks.
+
+IMPORTANT:
+Do NOT modify unrelated pages or functionality.
+
+Create a checkpoint after the change is implemented and verified successfully.

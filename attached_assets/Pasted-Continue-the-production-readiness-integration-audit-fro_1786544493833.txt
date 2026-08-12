@@ -1,0 +1,463 @@
+Continue the production-readiness integration audit from the Contact Messages module.
+
+Now focus ONLY on:
+
+WEBSITE SETTINGS
+
+Admin route:
+ /admin/settings
+
+IMPORTANT:
+- Do NOT redesign the UI.
+- Do NOT change the existing visual design, layout, colors, typography, spacing, navbar, footer, or responsive behavior.
+- Reuse the existing Admin Settings UI and components.
+- Do NOT create duplicate settings systems, APIs, tables, or storage systems.
+- Do NOT use mock data.
+- Reuse the existing database, backend/API, authentication, authorization, and file/image storage architecture.
+- Do not modify unrelated modules.
+- Do not modify Contact Messages, Donations, or Volunteer Requests unless a confirmed regression is discovered.
+
+FIRST: INSPECT BEFORE CHANGING
+
+Inspect:
+
+1. Existing Website Settings page.
+2. Existing settings database table/model.
+3. Backend settings routes/controllers/services.
+4. Frontend settings API/service/hooks.
+5. Existing authentication/authorization middleware.
+6. Existing image upload/storage mechanism.
+7. Public website components that consume settings.
+8. Existing navbar/footer/contact/social-media implementation.
+9. Existing logo/favicon handling.
+
+Use the current implementation as the source of truth.
+
+==================================================
+1. GENERAL SETTINGS
+==================================================
+
+Verify that the settings shown in /admin/settings are loaded from the real database.
+
+Check:
+- Site name Arabic
+- Site name English
+- Site description Arabic
+- Site description English
+- Logo
+- Favicon
+- Any other existing general settings
+
+Verify:
+
+Admin changes value
+→ Save
+→ Backend/API
+→ Database
+→ Refresh
+→ Value remains changed.
+
+Do not use local-only state as the final source of truth.
+
+==================================================
+2. CONTACT INFORMATION
+==================================================
+
+Verify the existing Contact Information settings.
+
+Check all existing fields such as:
+
+- Email
+- Phone
+- Address
+- Working hours
+- Google Maps URL
+- Any other existing contact fields
+
+Verify that saving these values updates the public website.
+
+IMPORTANT:
+
+The public Contact Us section and Footer must consume the same real settings.
+
+Do not create a second contact-information source.
+
+==================================================
+3. SOCIAL MEDIA
+==================================================
+
+Verify the existing social media settings.
+
+Check:
+- Facebook
+- Instagram
+- WhatsApp
+- Any other existing social links
+
+Verify:
+
+Admin saves social URL
+→ Database updates
+→ Public website displays the updated link.
+
+Validate URLs where appropriate.
+
+Do not render broken/empty links incorrectly.
+
+==================================================
+4. BRANDING / LOGO
+==================================================
+
+KNOWN ISSUE:
+
+The Website Settings page previously showed a broken/missing website logo image in the logo section.
+
+Investigate the ROOT CAUSE.
+
+Inspect:
+
+- Database stored logo URL/path
+- Upload handling
+- Storage directory
+- Public URL generation
+- File permissions/access
+- Frontend image rendering
+- Authentication requirements
+- Whether the stored path is relative or absolute
+- Whether the file actually exists
+- Whether the public website can access the image
+
+DO NOT simply hide the broken image.
+
+Fix the actual root cause if it is confirmed.
+
+IMPORTANT:
+
+Reuse the existing storage/upload system.
+
+Do NOT introduce a second image storage system.
+
+After fixing, verify:
+
+Admin Settings:
+→ Logo displays correctly.
+
+Public Navbar:
+→ Same logo displays correctly.
+
+Public Footer:
+→ Same logo displays correctly.
+
+If the same image/storage problem affects:
+- News
+- Gallery
+- Programs
+- Events
+- Partners
+- Other uploaded images
+
+identify it and report it.
+
+Only fix confirmed related issues.
+
+==================================================
+5. LOGO UPLOAD
+==================================================
+
+If the existing settings page supports logo upload, verify:
+
+Upload
+→ Validation
+→ Storage
+→ Database URL/path
+→ Public URL
+→ Frontend rendering
+
+Validate:
+- File type
+- File size
+- Invalid files
+- Upload failure
+- Broken URL
+- Replacement of existing logo
+
+Do not allow unsafe file types.
+
+==================================================
+6. FAVICON
+==================================================
+
+Verify the favicon functionality if currently supported.
+
+Check:
+- Upload/storage
+- Database/path
+- Public URL
+- Browser rendering
+
+Do not add a new favicon system if one already exists.
+
+==================================================
+7. SAVE / RESET
+==================================================
+
+Verify existing:
+
+- Save Changes
+- Reset/Restore where supported
+
+Check:
+- Loading state
+- Success message
+- Error message
+- Failed save
+- Validation errors
+- Refresh persistence
+
+Do not add unnecessary UI changes.
+
+==================================================
+8. AUTHORIZATION
+==================================================
+
+Verify:
+
+/admin/settings requires authenticated admin access.
+
+Normal users must NOT be able to:
+
+- Open /admin/settings
+- Read admin-only settings APIs
+- Modify settings
+- Upload/change branding assets
+
+Backend authorization must enforce this.
+
+Do not rely only on frontend route protection.
+
+Test unauthorized API access and verify 401/403 behavior.
+
+==================================================
+9. PUBLIC WEBSITE SYNCHRONIZATION
+==================================================
+
+Verify the complete flow:
+
+ADMIN:
+
+Login
+→ /admin/settings
+→ Change site setting
+→ Save
+
+PUBLIC:
+
+Refresh homepage
+→ Verify updated setting appears.
+
+Test at least:
+
+- Site name
+- Logo
+- Contact email
+- Phone
+- Social links
+- Footer content
+- Working hours
+
+Do not use hardcoded fallback values when a valid database value exists.
+
+Existing fallback behavior should only be used when the setting is genuinely missing.
+
+==================================================
+10. ARABIC / ENGLISH
+==================================================
+
+Verify both languages.
+
+Arabic:
+- Site name
+- Description
+- Footer
+- Contact information
+- Any bilingual settings
+
+English:
+- Site name
+- Description
+- Footer
+- Contact information
+- Any bilingual settings
+
+Verify:
+- No raw translation keys
+- No accidental mixed language
+- RTL/LTR remains correct
+
+==================================================
+11. SECURITY
+==================================================
+
+Audit:
+
+- Unauthorized settings modification
+- Unauthorized logo upload
+- File upload vulnerabilities
+- Unsafe file types
+- Path traversal
+- Sensitive configuration exposure
+- SQL injection
+- XSS through editable settings
+- Unsafe URL handling
+- Improper error messages
+
+Only fix confirmed issues.
+
+Do not expose secrets through Website Settings or public APIs.
+
+==================================================
+12. API / DATABASE CONSISTENCY
+==================================================
+
+Verify:
+
+Frontend
+↔ API
+↔ Controller/service
+↔ Model
+↔ Database
+
+Make sure the same settings source is used consistently.
+
+Do NOT create duplicate settings tables or APIs.
+
+==================================================
+13. REAL-WORLD TEST
+==================================================
+
+Perform these tests:
+
+TEST A:
+Change site name
+→ Save
+→ Refresh admin
+→ Verify persistence.
+
+TEST B:
+Change contact email
+→ Save
+→ Open public Contact Us
+→ Verify new email.
+
+TEST C:
+Change phone
+→ Save
+→ Open public Contact Us/Footer
+→ Verify new phone.
+
+TEST D:
+Change social link
+→ Save
+→ Open public website
+→ Verify correct link.
+
+TEST E:
+Upload/replace logo
+→ Save
+→ Refresh admin
+→ Verify logo.
+
+TEST F:
+Open public homepage
+→ Verify same logo appears in navbar and footer.
+
+TEST G:
+Attempt admin settings API access without admin authorization
+→ Verify 401/403.
+
+TEST H:
+Switch Arabic/English
+→ Verify bilingual settings correctly display.
+
+==================================================
+14. DO NOT CHANGE UI
+==================================================
+
+The current Settings UI is approved.
+
+Do not redesign anything.
+
+Only fix confirmed:
+- Backend/API issues
+- Database issues
+- Upload/storage issues
+- Authorization issues
+- Validation issues
+- Security issues
+- Broken public synchronization
+
+==================================================
+15. TESTS
+==================================================
+
+Run all relevant automated tests.
+
+Perform runtime verification where possible.
+
+Check that previous modules remain functional:
+
+- Donations
+- Volunteer Requests
+- Contact Messages
+
+Do not introduce regressions.
+
+==================================================
+16. CHECKPOINT
+==================================================
+
+After the Website Settings audit and fixes are complete:
+
+CREATE A CHECKPOINT.
+
+Do not continue to the final project audit until the checkpoint is successfully created.
+
+==================================================
+FINAL REPORT
+==================================================
+
+Provide:
+
+1. VERIFIED WORKING
+2. REAL BACKEND/API INTEGRATION
+3. DATABASE INTEGRATION
+4. CONTACT SETTINGS
+5. SOCIAL MEDIA SETTINGS
+6. LOGO
+7. FAVICON
+8. IMAGE STORAGE
+9. PUBLIC WEBSITE SYNCHRONIZATION
+10. ARABIC / ENGLISH
+11. SECURITY
+12. AUTHORIZATION
+13. VALIDATION
+14. ISSUES FOUND
+15. FIXES APPLIED
+16. REMAINING LIMITATIONS
+
+For every issue include:
+
+- Module
+- File/path
+- Problem
+- Severity: Critical / High / Medium / Low
+- Recommended fix
+- Fixed or reported only
+
+At the very end explicitly confirm:
+
+CHECKPOINT:
+- Created: YES/NO
+- Checkpoint state: Website Settings verified
+- Tests: PASS/FAIL
+- Existing modules regression check: PASS/FAIL
