@@ -1,0 +1,103 @@
+Fix the public FAQ behavior exactly as follows.
+
+IMPORTANT:
+Do NOT redesign the FAQ UI.
+Do NOT change colors, typography, spacing, cards, or the existing visual design.
+
+REQUIRED BEHAVIOR:
+
+1. HOMEPAGE FAQ SECTION
+
+On the homepage, display ONLY the first 2 published FAQs.
+
+- Show exactly 2 FAQ items.
+- Do NOT show all FAQs on the homepage.
+- Do NOT use an accordion/dropdown interaction for the homepage FAQ section.
+- The FAQ questions/answers shown on the homepage should be simple static preview cards/items.
+- The "اقرأ المزيد" button/link must ALWAYS be visible.
+- Clicking "اقرأ المزيد" must navigate to:
+
+/faq
+
+It must NOT expand or collapse the FAQ.
+It must NOT reveal additional questions on the homepage.
+It must NOT require clicking an arrow first.
+
+2. FAQ PAGE
+
+The /faq page must display ALL published FAQs returned by the existing public FAQ API.
+
+- Show all published FAQ records.
+- Do not limit the list to 1 or 2.
+- Do not use frontend filtering that hides valid published FAQs.
+- Draft and Archived FAQs must remain hidden.
+- Use the existing API/database and existing FAQ architecture.
+
+3. FAQ DETAIL PAGE
+
+Keep the existing FAQ detail route:
+
+/faqs/:id
+
+The "اقرأ المزيد" link inside an individual FAQ preview/detail context should navigate to the correct FAQ detail page only where that behavior is already required.
+
+Do NOT turn "اقرأ المزيد" on the homepage into an accordion trigger.
+
+4. LANGUAGE
+
+Arabic:
+- Show Arabic question and answer.
+- Button text: "اقرأ المزيد"
+
+English:
+- Show English question and answer.
+- Button text should use the existing English translation.
+
+Do not hardcode one language when the site is switched to the other language.
+
+5. DATA
+
+Use the existing backend/API.
+
+Do NOT add mock data.
+Do NOT create duplicate FAQ records.
+Do NOT modify the database schema unless absolutely necessary.
+
+6. ACCEPTANCE TESTS
+
+Verify these exact scenarios:
+
+TEST 1:
+Open homepage → FAQ section shows exactly 2 published FAQs.
+
+TEST 2:
+The "اقرأ المزيد" button is visible immediately without clicking an arrow.
+
+TEST 3:
+Click "اقرأ المزيد" → browser navigates to /faq.
+
+TEST 4:
+The homepage FAQ section does NOT expand when clicking "اقرأ المزيد".
+
+TEST 5:
+Open /faq → ALL published FAQs are displayed.
+
+TEST 6:
+Draft/Archived FAQs do not appear on /faq.
+
+TEST 7:
+Switch to English → the same behavior works and English content is displayed.
+
+TEST 8:
+No Lorem Ipsum or placeholder FAQ content is displayed publicly.
+
+IMPORTANT:
+Do not modify unrelated modules or pages.
+
+After implementing, report:
+- Files modified
+- Exact homepage FAQ behavior
+- Exact /faq behavior
+- API used
+- Number of published FAQs currently displayed on /faq
+- Tests performed and results

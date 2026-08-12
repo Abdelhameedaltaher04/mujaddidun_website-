@@ -71,7 +71,6 @@ export default function HomePage() {
   const activePrograms = usePublicProgramsList({ status: 'active', per_page: 3 });
   const homePrograms = (activePrograms.data?.data ?? []).slice(0, 3);
   const ArrowIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
-  const [faqExpanded, setFaqExpanded] = useState(false);
   const faqsQuery = usePublicFaqs();
   const publicFaqs = faqsQuery.data ?? [];
 
@@ -554,81 +553,42 @@ export default function HomePage() {
           />
           {faqsQuery.isLoading ? (
             <div className="space-y-4" data-testid="home-faq-loading">
-              {[1, 2, 3].map((i) => (
-                <Skeleton key={i} className="h-[76px] w-full rounded-2xl" />
+              {[1, 2].map((i) => (
+                <Skeleton key={i} className="h-[120px] w-full rounded-2xl" />
               ))}
             </div>
           ) : (
-            <>
-              <div className="space-y-4" id="home-faq-items">
-                {publicFaqs.map((faq, i) => (
-                  <div
-                    key={faq.id}
-                    className={cn(
-                      'grid transition-[grid-template-rows,opacity] duration-500 ease-in-out',
-                      i > 1 && !faqExpanded
-                        ? 'grid-rows-[0fr] opacity-0 pointer-events-none'
-                        : 'grid-rows-[1fr] opacity-100',
+            <div className="space-y-4" id="home-faq-items">
+              {/* Static preview of the first 2 published FAQs; full list lives on /faq. */}
+              {publicFaqs.slice(0, 2).map((faq) => (
+                <div
+                  key={faq.id}
+                  className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm p-6"
+                  data-testid={`home-faq-item-${faq.id}`}
+                >
+                  <div className="flex flex-col gap-1 font-bold text-foreground">
+                    {faq.category && (
+                      <span className="text-xs font-semibold text-secondary">
+                        {t(`faq.categories.${faq.category}`)}
+                      </span>
                     )}
-                  >
-                    <div className="min-h-0 overflow-hidden">
-                      {/* Card wrapper so the read-more link stays visible while the accordion collapses. */}
-                      <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
-                        <details className="group [&_summary::-webkit-details-marker]:hidden">
-                          <summary className="flex items-center justify-between p-6 font-bold cursor-pointer hover:bg-muted/50 transition-colors focus-ring-standard text-foreground">
-                            <span className="pe-4 flex flex-col gap-1">
-                              {faq.category && (
-                                <span className="text-xs font-semibold text-secondary">
-                                  {t(`faq.categories.${faq.category}`)}
-                                </span>
-                              )}
-                              <span>{faqQuestion(faq, homeLang)}</span>
-                            </span>
-                            <span className="w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center shrink-0 group-open:rotate-180 transition-transform">
-                              <ChevronLeft className="w-5 h-5 -rotate-90" />
-                            </span>
-                          </summary>
-                          <div className="px-6 pb-2 text-muted-foreground leading-relaxed">
-                            {faqAnswer(faq, homeLang)}
-                          </div>
-                        </details>
-                        {/* Always visible regardless of accordion state. */}
-                        <div className="px-6 pb-5">
-                          <Link
-                            href={`/faqs/${faq.id}`}
-                            className="font-bold text-primary underline-offset-4 hover:underline focus-ring-standard rounded-md"
-                            data-testid={`link-home-faq-details-${faq.id}`}
-                          >
-                            {t('common.readMore')}
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
+                    <span>{faqQuestion(faq, homeLang)}</span>
                   </div>
-                ))}
-              </div>
-              {publicFaqs.length > 2 && (
-                <div className="text-center mt-8">
-                  <Button
-                    type="button"
-                    variant="link"
-                    className="font-bold text-primary text-lg"
-                    onClick={() => setFaqExpanded((expanded) => !expanded)}
-                    aria-expanded={faqExpanded}
-                    aria-controls="home-faq-items"
-                    data-testid="button-faq-toggle"
-                  >
-                    {faqExpanded ? t('common.readLess') : t('common.readMore')}
-                    <ArrowIcon
-                      className={cn(
-                        'w-5 h-5 ms-2 transition-transform duration-300',
-                        faqExpanded && 'rotate-180',
-                      )}
-                    />
-                  </Button>
+                  <p className="mt-3 text-muted-foreground leading-relaxed">
+                    {faqAnswer(faq, homeLang)}
+                  </p>
+                  <div className="mt-4">
+                    <Link
+                      href="/faq"
+                      className="font-bold text-primary underline-offset-4 hover:underline focus-ring-standard rounded-md"
+                      data-testid={`link-home-faq-more-${faq.id}`}
+                    >
+                      {t('common.readMore')}
+                    </Link>
+                  </div>
                 </div>
-              )}
-            </>
+              ))}
+            </div>
           )}
         </div>
       </SectionWrapper>
