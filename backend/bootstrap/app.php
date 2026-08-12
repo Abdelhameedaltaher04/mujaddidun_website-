@@ -24,6 +24,18 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'active' => \App\Http\Middleware\EnsureUserIsActive::class,
         ]);
+
+        // API-only backend: there is no named `login` web route, so guests
+        // hitting protected endpoints without an Accept: application/json
+        // header must still get a JSON 401, not a redirect attempt that
+        // blows up with "Route [login] not defined" (500).
+        $middleware->redirectGuestsTo(function (Request $request) {
+            if ($request->is('api/*')) {
+                return null; // fall through to the JSON 401 renderer
+            }
+
+            return '/login';
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(function (Request $request, \Throwable $e): bool {

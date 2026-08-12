@@ -54,6 +54,16 @@ class ContactMessageApiTest extends TestCase
         ], $attributes));
     }
 
+    public function test_unauthenticated_request_without_accept_header_gets_json_401(): void
+    {
+        // Regression: guests hitting protected API routes with a plain
+        // browser-style request (no Accept: application/json) used to trigger
+        // a "Route [login] not defined" 500 instead of a JSON 401.
+        $this->get('/api/v1/contact-messages')
+            ->assertUnauthorized()
+            ->assertJson(['success' => false, 'message' => 'Unauthenticated.']);
+    }
+
     public function test_authorization_matrix(): void
     {
         $message = $this->makeMessage();

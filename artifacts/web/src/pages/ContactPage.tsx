@@ -62,7 +62,8 @@ export default function ContactPage() {
       const { fields, status } = getApiError(error);
       const fieldErrors: FormErrors = {};
       (['name', 'email', 'phone', 'subject', 'message'] as const).forEach((field) => {
-        if (fields?.[field]?.length) fieldErrors[field] = fields[field][0];
+        // fields values are pre-joined strings — assign whole, never [0].
+        if (fields?.[field]) fieldErrors[field] = fields[field];
       });
       setErrors(fieldErrors);
       if (Object.keys(fieldErrors).length > 0) {
