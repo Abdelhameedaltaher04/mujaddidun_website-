@@ -264,7 +264,7 @@ export default function HomePage() {
               </Link>
             </Button>
           </div>
-          <div className="relative order-first lg:order-none w-full lg:-translate-x-4 lg:scale-[1.04]">
+          <div className="relative order-first lg:order-none w-full max-w-sm sm:max-w-md lg:max-w-none mx-auto lg:mx-0 lg:-translate-x-4 lg:scale-[1.04]">
             <div className="aspect-[7/5] rounded-3xl bg-primary/5 border border-primary/10 overflow-hidden shadow-xl shadow-primary/10">
               <img
                 src={about?.image_url || logoUrl}

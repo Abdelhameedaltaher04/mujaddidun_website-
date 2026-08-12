@@ -32,7 +32,7 @@ export function AuthLayout({ eyebrow, title, description, children, footer }: Au
 
   return (
     <main dir={dir} className="min-h-[100dvh] overflow-hidden bg-[#f7fbfc] text-foreground">
-      <div className="mx-auto grid min-h-[100dvh] max-w-[1440px] lg:grid-cols-12">
+      <div className="grid min-h-[100dvh] w-full lg:grid-cols-12">
         <section className="relative flex flex-col justify-between overflow-hidden bg-primary px-6 py-6 text-primary-foreground sm:px-10 lg:order-2 lg:col-span-5 lg:px-14 lg:py-10">
           <div className="pointer-events-none absolute -end-28 -top-28 h-72 w-72 rounded-full border border-white/15" />
           <div className="pointer-events-none absolute -bottom-36 -start-24 h-96 w-96 rounded-full border-[28px] border-secondary/20" />

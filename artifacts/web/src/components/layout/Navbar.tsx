@@ -126,6 +126,7 @@ export function Navbar() {
   };
 
   return (
+    <>
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <MainContainer width="wide">
         <div className="flex h-16 items-center justify-between gap-4">
@@ -283,14 +284,17 @@ export function Navbar() {
         </div>
       </MainContainer>
 
-      {/* Full-screen mobile navigation overlay */}
+    </header>
+
+      {/* Full-screen mobile navigation overlay — rendered OUTSIDE <header> so
+          the header's z-50 stacking context does not clip it. */}
       {mobileOpen && (
         <div
           id="mobile-menu"
           role="dialog"
           aria-modal="true"
           aria-label={t('nav.mainNavigation')}
-          className="fixed inset-0 z-[60] lg:hidden flex flex-col bg-background motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-top-4 motion-safe:duration-300"
+          className="fixed inset-0 z-[100] lg:hidden flex flex-col bg-background motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-top-4 motion-safe:duration-300"
           data-testid="nav-mobile"
         >
           {/* Subtle brand accents */}
@@ -434,6 +438,6 @@ export function Navbar() {
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }

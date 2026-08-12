@@ -1,0 +1,94 @@
+Please make the following updates and fixes across the application.
+
+### 1. Make the Login Page full width
+
+* Update the Login page so it properly uses the **full available viewport width**.
+* Remove any unnecessary max-width/container restriction that is causing the page to appear narrow.
+* Keep the login form visually centered and properly spaced.
+* Make sure the layout is responsive on desktop, tablet, and mobile.
+* Do not stretch the login form itself unnecessarily; the **page/layout should use the full width**, while the form can retain a sensible readable width.
+* Preserve the existing design, branding, colors, and functionality.
+
+### 2. Fix the Burger Menu on Mobile
+
+The mobile burger/hamburger menu is not working correctly.
+
+Please:
+
+* Inspect the existing mobile navigation implementation.
+* Make sure tapping the burger icon reliably opens the mobile menu.
+* Make sure tapping it again closes the menu.
+* Make sure the menu is actually visible when opened and does not appear behind other elements.
+* Fix any z-index, positioning, overflow, state, or event-handler issues.
+* Make sure clicking a navigation item closes the mobile menu when appropriate.
+* Make sure the burger icon itself changes correctly between open/closed states if the existing design supports this.
+* Test the menu in different mobile screen sizes.
+* Make sure the fix works correctly in both **English LTR** and **Arabic RTL**.
+
+### 3. Reduce the About Page Image on Mobile
+
+On the **About** page, the image is too large on mobile.
+
+Please:
+
+* Reduce the image size specifically for mobile/tablet breakpoints.
+* Keep the image responsive and maintain its aspect ratio.
+* Make sure it does not dominate the page or cause unnecessary scrolling.
+* Do not reduce the desktop image unnecessarily; keep the existing desktop appearance.
+* Make sure the layout still looks balanced in both English and Arabic/RTL.
+
+### 4. `programs.categories.empowerment` STILL appears — FIX THE ROOT CAUSE
+
+The following raw translation key is **still visible to users**:
+
+`programs.categories.empowerment`
+
+This must be completely fixed.
+
+Please do not simply hide or replace the text in one component. Find the actual source of the problem.
+
+Check all of the following:
+
+* Translation/i18n files.
+* English translation files.
+* Arabic translation files.
+* Translation namespaces.
+* The `programs.categories` translation structure.
+* The component/page where the category is rendered.
+* Any dynamically generated program categories.
+* Any fallback translation logic.
+* Any incorrect `useTranslation()` namespace.
+* Any mismatch between the translation key used by the frontend and the key defined in the translation files.
+* Any hardcoded `programs.categories.empowerment` value coming from API/database/mock data that is being rendered directly instead of translated.
+
+### Required behavior
+
+If the category value is `empowerment`, it should display the proper human-readable translated label:
+
+* **English:** Empowerment
+* **Arabic:** التمكين
+
+Do not display the raw key under any circumstances.
+
+If the category is coming from backend/API data as `empowerment`, correctly map that value through the translation system before displaying it.
+
+### Final verification
+
+After making all changes, test:
+
+* Login page on desktop and mobile.
+* Mobile burger menu open/close behavior.
+* About page image on mobile and desktop.
+* Programs Management page.
+* Any other page where program categories are displayed.
+* English/LTR mode.
+* Arabic/RTL mode.
+* Search and existing dashboard functionality.
+
+Search the entire codebase for:
+
+`programs.categories.empowerment`
+
+and verify that there is no remaining incorrect usage that could cause the raw translation key to appear in the UI.
+
+Do not introduce unrelated design changes or remove existing functionality.
