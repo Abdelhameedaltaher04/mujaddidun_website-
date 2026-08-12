@@ -1,0 +1,255 @@
+Add the following real FAQ content to the existing FAQ database so the public FAQ page has a useful set of published questions.
+
+IMPORTANT:
+
+- Do NOT modify the FAQ UI.
+- Do NOT modify the FAQ API.
+- Do NOT create mock/demo data.
+- Do NOT create duplicate FAQs if equivalent records already exist.
+- Use the existing Admin FAQ database structure.
+- All new FAQs must be created as PUBLISHED.
+- Preserve the existing FAQ with ID 3 if it already contains the correct real content.
+- Arabic and English content must both be provided.
+- Use the existing category system.
+- Use proper display_order values.
+- Do not modify Draft or Archived records unless necessary.
+- Do not change authentication or authorization.
+
+================================================
+FAQ 1
+================================================
+
+Arabic Question:
+ما هي أهداف جمعية مجددون؟
+
+English Question:
+What are the goals of Mujaddidun Association?
+
+Arabic Answer:
+تسعى جمعية مجددون إلى تقديم الدعم والرعاية للفئات المحتاجة من خلال مشاريع تنموية مستدامة، والمساهمة في بناء مجتمع متكافل ومتمكن، مع التركيز على مشاريع الإطعام والإيواء والتمكين.
+
+English Answer:
+Mujaddidun Association aims to support and care for people in need through sustainable development projects, contributing to an empowered and supportive community, with a focus on food assistance, shelter, and empowerment initiatives.
+
+Category:
+عام
+
+Display Order:
+1
+
+Status:
+Published
+
+================================================
+FAQ 2
+================================================
+
+Arabic Question:
+كيف يمكنني دعم مشاريع جمعية مجددون؟
+
+English Question:
+How can I support Mujaddidun Association projects?
+
+Arabic Answer:
+يمكنك دعم مشاريع جمعية مجددون من خلال التبرع، أو التطوع، أو المساهمة في نشر مبادرات الجمعية وبرامجها، أو من خلال الشراكة والدعم المؤسسي.
+
+English Answer:
+You can support Mujaddidun Association projects by donating, volunteering, sharing the association's initiatives and programs, or through partnerships and institutional support.
+
+Category:
+التبرعات
+
+Display Order:
+2
+
+Status:
+Published
+
+================================================
+FAQ 3
+================================================
+
+Arabic Question:
+كيف يمكنني التبرع لجمعية مجددون؟
+
+English Question:
+How can I donate to Mujaddidun Association?
+
+Arabic Answer:
+يمكنك التبرع من خلال صفحة التبرعات على الموقع واختيار طريقة التبرع المناسبة، ثم اتباع الخطوات الموضحة لإتمام العملية.
+
+English Answer:
+You can donate through the donation page on the website by selecting the appropriate donation method and following the instructions to complete the donation.
+
+Category:
+التبرعات
+
+Display Order:
+3
+
+Status:
+Published
+
+================================================
+FAQ 4
+================================================
+
+Arabic Question:
+كيف يمكنني التطوع مع جمعية مجددون؟
+
+English Question:
+How can I volunteer with Mujaddidun Association?
+
+Arabic Answer:
+يمكنك التقديم للتطوع من خلال نموذج طلبات التطوع على الموقع، واختيار البرنامج أو المجال المناسب لمهاراتك واهتماماتك، ثم إرسال الطلب لمراجعته من فريق الجمعية.
+
+English Answer:
+You can apply to volunteer through the volunteer application form on the website. Select a suitable program or area based on your skills and interests, then submit your application for review by the association team.
+
+Category:
+التطوع
+
+Display Order:
+4
+
+Status:
+Published
+
+================================================
+FAQ 5
+================================================
+
+Arabic Question:
+ما هي البرامج والمبادرات التي تقدمها جمعية مجددون؟
+
+English Question:
+What programs and initiatives does Mujaddidun Association offer?
+
+Arabic Answer:
+تقدم جمعية مجددون مجموعة من البرامج والمبادرات التنموية والمجتمعية التي تهدف إلى دعم الأفراد والأسر وتمكين المجتمع، ويمكن الاطلاع على البرامج والمبادرات الحالية من خلال الموقع الإلكتروني.
+
+English Answer:
+Mujaddidun Association offers a range of community and development programs and initiatives aimed at supporting individuals and families and empowering the community. Current programs and initiatives can be viewed through the website.
+
+Category:
+البرامج
+
+Display Order:
+5
+
+Status:
+Published
+
+================================================
+FAQ 6
+================================================
+
+Arabic Question:
+كيف يمكنني التسجيل في فعاليات جمعية مجددون؟
+
+English Question:
+How can I register for Mujaddidun Association events?
+
+Arabic Answer:
+يمكنك الاطلاع على الفعاليات المتاحة من خلال صفحة الفعاليات على الموقع، ثم اختيار الفعالية المناسبة وإكمال نموذج التسجيل إذا كان التسجيل متاحًا.
+
+English Answer:
+You can view available events through the Events page on the website, select the appropriate event, and complete the registration form if registration is available.
+
+Category:
+الفعاليات
+
+Display Order:
+6
+
+Status:
+Published
+
+================================================
+FAQ 7
+================================================
+
+Arabic Question:
+كيف يمكنني التواصل مع جمعية مجددون؟
+
+English Question:
+How can I contact Mujaddidun Association?
+
+Arabic Answer:
+يمكنك التواصل مع جمعية مجددون من خلال نموذج اتصل بنا على الموقع أو باستخدام معلومات الاتصال الرسمية الموجودة في الموقع.
+
+English Answer:
+You can contact Mujaddidun Association through the Contact Us form on the website or by using the official contact information provided on the website.
+
+Category:
+عام
+
+Display Order:
+7
+
+Status:
+Published
+
+================================================
+FAQ 8
+================================================
+
+Arabic Question:
+هل يمكن للمؤسسات والشركات التعاون مع جمعية مجددون؟
+
+English Question:
+Can organizations and companies partner with Mujaddidun Association?
+
+Arabic Answer:
+نعم، ترحب جمعية مجددون بالشراكات والتعاون مع المؤسسات والشركات والجهات المختلفة لدعم المبادرات والمشاريع التنموية والمجتمعية.
+
+English Answer:
+Yes. Mujaddidun Association welcomes partnerships and collaboration with organizations, companies, and other entities to support community and development initiatives and projects.
+
+Category:
+الشراكات
+
+Display Order:
+8
+
+Status:
+Published
+
+================================================
+IMPORTANT DUPLICATE CHECK
+================================================
+
+Before inserting each FAQ:
+
+- Check existing records by Arabic question.
+- Check existing records by English question.
+- If an equivalent FAQ already exists, do NOT create a duplicate.
+- If the existing FAQ is already correct and published, keep it.
+- If the existing FAQ is ID 3 ("ما هي أهداف جمعية مجددون؟"), preserve it and do not duplicate it.
+
+================================================
+FINAL VERIFICATION
+================================================
+
+After insertion:
+
+1. Verify the database contains the expected published FAQs.
+2. Verify GET /api/v1/public/faqs returns all published FAQs.
+3. Verify /faq displays all published FAQs.
+4. Verify Arabic displays Arabic content.
+5. Verify English displays English content.
+6. Verify display order is correct.
+7. Verify "اقرأ المزيد" appears for every FAQ.
+8. Verify each "اقرأ المزيد" links to the correct /faqs/{id}.
+9. Verify Draft and Archived FAQs remain hidden from the public API.
+10. Verify no Lorem Ipsum or placeholder FAQ content is publicly visible.
+
+Do not modify unrelated modules.
+
+Finally report:
+
+- Number of FAQs added.
+- Number skipped because they already existed.
+- Final number of published FAQs.
+- IDs of the published FAQs.
+- Any remaining issues.
