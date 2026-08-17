@@ -577,17 +577,15 @@ export default function HomePage() {
                   <p className="mt-3 text-muted-foreground leading-relaxed">
                     {faqAnswer(faq, homeLang)}
                   </p>
-                  <div className="mt-4">
-                    <Link
-                      href="/faq"
-                      className="font-bold text-primary underline-offset-4 hover:underline focus-ring-standard rounded-md"
-                      data-testid={`link-home-faq-more-${faq.id}`}
-                    >
-                      {t('common.readMore')}
-                    </Link>
-                  </div>
                 </div>
               ))}
+              <div className="mt-8 flex justify-center">
+                <Button size="lg" className="px-8 font-bold shadow-sm hover-elevate" asChild data-testid="button-home-faq-read-more">
+                  <Link href="/faq">
+                    {t('common.readMore')}
+                  </Link>
+                </Button>
+              </div>
             </div>
           )}
         </div>
