@@ -23,6 +23,8 @@ interface AuthContextValue {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string, remember?: boolean) => Promise<AuthUser>;
+  /** Completes Google Sign-In from the one-time code returned by the backend. */
+  loginWithGoogleCode: (code: string, remember?: boolean) => Promise<AuthUser>;
   register: (input: RegisterInput) => Promise<AuthUser>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<AuthUser | null>;
@@ -74,6 +76,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const loginWithGoogleCode = useCallback(async (code: string, remember = true) => {
+    const result = await authApi.exchangeGoogleCode(code);
+    storeAccessToken(result.token, remember);
+    const currentUser = await authApi.me();
+    setUser(currentUser);
+    return currentUser;
+  }, []);
+
   const register = useCallback(async (input: RegisterInput) => {
     const result = await authApi.register(input);
     return result.user;
@@ -94,11 +104,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isLoading,
       isAuthenticated: Boolean(user),
       login,
+      loginWithGoogleCode,
       register,
       logout,
       refreshUser,
     }),
-    [user, isLoading, login, register, logout, refreshUser],
+    [user, isLoading, login, loginWithGoogleCode, register, logout, refreshUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -31,9 +31,11 @@ class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
         'first_name',
         'last_name',
         'email',
+        'google_id',
         'phone',
         'country_code',
         'avatar_path',
+        'google_avatar_url',
         'bio',
         'locale',
         'status',
@@ -48,7 +50,14 @@ class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'google_id',
     ];
+
+    /** A Google-only account has no password of its own. */
+    public function hasPassword(): bool
+    {
+        return $this->password !== null && $this->password !== '';
+    }
 
     /**
      * Get the attributes that should be cast.

@@ -93,6 +93,19 @@ export const authApi = {
     return response.data.data;
   },
 
+  /**
+   * Exchanges the one-time code from the Google callback for the same
+   * `{user, token, token_type}` payload that `/auth/login` returns. The token
+   * travels in this response body, never in a URL.
+   */
+  async exchangeGoogleCode(code: string) {
+    const response = await apiClient.post<ApiEnvelope<AuthPayload>>(
+      '/auth/google/exchange',
+      { code },
+    );
+    return response.data.data;
+  },
+
   async me() {
     const response = await apiClient.get<ApiEnvelope<{ user: AuthUser }>>(
       '/auth/me',

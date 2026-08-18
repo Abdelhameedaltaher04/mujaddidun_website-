@@ -8,6 +8,7 @@ import { useLocale } from '@/contexts/LocaleContext';
 import { CountryPhoneField, type PhoneCountry } from '@/components/forms/CountryPhoneField';
 import { isValidPhoneNumber, type CountryCode } from 'libphonenumber-js';
 import { authApi } from '@/services/auth';
+import { startGoogleSignIn } from '@/lib/googleAuth';
 import { getApiError } from '@/services/api';
 
 interface RegisterErrors {
@@ -115,9 +116,14 @@ export default function RegisterPage() {
       <div className="mb-5 space-y-3">
         <GoogleAuthButton
           label={t('auth.socialLogin.registerWithGoogle')}
-          onClick={() => setGoogleAuthRequested(true)}
+          onClick={() => {
+            setGoogleAuthRequested(true);
+            // Google sign-up and sign-in are the same OAuth flow; Laravel
+            // creates the account on first use.
+            startGoogleSignIn();
+          }}
           testId="button-register-google"
-          disabled={isSubmitting}
+          disabled={isSubmitting || googleAuthRequested}
         />
         <AuthDivider />
       </div>
@@ -187,22 +193,23 @@ export default function RegisterPage() {
         <FormError message={formError} testId="error-register-form" />
           <AuthSubmitButton loading={isSubmitting} label={t('auth.register.submit')} loadingLabel={t('common.loading')} testId="button-register-submit" />
       </form>
+      {/* Google sign-up navigates straight to Laravel, so it no longer opens
+          this dialog — `googleAuthRequested` only disables the button while
+          the browser is leaving the page. */}
       <AuthFeedbackDialog
-        open={feedback !== null || googleAuthRequested}
+        open={feedback !== null}
         kind="success"
-        title={googleAuthRequested ? t('auth.socialLogin.title') : t('auth.register.successTitle')}
-        description={googleAuthRequested ? t('auth.socialLogin.description') : t('auth.register.successDescription')}
-        actionLabel={googleAuthRequested ? t('auth.feedback.close') : t('auth.register.verifyEmail')}
+        title={t('auth.register.successTitle')}
+        description={t('auth.register.successDescription')}
+        actionLabel={t('auth.register.verifyEmail')}
         onOpenChange={(open) => {
           if (!open) {
             setFeedback(null);
-            setGoogleAuthRequested(false);
           }
         }}
         onAction={() => {
           const current = feedback;
           setFeedback(null);
-          setGoogleAuthRequested(false);
           if (current === 'success') setLocation(`/verify-email?email=${encodeURIComponent(form.email.trim())}`);
         }}
       />

@@ -16,6 +16,14 @@ export const apiClient = axios.create({
 });
 
 /**
+ * Absolute (or root-relative) base of the Laravel API, version prefix included.
+ * Exported for the few flows that must leave the SPA entirely — the Google
+ * OAuth redirect is a full browser navigation, not an XHR, so it cannot go
+ * through `apiClient`.
+ */
+export const API_BASE_URL = API_URL;
+
+/**
  * Origin of the Laravel API, or '' when VITE_API_URL is same-origin relative
  * (e.g. the production '/api/v1', which is already proxied by the web server).
  */

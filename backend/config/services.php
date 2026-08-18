@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    // Google Sign-In (Socialite). Credentials come from the environment only —
+    // never commit them. The redirect URI must match the one registered in the
+    // Google Cloud Console exactly, including scheme, host, port and path.
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI', 'http://127.0.0.1:8000/api/v1/auth/google/callback'),
+    ],
+
 ];

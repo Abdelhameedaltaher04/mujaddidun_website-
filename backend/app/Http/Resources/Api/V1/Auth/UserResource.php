@@ -22,9 +22,13 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'country_code' => $this->country_code,
             'avatar_path' => $this->avatar_path,
+            // An uploaded avatar always wins; the Google picture is only a
+            // fallback for accounts that have never uploaded one. Google
+            // returns an absolute URL, which the frontend passes through
+            // unchanged, while local paths keep the /api/v1/files prefix.
             'avatar_url' => $this->avatar_path
                 ? '/api/v1/files/'.$this->avatar_path
-                : null,
+                : ($this->google_avatar_url ?: null),
             'bio' => $this->bio,
             'locale' => $this->locale,
             'status' => $this->status,

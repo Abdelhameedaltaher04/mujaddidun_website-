@@ -6,6 +6,7 @@ import { Mail } from 'lucide-react';
 import { AuthDivider, AuthFeedbackDialog, AuthFooterLink, AuthLayout, AuthSubmitButton, FieldError, FormError, GoogleAuthButton, PasswordField } from '@/components/auth/AuthLayout';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { startGoogleSignIn } from '@/lib/googleAuth';
 import { getApiError } from '@/services/api';
 
 interface LoginErrors {
@@ -135,9 +136,13 @@ export default function LoginPage() {
       <div className="mb-5 space-y-3">
         <GoogleAuthButton
           label={t('auth.socialLogin.loginWithGoogle')}
-          onClick={() => setGoogleAuthRequested(true)}
+          onClick={() => {
+            setGoogleAuthRequested(true);
+            // Hand the browser to Laravel, which owns the OAuth exchange.
+            startGoogleSignIn(new URLSearchParams(window.location.search).get('redirect') ?? undefined);
+          }}
           testId="button-login-google"
-          disabled={isSubmitting || rateLimitSeconds > 0}
+          disabled={isSubmitting || rateLimitSeconds > 0 || googleAuthRequested}
         />
         <AuthDivider />
       </div>
@@ -208,22 +213,23 @@ export default function LoginPage() {
          <FormError message={formError} testId="error-login-form" />
       </form>
 
+      {/* Google sign-in now navigates straight to Laravel, so it no longer
+          opens this dialog — `googleAuthRequested` only disables the button
+          while the browser is leaving the page. */}
       <AuthFeedbackDialog
-        open={feedback !== null || googleAuthRequested}
+        open={feedback !== null}
         kind="success"
-        title={googleAuthRequested ? t('auth.socialLogin.title') : t('auth.login.successTitle')}
-        description={googleAuthRequested ? t('auth.socialLogin.description') : t('auth.login.successDescription')}
-        actionLabel={googleAuthRequested ? t('auth.feedback.close') : t('auth.feedback.continue')}
+        title={t('auth.login.successTitle')}
+        description={t('auth.login.successDescription')}
+        actionLabel={t('auth.feedback.continue')}
         onOpenChange={(open) => {
           if (!open) {
             setFeedback(null);
-            setGoogleAuthRequested(false);
           }
         }}
         onAction={() => {
           const current = feedback;
           setFeedback(null);
-          setGoogleAuthRequested(false);
            if (current === 'success') {
              const params = new URLSearchParams(window.location.search);
              const redirect = params.get('redirect');

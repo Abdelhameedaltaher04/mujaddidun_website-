@@ -37,6 +37,7 @@ import RegisterPage from '@/pages/register';
 import ForgotPasswordPage from '@/pages/forgot-password';
 import ResetPasswordPage from '@/pages/reset-password';
 import VerifyEmailPage from '@/pages/verify-email';
+import GoogleCallbackPage from '@/pages/auth-google-callback';
 import ProfilePage from '@/pages/ProfilePage';
 import ForbiddenPage from '@/pages/forbidden';
 import NotFound from '@/pages/not-found';
@@ -99,6 +100,8 @@ function Router() {
       <Route path="/forgot-password" component={ForgotPasswordPage} />
       <Route path="/reset-password" component={ResetPasswordPage} />
       <Route path="/verify-email" component={VerifyEmailPage} />
+      {/* Laravel redirects here after the Google OAuth callback. */}
+      <Route path="/auth/google/callback" component={GoogleCallbackPage} />
       <Route path="/profile" component={ProfilePage} />
       <Route path="/403" component={ForbiddenPage} />
       <Route path="/admin">

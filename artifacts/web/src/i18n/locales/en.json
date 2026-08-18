@@ -472,7 +472,25 @@
       "registerWithGoogle": "Sign up with Google",
       "title": "Continue with Google",
       "description": "Google sign-in will be enabled once the Laravel OAuth integration is connected.",
-      "comingSoon": "Social sign-in will be available soon."
+      "comingSoon": "Social sign-in will be available soon.",
+      "connecting": "Completing Google sign-in…",
+      "successTitle": "Signed in",
+      "failedTitle": "Google sign-in failed",
+      "backToLogin": "Back to sign in",
+      "errors": {
+        "cancelled": "Google sign-in was cancelled.",
+        "invalid_state": "Your sign-in session expired. Please try again.",
+        "missing_email": "Your Google account did not provide an email address. Please sign in with email and password.",
+        "missing_google_id": "Google account details could not be read. Please try again.",
+        "email_linked_to_other_google_account": "This email address is already linked to a different Google account. Please sign in with your email and password.",
+        "account_disabled": "This account has been disabled. Please contact an administrator.",
+        "provider_unavailable": "Could not reach Google. Please try again later.",
+        "provider_error": "Google refused the sign-in request. Please try again.",
+        "callback_failed": "Google sign-in could not be completed. Please try again.",
+        "google_not_configured": "Google sign-in is not enabled on this server.",
+        "invalid_or_expired_code": "This sign-in link has expired. Please try again.",
+        "generic": "Google sign-in could not be completed. Please try again."
+      }
     },
     "sessionExpired": {
       "title": "Your session has expired",

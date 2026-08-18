@@ -52,7 +52,10 @@ class AuthService
     {
         $user = User::query()->with('role')->where('email', $email)->first();
 
-        if (! $user || ! Hash::check($password, $user->password)) {
+        // A Google-only account has a null password. Reject it here with the
+        // same generic outcome as a wrong password so this endpoint cannot be
+        // used to enumerate which addresses are registered or how they sign in.
+        if (! $user || ! $user->hasPassword() || ! Hash::check($password, $user->password)) {
             return null;
         }
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Auth\GoogleAuthController;
 use App\Http\Controllers\Api\V1\Events\EventAdminController;
 use App\Http\Controllers\Api\V1\Events\EventRegistrationController;
 use App\Http\Controllers\Api\V1\Files\PublicFileController;
@@ -53,6 +54,28 @@ Route::prefix('auth')->group(function (): void {
         ->name('verification.verify');
     Route::post('/email/resend', [AuthController::class, 'resendVerification'])
         ->middleware('throttle:6,1');
+
+    // Google Sign-In. These two endpoints are browser navigations rather than
+    // XHR, so they carry session middleware: Socialite stores the OAuth `state`
+    // value in the session and validates it on the way back, which is the
+    // OAuth 2.0 CSRF defence. The rest of the API stays stateless. CSRF token
+    // verification does not apply to GET, so no protection is being skipped.
+    Route::middleware([
+        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+    ])->group(function (): void {
+        Route::get('/google', [GoogleAuthController::class, 'redirect'])
+            ->middleware('throttle:15,1')
+            ->name('auth.google.redirect');
+        Route::get('/google/callback', [GoogleAuthController::class, 'callback'])
+            ->middleware('throttle:15,1')
+            ->name('auth.google.callback');
+    });
+
+    // Exchanges the one-time claim code from the callback for the bearer token.
+    Route::post('/google/exchange', [GoogleAuthController::class, 'exchange'])
+        ->middleware('throttle:15,1')
+        ->name('auth.google.exchange');
 
     Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
         Route::post('/logout', [AuthController::class, 'logout']);

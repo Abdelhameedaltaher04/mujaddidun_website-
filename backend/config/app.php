@@ -56,6 +56,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Frontend URL
+    |--------------------------------------------------------------------------
+    |
+    | Origin of the SPA. Used to build the URLs the backend redirects a browser
+    | back to (e.g. after the Google OAuth callback) and the links placed in
+    | notification emails. Read from config rather than env() directly so it
+    | survives `php artisan config:cache`.
+    |
+    */
+
+    'frontend_url' => env('FRONTEND_URL', env('APP_URL', 'http://localhost:5173')),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
