@@ -4,7 +4,7 @@
  *   GET /public/gallery/albums/{id}          (detail; 404 for draft/archived)
  *   GET /public/gallery/albums/{id}/images   (paginated images of a published album)
  */
-import { apiClient, type ApiEnvelope } from './api';
+import { apiClient, resolveFileUrl, type ApiEnvelope } from './api';
 
 export interface PublicGalleryAlbum {
   id: number;
@@ -41,6 +41,17 @@ export interface PublicGalleryMeta {
 
 type ListEnvelope<T> = ApiEnvelope<T[]> & { meta: PublicGalleryMeta };
 
+/** Rebases media URLs onto the API origin. Order and all other fields are untouched. */
+const withAlbumUrl = (album: PublicGalleryAlbum): PublicGalleryAlbum => ({
+  ...album,
+  cover_image_url: resolveFileUrl(album.cover_image_url),
+});
+
+const withImageUrl = (image: PublicGalleryImage): PublicGalleryImage => ({
+  ...image,
+  url: resolveFileUrl(image.url),
+});
+
 export const publicGalleryApi = {
   /** GET /public/gallery/albums */
   async listAlbums(page = 1, perPage = 12): Promise<{ data: PublicGalleryAlbum[]; meta: PublicGalleryMeta }> {
@@ -48,7 +59,7 @@ export const publicGalleryApi = {
       '/public/gallery/albums',
       { params: { page, per_page: perPage } },
     );
-    return { data: response.data.data, meta: response.data.meta };
+    return { data: response.data.data.map(withAlbumUrl), meta: response.data.meta };
   },
 
   /** GET /public/gallery/albums/{id} */
@@ -56,7 +67,7 @@ export const publicGalleryApi = {
     const response = await apiClient.get<ApiEnvelope<PublicGalleryAlbum>>(
       `/public/gallery/albums/${id}`,
     );
-    return response.data.data;
+    return withAlbumUrl(response.data.data);
   },
 
   /** GET /public/gallery/albums/{id}/images */
@@ -65,6 +76,6 @@ export const publicGalleryApi = {
       `/public/gallery/albums/${id}/images`,
       { params: { page, per_page: perPage } },
     );
-    return { data: response.data.data, meta: response.data.meta };
+    return { data: response.data.data.map(withImageUrl), meta: response.data.meta };
   },
 };

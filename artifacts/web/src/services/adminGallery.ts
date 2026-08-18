@@ -19,7 +19,7 @@
  *   PATCH  /gallery/images/{id}/cover    (set as album cover)
  */
 import type { PaginatedResponse } from './adminNews';
-import { apiClient } from './api';
+import { apiClient, resolveFileUrl } from './api';
 
 export type AlbumStatus = 'draft' | 'published' | 'archived';
 
@@ -109,6 +109,17 @@ interface Envelope<T> {
   meta?: PaginatedResponse<never>['meta'];
 }
 
+/** Rebases media URLs onto the API origin. Order and all other fields are untouched. */
+const withAlbumUrl = (album: GalleryAlbum): GalleryAlbum => ({
+  ...album,
+  cover_image_url: resolveFileUrl(album.cover_image_url),
+});
+
+const withImageUrl = (image: GalleryImage): GalleryImage => ({
+  ...image,
+  url: resolveFileUrl(image.url),
+});
+
 function albumFormData(input: AlbumInput): FormData {
   const form = new FormData();
   form.append('title_ar', input.title_ar);
@@ -133,7 +144,7 @@ export const adminGalleryAlbumsApi = {
       { params },
     );
     return {
-      data: data.data,
+      data: data.data.map(withAlbumUrl),
       meta: data.meta as PaginatedResponse<GalleryAlbum>['meta'],
     };
   },
@@ -143,7 +154,7 @@ export const adminGalleryAlbumsApi = {
     const { data } = await apiClient.get<Envelope<GalleryAlbum>>(
       `/gallery/albums/${id}`,
     );
-    return data.data;
+    return withAlbumUrl(data.data);
   },
 
   /** POST /gallery/albums */
@@ -153,7 +164,7 @@ export const adminGalleryAlbumsApi = {
       albumFormData(input),
       { headers: { 'Content-Type': 'multipart/form-data' } },
     );
-    return data.data;
+    return withAlbumUrl(data.data);
   },
 
   /** PUT /gallery/albums/{id} (multipart via _method=PUT) */
@@ -165,7 +176,7 @@ export const adminGalleryAlbumsApi = {
       form,
       { headers: { 'Content-Type': 'multipart/form-data' } },
     );
-    return data.data;
+    return withAlbumUrl(data.data);
   },
 
   /** PATCH /gallery/albums/{id}/status */
@@ -174,7 +185,7 @@ export const adminGalleryAlbumsApi = {
       `/gallery/albums/${id}/status`,
       { status },
     );
-    return data.data;
+    return withAlbumUrl(data.data);
   },
 
   /** DELETE /gallery/albums/{id} */
@@ -189,7 +200,7 @@ export const adminGalleryImagesApi = {
     const { data } = await apiClient.get<Envelope<GalleryImage[]>>(
       `/gallery/albums/${albumId}/images`,
     );
-    return data.data;
+    return data.data.map(withImageUrl);
   },
 
   /** POST /gallery/albums/{id}/images — multipart multi-file upload. */
@@ -217,7 +228,7 @@ export const adminGalleryImagesApi = {
         },
       },
     );
-    return data.data;
+    return data.data.map(withImageUrl);
   },
 
   /** PUT /gallery/images/{id} (multipart via _method=PUT) */
@@ -241,7 +252,7 @@ export const adminGalleryImagesApi = {
       form,
       { headers: { 'Content-Type': 'multipart/form-data' } },
     );
-    return data.data;
+    return withImageUrl(data.data);
   },
 
   /** DELETE /gallery/images/{id} */
@@ -254,6 +265,6 @@ export const adminGalleryImagesApi = {
     const { data } = await apiClient.patch<Envelope<GalleryImage>>(
       `/gallery/images/${id}/cover`,
     );
-    return data.data;
+    return withImageUrl(data.data);
   },
 };

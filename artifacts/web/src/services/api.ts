@@ -15,6 +15,28 @@ export const apiClient = axios.create({
   },
 });
 
+/**
+ * Origin of the Laravel API, or '' when VITE_API_URL is same-origin relative
+ * (e.g. the production '/api/v1', which is already proxied by the web server).
+ */
+const API_ORIGIN = /^[a-z][a-z0-9+.-]*:\/\//i.test(API_URL)
+  ? new URL(API_URL).origin
+  : '';
+
+/**
+ * Laravel resources return media as root-relative `/api/v1/files/...` paths.
+ * In development the SPA is served from a different origin than the API, so the
+ * browser would resolve them against the frontend origin and 404. This rebases
+ * such paths onto the API origin; absolute/data/blob URLs are left untouched.
+ */
+export function resolveFileUrl<T extends string | null | undefined>(url: T): T {
+  if (!url || !API_ORIGIN) return url;
+  if (/^([a-z][a-z0-9+.-]*:)?\/\//i.test(url) || /^(data|blob):/i.test(url)) {
+    return url;
+  }
+  return `${API_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}` as T;
+}
+
 function readToken(): string | null {
   try {
     return (
