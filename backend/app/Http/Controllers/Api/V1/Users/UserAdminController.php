@@ -8,10 +8,13 @@ use App\Http\Requests\Api\V1\Users\UpdateUserRequest;
 use App\Http\Requests\Api\V1\Users\UpdateUserRoleRequest;
 use App\Http\Requests\Api\V1\Users\UpdateUserStatusRequest;
 use App\Http\Resources\Api\V1\Users\AdminUserResource;
+use App\Mail\AccountActivatedMail;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class UserAdminController extends BaseController
 {
@@ -140,13 +143,47 @@ class UserAdminController extends BaseController
             return $this->error('You cannot change your own status.', [], 422);
         }
 
-        $user->update(['status' => $request->validated('status')]);
+        $status = $request->validated('status');
+        // Captured before the write so the notification fires only on a real
+        // transition into `active` — re-confirming an already-active account
+        // must not send a second activation email.
+        $wasActive = $user->status === 'active';
+
+        $user->update(['status' => $status]);
         $this->revokeTokensIfSuspended($user);
+
+        if ($status === 'active' && ! $wasActive) {
+            $this->sendActivationEmail($user);
+        }
 
         return $this->success(
             new AdminUserResource($user->load('role')),
             'User status updated successfully.',
         );
+    }
+
+    /**
+     * Tells the member their account was approved. Delivery problems must not
+     * fail the request: the status change is already committed and correct, so
+     * a mail outage would otherwise leave the admin retrying an action that
+     * actually succeeded. The failure is logged for the operator instead, and
+     * the exception is never surfaced to the client.
+     */
+    private function sendActivationEmail(User $user): void
+    {
+        if (blank($user->email)) {
+            return;
+        }
+
+        try {
+            Mail::to($user->email)->send(new AccountActivatedMail($user));
+        } catch (\Throwable $exception) {
+            Log::error('Account activation email could not be sent.', [
+                'user_id' => $user->id,
+                'exception' => $exception::class,
+                'message' => $exception->getMessage(),
+            ]);
+        }
     }
 
     /** PATCH /api/v1/users/{user}/role */

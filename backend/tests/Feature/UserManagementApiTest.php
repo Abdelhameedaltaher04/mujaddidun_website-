@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Mail\AccountActivatedMail;
 use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class UserManagementApiTest extends TestCase
@@ -162,6 +164,84 @@ class UserManagementApiTest extends TestCase
         $this->assertSame(0, $this->member->tokens()->count());
         $this->app['auth']->forgetGuards();
         $this->getJson('/api/v1/auth/me', $memberToken)->assertStatus(401);
+    }
+
+    public function test_activating_a_suspended_account_sends_one_activation_email(): void
+    {
+        Mail::fake();
+        $client = $this->makeUser('user', 'client@example.com', ['status' => 'suspended']);
+
+        $this->patchJson(
+            "/api/v1/users/{$client->id}/status",
+            ['status' => 'active'],
+            $this->actingAsToken($this->admin),
+        )->assertStatus(200)->assertJsonPath('data.status', 'active');
+
+        $this->assertSame('active', $client->fresh()->status);
+
+        Mail::assertSent(AccountActivatedMail::class, 1);
+        Mail::assertSent(
+            AccountActivatedMail::class,
+            fn (AccountActivatedMail $mail) => $mail->hasTo('client@example.com'),
+        );
+    }
+
+    public function test_reactivating_an_already_active_account_sends_no_email(): void
+    {
+        Mail::fake();
+
+        $this->patchJson(
+            "/api/v1/users/{$this->member->id}/status",
+            ['status' => 'active'],
+            $this->actingAsToken($this->admin),
+        )->assertStatus(200);
+
+        Mail::assertNothingSent();
+    }
+
+    public function test_suspending_an_account_sends_no_activation_email(): void
+    {
+        Mail::fake();
+
+        $this->patchJson(
+            "/api/v1/users/{$this->member->id}/status",
+            ['status' => 'suspended'],
+            $this->actingAsToken($this->admin),
+        )->assertStatus(200);
+
+        Mail::assertNothingSent();
+    }
+
+    public function test_non_admins_cannot_activate_and_no_email_is_sent(): void
+    {
+        Mail::fake();
+        $client = $this->makeUser('user', 'client2@example.com', ['status' => 'suspended']);
+
+        $this->patchJson(
+            "/api/v1/users/{$client->id}/status",
+            ['status' => 'active'],
+            $this->actingAsToken($this->moderator),
+        )->assertStatus(403);
+
+        $this->assertSame('suspended', $client->fresh()->status);
+        Mail::assertNothingSent();
+    }
+
+    public function test_activation_email_is_localised_and_leaks_no_credentials(): void
+    {
+        $arabic = $this->makeUser('user', 'ar-client@example.com', ['status' => 'suspended', 'locale' => 'ar']);
+        $english = $this->makeUser('user', 'en-client@example.com', ['status' => 'suspended', 'locale' => 'en']);
+
+        $arabicMail = new AccountActivatedMail($arabic);
+        $this->assertSame('تم تفعيل حسابك في منصة مجددون', $arabicMail->envelope()->subject);
+        $arabicHtml = $arabicMail->render();
+        $this->assertStringContainsString('dir="rtl"', $arabicHtml);
+        $this->assertStringContainsString('/login', $arabicHtml);
+        $this->assertStringNotContainsString('Str0ng!Password', $arabicHtml);
+
+        $englishMail = new AccountActivatedMail($english);
+        $this->assertSame('Your Mujaddidun account has been activated', $englishMail->envelope()->subject);
+        $this->assertStringContainsString('dir="ltr"', $englishMail->render());
     }
 
     public function test_self_action_guards(): void
