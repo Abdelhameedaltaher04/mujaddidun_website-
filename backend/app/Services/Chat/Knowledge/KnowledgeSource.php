@@ -23,6 +23,15 @@ interface KnowledgeSource
     public function key(): string;
 
     /**
+     * Broad category this source belongs to, e.g. `faq` or `program`.
+     *
+     * KnowledgeBase uses it to order sources deterministically — direct
+     * question-and-answer material is presented before catalogue-style
+     * material — without needing an intent classifier.
+     */
+    public function type(): string;
+
+    /**
      * Public facts relevant to this question, already localised.
      *
      * Must be free of side effects: no writes, no logging, no mutation of

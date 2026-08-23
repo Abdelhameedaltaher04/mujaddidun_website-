@@ -26,6 +26,11 @@ class FaqKnowledgeSource implements KnowledgeSource
         return 'faqs';
     }
 
+    public function type(): string
+    {
+        return 'faq';
+    }
+
     public function retrieve(string $question, string $locale): array
     {
         $tokens = KeywordMatcher::tokenize($question);

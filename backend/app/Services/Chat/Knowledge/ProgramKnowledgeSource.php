@@ -28,6 +28,11 @@ class ProgramKnowledgeSource implements KnowledgeSource
         return 'programs';
     }
 
+    public function type(): string
+    {
+        return 'program';
+    }
+
     public function retrieve(string $question, string $locale): array
     {
         $tokens = KeywordMatcher::tokenize($question);
