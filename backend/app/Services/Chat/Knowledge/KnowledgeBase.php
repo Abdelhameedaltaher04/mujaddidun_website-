@@ -34,12 +34,13 @@ class KnowledgeBase
     /**
      * Source categories in the order they should appear.
      *
-     * Direct question-and-answer material comes before catalogue-style
-     * material, so an assistant answering "how do I volunteer?" reads the FAQ
-     * before a programme listing. Anything not listed sorts last, and ties fall
-     * back to registration order — no intent classifier involved.
+     * Direct question-and-answer material comes first, then catalogue-style
+     * material, then time-bound reporting: an assistant answering "how do I
+     * volunteer?" reads the FAQ before a programme listing, and a news item
+     * last. Anything not listed sorts after those, and ties fall back to
+     * registration order — no intent classifier involved.
      */
-    private const TYPE_PRIORITY = ['faq' => 0, 'program' => 1];
+    private const TYPE_PRIORITY = ['faq' => 0, 'program' => 1, 'news' => 2];
 
     /** @var list<KnowledgeSource> */
     private array $sources;

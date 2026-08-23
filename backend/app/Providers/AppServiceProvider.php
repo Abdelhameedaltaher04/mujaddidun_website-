@@ -55,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
             fn ($app) => new \App\Services\Chat\Knowledge\KnowledgeBase([
                 $app->make(\App\Services\Chat\Knowledge\FaqKnowledgeSource::class),
                 $app->make(\App\Services\Chat\Knowledge\ProgramKnowledgeSource::class),
+                $app->make(\App\Services\Chat\Knowledge\NewsKnowledgeSource::class),
             ]),
         );
     }
