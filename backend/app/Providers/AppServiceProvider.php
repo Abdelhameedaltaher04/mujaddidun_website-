@@ -45,6 +45,18 @@ class AppServiceProvider extends ServiceProvider
                 return $app->make(\App\Services\Chat\AnthropicChatProvider::class);
             },
         );
+
+        // Knowledge sources the assistant may consult. Every source listed here
+        // reads only data the public website already publishes, using the same
+        // visibility predicates as the public controllers. Nothing that exposes
+        // private, admin-only, draft or archived content belongs in this list.
+        $this->app->singleton(
+            \App\Services\Chat\Knowledge\KnowledgeBase::class,
+            fn ($app) => new \App\Services\Chat\Knowledge\KnowledgeBase([
+                $app->make(\App\Services\Chat\Knowledge\FaqKnowledgeSource::class),
+                $app->make(\App\Services\Chat\Knowledge\ProgramKnowledgeSource::class),
+            ]),
+        );
     }
 
     /**
