@@ -46,7 +46,11 @@ class MockChatProvider implements ChatCompletionProvider
         ],
         'programs' => [
             'برنامج', 'برامج', 'مشاريع', 'مشروع', 'نطعم', 'نسكن', 'نمكن',
-            'program', 'programme', 'programs', 'projects', 'project',
+            // Each plural is spelled out because Latin keywords are matched
+            // between word boundaries, so "program" does not match "programs".
+            // Both spellings are listed: a visitor writing British English was
+            // being told their question was off topic.
+            'program', 'programs', 'programme', 'programmes', 'project', 'projects',
         ],
         'about' => [
             'مجددون', 'الجمعية', 'من أنتم', 'عنكم', 'تعريف',
@@ -63,7 +67,29 @@ class MockChatProvider implements ChatCompletionProvider
             'مرحبا', 'مرحباً', 'السلام', 'أهلا', 'أهلاً', 'هلا', 'صباح', 'مساء',
             'hello', 'hi', 'hey', 'good morning', 'good evening', 'salam',
         ],
+        // Checked last, after every subject and after greeting: "thanks, how do
+        // I donate?" must answer the donation question, not just say you're
+        // welcome. Only a message with nothing else in it lands here.
+        //
+        // "شكر" is the stem on purpose — it covers شكراً, شكرًا, أشكرك and
+        // الشكر, whose tanween sits on either side of the alef and so defeats a
+        // literal "شكرا".
+        'acknowledgement' => [
+            'شكر', 'مشكور', 'يعطيك العافية', 'تسلم', 'جزاك', 'تمام', 'ممتاز', 'رائع',
+            'thanks', 'thank you', 'thx', 'great', 'perfect', 'appreciate it', 'got it',
+        ],
     ];
+
+    /**
+     * Topics answered from wording alone, with no knowledge context.
+     *
+     * Both are about the exchange rather than about the association, so neither
+     * needs a fact and neither may be answered with "I don't have published
+     * information" — that would be a non-sequitur in reply to "thank you".
+     *
+     * @var list<string>
+     */
+    private const CONVERSATIONAL_TOPICS = ['greeting', 'acknowledgement'];
 
     /**
      * Which knowledge source answers which topic, in order of preference.
@@ -114,6 +140,14 @@ class MockChatProvider implements ChatCompletionProvider
             'ar' => "مرحباً بك! 👋 أنا مساعد جمعية مجددون الخيرية التنموية.\n\nيمكنني مساعدتك في التعرّف على برامج الجمعية وحملاتها، وكيفية التطوع أو التبرع، إضافة إلى الأخبار ومعلومات التواصل. كيف يمكنني مساعدتك؟",
             'en' => "Hello! 👋 I'm the assistant for the Mujaddidun Charity and Development Association.\n\nI can help you learn about our programmes and campaigns, how to volunteer or donate, as well as news and how to get in touch. How can I help?",
         ],
+        'acknowledgement' => [
+            'ar' => "على الرحب والسعة! 🌿
+
+إن كان لديك سؤال آخر عن الجمعية أو برامجها، فأنا هنا.",
+            'en' => "You're very welcome! 🌿
+
+If you have another question about the association or its programmes, I'm here.",
+        ],
         'not_available' => [
             'ar' => "لا تتوفر لدي معلومات منشورة حول هذا الأمر.\n\nيمكنك مراجعة الصفحات المخصصة على الموقع أو التواصل معنا مباشرة عبر صفحة اتصل بنا.",
             'en' => "I don't have published information about that.\n\nYou can check the relevant pages of the website, or contact us directly through the Contact page.",
@@ -142,8 +176,8 @@ class MockChatProvider implements ChatCompletionProvider
         $language = $this->detectLanguage($lastUserMessage);
         $knowledge = KnowledgeContextReader::parse($systemPrompt);
 
-        $reply = $topic === 'greeting'
-            ? self::PHRASES['greeting'][$language]
+        $reply = in_array($topic, self::CONVERSATIONAL_TOPICS, true)
+            ? self::PHRASES[$topic][$language]
             : $this->groundedAnswer($topic, $knowledge, $language);
 
         if ($reply === null) {
@@ -173,8 +207,9 @@ class MockChatProvider implements ChatCompletionProvider
      * programme was irrelevant — which is precisely the failure this mirrors
      * ChatService in fixing.
      *
-     * Greetings never carry over: "مرحبا" is about the turn it appears in, so
-     * a later question must not be answered by greeting the visitor again.
+     * Greetings and acknowledgements never carry over: "مرحبا" and "شكراً" are
+     * about the turn they appear in, so a later question must not be answered
+     * by greeting or thanking the visitor again.
      *
      * Known limit of the mock: it cannot tell an elliptical follow-up from a
      * genuinely off-topic aside, so "tell me a joke" asked after a programme
@@ -194,7 +229,7 @@ class MockChatProvider implements ChatCompletionProvider
                 continue;
             }
 
-            if ($index > 0 && $topic === 'greeting') {
+            if ($index > 0 && in_array($topic, self::CONVERSATIONAL_TOPICS, true)) {
                 continue;
             }
 

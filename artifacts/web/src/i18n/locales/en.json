@@ -1959,6 +1959,13 @@
     "hint": "Enter to send · Shift+Enter for a new line",
     "empty": "How can I help you?",
     "disclaimer": "Automated assistant — it can make mistakes. For official details please check the site pages or contact us.",
+    "suggestionsLabel": "Common questions",
+    "suggestions": {
+      "donate": "How can I donate?",
+      "volunteer": "How can I volunteer?",
+      "programs": "What programs do you offer?",
+      "contact": "How can I contact you?"
+    },
     "errors": {
       "ai_not_configured": "The assistant is not enabled right now. Please contact us directly.",
       "ai_unavailable": "The assistant is unreachable at the moment. Please try again shortly.",

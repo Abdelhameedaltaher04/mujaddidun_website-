@@ -230,6 +230,43 @@ class ChatConversationTest extends TestCase
         $this->assertStringContainsString('أعتذر', $reply);
     }
 
+    /**
+     * An acknowledgement belongs to the turn it appears in, exactly as a
+     * greeting does. Carrying it forward would answer a later real question by
+     * thanking the visitor again.
+     */
+    public function test_an_earlier_acknowledgement_is_never_carried_into_a_later_turn(): void
+    {
+        $this->seedPublicContent();
+
+        $reply = $this->converse([
+            $this->user('شكراً'),
+            $this->assistant('على الرحب والسعة!'),
+            $this->user('؟؟؟'),
+        ]);
+
+        $this->assertStringNotContainsString('على الرحب والسعة', $reply);
+        $this->assertStringContainsString('أعتذر', $reply);
+    }
+
+    /**
+     * The reverse direction: an acknowledgement after a grounded answer is
+     * acknowledged, not answered again with the previous subject.
+     */
+    public function test_an_acknowledgement_after_an_answer_is_not_answered_with_the_old_subject(): void
+    {
+        $this->seedPublicContent();
+
+        $reply = $this->converse([
+            $this->user('ما هي برامجكم؟'),
+            $this->assistant('هذه البرامج المتاحة حالياً: برنامج محو الأمية الرقمية'),
+            $this->user('شكراً'),
+        ]);
+
+        $this->assertStringContainsString('على الرحب والسعة', $reply);
+        $this->assertStringNotContainsString('برنامج محو الأمية الرقمية', $reply);
+    }
+
     /** Language mirrors the newest turn even when the subject came from Arabic. */
     public function test_language_follows_the_newest_turn_not_the_carried_subject(): void
     {

@@ -15,6 +15,19 @@ import { CHAT_MAX_CONTENT_LENGTH } from '@/services/chat';
 import { cn } from '@/lib/utils';
 
 /**
+ * Questions offered on the empty state.
+ *
+ * Every one of these is verified to produce a grounded answer against the
+ * current published corpus — they are the four paths a visitor actually
+ * arrives with. Four is deliberate: enough to show the assistant's range in one
+ * glance, few enough not to read as a menu.
+ *
+ * The wording lives in the locale files, so each language asks the question the
+ * way that language's visitors would.
+ */
+const SUGGESTION_KEYS = ['donate', 'volunteer', 'programs', 'contact'] as const;
+
+/**
  * Public support assistant.
  *
  * The launcher renders **in flow** so the floating stack in FloatingActions
@@ -260,6 +273,32 @@ export function ChatWidget({
                     <p className="text-base font-bold text-foreground">{t('chat.emptyTitle')}</p>
                     <p className="text-sm text-muted-foreground">{t('chat.emptyIntro')}</p>
                     <p className="text-sm font-medium text-foreground">{t('chat.empty')}</p>
+                  </div>
+
+                  {/* Suggested questions. Each sends exactly as if the visitor
+                      had typed it, so there is no second message path to keep
+                      in step with the composer. */}
+                  <div
+                    role="group"
+                    aria-label={t('chat.suggestionsLabel')}
+                    className="flex flex-wrap justify-center gap-2 pt-1"
+                    data-testid="chat-suggestions"
+                  >
+                    {SUGGESTION_KEYS.map((key) => {
+                      const suggestion = t(`chat.suggestions.${key}`);
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          onClick={() => send(suggestion)}
+                          disabled={isSending}
+                          className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-60 focus-ring-standard"
+                          data-testid={`button-chat-suggestion-${key}`}
+                        >
+                          {suggestion}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               ) : null}

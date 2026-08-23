@@ -258,6 +258,150 @@ class ChatMockGroundingTest extends TestCase
         $this->assertStringContainsString("I'm the assistant", $english);
     }
 
+    // ------------------------------------------------ Spelling variants
+
+    /**
+     * Both spellings of "program(me)", singular and plural.
+     *
+     * Latin keywords are matched between word boundaries, so each form has to
+     * be listed explicitly — "program" does not match "programs". "programmes"
+     * was the one form missing, and a visitor writing British English was told
+     * their question was off topic.
+     */
+    public function test_both_english_spellings_of_program_are_recognised(): void
+    {
+        $this->seedPublicContent();
+
+        foreach ([
+            'What program do you offer?',
+            'What programs do you offer?',
+            'What programme do you offer?',
+            'What programmes do you offer?',
+        ] as $question) {
+            $reply = $this->ask($question, 'en');
+
+            $this->assertStringContainsString(
+                'Digital Literacy Program',
+                $reply,
+                "[{$question}] did not reach the programme knowledge",
+            );
+            $this->assertStringNotContainsString(
+                'I can only help with topics',
+                $reply,
+                "[{$question}] hit the off-topic apology",
+            );
+        }
+    }
+
+    /**
+     * The word boundary still holds: this widens the spellings accepted, not
+     * the matching itself. "programmer" is a different word and must not pull a
+     * visitor into the programmes topic.
+     */
+    public function test_the_word_boundary_is_preserved_for_program_keywords(): void
+    {
+        $this->seedPublicContent();
+
+        $this->assertStringContainsString(
+            'I can only help with topics',
+            $this->ask('Do you have a programmer job?', 'en'),
+        );
+    }
+
+    // ---------------------------------------------- Acknowledgements (C1)
+
+    /**
+     * Thanking the assistant used to return the off-topic apology — the visitor
+     * was told their "شكراً" was irrelevant to Mujaddidun, which is a graceless
+     * way to end a donor conversation.
+     */
+    public function test_arabic_acknowledgements_are_answered_politely(): void
+    {
+        $this->seedPublicContent();
+
+        foreach (['شكراً', 'شكرًا', 'مشكور', 'يعطيك العافية', 'تمام', 'ممتاز'] as $thanks) {
+            $reply = $this->ask($thanks);
+
+            $this->assertStringContainsString('على الرحب والسعة', $reply, "[{$thanks}] was not acknowledged");
+            $this->assertStringNotContainsString('أعتذر', $reply, "[{$thanks}] hit the off-topic apology");
+            $this->assertStringNotContainsString('لا تتوفر لدي معلومات', $reply, "[{$thanks}] hit the no-data reply");
+        }
+    }
+
+    public function test_english_acknowledgements_are_answered_politely(): void
+    {
+        $this->seedPublicContent();
+
+        foreach (['thanks', 'thank you', 'thx', 'great', 'perfect'] as $thanks) {
+            $reply = $this->ask($thanks, 'en');
+
+            $this->assertStringContainsString("You're very welcome", $reply, "[{$thanks}] was not acknowledged");
+            $this->assertStringNotContainsString('I can only help with topics', $reply, "[{$thanks}] hit the off-topic apology");
+            $this->assertStringNotContainsString("I don't have published", $reply, "[{$thanks}] hit the no-data reply");
+        }
+    }
+
+    /** The reply mirrors the visitor's language, as every other reply does. */
+    public function test_an_acknowledgement_reply_matches_the_visitors_language(): void
+    {
+        $arabic = $this->ask('شكراً');
+        $this->assertStringNotContainsString('welcome', $arabic);
+
+        $english = $this->ask('thanks', 'en');
+        $this->assertDoesNotMatchRegularExpression('/\p{Arabic}/u', $english);
+    }
+
+    /**
+     * An acknowledgement that carries a real question must answer the question.
+     * The topic groups are ordered so every subject is checked before this one.
+     */
+    public function test_a_thank_you_followed_by_a_question_still_answers_the_question(): void
+    {
+        $this->seedPublicContent();
+
+        $this->assertStringContainsString(
+            'نموذج طلبات التطوع',
+            $this->ask('شكرا، كيف يمكنني التطوع؟'),
+        );
+
+        $this->assertStringContainsString(
+            'Digital Literacy Program',
+            $this->ask('thanks, what programs does Mujaddidun have?', 'en'),
+        );
+    }
+
+    /**
+     * The acknowledgement states nothing about the association and promises no
+     * action — it is pure connective wording, like the greeting.
+     */
+    public function test_an_acknowledgement_invents_no_facts_and_promises_no_action(): void
+    {
+        $this->seedPublicContent();
+
+        $reply = $this->ask('شكراً');
+
+        // No retrieved material, no bullets, no financial or contact detail.
+        $this->assertStringNotContainsString('•', $reply);
+        $this->assertStringNotContainsString('برنامج محو الأمية', $reply);
+        $this->assertStringNotContainsString('أورنج', $reply);
+
+        foreach (['IBAN', 'SWIFT', 'JO00', '@', 'http'] as $detail) {
+            $this->assertStringNotContainsString($detail, $reply);
+        }
+    }
+
+    /** A genuinely off-topic message must still reach the apology. */
+    public function test_acknowledgement_handling_does_not_swallow_off_topic_messages(): void
+    {
+        $this->seedPublicContent();
+
+        $this->assertStringContainsString('أعتذر', $this->ask('ما هي عاصمة فرنسا؟'));
+        $this->assertStringContainsString(
+            'I can only help with topics related to the Mujaddidun',
+            $this->ask('tell me a joke', 'en'),
+        );
+    }
+
     public function test_the_response_envelope_is_unchanged(): void
     {
         $this->seedPublicContent();
