@@ -44,4 +44,12 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI', 'http://127.0.0.1:8000/api/v1/auth/google/callback'),
     ],
 
+    // Anthropic (public support assistant). Backend-only: this key must never
+    // be exposed to the browser, so it has no VITE_ counterpart. Leave the key
+    // blank to disable the chatbot — the endpoint then returns a clean 503.
+    'anthropic' => [
+        'api_key' => env('ANTHROPIC_API_KEY'),
+        'model' => env('ANTHROPIC_MODEL', 'claude-opus-5'),
+    ],
+
 ];

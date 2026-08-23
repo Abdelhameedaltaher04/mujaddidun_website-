@@ -1943,5 +1943,31 @@
     "title": "Access denied",
     "description": "You do not have permission to access this page.",
     "backHome": "Back to home"
+  },
+  "chat": {
+    "title": "Mujaddidun Assistant",
+    "subtitle": "Here to answer your questions",
+    "open": "Open the Mujaddidun assistant",
+    "close": "Close chat",
+    "reset": "Start a new conversation",
+    "send": "Send",
+    "placeholder": "Type your question…",
+    "typing": "Typing…",
+    "emptyTitle": "Hello! 👋",
+    "emptyIntro": "I'm the Mujaddidun Assistant.",
+    "online": "Online",
+    "hint": "Enter to send · Shift+Enter for a new line",
+    "empty": "How can I help you?",
+    "disclaimer": "Automated assistant — it can make mistakes. For official details please check the site pages or contact us.",
+    "errors": {
+      "ai_not_configured": "The assistant is not enabled right now. Please contact us directly.",
+      "ai_unavailable": "The assistant is unreachable at the moment. Please try again shortly.",
+      "ai_declined": "I can't help with that request. Try asking something about Mujaddidun.",
+      "ai_empty_response": "I couldn't produce a reply. Please rephrase your question.",
+      "empty_conversation": "Please type your question first.",
+      "rateLimited": "You've sent too many messages. Please wait a minute and try again.",
+      "network": "Could not reach the server. Please check your connection.",
+      "generic": "Something went wrong. Please try again."
+    }
   }
 }

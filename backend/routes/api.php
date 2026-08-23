@@ -254,6 +254,11 @@ Route::get('/public/content', [\App\Http\Controllers\Api\V1\Content\WebsiteConte
 Route::post('/public/contact-messages', [\App\Http\Controllers\Api\V1\Contact\PublicContactMessageController::class, 'store'])
     ->middleware('throttle:5,1');
 
+// Public AI support assistant (no auth). Conversational only — it has no tools
+// and no database access. Throttled because every call costs money.
+Route::post('/public/chat', [\App\Http\Controllers\Api\V1\Chat\ChatController::class, 'send'])
+    ->middleware('throttle:10,1');
+
 // Public read-only news (no auth). Only published articles are exposed;
 // drafts and archived articles 404 / are absent from lists.
 // Public read-only events (no auth). Draft and cancelled events are never exposed.

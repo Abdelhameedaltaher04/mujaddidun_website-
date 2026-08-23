@@ -17,7 +17,34 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // The chat assistant talks to its provider through a narrow contract so
+        // the service's own logic stays testable without network access.
         //
+        // Anthropic is the only provider that ever serves real traffic. The
+        // development mock exists so the chat UI can be built and demonstrated
+        // without a key, and it is reachable ONLY when both hold:
+        //
+        //   1. no ANTHROPIC_API_KEY is configured, and
+        //   2. the app is running under APP_ENV=local or development.
+        //
+        // Production is excluded by that second condition, so a missing key in
+        // production keeps the existing behaviour — AnthropicChatProvider is
+        // used and returns `ai_not_configured`, a visible 503, rather than
+        // silently answering with canned text. The `testing` environment is
+        // excluded for the same reason, so the suite exercises the real
+        // binding unless a test opts in.
+        $this->app->bind(
+            \App\Services\Chat\ChatCompletionProvider::class,
+            function ($app) {
+                $keyIsMissing = blank(config('services.anthropic.api_key'));
+
+                if ($keyIsMissing && $app->environment(['local', 'development'])) {
+                    return $app->make(\App\Services\Chat\MockChatProvider::class);
+                }
+
+                return $app->make(\App\Services\Chat\AnthropicChatProvider::class);
+            },
+        );
     }
 
     /**
