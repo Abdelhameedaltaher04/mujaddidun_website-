@@ -1959,6 +1959,9 @@
     "hint": "اضغط Enter للإرسال · Shift+Enter لسطر جديد",
     "empty": "كيف يمكنني مساعدتك؟",
     "disclaimer": "مساعد آلي — قد يخطئ. للمعلومات الرسمية يرجى مراجعة صفحات الموقع أو التواصل معنا.",
+    "speakerYou": "أنت",
+    "speakerAssistant": "المساعد",
+    "jumpToLatest": "الانتقال إلى أحدث رسالة",
     "suggestionsLabel": "أسئلة شائعة",
     "suggestions": {
       "donate": "كيف أتبرع؟",

@@ -7,7 +7,7 @@ import {
   type KeyboardEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { Bot, Loader2, MessageCircle, RotateCcw, Send, X } from 'lucide-react';
+import { ArrowDown, Bot, Loader2, MessageCircle, RotateCcw, Send, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useChat } from '@/hooks/useChat';
@@ -54,6 +54,15 @@ export function ChatWidget({
   // panel in the DOM while closed.
   const [isMounted, setIsMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  /**
+   * Whether the thread is scrolled to (or near) the newest message.
+   *
+   * Starts true so a freshly opened panel lands at the bottom, and only turns
+   * false when the visitor scrolls up themselves.
+   */
+  const [isPinnedToLatest, setIsPinnedToLatest] = useState(true);
+  /** Below the `sm` breakpoint, where the panel is effectively full-screen. */
+  const [isCompact, setIsCompact] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -72,31 +81,132 @@ export function ChatWidget({
     return () => window.clearTimeout(timer);
   }, [open]);
 
-  // Keep the newest message in view as the thread grows.
+  const scrollToLatest = useCallback((smooth = true) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollTo({ top: el.scrollHeight, behavior: smooth && !reduceMotion ? 'smooth' : 'auto' });
+  }, []);
+
+  /** Recomputed on every scroll, so the pin follows what the visitor does. */
+  const onMessagesScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    // Anything within this many pixels of the end counts as "at the bottom".
+    setIsPinnedToLatest(el.scrollHeight - el.scrollTop - el.clientHeight <= 48);
+  }, []);
+
+  /**
+   * Follow the newest message only while the visitor is already at the bottom.
+   *
+   * Forcing the scroll unconditionally yanked anyone re-reading an earlier
+   * answer back down the moment a reply landed. When they have scrolled up the
+   * thread is left where they put it, and the jump button offers the way back.
+   */
   useLayoutEffect(() => {
-    if (!isMounted) return;
-    scrollRef.current?.scrollTo({
-      top: scrollRef.current.scrollHeight,
-      behavior: 'smooth',
-    });
-  }, [messages, isSending, errorKey, isMounted]);
+    if (!isMounted || !isPinnedToLatest) return;
+    scrollToLatest(true);
+  }, [messages, isSending, errorKey, isMounted, isPinnedToLatest, scrollToLatest]);
+
+  // Opening always starts at the newest message.
+  useEffect(() => {
+    if (isVisible) setIsPinnedToLatest(true);
+  }, [isVisible]);
+
+  // Track the breakpoint rather than assuming it, so a rotation or a resize
+  // while the panel is open keeps the scroll lock in step with the layout.
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 639px)');
+    const sync = () => setIsCompact(query.matches);
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
+
+  /**
+   * Hold the page still behind the panel on small screens.
+   *
+   * There the panel covers most of the viewport, so scrolling the page behind
+   * it is disorienting: the content moves but nothing the visitor can see
+   * reacts. Desktop is left alone, where the panel is a small corner surface
+   * and the page around it stays legitimately usable.
+   *
+   * The previous inline values are restored rather than blanked, and any
+   * scrollbar width is padded back so removing it cannot shift the layout.
+   */
+  useEffect(() => {
+    if (!open || !isCompact) return;
+
+    const { body, documentElement: root } = document;
+    const previousBodyOverflow = body.style.overflow;
+    const previousRootOverflow = root.style.overflow;
+    const previousPaddingInlineEnd = body.style.paddingInlineEnd;
+    const scrollbarWidth = window.innerWidth - root.clientWidth;
+
+    // Both elements are locked on purpose: which one actually scrolls the page
+    // differs between engines, and locking only <body> leaves the document
+    // still scrolling wherever <html> is the scrolling element.
+    body.style.overflow = 'hidden';
+    root.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) {
+      body.style.paddingInlineEnd = `${scrollbarWidth}px`;
+    }
+
+    return () => {
+      body.style.overflow = previousBodyOverflow;
+      root.style.overflow = previousRootOverflow;
+      body.style.paddingInlineEnd = previousPaddingInlineEnd;
+    };
+  }, [open, isCompact]);
 
   useEffect(() => {
     if (isVisible) inputRef.current?.focus();
   }, [isVisible]);
+
+  /**
+   * Close and hand focus back to the launcher.
+   *
+   * The panel is portalled and unmounts on close, so any focus inside it would
+   * otherwise fall to <body> — leaving a keyboard or screen-reader user with no
+   * position on the page and nothing to tab from. The launcher is the control
+   * that opened the panel and is always present, so it is where focus belongs
+   * on every close path.
+   */
+  const close = useCallback((afterOutsidePress = false) => {
+    onOpenChange(false);
+
+    if (!afterOutsidePress) {
+      launcherRef.current?.focus();
+      return;
+    }
+
+    // An outside press is different: this runs on `pointerdown`, before the
+    // browser has done its own focus handling, so focusing the launcher now
+    // would just be overwritten a moment later — by the pressed control, or by
+    // <body> when nothing focusable was pressed.
+    //
+    // One frame is enough to let that settle, and focus is then rescued only
+    // when it landed nowhere. A link or field the visitor deliberately pressed
+    // keeps focus, which is the whole point of a light dismiss.
+    requestAnimationFrame(() => {
+      const active = document.activeElement;
+      if (!active || active === document.body) {
+        launcherRef.current?.focus();
+      }
+    });
+  }, [onOpenChange]);
 
   // Escape closes and returns focus to the launcher.
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onOpenChange(false);
-        launcherRef.current?.focus();
+        close();
       }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [open, onOpenChange]);
+  }, [open, close]);
 
   /**
    * Close when a press starts anywhere outside the panel.
@@ -123,12 +233,12 @@ export function ChatWidget({
       if (!target) return;
       if (launcherRef.current?.contains(target)) return;
       if (panelRef.current?.contains(target)) return;
-      onOpenChange(false);
+      close(true);
     };
 
     document.addEventListener('pointerdown', onPointerDown);
     return () => document.removeEventListener('pointerdown', onPointerDown);
-  }, [open, onOpenChange]);
+  }, [open, close]);
 
   const autoGrow = useCallback(() => {
     const el = inputRef.current;
@@ -136,6 +246,26 @@ export function ChatWidget({
     el.style.height = 'auto';
     el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
   }, []);
+
+  /**
+   * Start a new conversation.
+   *
+   * `reset()` clears the thread; the composer is this component's own state and
+   * is cleared here, so a half-typed question from the previous conversation
+   * does not survive into the new one. The textarea is auto-resizing, so its
+   * inline height is recomputed rather than left at the old draft's size.
+   *
+   * Focus is moved deliberately: the reset control unmounts with the last
+   * message, so without this it would fall to <body>. It is only taken when the
+   * panel is actually open, so a reset triggered from anywhere else cannot pull
+   * focus out from under the visitor.
+   */
+  const startNewConversation = useCallback(() => {
+    reset();
+    setDraft('');
+    if (open) inputRef.current?.focus();
+    requestAnimationFrame(autoGrow);
+  }, [reset, open, autoGrow]);
 
   const submit = useCallback(() => {
     if (!draft.trim() || isSending) return;
@@ -153,6 +283,18 @@ export function ChatWidget({
   };
 
   const canSend = draft.trim().length > 0 && !isSending;
+
+  /**
+   * The single string a screen reader hears when something changes.
+   *
+   * The message list itself is deliberately not a live region: it holds the
+   * whole conversation, so every send re-announced everything already said.
+   * Only the newest assistant turn — or the fact that one is being prepared —
+   * belongs here. Errors are left out on purpose: the error block is already a
+   * `role="alert"` and would otherwise be read twice.
+   */
+  const lastAssistantMessage = [...messages].reverse().find((m) => m.role === 'assistant');
+  const announcement = isSending ? t('chat.typing') : (lastAssistantMessage?.content ?? '');
 
   return (
     <>
@@ -234,7 +376,7 @@ export function ChatWidget({
               {messages.length > 0 && (
                 <button
                   type="button"
-                  onClick={reset}
+                  onClick={startNewConversation}
                   aria-label={t('chat.reset')}
                   className="rounded-lg p-2 transition-colors hover:bg-white/15 focus-ring-standard"
                   data-testid="button-chat-reset"
@@ -244,7 +386,7 @@ export function ChatWidget({
               )}
               <button
                 type="button"
-                onClick={() => onOpenChange(false)}
+                onClick={() => close()}
                 aria-label={t('chat.close')}
                 className="rounded-lg p-2 transition-colors hover:bg-white/15 focus-ring-standard"
                 data-testid="button-chat-close"
@@ -254,105 +396,147 @@ export function ChatWidget({
             </header>
 
             {/* Messages */}
-            <div
-              ref={scrollRef}
-              className="flex-1 space-y-3 overflow-y-auto overflow-x-hidden bg-muted/20 p-4"
-              aria-live="polite"
-              aria-busy={isSending}
-              data-testid="chat-messages"
-            >
-              {messages.length === 0 && !isSending && !errorKey ? (
-                <div
-                  className="flex flex-col items-center justify-center gap-3 px-4 py-10 text-center"
-                  data-testid="chat-empty"
-                >
-                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                    <Bot className="h-7 w-7" aria-hidden="true" />
-                  </span>
-                  <div className="space-y-1">
-                    <p className="text-base font-bold text-foreground">{t('chat.emptyTitle')}</p>
-                    <p className="text-sm text-muted-foreground">{t('chat.emptyIntro')}</p>
-                    <p className="text-sm font-medium text-foreground">{t('chat.empty')}</p>
-                  </div>
-
-                  {/* Suggested questions. Each sends exactly as if the visitor
-                      had typed it, so there is no second message path to keep
-                      in step with the composer. */}
+            <div className="relative flex min-h-0 flex-1 flex-col">
+              <div
+                ref={scrollRef}
+                onScroll={onMessagesScroll}
+                className="flex-1 space-y-3 overflow-y-auto overflow-x-hidden bg-muted/20 p-4"
+                aria-busy={isSending}
+                data-testid="chat-messages"
+              >
+                {messages.length === 0 && !isSending && !errorKey ? (
                   <div
-                    role="group"
-                    aria-label={t('chat.suggestionsLabel')}
-                    className="flex flex-wrap justify-center gap-2 pt-1"
-                    data-testid="chat-suggestions"
+                    className="flex flex-col items-center justify-center gap-3 px-4 py-10 text-center"
+                    data-testid="chat-empty"
                   >
-                    {SUGGESTION_KEYS.map((key) => {
-                      const suggestion = t(`chat.suggestions.${key}`);
-                      return (
-                        <button
-                          key={key}
-                          type="button"
-                          onClick={() => send(suggestion)}
-                          disabled={isSending}
-                          className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-60 focus-ring-standard"
-                          data-testid={`button-chat-suggestion-${key}`}
-                        >
-                          {suggestion}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ) : null}
+                    <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                      <Bot className="h-7 w-7" aria-hidden="true" />
+                    </span>
+                    <div className="space-y-1">
+                      <p className="text-base font-bold text-foreground">{t('chat.emptyTitle')}</p>
+                      <p className="text-sm text-muted-foreground">{t('chat.emptyIntro')}</p>
+                      <p className="text-sm font-medium text-foreground">{t('chat.empty')}</p>
+                    </div>
 
-              {messages.map((message, index) => {
-                const isUser = message.role === 'user';
-                return (
-                  <div
-                    key={`${message.role}-${index}`}
-                    className={cn('flex w-full', isUser ? 'justify-end' : 'justify-start')}
-                    data-testid={`chat-message-${message.role}`}
-                  >
-                    <p
-                      className={cn(
-                        'max-w-[85%] whitespace-pre-wrap break-words px-4 py-2.5 text-sm leading-relaxed shadow-sm',
-                        isUser
-                          ? 'rounded-2xl rounded-ee-md bg-primary text-primary-foreground'
-                          : 'rounded-2xl rounded-es-md border border-border bg-card text-foreground',
-                      )}
+                    {/* Suggested questions. Each sends exactly as if the visitor
+                        had typed it, so there is no second message path to keep
+                        in step with the composer. */}
+                    <div
+                      role="group"
+                      aria-label={t('chat.suggestionsLabel')}
+                      className="flex flex-wrap justify-center gap-2 pt-1"
+                      data-testid="chat-suggestions"
                     >
-                      {message.content}
-                    </p>
+                      {SUGGESTION_KEYS.map((key) => {
+                        const suggestion = t(`chat.suggestions.${key}`);
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            onClick={() => send(suggestion)}
+                            disabled={isSending}
+                            className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-60 focus-ring-standard"
+                            data-testid={`button-chat-suggestion-${key}`}
+                          >
+                            {suggestion}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                );
-              })}
+                ) : null}
 
-              {isSending && (
-                <div className="flex justify-start" data-testid="chat-typing">
-                  <span className="flex items-center gap-2 rounded-2xl rounded-es-md border border-border bg-card px-4 py-2.5 text-sm text-muted-foreground shadow-sm">
-                    <Loader2 className="h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden="true" />
-                    {t('chat.typing')}
-                  </span>
-                </div>
-              )}
+                {messages.map((message, index) => {
+                  const isUser = message.role === 'user';
+                  return (
+                    <div
+                      key={`${message.role}-${index}`}
+                      className={cn('flex w-full', isUser ? 'justify-end' : 'justify-start')}
+                      data-testid={`chat-message-${message.role}`}
+                    >
+                      <p
+                        className={cn(
+                          'max-w-[85%] whitespace-pre-wrap break-words px-4 py-2.5 text-sm leading-relaxed shadow-sm',
+                          isUser
+                            ? 'rounded-2xl rounded-ee-md bg-primary text-primary-foreground'
+                            : 'rounded-2xl rounded-es-md border border-border bg-card text-foreground',
+                        )}
+                      >
+                        {/* Sighted readers get the speaker from the side the
+                            bubble sits on and its colour; a screen reader gets
+                            neither, so the name is spelled out for it alone. */}
+                        <span className="sr-only">
+                          {isUser ? t('chat.speakerYou') : t('chat.speakerAssistant')}:{' '}
+                        </span>
+                        {message.content}
+                      </p>
+                    </div>
+                  );
+                })}
 
-              {errorKey && (
-                <div
-                  role="alert"
-                  className="rounded-2xl border border-dashed border-destructive/40 bg-destructive/5 p-3 text-center"
-                  data-testid="chat-error"
-                >
-                  <p className="mb-2 text-sm text-muted-foreground">
-                    {t(`chat.errors.${errorKey}`)}
-                  </p>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={retryLast}
-                    data-testid="button-chat-retry"
+                {isSending && (
+                  <div className="flex justify-start" data-testid="chat-typing">
+                    <span className="flex items-center gap-2 rounded-2xl rounded-es-md border border-border bg-card px-4 py-2.5 text-sm text-muted-foreground shadow-sm">
+                      <Loader2 className="h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden="true" />
+                      {t('chat.typing')}
+                    </span>
+                  </div>
+                )}
+
+                {errorKey && (
+                  <div
+                    role="alert"
+                    className="rounded-2xl border border-dashed border-destructive/40 bg-destructive/5 p-3 text-center"
+                    data-testid="chat-error"
                   >
-                    {t('news.retry')}
-                  </Button>
-                </div>
+                    <p className="mb-2 text-sm text-muted-foreground">
+                      {t(`chat.errors.${errorKey}`)}
+                    </p>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={retryLast}
+                      data-testid="button-chat-retry"
+                    >
+                      {t('news.retry')}
+                    </Button>
+                  </div>
+                )}
+              </div>
+
+              {/*
+                Return to the newest message.
+
+                Shown only while the visitor has scrolled away from the end, so
+                it never covers the thread during ordinary reading. It sits
+                inside the message area rather than the composer so it reads as
+                part of the transcript it controls.
+              */}
+              {!isPinnedToLatest && messages.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPinnedToLatest(true);
+                    scrollToLatest(true);
+                  }}
+                  aria-label={t('chat.jumpToLatest')}
+                  className="absolute bottom-3 end-3 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-md transition-colors hover:bg-primary/5 focus-ring-standard"
+                  data-testid="button-chat-jump-latest"
+                >
+                  <ArrowDown className="h-4 w-4" aria-hidden="true" />
+                </button>
               )}
+            </div>
+
+            {/*
+              The only live region in the panel.
+
+              It carries one string at a time — the newest assistant reply, or
+              the fact that one is on its way — so a send never re-announces the
+              conversation that came before it.
+            */}
+            <div className="sr-only" role="status" aria-live="polite">
+              {announcement}
             </div>
 
             {/* Composer — visually separated from the message area. */}

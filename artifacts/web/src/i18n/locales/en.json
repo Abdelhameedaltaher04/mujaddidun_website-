@@ -1959,6 +1959,9 @@
     "hint": "Enter to send · Shift+Enter for a new line",
     "empty": "How can I help you?",
     "disclaimer": "Automated assistant — it can make mistakes. For official details please check the site pages or contact us.",
+    "speakerYou": "You",
+    "speakerAssistant": "Assistant",
+    "jumpToLatest": "Jump to the latest message",
     "suggestionsLabel": "Common questions",
     "suggestions": {
       "donate": "How can I donate?",
