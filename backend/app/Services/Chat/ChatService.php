@@ -2,6 +2,7 @@
 
 namespace App\Services\Chat;
 
+use App\Services\Chat\Knowledge\KeywordMatcher;
 use App\Services\Chat\Knowledge\KnowledgeBase;
 
 /**
@@ -166,6 +167,14 @@ class ChatService
 
         if (trim($knowledge) !== '' || count($turns) === 1) {
             return $knowledge;
+        }
+
+        // Retrieving nothing is not on its own a reason to reach backwards. A
+        // self-contained question that simply has no answer here — "شو عاصمة
+        // فرنسا؟" — must stay unanswered rather than inherit whatever the
+        // visitor happened to ask before it.
+        if (! KeywordMatcher::continuesPreviousTurn($turns[0])) {
+            return '';
         }
 
         // Newest first, so its wording still carries the most weight wherever a

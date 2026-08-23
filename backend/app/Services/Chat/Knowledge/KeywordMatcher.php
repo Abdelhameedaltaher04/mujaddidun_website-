@@ -107,6 +107,82 @@ final class KeywordMatcher
      *
      * @param  list<string>  $needles  already-normalised words
      */
+    /**
+     * Words that mark a message as continuing the turn before it.
+     *
+     * A closed class of function words, in the same spirit as STOPWORDS — not a
+     * list of questions. In Arabic a follow-up is normally the conjunction "و"
+     * fused to an interrogative ("وكم مدته؟"), and in English it opens with a
+     * plain connective ("and the second one?").
+     *
+     * Matched only at the very start of a message: "و" also begins ordinary
+     * nouns such as "وقت", and those must not be mistaken for a conjunction
+     * when they appear anywhere else in the sentence.
+     *
+     * @var list<string>
+     */
+    private const CONTINUATION_OPENERS = [
+        'وكم', 'ومتي', 'وماذا', 'وهل', 'واين', 'ومن', 'وكيف', 'وما', 'وايه', 'وشو',
+        'وايضا', 'ثم', 'ايضا',
+        'and', 'also', 'then', 'plus', 'what about', 'how about', 'and what',
+    ];
+
+    /**
+     * Whether a message reads as a follow-up rather than a new question.
+     *
+     * This exists to keep conversation carry-over honest. Carrying the previous
+     * subject forward is what lets "وكم مدته؟" be answered, but applied blindly
+     * it also let "شو عاصمة فرنسا؟" inherit a donation question asked earlier
+     * and be answered with donation details — confidently, and about something
+     * the visitor never asked.
+     *
+     * Two shapes count as a follow-up, and nothing else does:
+     *
+     *  - the message carries no content of its own once stopwords are removed
+     *    ("tell me more about it"), so it can only be about the previous turn;
+     *  - it opens with a connective, the ordinary way both languages attach a
+     *    question to the one before it.
+     *
+     * Deliberately not used: whether the message's words appear in the corpus.
+     * Measured against the real data, genuine follow-ups ("وكم مدته؟", "وهل
+     * هناك شروط؟") share that property with off-topic questions — every one of
+     * their tokens is absent from the corpus too — so it separates nothing.
+     *
+     * The failure this leaves is the safe one: a follow-up phrased without a
+     * connective ("كم مدته؟") loses the carried subject and is answered with "I
+     * don't have that" instead of the wrong answer to a different question.
+     */
+    public static function continuesPreviousTurn(string $message): bool
+    {
+        $normalised = trim(self::normalise($message));
+
+        if ($normalised === '') {
+            return true;
+        }
+
+        if (self::tokenize($message) === []) {
+            return true;
+        }
+
+        $firstWord = explode(' ', $normalised)[0];
+
+        foreach (self::CONTINUATION_OPENERS as $opener) {
+            if (str_contains($opener, ' ')) {
+                if (str_starts_with($normalised, $opener.' ')) {
+                    return true;
+                }
+
+                continue;
+            }
+
+            if ($firstWord === $opener) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static function mentionsAny(string $text, array $needles): bool
     {
         $haystack = self::normalise($text);

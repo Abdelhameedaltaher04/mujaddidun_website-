@@ -282,6 +282,169 @@ class ChatConversationTest extends TestCase
         $this->assertStringNotContainsString('برنامج محو الأمية الرقمية', $reply);
     }
 
+    // ------------------------------------------- Off-topic amid a conversation
+
+    /**
+     * Seeds a donation FAQ alongside the rest, so a wrong answer has something
+     * concrete to leak.
+     */
+    private function donationFaq(): void
+    {
+        Faq::create([
+            'question_ar' => 'كيف يمكنني التبرع لجمعية مجددون؟',
+            'question_en' => 'How can I donate to Mujaddidun Association?',
+            'answer_ar' => 'يمكنك التبرع من خلال صفحة التبرعات على الموقع واختيار طريقة التبرع المناسبة.',
+            'answer_en' => 'You can donate through the donation page on the website and choose a donation method.',
+            'category' => 'donations',
+            'status' => 'published',
+            'sort_order' => 2,
+        ]);
+    }
+
+    /**
+     * The reported bug.
+     *
+     * Asked on its own, "شو عاصمة فرنسا؟" already reached the fallback. Asked
+     * after a donation question it did not: retrieval fell back to the previous
+     * turns, pulled in the donation FAQ, and the visitor was told how to donate
+     * — an answer to a question they had not asked, delivered confidently.
+     */
+    public function test_an_off_topic_question_after_a_donation_question_is_not_answered_with_it(): void
+    {
+        $this->seedPublicContent();
+        $this->donationFaq();
+
+        $reply = $this->converse([
+            $this->user('كيف أتبرع؟'),
+            $this->assistant('يمكنك التبرع من خلال صفحة التبرعات على الموقع.'),
+            $this->user('شو عاصمة فرنسا؟'),
+        ]);
+
+        $this->assertStringContainsString('أعتذر', $reply);
+
+        // The words "التبرع" and "برامج" appear in the fallback itself, which
+        // lists what the assistant *can* help with — so the assertion targets
+        // the FAQ's actual answer text, which must not be reproduced.
+        foreach (['صفحة التبرعات', 'محو الأمية الرقمية', 'أورنج'] as $leaked) {
+            $this->assertStringNotContainsString($leaked, $reply, "[{$leaked}] leaked into an off-topic answer");
+        }
+    }
+
+    public function test_the_english_capital_question_reaches_the_fallback_mid_conversation(): void
+    {
+        $this->seedPublicContent();
+        $this->donationFaq();
+
+        $reply = $this->converse([
+            $this->user('How can I donate?'),
+            $this->assistant('You can donate through the donation page on the website.'),
+            $this->user('What is the capital of France?'),
+        ], 'en');
+
+        $this->assertStringContainsString('I can only help with topics related to the Mujaddidun', $reply);
+
+        foreach (['donation page', 'Digital Literacy', 'Orange Jordan'] as $leaked) {
+            $this->assertStringNotContainsString($leaked, $reply, "[{$leaked}] leaked into an off-topic answer");
+        }
+    }
+
+    /**
+     * Retrieval itself must come back empty — not merely be ignored downstream.
+     * Asserted on the prompt so the guarantee does not depend on the provider.
+     */
+    public function test_an_unrelated_arabic_question_retrieves_no_knowledge_at_all(): void
+    {
+        $this->seedPublicContent();
+        $this->donationFaq();
+
+        $fake = new class implements ChatCompletionProvider
+        {
+            public ?string $systemPrompt = null;
+
+            public function complete(string $systemPrompt, array $messages): string
+            {
+                $this->systemPrompt = $systemPrompt;
+
+                return 'ok';
+            }
+        };
+        $this->app->instance(ChatCompletionProvider::class, $fake);
+
+        app(ChatService::class)->reply([
+            $this->user('ما هي برامجكم؟'),
+            $this->assistant('هذه البرامج المتاحة حالياً.'),
+            $this->user('شو عاصمة فرنسا؟'),
+        ], 'ar');
+
+        $prompt = (string) $fake->systemPrompt;
+
+        $this->assertStringNotContainsString('<knowledge_context>', $prompt, 'an off-topic question still built a knowledge block');
+        foreach (['التبرع', 'محو الأمية', 'أورنج'] as $material) {
+            $this->assertStringNotContainsString($material, $prompt);
+        }
+    }
+
+    /** Several unrelated questions, each after a different subject. */
+    public function test_unrelated_questions_never_inherit_the_previous_subject(): void
+    {
+        $this->seedPublicContent();
+        $this->donationFaq();
+
+        foreach ([
+            ['كيف أتبرع؟', 'يمكنك التبرع من خلال الصفحة.', 'من فاز بكأس العالم؟'],
+            ['ما هي برامجكم؟', 'هذه البرامج المتاحة حالياً.', 'اكتب لي قصيدة عن القطط'],
+            ['ما هي آخر الأخبار؟', 'إليك آخر الأخبار.', 'شو عاصمة فرنسا؟'],
+        ] as [$first, $answer, $offTopic]) {
+            $reply = $this->converse([
+                $this->user($first),
+                $this->assistant($answer),
+                $this->user($offTopic),
+            ]);
+
+            $this->assertStringContainsString('أعتذر', $reply, "[{$offTopic}] did not reach the fallback");
+            $this->assertStringNotContainsString('•', $reply, "[{$offTopic}] was answered with a list");
+        }
+    }
+
+    // ------------------------------------- Valid retrieval must be unaffected
+
+    public function test_a_donation_question_still_retrieves_the_donation_faq(): void
+    {
+        $this->seedPublicContent();
+        $this->donationFaq();
+
+        $this->assertStringContainsString(
+            'صفحة التبرعات',
+            $this->converse([$this->user('كيف أتبرع؟')]),
+        );
+
+        // And still does mid-conversation.
+        $this->assertStringContainsString(
+            'صفحة التبرعات',
+            $this->converse([
+                $this->user('ما هي برامجكم؟'),
+                $this->assistant('هذه البرامج المتاحة حالياً.'),
+                $this->user('كيف أتبرع؟'),
+            ]),
+        );
+    }
+
+    public function test_a_programme_question_still_retrieves_programme_knowledge(): void
+    {
+        $this->seedPublicContent();
+        $this->donationFaq();
+
+        $this->assertStringContainsString(
+            'برنامج محو الأمية الرقمية',
+            $this->converse([$this->user('ما هي البرامج؟')]),
+        );
+
+        $this->assertStringContainsString(
+            'Digital Literacy Program',
+            $this->converse([$this->user('What programs do you offer?')], 'en'),
+        );
+    }
+
     // ------------------------------------------------------------- Safety
 
     /**

@@ -42,19 +42,35 @@ export function FloatingActions() {
       {/*
         End-side stack. One fixed container owns the placement of everything in
         this corner, so the assistant launcher does not need positioning of its
-        own. `flex-col-reverse` puts the first child nearest the bottom edge:
-        back-to-top keeps the exact spot it has always had, and the assistant
-        launcher sits directly above it. Back-to-top only fades (it never
-        unmounts), so the launcher's position never shifts on scroll.
+        own. `flex-col-reverse` puts the first child nearest the bottom edge, so
+        the assistant launcher is listed first and back-to-top sits above it.
+        Back-to-top only fades (it never unmounts), so the launcher's position
+        never shifts on scroll.
+
+        The launcher has to be the bottom-most item for it to line up with the
+        WhatsApp button in the opposite corner: while it sat above back-to-top,
+        that control reserved its 48px plus the 12px gap even at the top of the
+        page where it is invisible, floating the launcher 60px higher than its
+        counterpart for no reason a visitor could see.
+
+        Vertical offset: WhatsApp uses `bottom-5 sm:bottom-6` and is 48px tall,
+        so its centre sits 20+24=44px (24+24=48px from `sm`) above the viewport
+        edge. The launcher is 56px, so matching those centres means sitting half
+        the 8px height difference lower — `bottom-4 sm:bottom-5`. The numbers are
+        derived from the two button heights, so they stay correct as long as
+        those heights do; both are stated here so a future size change is
+        obviously a change to this sum too.
       */}
       <div
         className={cn(
-          'fixed bottom-5 end-5 z-40 flex flex-col-reverse items-center gap-3 transition-all duration-300 sm:bottom-6 sm:end-6',
+          'fixed bottom-4 end-5 z-40 flex flex-col-reverse items-center gap-3 transition-all duration-300 sm:bottom-5 sm:end-6',
           // While the panel is open it occupies this corner, so the stack steps
           // out of the way rather than overlapping it.
           isChatOpen && 'pointer-events-none translate-y-2 opacity-0',
         )}
       >
+        <ChatWidget open={isChatOpen} onOpenChange={setIsChatOpen} />
+
         <button
           type="button"
           aria-label={t('common.backToTop')}
@@ -69,8 +85,6 @@ export function FloatingActions() {
         >
           <ArrowUp className="h-5 w-5" aria-hidden="true" />
         </button>
-
-        <ChatWidget open={isChatOpen} onOpenChange={setIsChatOpen} />
       </div>
 
       {whatsappNumber && (

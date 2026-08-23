@@ -240,6 +240,56 @@ export function ChatWidget({
     return () => document.removeEventListener('pointerdown', onPointerDown);
   }, [open, close]);
 
+  /**
+   * Keep Tab inside the panel while it is genuinely modal.
+   *
+   * This exists only because `aria-modal` is true on small screens. That
+   * attribute tells assistive tech the rest of the page is inert, so letting
+   * Tab walk out into content a screen reader has been told to ignore would
+   * strand the visitor somewhere they cannot perceive. On desktop the panel is
+   * a small corner surface, `aria-modal` is false, and no trap is installed —
+   * tabbing away to the page is correct there.
+   *
+   * Only the two boundaries are intercepted, so ordinary Tab and Shift+Tab
+   * between the panel's own controls behave exactly as the browser intends.
+   * Escape is untouched and still closes.
+   */
+  useEffect(() => {
+    if (!open || !isCompact) return;
+
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+
+      const panel = panelRef.current;
+      if (!panel) return;
+
+      const focusable = [
+        ...panel.querySelectorAll<HTMLElement>(
+          'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])',
+        ),
+      ].filter(
+        (el) =>
+          !el.hasAttribute('disabled') &&
+          (el.offsetWidth > 0 || el.offsetHeight > 0 || el.getClientRects().length > 0),
+      );
+
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      const outside = !panel.contains(active);
+
+      if (event.shiftKey ? active === first || outside : active === last || outside) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [open, isCompact]);
+
   const autoGrow = useCallback(() => {
     const el = inputRef.current;
     if (!el) return;
@@ -306,14 +356,16 @@ export function ChatWidget({
         aria-expanded={open}
         aria-controls="mujaddidun-chat-panel"
         onClick={() => onOpenChange(!open)}
-        className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 ring-1 ring-white/15 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-primary/40 active:scale-95 focus-ring-standard motion-reduce:transition-none motion-reduce:hover:scale-100"
+        className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-black/25 border border-white/25 transition-all duration-300 hover:scale-110 hover:border-white/40 hover:shadow-xl hover:shadow-black/30 active:scale-95 focus-ring-standard motion-reduce:transition-none motion-reduce:hover:scale-100"
         data-testid="button-chat-open"
       >
         <MessageCircle
           className={cn(
-            'absolute h-6 w-6 transition-all duration-200',
+            'absolute h-7 w-7 transition-all duration-200',
             open ? 'scale-0 opacity-0' : 'scale-100 opacity-100',
           )}
+          fill="currentColor"
+          strokeWidth={0}
           aria-hidden="true"
         />
         <X
@@ -321,13 +373,14 @@ export function ChatWidget({
             'absolute h-6 w-6 transition-all duration-200',
             open ? 'scale-100 opacity-100' : 'scale-0 opacity-0',
           )}
+          strokeWidth={2.5}
           aria-hidden="true"
         />
         {/* Availability dot. Paired with text in the header, so colour is
             never the only signal. */}
         <span
           className={cn(
-            'absolute -top-0.5 h-3 w-3 rounded-full border-2 border-background bg-success transition-opacity duration-200',
+            'absolute -top-0.5 h-3.5 w-3.5 rounded-full bg-success ring-2 ring-card transition-opacity duration-200',
             dir === 'rtl' ? '-start-0.5' : '-end-0.5',
             open && 'opacity-0',
           )}
@@ -342,7 +395,7 @@ export function ChatWidget({
             id="mujaddidun-chat-panel"
             dir={dir}
             role="dialog"
-            aria-modal="false"
+            aria-modal={isCompact}
             aria-label={t('chat.title')}
             className={cn(
               'fixed inset-x-3 bottom-3 z-50 flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-2xl shadow-primary/10',
@@ -555,15 +608,20 @@ export function ChatWidget({
                   placeholder={t('chat.placeholder')}
                   aria-label={t('chat.placeholder')}
                   aria-describedby="mujaddidun-chat-hint"
-                  disabled={isSending}
-                  className="max-h-[120px] min-h-[2.25rem] flex-1 resize-none bg-transparent px-2.5 py-2 text-sm leading-relaxed text-foreground outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-60"
+                  // Deliberately not disabled while a reply is in flight: the
+                  // visitor can keep composing their next question. Nothing can
+                  // be sent twice — `submit()` and `useChat.send()` both refuse
+                  // while a request is pending, and the send button is disabled
+                  // for the duration — so the only thing disabling this bought
+                  // was taking the keyboard away mid-thought.
+                  className="max-h-[120px] min-h-[2.25rem] flex-1 resize-none bg-transparent px-2.5 py-2 text-sm leading-relaxed text-foreground outline-none placeholder:text-muted-foreground"
                   data-testid="input-chat-message"
                 />
                 <Button
                   type="button"
                   size="icon"
                   onClick={submit}
-                  className="h-9 w-9 shrink-0 rounded-xl transition-transform active:scale-95 disabled:opacity-40 motion-reduce:transition-none"
+                  className="h-9 w-9 shrink-0 rounded-xl transition-transform active:scale-95 disabled:opacity-40 focus-ring-standard motion-reduce:transition-none"
                   disabled={!canSend}
                   aria-label={t('chat.send')}
                   data-testid="button-chat-send"

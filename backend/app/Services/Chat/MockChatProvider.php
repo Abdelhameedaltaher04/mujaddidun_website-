@@ -2,6 +2,7 @@
 
 namespace App\Services\Chat;
 
+use App\Services\Chat\Knowledge\KeywordMatcher;
 use App\Services\Chat\Knowledge\KnowledgeContextReader;
 use Illuminate\Support\Facades\Log;
 
@@ -226,6 +227,14 @@ If you have another question about the association or its programmes, I'm here."
             $topic = $this->detectTopic($turn);
 
             if ($topic === 'fallback') {
+                // Only an elliptical follow-up may borrow an earlier subject.
+                // A fresh question that matched no topic is off topic, and
+                // saying so is the correct answer — inheriting the previous
+                // subject would answer something nobody asked.
+                if (! KeywordMatcher::continuesPreviousTurn($turn)) {
+                    return 'fallback';
+                }
+
                 continue;
             }
 
