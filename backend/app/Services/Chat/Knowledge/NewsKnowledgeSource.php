@@ -42,6 +42,22 @@ class NewsKnowledgeSource implements KnowledgeSource
         'news', 'latest', 'update', 'headline', 'recent',
     ];
 
+    /**
+     * The only columns read out of the news table.
+     *
+     * `status` and `deleted_at` are filtered on but never selected: they decide
+     * visibility, they are not reference material. Ordering by `id` needs no
+     * select either — it happens in the database.
+     *
+     * @var list<string>
+     */
+    private const EXPOSED_COLUMNS = [
+        'title_ar', 'title_en',
+        'excerpt_ar', 'excerpt_en',
+        'published_at',
+        'author_name',
+    ];
+
     public function key(): string
     {
         return 'news';
@@ -62,6 +78,12 @@ class NewsKnowledgeSource implements KnowledgeSource
         }
 
         $articles = News::query()
+            // Only the columns this source actually renders. Article bodies are
+            // the largest text in the public corpus and were being loaded on
+            // every chat request just to be discarded here; naming the columns
+            // also means a field that is never selected can never leak into a
+            // snippet by accident.
+            ->select(self::EXPOSED_COLUMNS)
             ->where('status', 'published')
             ->orderByDesc('published_at')
             ->orderByDesc('id')

@@ -124,17 +124,21 @@ class MockChatProvider implements ChatCompletionProvider
         ],
     ];
 
+    /**
+     * User turns the mock may consider, matching ChatService::CARRY_OVER_TURNS
+     * plus the latest message. The two must agree: a topic detected from a turn
+     * outside the retrieval window would have no context to answer from.
+     */
+    private const CARRY_OVER_WINDOW = 3;
+
     public function complete(string $systemPrompt, array $messages): string
     {
-        $lastUserMessage = '';
-        foreach (array_reverse($messages) as $message) {
-            if (($message['role'] ?? null) === 'user') {
-                $lastUserMessage = (string) ($message['content'] ?? '');
-                break;
-            }
-        }
+        $turns = $this->recentUserMessages($messages);
+        $lastUserMessage = $turns[0] ?? '';
 
-        $topic = $this->detectTopic($lastUserMessage);
+        // Language follows the newest turn only: a visitor who switches to
+        // English mid-conversation should be answered in English.
+        $topic = $this->detectConversationTopic($turns);
         $language = $this->detectLanguage($lastUserMessage);
         $knowledge = KnowledgeContextReader::parse($systemPrompt);
 
@@ -158,6 +162,79 @@ class MockChatProvider implements ChatCompletionProvider
         ]);
 
         return $reply;
+    }
+
+    /**
+     * The topic under discussion, looking back when the newest turn has none.
+     *
+     * A follow-up names no topic: "وكم مدته؟" and "and the second one?" are
+     * about whatever was just asked. Without this the mock would reach the
+     * off-topic apology and tell a visitor that their question about our own
+     * programme was irrelevant — which is precisely the failure this mirrors
+     * ChatService in fixing.
+     *
+     * Greetings never carry over: "مرحبا" is about the turn it appears in, so
+     * a later question must not be answered by greeting the visitor again.
+     *
+     * Known limit of the mock: it cannot tell an elliptical follow-up from a
+     * genuinely off-topic aside, so "tell me a joke" asked after a programme
+     * question inherits that topic instead of reaching the apology. The real
+     * provider is a model reading the same instructions and does not share this
+     * limitation; the single-turn behaviour it would regress is covered by
+     * test_an_unrelated_question_still_gets_the_polite_fallback.
+     *
+     * @param  list<string>  $turns  newest first
+     */
+    private function detectConversationTopic(array $turns): string
+    {
+        foreach ($turns as $index => $turn) {
+            $topic = $this->detectTopic($turn);
+
+            if ($topic === 'fallback') {
+                continue;
+            }
+
+            if ($index > 0 && $topic === 'greeting') {
+                continue;
+            }
+
+            return $topic;
+        }
+
+        return 'fallback';
+    }
+
+    /**
+     * The visitor's user turns, newest first, capped to match the retrieval
+     * window ChatService uses so the mock never claims a topic for which no
+     * context could have been retrieved.
+     *
+     * @param  list<array{role: string, content: string}>  $messages
+     * @return list<string>
+     */
+    private function recentUserMessages(array $messages): array
+    {
+        $turns = [];
+
+        foreach (array_reverse($messages) as $message) {
+            if (($message['role'] ?? null) !== 'user') {
+                continue;
+            }
+
+            $content = trim((string) ($message['content'] ?? ''));
+
+            if ($content === '') {
+                continue;
+            }
+
+            $turns[] = $content;
+
+            if (count($turns) >= self::CARRY_OVER_WINDOW) {
+                break;
+            }
+        }
+
+        return $turns;
     }
 
     /**

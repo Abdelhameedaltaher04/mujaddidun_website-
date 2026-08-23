@@ -19,6 +19,14 @@ class ChatService
 
     private const KNOWLEDGE_CLOSE = '</knowledge_context>';
 
+    /**
+     * How many earlier user turns may be folded into a retrieval that found
+     * nothing on its own. Two covers the realistic follow-up ("and how long is
+     * it?", "and the second one?") without letting a conversation accumulate
+     * every topic it has ever touched.
+     */
+    private const CARRY_OVER_TURNS = 2;
+
     public function __construct(
         private readonly ChatCompletionProvider $provider,
         private readonly KnowledgeBase $knowledgeBase,
@@ -44,10 +52,8 @@ class ChatService
             throw new ChatException('empty_conversation');
         }
 
-        $question = $this->latestUserMessage($messages);
-
         return $this->provider->complete(
-            $this->buildSystemPrompt($question, $locale),
+            $this->buildSystemPrompt($this->retrieveKnowledge($messages, $locale), $locale),
             $messages,
         );
     }
@@ -58,10 +64,9 @@ class ChatService
      * result is byte-for-byte the Phase 1 prompt, so no empty
      * `<knowledge_context>` block is ever emitted.
      */
-    private function buildSystemPrompt(string $question, string $locale): string
+    private function buildSystemPrompt(string $knowledge, string $locale): string
     {
         $prompt = $this->systemPrompt($locale);
-        $knowledge = $this->knowledgeBase->contextFor($question, $locale);
 
         if (trim($knowledge) === '') {
             return $prompt;
@@ -70,7 +75,12 @@ class ChatService
         // Order matters: the rules about how to treat the block are stated
         // before the block itself, so the instructions are already established
         // by the time the model reads any retrieved text.
-        return $prompt.PHP_EOL.PHP_EOL.$this->knowledgeSection($knowledge);
+        //
+        // The separator is an explicit "\n" rather than PHP_EOL on purpose:
+        // identical content must produce identical prompt bytes on every host, or
+        // a Windows dev machine and a Linux server disagree and prompt-cache hits
+        // are lost. Please do not "tidy" this back to PHP_EOL.
+        return $prompt."\n\n".$this->knowledgeSection($knowledge);
     }
 
     /**
@@ -129,16 +139,72 @@ class ChatService
         SECTION;
     }
 
-    /** The visitor's latest message — what a source would retrieve against. */
-    private function latestUserMessage(array $messages): string
+    /**
+     * The reference block for this conversation, or '' when nothing matched.
+     *
+     * A follow-up rarely restates its subject. "وكم مدته؟" and "tell me more
+     * about it" carry no topical word at all, so retrieving on the latest
+     * message alone comes back empty and the assistant answers as though the
+     * visitor had wandered off topic — while still holding the answer from the
+     * turn before. Earlier user turns are folded in to recover the subject.
+     *
+     * The carry-over runs only when the latest message retrieves nothing on its
+     * own, so a self-contained question is never dragged back toward a topic the
+     * visitor has already moved on from.
+     *
+     * @param  list<array{role: string, content: string}>  $messages
+     */
+    private function retrieveKnowledge(array $messages, string $locale): string
     {
+        $turns = $this->recentUserMessages($messages);
+
+        if ($turns === []) {
+            return '';
+        }
+
+        $knowledge = $this->knowledgeBase->contextFor($turns[0], $locale);
+
+        if (trim($knowledge) !== '' || count($turns) === 1) {
+            return $knowledge;
+        }
+
+        // Newest first, so its wording still carries the most weight wherever a
+        // source ranks by keyword overlap.
+        return $this->knowledgeBase->contextFor(implode(' ', $turns), $locale);
+    }
+
+    /**
+     * The visitor's latest message, then up to CARRY_OVER_TURNS earlier ones.
+     *
+     * Blank turns are skipped rather than counted, so a stray empty message
+     * cannot silently consume the carry-over budget.
+     *
+     * @param  list<array{role: string, content: string}>  $messages
+     * @return list<string>
+     */
+    private function recentUserMessages(array $messages): array
+    {
+        $turns = [];
+
         foreach (array_reverse($messages) as $message) {
-            if (($message['role'] ?? null) === 'user') {
-                return (string) ($message['content'] ?? '');
+            if (($message['role'] ?? null) !== 'user') {
+                continue;
+            }
+
+            $content = trim((string) ($message['content'] ?? ''));
+
+            if ($content === '') {
+                continue;
+            }
+
+            $turns[] = $content;
+
+            if (count($turns) >= 1 + self::CARRY_OVER_TURNS) {
+                break;
             }
         }
 
-        return '';
+        return $turns;
     }
 
     /**

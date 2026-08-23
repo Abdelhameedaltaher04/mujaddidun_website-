@@ -393,6 +393,32 @@ class ChatApiTest extends TestCase
         $this->assertStringContainsString('injected snippet', $fake->systemPrompt);
     }
 
+    /**
+     * The prompt is assembled with an explicit "\n", never PHP_EOL.
+     *
+     * PHP_EOL made the joint between the standing instructions and the
+     * knowledge block CRLF on Windows and LF on Linux, so the same content
+     * produced different prompt bytes depending on which host built it —
+     * silently costing prompt-cache hits in production. This pins the bytes.
+     */
+    public function test_the_system_prompt_uses_platform_independent_newlines(): void
+    {
+        $this->useKnowledgeSources($this->fakeSource('probe', ['injected snippet']));
+        $fake = $this->fakeProvider();
+
+        $this->postJson('/api/v1/public/chat', $this->payload())->assertStatus(200);
+
+        $prompt = (string) $fake->systemPrompt;
+
+        // No carriage return anywhere, whatever host built the prompt.
+        $this->assertStringNotContainsString("\r", $prompt);
+
+        // And the separator before the knowledge section is exactly two LFs.
+        $offset = mb_strpos($prompt, 'REFERENCE INFORMATION');
+        $this->assertNotFalse($offset, 'no knowledge section was appended');
+        $this->assertSame("\n\n", mb_substr($prompt, $offset - 2, 2));
+    }
+
     public function test_an_empty_knowledge_base_adds_no_knowledge_block(): void
     {
         $fake = $this->fakeProvider();

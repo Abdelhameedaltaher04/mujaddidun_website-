@@ -11,6 +11,7 @@ use App\Services\Chat\Knowledge\KnowledgeSource;
 use App\Services\Chat\Knowledge\NewsKnowledgeSource;
 use App\Services\Chat\Knowledge\ProgramKnowledgeSource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 /**
@@ -737,6 +738,69 @@ class ChatKnowledgeTest extends TestCase
         foreach (['secret-cover', 'news-covers', 'orange-support-', '4242', 'views_count', 'cover_image_path'] as $internal) {
             $this->assertStringNotContainsString($internal, $snippet);
         }
+    }
+
+    /**
+     * The source reads only the columns it renders.
+     *
+     * It used to SELECT *, loading both article bodies — by far the largest
+     * text in the public corpus — on every chat request only to discard them.
+     * Asserting on the loaded attributes rather than on the rendered snippet is
+     * deliberate: a snippet assertion passes just as well when the column was
+     * fetched and then dropped, which is exactly the waste being removed here.
+     */
+    public function test_only_the_rendered_columns_are_loaded_from_the_database(): void
+    {
+        $loaded = [];
+
+        DB::listen(static function ($query) use (&$loaded): void {
+            if (str_contains($query->sql, 'from "news"')) {
+                $loaded[] = $query->sql;
+            }
+        });
+
+        $this->news(8, 'published');
+        $snippets = (new NewsKnowledgeSource())->retrieve('أورنج', 'ar');
+
+        $this->assertNotEmpty($snippets, 'the article should still be retrieved');
+        $this->assertNotEmpty($loaded, 'no news query was observed');
+
+        $sql = end($loaded);
+
+        // The bodies must not even be fetched, let alone rendered.
+        foreach (['content_ar', 'content_en', 'select *'] as $excluded) {
+            $this->assertStringNotContainsString($excluded, $sql, "[{$excluded}] is still being selected");
+        }
+
+        // Every column the renderer actually reads is present.
+        foreach (['title_ar', 'title_en', 'excerpt_ar', 'excerpt_en', 'published_at', 'author_name'] as $needed) {
+            $this->assertStringContainsString($needed, $sql, "[{$needed}] is no longer selected");
+        }
+    }
+
+    /**
+     * Retrieval must not depend on a column that is no longer fetched. A model
+     * hydrated without the bodies still ranks, renders and falls back exactly as
+     * before — including when a localised field is missing.
+     */
+    public function test_retrieval_does_not_depend_on_the_excluded_body_columns(): void
+    {
+        $this->news(8, 'published', [
+            'content_ar' => 'نص كامل لا علاقة له بالسؤال: التشجير.',
+            'content_en' => 'FULL ARTICLE BODY mentioning reforestation.',
+        ]);
+
+        $source = new NewsKnowledgeSource();
+
+        // A word that appears only in the body must not produce a match: the
+        // column is not read, so it cannot influence ranking.
+        $this->assertSame([], $source->retrieve('reforestation', 'en'));
+        $this->assertSame([], $source->retrieve('التشجير', 'ar'));
+
+        // Title and excerpt still rank and render as before.
+        $snippet = $source->retrieve('أورنج', 'ar')[0];
+        $this->assertStringContainsString('أورنج الأردن تدعم حملات مجددون', $snippet);
+        $this->assertStringNotContainsString('FULL ARTICLE BODY', $snippet);
     }
 
     public function test_malicious_stored_news_cannot_escape_the_knowledge_block(): void
