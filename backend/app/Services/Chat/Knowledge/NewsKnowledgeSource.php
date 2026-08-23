@@ -28,6 +28,20 @@ class NewsKnowledgeSource implements KnowledgeSource
     /** News is supporting context, not the main answer — keep it tight. */
     private const MAX_RESULTS = 3;
 
+    /**
+     * Words that ask for recent news as a category rather than by topic.
+     *
+     * "ما هي آخر الأخبار؟" cannot be answered by keyword overlap: no article
+     * contains the word "أخبار". When one of these appears, the newest
+     * published articles are returned — which is exactly what was asked.
+     *
+     * @var list<string>
+     */
+    private const LISTING_KEYWORDS = [
+        'اخبار', 'خبر', 'مستجدات', 'جديد', 'يحدث',
+        'news', 'latest', 'update', 'headline', 'recent',
+    ];
+
     public function key(): string
     {
         return 'news';
@@ -41,8 +55,9 @@ class NewsKnowledgeSource implements KnowledgeSource
     public function retrieve(string $question, string $locale): array
     {
         $tokens = KeywordMatcher::tokenize($question);
+        $isListingRequest = KeywordMatcher::mentionsAny($question, self::LISTING_KEYWORDS);
 
-        if ($tokens === []) {
+        if ($tokens === [] && ! $isListingRequest) {
             return [];
         }
 
@@ -51,6 +66,22 @@ class NewsKnowledgeSource implements KnowledgeSource
             ->orderByDesc('published_at')
             ->orderByDesc('id')
             ->get();
+
+        // "What's the latest?" — the answer is the newest articles, already
+        // ordered by the query above.
+        if ($isListingRequest) {
+            $snippets = [];
+
+            foreach ($articles->take(self::MAX_RESULTS) as $article) {
+                $snippet = $this->render($article, $locale);
+
+                if ($snippet !== null) {
+                    $snippets[] = $snippet;
+                }
+            }
+
+            return $snippets;
+        }
 
         $matches = [];
 

@@ -23,6 +23,21 @@ class ProgramKnowledgeSource implements KnowledgeSource
 
     private const MAX_RESULTS = 3;
 
+    /**
+     * Words that ask for the programme catalogue as a category.
+     *
+     * Needed because Arabic forms broken plurals: "برامج" shares no substring
+     * with "برنامج", so "ما هي البرامج؟" scores zero against every programme
+     * despite being the most obvious question a visitor can ask. When one of
+     * these appears, the public programmes are returned in listing order.
+     *
+     * @var list<string>
+     */
+    private const LISTING_KEYWORDS = [
+        'برامج', 'برنامج', 'مشاريع', 'مشروع', 'مبادرات', 'انشطه',
+        'program', 'programme', 'project', 'initiative', 'activities',
+    ];
+
     public function key(): string
     {
         return 'programs';
@@ -36,8 +51,9 @@ class ProgramKnowledgeSource implements KnowledgeSource
     public function retrieve(string $question, string $locale): array
     {
         $tokens = KeywordMatcher::tokenize($question);
+        $isListingRequest = KeywordMatcher::mentionsAny($question, self::LISTING_KEYWORDS);
 
-        if ($tokens === []) {
+        if ($tokens === [] && ! $isListingRequest) {
             return [];
         }
 
@@ -49,6 +65,22 @@ class ProgramKnowledgeSource implements KnowledgeSource
             ->orderByDesc('starts_on')
             ->orderBy('id')
             ->get();
+
+        // "What programmes do you have?" — the answer is the catalogue itself,
+        // already in listing order from the query above.
+        if ($isListingRequest) {
+            $snippets = [];
+
+            foreach ($programs->take(self::MAX_RESULTS) as $program) {
+                $snippet = $this->render($program, $locale);
+
+                if ($snippet !== null) {
+                    $snippets[] = $snippet;
+                }
+            }
+
+            return $snippets;
+        }
 
         $matches = [];
 

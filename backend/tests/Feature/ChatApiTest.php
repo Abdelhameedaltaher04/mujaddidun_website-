@@ -252,27 +252,45 @@ class ChatApiTest extends TestCase
         }
     }
 
-    public function test_the_mock_provider_answers_each_supported_topic(): void
+    public function test_the_mock_provider_greets_without_needing_knowledge(): void
     {
         $mock = new MockChatProvider();
 
+        // A greeting asserts no facts, so it needs no retrieved context.
+        $this->assertStringContainsString(
+            'مساعد جمعية مجددون',
+            $mock->complete('system', [['role' => 'user', 'content' => 'مرحباً']]),
+        );
+        $this->assertStringContainsString(
+            "I'm the assistant",
+            $mock->complete('system', [['role' => 'user', 'content' => 'Hello there']]),
+        );
+    }
+
+    public function test_the_mock_provider_invents_nothing_without_a_knowledge_block(): void
+    {
+        $mock = new MockChatProvider();
+
+        // Every one of these used to return canned facts. With no knowledge in
+        // the prompt the mock must now say it has nothing, so what a developer
+        // sees locally reflects what retrieval actually produced.
         $cases = [
-            ['مرحباً', 'مساعد جمعية مجددون'],
-            ['Hello there', "I'm the assistant"],
-            ['كيف أتطوع معكم؟', 'التطوع'],
-            ['How can I volunteer?', 'volunteering'],
-            ['أريد التبرع', 'التبرعات'],
-            ['I want to donate', 'donation'],
-            ['ما هي برامجكم؟', 'نُطعِم'],
-            ['Tell me about your programs', 'programmes'],
-            ['من هي جمعية مجددون؟', '2009'],
-            ['What is Mujaddidun?', '2009'],
-            ['كيف أتواصل معكم؟', 'اتصل بنا'],
+            ['كيف أتطوع معكم؟', 'لا تتوفر لدي معلومات منشورة'],
+            ['How can I volunteer?', "I don't have published information"],
+            ['أريد التبرع', 'لا تتوفر لدي معلومات منشورة'],
+            ['ما هي برامجكم؟', 'لا تتوفر لدي معلومات منشورة'],
+            ['Tell me about your programs', "I don't have published information"],
+            ['ما هي آخر الأخبار؟', 'لا تتوفر لدي معلومات منشورة'],
         ];
 
         foreach ($cases as [$question, $expected]) {
             $reply = $mock->complete('system', [['role' => 'user', 'content' => $question]]);
             $this->assertStringContainsString($expected, $reply, "unexpected reply for [{$question}]");
+
+            // No fabricated programme names, figures or bank details.
+            foreach (['نُطعِم', '2009', 'JO00', 'IBAN'] as $invented) {
+                $this->assertStringNotContainsString($invented, $reply);
+            }
         }
     }
 

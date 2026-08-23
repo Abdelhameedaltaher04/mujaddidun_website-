@@ -97,6 +97,30 @@ final class KeywordMatcher
     }
 
     /**
+     * Whether the text mentions any of these words.
+     *
+     * Used for "list what you have" intents — "ما هي آخر الأخبار؟", "what
+     * programs do you offer?" — where the visitor names a *category* rather
+     * than anything inside the records. Token overlap cannot answer those: no
+     * article contains the word "news", and Arabic's broken plural means
+     * "برامج" shares no substring with "برنامج".
+     *
+     * @param  list<string>  $needles  already-normalised words
+     */
+    public static function mentionsAny(string $text, array $needles): bool
+    {
+        $haystack = self::normalise($text);
+
+        foreach ($needles as $needle) {
+            if ($needle !== '' && mb_strpos($haystack, $needle) !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * How many distinct question tokens appear in the haystack.
      *
      * Each token is expanded into a few affix-stripped forms before matching.

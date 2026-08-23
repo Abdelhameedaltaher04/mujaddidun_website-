@@ -2,6 +2,7 @@
 
 namespace App\Services\Chat;
 
+use App\Services\Chat\Knowledge\KnowledgeContextReader;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -12,10 +13,12 @@ use Illuminate\Support\Facades\Log;
  * the key is missing *and* the app is running locally — see the binding there
  * for the exact rule. Production never reaches this class.
  *
- * The replies deliberately follow the same rules as the real system prompt:
- * they invent no figures, quote no bank or contact details, and point at the
- * website for specifics. That keeps a screenshot taken during development from
- * showing something the real assistant would never say.
+ * It answers the way the real assistant is instructed to: from the knowledge
+ * block in the system prompt when one is present, and with a plain "I don't
+ * have that" when it is not. Nothing here invents a programme, an article, a
+ * date, a phone number or a bank detail — every fact in a grounded reply is
+ * copied out of the retrieved context, so what a developer sees locally
+ * reflects what retrieval actually produced.
  */
 class MockChatProvider implements ChatCompletionProvider
 {
@@ -25,6 +28,14 @@ class MockChatProvider implements ChatCompletionProvider
      * donation question rather than just greeting back.
      */
     private const TOPICS = [
+        'news' => [
+            'اخبار', 'الاخبار', 'أخبار', 'الأخبار', 'خبر', 'مستجدات', 'جديد',
+            'news', 'latest', 'update', 'headline',
+        ],
+        'events' => [
+            'فعالية', 'فعاليات', 'الفعاليات', 'نشاط', 'أنشطة', 'ورشة',
+            'event', 'events', 'workshop', 'activities',
+        ],
         'volunteering' => [
             'تطوع', 'متطوع', 'التطوع', 'أتطوع', 'انضم',
             'volunteer', 'volunteering', 'join',
@@ -54,35 +65,62 @@ class MockChatProvider implements ChatCompletionProvider
         ],
     ];
 
-    /** @var array<string, array{ar: string, en: string}> */
-    private const REPLIES = [
-        'volunteering' => [
-            'ar' => "يسعدنا اهتمامك بالتطوع مع مجددون! التطوع هو أساس عمل الجمعية، ويشارك متطوعونا في حملات توزيع الطرود الغذائية، وحملة دفء الشتوية، وتجهيز المساعدات وتنظيمها.\n\nيمكنك تقديم طلب التطوع من صفحة \"التطوع\" في الموقع، وسيتواصل معك الفريق لمتابعة طلبك. إذا كان لديك سؤال محدد عن فريق أو محافظة معينة، يمكنك التواصل معنا عبر صفحة الاتصال.",
-            'en' => "We're glad you're interested in volunteering with Mujaddidun! Volunteers are at the heart of the association's work — they take part in food parcel distribution, the Warmth (دفء) winter campaign, and preparing and organising aid.\n\nYou can apply through the \"Volunteer\" page on this website, and the team will follow up with you. If you have a question about a specific team or governorate, the contact page is the best place to ask.",
+    /**
+     * Which knowledge source answers which topic, in order of preference.
+     *
+     * @var array<string, list<string>>
+     */
+    private const TOPIC_SOURCES = [
+        'news' => ['news'],
+        // Events are in scope but have no knowledge source: the audit found
+        // every event record to be placeholder, so none is exposed. Routing to
+        // the FAQs lets a published answer ("see the Events page") stand in,
+        // and when there is none the reply is "I don't have that" rather than
+        // the off-topic apology, which would wrongly tell a visitor their
+        // question was irrelevant.
+        'events' => ['faqs'],
+        'programs' => ['programs', 'faqs'],
+        'volunteering' => ['faqs', 'programs'],
+        'donation' => ['faqs'],
+        'about' => ['faqs', 'programs'],
+        'contact' => ['faqs'],
+    ];
+
+    /**
+     * Only connective wording lives here — leads, and the two replies used when
+     * there is nothing to ground on. No fact about the association appears in
+     * this list; facts come exclusively from the knowledge context.
+     *
+     * @var array<string, array{ar: string, en: string}>
+     */
+    private const PHRASES = [
+        'news_lead' => [
+            'ar' => 'إليك آخر الأخبار المنشورة على موقع مجددون:',
+            'en' => 'Here is the latest news published on the Mujaddidun website:',
         ],
-        'donation' => [
-            'ar' => "شكراً لرغبتك في دعم عمل مجددون. تذهب التبرعات إلى برامج الجمعية الثلاثة: نُطعِم لتوفير الغذاء، ونُسكِن لتحسين ظروف السكن، ونُمكِّن لتمكين الأفراد.\n\nتجد طرق التبرع المتاحة وتفاصيلها المحدّثة في صفحة \"تبرع\" على الموقع. لا أستطيع تزويدك بأرقام الحسابات هنا، لذا يُرجى الاعتماد على ما هو منشور في تلك الصفحة أو التواصل معنا مباشرة.",
-            'en' => "Thank you for wanting to support Mujaddidun's work. Donations go to the association's three programmes: نُطعِم (feeding), نُسكِن (shelter) and نُمكِّن (empowerment).\n\nThe available donation methods and their current details are on the \"Donate\" page of this website. I can't give out account numbers here, so please rely on what's published there, or contact us directly.",
+        'programs_lead' => [
+            'ar' => 'هذه البرامج المتاحة حالياً:',
+            'en' => 'These are the programmes currently listed:',
         ],
-        'programs' => [
-            'ar' => "تعمل جمعية مجددون من خلال ثلاثة برامج رئيسية:\n\n• نُطعِم — توفير الغذاء وتوزيع الطرود الغذائية على الأسر المحتاجة.\n• نُسكِن — تحسين ظروف السكن للأسر المتعففة.\n• نُمكِّن — تدريب وتمكين الأفراد لبناء مستقبل مستقل.\n\nتجد تفاصيل البرامج والحملات الجارية في صفحتي \"البرامج\" و\"المشاريع\" على الموقع.",
-            'en' => "Mujaddidun works through three main programmes:\n\n• نُطعِم (We Feed) — providing food and distributing parcels to families in need.\n• نُسكِن (We Shelter) — improving housing conditions for struggling families.\n• نُمكِّن (We Empower) — training and empowering people to build an independent future.\n\nYou'll find details of current programmes and campaigns on the \"Programs\" and \"Projects\" pages of this website.",
+        'general_lead' => [
+            'ar' => 'إليك ما هو منشور لدينا حول ذلك:',
+            'en' => 'Here is what we have published about that:',
         ],
-        'about' => [
-            'ar' => "جمعية مجددون الخيرية التنموية هي جمعية أردنية تأسست عام 2009 ومسجلة لدى وزارة التنمية الاجتماعية. يقوم عملها على جهود المتطوعين، وتنظّم أنشطتها ضمن ثلاثة برامج: نُطعِم، ونُسكِن، ونُمكِّن.\n\nيمكنك معرفة المزيد من صفحة \"من نحن\"، ومتابعة أنشطتنا في صفحتي الأخبار ومعرض الصور.",
-            'en' => "The Mujaddidun Charity and Development Association is a Jordanian association founded in 2009 and registered with the Ministry of Social Development. Its work is built on volunteer effort and organised under three programmes: نُطعِم (feeding), نُسكِن (shelter) and نُمكِّن (empowerment).\n\nYou can read more on the \"About\" page, and follow our activities through the News and Gallery pages.",
-        ],
-        'contact' => [
-            'ar' => "يسعدنا تواصلك معنا. تجد بيانات التواصل المحدّثة — بما فيها الهاتف والبريد الإلكتروني — في صفحة \"اتصل بنا\" على الموقع، ويمكنك أيضاً إرسال رسالة مباشرة من النموذج الموجود هناك.\n\nلا أستطيع ذكر أرقام الهاتف أو العناوين من الذاكرة، لذا يُرجى الاعتماد على ما هو منشور في تلك الصفحة.",
-            'en' => "We'd be glad to hear from you. The current contact details — including phone and email — are on the \"Contact\" page of this website, and you can also send a message straight from the form there.\n\nI can't quote phone numbers or addresses from memory, so please rely on what's published on that page.",
+        'more_on_site' => [
+            'ar' => 'تجد التفاصيل الكاملة في الصفحات المخصصة على الموقع.',
+            'en' => 'You can find the full details on the relevant pages of the website.',
         ],
         'greeting' => [
-            'ar' => "مرحباً بك! 👋 أنا مساعد جمعية مجددون الخيرية التنموية.\n\nيمكنني مساعدتك في التعرّف على برامج الجمعية وحملاتها، وكيفية التطوع أو التبرع، إضافة إلى الأخبار والفعاليات ومعلومات التواصل. كيف يمكنني مساعدتك؟",
-            'en' => "Hello! 👋 I'm the assistant for the Mujaddidun Charity and Development Association.\n\nI can help you learn about our programmes and campaigns, how to volunteer or donate, as well as news, events and how to get in touch. How can I help?",
+            'ar' => "مرحباً بك! 👋 أنا مساعد جمعية مجددون الخيرية التنموية.\n\nيمكنني مساعدتك في التعرّف على برامج الجمعية وحملاتها، وكيفية التطوع أو التبرع، إضافة إلى الأخبار ومعلومات التواصل. كيف يمكنني مساعدتك؟",
+            'en' => "Hello! 👋 I'm the assistant for the Mujaddidun Charity and Development Association.\n\nI can help you learn about our programmes and campaigns, how to volunteer or donate, as well as news and how to get in touch. How can I help?",
+        ],
+        'not_available' => [
+            'ar' => "لا تتوفر لدي معلومات منشورة حول هذا الأمر.\n\nيمكنك مراجعة الصفحات المخصصة على الموقع أو التواصل معنا مباشرة عبر صفحة اتصل بنا.",
+            'en' => "I don't have published information about that.\n\nYou can check the relevant pages of the website, or contact us directly through the Contact page.",
         ],
         'fallback' => [
-            'ar' => "أعتذر، يمكنني المساعدة فقط في المواضيع المتعلقة بجمعية مجددون وموقعها الإلكتروني.\n\nيسعدني أن أساعدك في التعرّف على برامج الجمعية، أو كيفية التطوع أو التبرع، أو الأخبار والفعاليات، أو طرق التواصل معنا. هل تود السؤال عن أحدها؟",
-            'en' => "I'm sorry — I can only help with topics related to the Mujaddidun association and its website.\n\nI'd be happy to help you with our programmes, how to volunteer or donate, news and events, or how to get in touch. Would you like to ask about any of those?",
+            'ar' => "أعتذر، يمكنني المساعدة فقط في المواضيع المتعلقة بجمعية مجددون وموقعها الإلكتروني.\n\nيسعدني أن أساعدك في التعرّف على برامج الجمعية، أو كيفية التطوع أو التبرع، أو الأخبار، أو طرق التواصل معنا. هل تود السؤال عن أحدها؟",
+            'en' => "I'm sorry — I can only help with topics related to the Mujaddidun association and its website.\n\nI'd be happy to help you with our programmes, how to volunteer or donate, news, or how to get in touch. Would you like to ask about any of those?",
         ],
     ];
 
@@ -98,13 +136,128 @@ class MockChatProvider implements ChatCompletionProvider
 
         $topic = $this->detectTopic($lastUserMessage);
         $language = $this->detectLanguage($lastUserMessage);
+        $knowledge = KnowledgeContextReader::parse($systemPrompt);
+
+        $reply = $topic === 'greeting'
+            ? self::PHRASES['greeting'][$language]
+            : $this->groundedAnswer($topic, $knowledge, $language);
+
+        if ($reply === null) {
+            // On topic but nothing retrieved, versus plainly off topic — the
+            // real assistant is instructed to distinguish these, so the mock
+            // does too rather than blaming the visitor for a gap in our data.
+            $reply = $topic === 'fallback'
+                ? self::PHRASES['fallback'][$language]
+                : self::PHRASES['not_available'][$language];
+        }
 
         Log::debug('Chat answered by the development mock provider.', [
             'topic' => $topic,
             'language' => $language,
+            'grounded_sources' => array_keys($knowledge),
         ]);
 
-        return self::REPLIES[$topic][$language];
+        return $reply;
+    }
+
+    /**
+     * Builds an answer purely from retrieved snippets, or null when the context
+     * holds nothing usable for this topic.
+     *
+     * @param  array<string, list<string>>  $knowledge
+     */
+    private function groundedAnswer(string $topic, array $knowledge, string $language): ?string
+    {
+        foreach (self::TOPIC_SOURCES[$topic] ?? [] as $sourceKey) {
+            $snippets = $knowledge[$sourceKey] ?? [];
+
+            if ($snippets === []) {
+                continue;
+            }
+
+            $body = match ($sourceKey) {
+                'news' => $this->renderNews($snippets),
+                'programs' => $this->renderPrograms($snippets),
+                default => $this->renderFaqs($snippets),
+            };
+
+            if ($body === null) {
+                continue;
+            }
+
+            $lead = match ($sourceKey) {
+                'news' => self::PHRASES['news_lead'][$language],
+                'programs' => self::PHRASES['programs_lead'][$language],
+                default => self::PHRASES['general_lead'][$language],
+            };
+
+            return $lead."\n\n".$body."\n\n".self::PHRASES['more_on_site'][$language];
+        }
+
+        return null;
+    }
+
+    /** @param list<string> $snippets */
+    private function renderNews(array $snippets): ?string
+    {
+        $lines = [];
+
+        foreach ($snippets as $snippet) {
+            $title = KnowledgeContextReader::line($snippet, ['خبر:', 'News:']);
+
+            if ($title === null) {
+                continue;
+            }
+
+            $meta = array_values(array_filter([
+                KnowledgeContextReader::line($snippet, ['تاريخ النشر:', 'Published:']),
+                KnowledgeContextReader::line($snippet, ['المصدر:', 'Source:']),
+            ]));
+
+            $lines[] = '• '.$title.($meta === [] ? '' : ' — '.implode(' · ', $meta));
+        }
+
+        return $lines === [] ? null : implode("\n", $lines);
+    }
+
+    /** @param list<string> $snippets */
+    private function renderPrograms(array $snippets): ?string
+    {
+        $lines = [];
+
+        foreach ($snippets as $snippet) {
+            $title = KnowledgeContextReader::line($snippet, ['البرنامج:', 'Program:']);
+
+            if ($title === null) {
+                continue;
+            }
+
+            $summary = KnowledgeContextReader::line($snippet, ['نبذة:', 'Summary:'])
+                ?? KnowledgeContextReader::line($snippet, ['الوصف:', 'Description:']);
+
+            $lines[] = '• '.$title.($summary === null ? '' : ' — '.$summary);
+        }
+
+        return $lines === [] ? null : implode("\n", $lines);
+    }
+
+    /**
+     * FAQ answers already read as prose, so the best-ranked one is used as the
+     * reply body directly.
+     *
+     * @param  list<string>  $snippets
+     */
+    private function renderFaqs(array $snippets): ?string
+    {
+        foreach ($snippets as $snippet) {
+            $answer = KnowledgeContextReader::line($snippet, ['إجابة:', 'A:']);
+
+            if ($answer !== null) {
+                return $answer;
+            }
+        }
+
+        return null;
     }
 
     private function detectTopic(string $message): string
@@ -134,8 +287,6 @@ class MockChatProvider implements ChatCompletionProvider
      */
     private function matches(string $haystack, string $keyword): bool
     {
-        // No apostrophes appear in the Latin keyword list, so a plain
-        // letters-and-spaces test is enough to tell the two scripts apart.
         if (preg_match('/^[a-z ]+$/', $keyword) === 1) {
             return preg_match('/\b'.preg_quote($keyword, '/').'\b/u', $haystack) === 1;
         }
